@@ -126,7 +126,7 @@ CGINCLUDE
 	{
 		v2f o;
 		
-		half3 worldSpaceVertex = mul(unity_ObjectToWorld,(v.vertex)).xyz;
+		half3 worldSpaceVertex = mul(_Object2World,(v.vertex)).xyz;
 		half3 vtxForAni = (worldSpaceVertex).xzz;
 
 		half3 nrml;
