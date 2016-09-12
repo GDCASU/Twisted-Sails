@@ -32,33 +32,21 @@ Material:
           m_Offset: {x: 0, y: 0}
       data:
         first:
-<<<<<<< HEAD
           name: _Fresnel
-=======
-          name: _RefractionTex
->>>>>>> master
         second:
           m_Texture: {fileID: 0}
           m_Scale: {x: 1, y: 1}
           m_Offset: {x: 0, y: 0}
       data:
         first:
-<<<<<<< HEAD
           name: _ReflectiveColor
-=======
-          name: _Fresnel
->>>>>>> master
         second:
           m_Texture: {fileID: 0}
           m_Scale: {x: 1, y: 1}
           m_Offset: {x: 0, y: 0}
       data:
         first:
-<<<<<<< HEAD
           name: _RefractionTex
-=======
-          name: _ReflectiveColor
->>>>>>> master
         second:
           m_Texture: {fileID: 0}
           m_Scale: {x: 1, y: 1}
