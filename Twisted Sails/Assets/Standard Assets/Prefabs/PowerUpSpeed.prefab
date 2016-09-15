@@ -23,6 +23,8 @@ GameObject:
   - 65: {fileID: 65000012598920930}
   - 23: {fileID: 23000013676518622}
   - 114: {fileID: 114000012577731052}
+  - 54: {fileID: 54000014233141156}
+  - 114: {fileID: 114000012572326340}
   m_Layer: 0
   m_Name: PowerUpSpeed
   m_TagString: Untagged
@@ -79,6 +81,21 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000010049665632}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!54 &54000014233141156
+Rigidbody:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000010049665632}
+  serializedVersion: 2
+  m_Mass: 150
+  m_Drag: 0.5
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!65 &65000012598920930
 BoxCollider:
   m_ObjectHideFlags: 1
@@ -91,6 +108,18 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &114000012572326340
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000010049665632}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3cf96158c6f2e564c9220d272e4a506e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  underWaterObj: {fileID: 0}
 --- !u!114 &114000012577731052
 MonoBehaviour:
   m_ObjectHideFlags: 1
