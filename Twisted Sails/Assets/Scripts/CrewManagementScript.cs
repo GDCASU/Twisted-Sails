@@ -11,12 +11,16 @@ using System.Collections;
 //
 // Initial Author: Erick Ramirez Cordero
 // First Version: September 12, 2016
-// Recent Author:
-// Recent Version:
+// Recent Author: Erick Ramirez Cordero
+// Recent Version: September 18, 2016
 */
 
 public class CrewManagementScript : MonoBehaviour
 {
+    public string speedButton = "Fire1";
+    public string fireRateButton = "Fire2";
+    public string defenseButton = "Fire3";
+
     public float baseSpeed = 5.0f;
     public float baseFireRate = 5.0f;
     public float baseDefense = 5.0f;
@@ -63,7 +67,7 @@ public class CrewManagementScript : MonoBehaviour
     {
         if (cooldownTimer >= cooldown)
         {
-            if (Input.GetButtonDown("Fire1") && currentSpeed < maxSpeed) // Increase Speed
+            if (Input.GetButtonDown(speedButton) && currentSpeed < maxSpeed)
             {
                 currentSpeed += modifySpeed * increment;
                 currentFireRate -= modifyFireRate;
@@ -78,7 +82,7 @@ public class CrewManagementScript : MonoBehaviour
                 }
             }
 
-            else if (Input.GetButtonDown("Fire2") && currentFireRate < maxFireRate) // Increase FireRate
+            else if (Input.GetButtonDown(fireRateButton) && currentFireRate < maxFireRate)
             {
                 currentSpeed -= modifySpeed;
                 currentFireRate += modifyFireRate * increment;
@@ -93,7 +97,7 @@ public class CrewManagementScript : MonoBehaviour
                 }
             }
 
-            else if (Input.GetButtonDown("Fire3") && currentDefense < maxDefense) // Increase Defense
+            else if (Input.GetButtonDown(defenseButton) && currentDefense < maxDefense)
             {
                 currentSpeed -= modifySpeed;
                 currentFireRate -= modifyFireRate;
