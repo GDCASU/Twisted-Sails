@@ -126,7 +126,7 @@ CGINCLUDE
 	{
 		v2f o;
 		
-		half3 worldSpaceVertex = mul(unity_ObjectToWorld,(v.vertex)).xyz;
+		half3 worldSpaceVertex = mul(_Object2World,(v.vertex)).xyz;
 		half3 vtxForAni = (worldSpaceVertex).xzz;
 
 		half3 nrml;
@@ -225,7 +225,7 @@ CGINCLUDE
 	{
 		v2f_noGrab o;
 		
-		half3 worldSpaceVertex = mul(unity_ObjectToWorld,(v.vertex)).xyz;
+		half3 worldSpaceVertex = mul(_Object2World,(v.vertex)).xyz;
 		half3 vtxForAni = (worldSpaceVertex).xzz;
 
 		half3 nrml;
@@ -310,7 +310,7 @@ CGINCLUDE
 	{
 		v2f_simple o;
 		
-		half3 worldSpaceVertex = mul(unity_ObjectToWorld, v.vertex).xyz;
+		half3 worldSpaceVertex = mul(_Object2World, v.vertex).xyz;
 		half2 tileableUv = worldSpaceVertex.xz;
 
 		o.bumpCoords.xyzw = (tileableUv.xyxy + _Time.xxxx * _BumpDirection.xyzw) * _BumpTiling.xyzw;

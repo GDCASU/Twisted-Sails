@@ -40,7 +40,7 @@ v2f vert(appdata v)
 
 	// scroll bump waves
 	float4 temp;
-	float4 wpos = mul (unity_ObjectToWorld, v.vertex);
+	float4 wpos = mul (_Object2World, v.vertex);
 	temp.xyzw = wpos.xzxz * _WaveScale + _WaveOffset;
 	o.bumpuv[0] = temp.xy * float2(.4, .45);
 	o.bumpuv[1] = temp.wz;
