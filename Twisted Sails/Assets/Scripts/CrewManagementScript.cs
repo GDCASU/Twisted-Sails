@@ -22,9 +22,9 @@ using System.Collections;
 
 public class CrewManagementScript : MonoBehaviour
 {
-    public string speedButton = "Attack Crew";
-    public string fireRateButton = "Defense Crew";
-    public string defenseButton = "Speed Crew";
+    public string speedButton = "Speed Crew"; // At the moment set to 'C'
+    public string fireRateButton = "Attack Crew"; // At the moment set to 'Z'
+    public string defenseButton = "Defense Crew"; // At the moment set to 'X'
 
     private float baseSpeed = 5.0f;
     private float baseFireRate = 5.0f;
