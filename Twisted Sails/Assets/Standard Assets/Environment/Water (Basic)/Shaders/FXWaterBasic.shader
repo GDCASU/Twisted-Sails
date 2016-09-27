@@ -1,5 +1,7 @@
 // Upgrade NOTE: replaced '_Object2World' with 'unity_ObjectToWorld'
 
+// Upgrade NOTE: replaced '_Object2World' with 'unity_ObjectToWorld'
+
 Shader "FX/Water (Basic)" {
 Properties {
 	_horizonColor ("Horizon color", COLOR)  = ( .172 , .463 , .435 , 0)
