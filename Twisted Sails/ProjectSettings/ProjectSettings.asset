@@ -70,6 +70,10 @@ PlayerSettings:
   uiUse16BitDepthBuffer: 0
   ignoreAlphaClear: 0
   xboxOneResolution: 0
+<<<<<<< HEAD
+=======
+  xboxOneMonoLoggingLevel: 0
+>>>>>>> master
   ps3SplashScreen: {fileID: 0}
   videoMemoryForVertexBuffers: 0
   psp2PowerMode: 0
