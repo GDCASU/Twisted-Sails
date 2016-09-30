@@ -26,40 +26,37 @@ public class Buoyancy : MonoBehaviour {
     public float surfaceDrag = 1.0f;
     public float submergedDrag = 1.25f;
 
-    private Vector3 centerOfMass;
-    private float ypos;
-    private float waterLevel;
+    public float waterLevel;
     private Rigidbody rb;
-    private float buoyancyAmount;
 
     void Start () {
         rb = this.GetComponent<Rigidbody>();
     }
 	
-	void FixedUpdate () {
+	void FixedUpdate ()
+	{
+		float bouyancyMult = 0;
+		float boatHeight = transform.position.y;
 
-        waterLevel = 0.0f;
-        buoyancyAmount = Mathf.Max((waterLevel - centerOfMass.y) / objectHeight, 1) * buoyancyFactor;
-        Vector3 force = transform.up * buoyancyAmount;
-        centerOfMass = rb.worldCenterOfMass;
-        ypos = centerOfMass.y;
-
-        //Add upward force when Center of Mass falls below the water level
-        if (ypos < waterLevel)
+		//Add upward force when Center of Mass falls below the water level
+		if (boatHeight < waterLevel)
         {
+            bouyancyMult = Mathf.Max(0, Mathf.Min(Mathf.Abs((waterLevel - boatHeight)) / objectHeight, 1));
+			float buoyancyAmount = bouyancyMult * buoyancyFactor;
+			Vector3 force = transform.up * buoyancyAmount;
             rb.AddForce(force, ForceMode.Acceleration);
         }
 
         //Adjust drag based on object situation
-        if (buoyancyAmount == 10 && ypos < objectHeight) //On water
-        {
-            rb.drag = surfaceDrag;
-        }
-        else if (buoyancyAmount > 10 && ypos < waterLevel) //Under water
+        if (bouyancyMult > .5f) //Under water
         {
             rb.drag = submergedDrag;
         }
-        else if (ypos >= objectHeight) //Above water
+		else if (bouyancyMult > 0f) //On water
+		{
+			rb.drag = surfaceDrag;
+		}
+        else //Above water
         {
             rb.drag = airDrag;
         }
