@@ -20,7 +20,7 @@ using System.Collections;
 // buttons for stat modification.
 */
 
-public class CrewManagementScript : MonoBehaviour
+public class CrewManagement : MonoBehaviour
 {
     public string speedButton = "Speed Crew"; // At the moment set to 'C'
     public string fireRateButton = "Attack Crew"; // At the moment set to 'Z'
@@ -66,7 +66,7 @@ public class CrewManagementScript : MonoBehaviour
     // end. If so, the script checks if the player has allowcated crew members
     // and calls the function for the appropriate stat.
     */
-    
+		
     // Update is called once per frame
 	void Update ()
     {

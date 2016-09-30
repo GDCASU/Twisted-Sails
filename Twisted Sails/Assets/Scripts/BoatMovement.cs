@@ -22,12 +22,12 @@ public class BoatMovement : MonoBehaviour
 
 	private void FixedUpdate()
     {
-		print(boat.velocity + ", " + boat.drag);
-		if (Input.GetKey(forwardKey) && Vector3.Dot(boat.velocity, transform.forward) < topSpeed)
+		float forwardSpeed = Vector3.Dot(boat.velocity, transform.forward);
+        if (Input.GetKey(forwardKey) && forwardSpeed < topSpeed)
 		{
 			boat.velocity += transform.forward * acceleration * Time.deltaTime;
         }
-		if (Input.GetKey(backwardsKey) && Vector3.Dot(boat.velocity, transform.forward) > 0)
+		if (Input.GetKey(backwardsKey) && forwardSpeed > 0)
 		{
 			boat.velocity -= transform.forward * (acceleration * Time.deltaTime);
 		}

@@ -27,7 +27,8 @@ public class BroadsideCannonFire : MonoBehaviour {
 				// This scales the size of the projectile to the diameter of the cannon barrel
 				_cannonBall.transform.localScale = new Vector3(this.transform.lossyScale.x, this.transform.lossyScale.x, this.transform.lossyScale.x);
 				// Sets the initial velocity of the cannonBall to projectileSpeed units/second in the direction of the cannon barrel
-				_cannonBall.GetComponent<Rigidbody>().velocity = this.transform.up * projectileSpeed;
+				Vector3 inheritedVelocity = this.transform.root.GetComponent<Rigidbody>().velocity;
+				_cannonBall.GetComponent<Rigidbody>().velocity = inheritedVelocity + this.transform.up * projectileSpeed;
 			}
 		}
 	}
