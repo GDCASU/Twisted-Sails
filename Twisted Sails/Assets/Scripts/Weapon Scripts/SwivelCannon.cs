@@ -12,13 +12,13 @@ public class SwivelCannon : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		//Debug.Log (rotationSpeed);
-		if (Input.GetKey(KeyCode.A)){
+		if (Input.GetKey(KeyCode.Q)){
 			//rotationSpeed += Time.deltaTime * 20;
-			this.transform.Rotate (0, -rotationSpeed, 0);
+			this.transform.Rotate (0, 0, -rotationSpeed);
 		}
-		else if(Input.GetKey(KeyCode.D)){
+		else if(Input.GetKey(KeyCode.E)){
 			//rotationSpeed -= Time.deltaTime * 20;
-			this.transform.Rotate (0, rotationSpeed, 0);
+			this.transform.Rotate (0, 0, rotationSpeed);
 		}
 	}
 }
