@@ -15,13 +15,15 @@ public class BroadsideCannonFire : MonoBehaviour {
 	public float fireDelay;
 	public float projectileSpeed;
 	
-	private void Update () {
+	public GameObject AttemptToFire () {
+
 		reloadTime += Time.deltaTime;
 		if (reloadTime >= fireDelay) {
 			if (Input.GetKeyDown (KeyCode.Space)) {
 				reloadTime = 0;
 
 				GameObject _cannonBall = GameObject.Instantiate (cannonBall);
+
 				Physics.IgnoreCollision(_cannonBall.GetComponent<Collider>(), this.GetComponent<Collider>());
 				_cannonBall.transform.position = this.transform.position;
 				// This scales the size of the projectile to the diameter of the cannon barrel
@@ -29,7 +31,10 @@ public class BroadsideCannonFire : MonoBehaviour {
 				// Sets the initial velocity of the cannonBall to projectileSpeed units/second in the direction of the cannon barrel
 				Vector3 inheritedVelocity = this.transform.root.GetComponent<Rigidbody>().velocity;
 				_cannonBall.GetComponent<Rigidbody>().velocity = inheritedVelocity + this.transform.up * projectileSpeed;
+
+				return _cannonBall;
 			}
 		}
+		return null;
 	}
 }

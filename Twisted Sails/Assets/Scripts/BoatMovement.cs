@@ -1,64 +1,74 @@
 ﻿using UnityEngine;
+using UnityEngine.Networking;
 using System.Collections;
-/************************** BOAT MOVEMENT SCRIPT *******************************
- * This script controls the movement of the boat, now with key bindings and 
- * deceleration physics! The boat now has more realistic motion.
- * 
- * Author: Diego Wilde
- * Date Modified: September 30th, 2016
- **/
 
-
-public class BoatMovement : MonoBehaviour
+public class BoatMovement : NetworkBehaviour
 {
     private Rigidbody boat;
-    public float acceleration = 15f;
-    public float topSpeed = 60;
-    public float rotationalVelocity = 25;
-    public float minorRotationalVelocity = 5;
-    public float speedBoostValue = 100;
-    public bool speedBoost = false;
+    public float acceleration = 1.0f;
+    public float topSpeed = 10;
+    public float rotationalVelocity = 30;
 
-    public KeyCode forwardKey;
-    public KeyCode backwardsKey;
-    public KeyCode leftKey;
-    public KeyCode rightKey;
+	public KeyCode forwardKey;
+	public KeyCode backwardsKey;
+	public KeyCode leftKey;
+	public KeyCode rightKey;
+
+	private BroadsideCannonFire[] cannons = new BroadsideCannonFire[8];
 
     // Use this for initialization
     private void Start()
     {
+		if (!isLocalPlayer) { return; }
+
         boat = this.GetComponent<Rigidbody>();
+		
+		//Make player camera follow player boat
+		BoatCamera boatCam = Camera.main.GetComponent<BoatCamera>();
+		boatCam.boatToFollow = this.gameObject;
+
+		//Get cannons
+		cannons = GetComponentsInChildren<BroadsideCannonFire>();
     }
 
-
-    private void FixedUpdate()
+	private void FixedUpdate()
     {
-        float forwardSpeed = Vector3.Dot(boat.velocity, transform.forward);
+		if (!isLocalPlayer) { return; }
+
+		//Attempt to fire all cannons
+		GameObject _cannonBall;
+		foreach(BroadsideCannonFire c in cannons)
+		{
+			_cannonBall = c.AttemptToFire();
+			if (_cannonBall != null)
+			{
+				CmdSpawn(_cannonBall);
+			}
+		}
+
+		float forwardSpeed = Vector3.Dot(boat.velocity, transform.forward);
         if (Input.GetKey(forwardKey) && forwardSpeed < topSpeed)
-        {
-            boat.velocity += transform.forward * acceleration * Time.deltaTime;
-            // Possible Speed Boost code
-            if (speedBoost)
-                boat.velocity += transform.forward * speedBoostValue;
-            // boat can only turn if moving
-            if (Input.GetKey(rightKey))
-                boat.transform.Rotate(Vector3.up * rotationalVelocity * Time.deltaTime);
-            if (Input.GetKey(leftKey))
-                boat.transform.Rotate(-Vector3.up * rotationalVelocity * Time.deltaTime);
+		{
+			boat.velocity += transform.forward * acceleration * Time.deltaTime;
         }
-        if (Input.GetKey(backwardsKey) && forwardSpeed > 0)
-            boat.velocity -= transform.forward * (acceleration * Time.deltaTime);
-        // Minor turning ability, needed in case the boat is stuck on a rock or something
-        if (Input.GetKey(rightKey))
-        {
-            boat.transform.Rotate(Vector3.up * minorRotationalVelocity * Time.deltaTime);
+		if (Input.GetKey(backwardsKey) && forwardSpeed > 0)
+		{
+			boat.velocity -= transform.forward * (acceleration * Time.deltaTime);
+		}
+		if (Input.GetKey(rightKey)) {
+            boat.transform.Rotate(Vector3.up * rotationalVelocity * Time.deltaTime);
         }
-        if (Input.GetKey(leftKey))
-        {
-            boat.transform.Rotate(-Vector3.up * minorRotationalVelocity * Time.deltaTime);
+        if (Input.GetKey(leftKey)) {
+            boat.transform.Rotate(-Vector3.up * rotationalVelocity * Time.deltaTime);
         }
+
+		boat.angularVelocity = Vector3.zero;
     }
 
-        
-    }
+	[Command]
+	void CmdSpawn(GameObject projectile)
+	{
+		NetworkServer.Spawn(projectile);
+	}
+}
 

@@ -17,6 +17,8 @@ public class BoatCamera : MonoBehaviour
 
 	private void Update()
 	{
+		if ( !boatToFollow ) { return; }
+
 		if (Input.GetAxis("CameraHorizontal") > 0)
 		{
 			rotation += rotationSpeed * Time.deltaTime;
@@ -46,6 +48,8 @@ public class BoatCamera : MonoBehaviour
 
 	private void FixedUpdate()
 	{
+		if (!boatToFollow) { return; }
+
 		float offsetX = orbitalDistance * Mathf.Sin(angleFromUp) * Mathf.Cos(rotation);
 		float offsetY = orbitalDistance * Mathf.Cos(angleFromUp);
         float offsetZ = orbitalDistance * Mathf.Sin(angleFromUp) * Mathf.Sin(rotation);
