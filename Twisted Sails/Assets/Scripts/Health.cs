@@ -90,10 +90,10 @@ public class Health : MonoBehaviour
 		Destroy (this.gameObject);
 	}*/
 
-    //
+    //Whenever ship collides with something else
     void OnCollisionEnter(Collision c)
     {
-        //CannonBall collision
+        //CannonBall collision - Comment this out if cannon testing is needed
         if (c.transform.gameObject.name.Equals("CannonBall(Clone)")) //todo: change this to use tags when possible
         { 
             ChangeHealth(-35);
