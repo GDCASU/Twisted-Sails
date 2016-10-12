@@ -13,6 +13,9 @@ using System.Collections;
 //	- Attempt to fire cannons from here instead of from BroadsideCannonFire
 //	- Changed cannonball scale to static, on init in CannonBallNetworked
 //	- Updated default values to Inspector values
+//	11th Oct
+//	-	Implemented BoatInput struct in preparation for sending input to server
+//	-	Added BoatState struct, does nothing yet
 
 public class BoatMovementNetworked : NetworkBehaviour
 {
@@ -25,11 +28,27 @@ public class BoatMovementNetworked : NetworkBehaviour
     public float speedBoostValue = 100;
     public bool speedBoost = false;
 
-	//Movement keys
+	//Boat Input
     public KeyCode forwardKey	= KeyCode.A;
     public KeyCode backwardsKey = KeyCode.S;
     public KeyCode leftKey		= KeyCode.A;
     public KeyCode rightKey		= KeyCode.D;
+	public KeyCode fireKey		= KeyCode.Space;
+	private struct BoatInput
+	{
+		public bool forward, backwards, left, right, fire;
+	}
+	private BoatInput KeysDown;
+
+	//Boat State (Position, Velocity, Quaternion rotation, Angular velocity)
+	private struct BoatState
+	{
+		public float posX, posY, posZ;
+		public float velX, velY, velZ;
+		public float quatW, quatX, quatY, quatZ;
+		public float angX, angY, angZ;
+	}
+	private BoatState MyState;
 
 	//List of cannons - Assume EIGHT cannons
 	public GameObject cannonBall;
@@ -54,6 +73,18 @@ public class BoatMovementNetworked : NetworkBehaviour
 		cannonScripts = this.GetComponentsInChildren<BroadsideCannonFireNetworked>();
     }
 
+	//Get input for player
+	void Update()
+	{
+		if (isLocalPlayer)
+		{
+			KeysDown.forward	= Input.GetKey(forwardKey);
+			KeysDown.backwards	= Input.GetKey(backwardsKey);
+			KeysDown.left		= Input.GetKey(leftKey);
+			KeysDown.right		= Input.GetKey(rightKey);
+			KeysDown.fire		= Input.GetKey(fireKey);
+		}
+	}
 
     private void FixedUpdate()
     {
@@ -64,7 +95,7 @@ public class BoatMovementNetworked : NetworkBehaviour
 		}
 
 		//Fire Input
-		if (Input.GetKeyDown (KeyCode.Space))
+		if (KeysDown.fire)
 		{ 
 			foreach(BroadsideCannonFireNetworked cScript in cannonScripts)
 			{
@@ -83,26 +114,26 @@ public class BoatMovementNetworked : NetworkBehaviour
 
 		//Movement Input
         float forwardSpeed = Vector3.Dot(boat.velocity, transform.forward);
-        if (Input.GetKey(forwardKey) && forwardSpeed < topSpeed)
+        if (KeysDown.forward && forwardSpeed < topSpeed)
         {
             boat.velocity += transform.forward * acceleration * Time.deltaTime;
             // Possible Speed Boost code
             if (speedBoost)
                 boat.velocity += transform.forward * speedBoostValue;
             // boat can only turn if moving
-            if (Input.GetKey(rightKey))
+            if (KeysDown.right)
                 boat.transform.Rotate(Vector3.up * rotationalVelocity * Time.deltaTime);
-            if (Input.GetKey(leftKey))
+            if (KeysDown.left)
                 boat.transform.Rotate(-Vector3.up * rotationalVelocity * Time.deltaTime);
         }
-        if (Input.GetKey(backwardsKey) && forwardSpeed > 0)
+        if (KeysDown.backwards && forwardSpeed > 0)
             boat.velocity -= transform.forward * (acceleration * Time.deltaTime);
         // Minor turning ability, needed in case the boat is stuck on a rock or something
-        if (Input.GetKey(rightKey))
+        if (KeysDown.right)
         {
             boat.transform.Rotate(Vector3.up * minorRotationalVelocity * Time.deltaTime);
         }
-        if (Input.GetKey(leftKey))
+        if (KeysDown.left)
         {
             boat.transform.Rotate(-Vector3.up * minorRotationalVelocity * Time.deltaTime);
         }

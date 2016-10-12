@@ -5273,7 +5273,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_TransformSyncMode: 1
-  m_SendInterval: 1
+  m_SendInterval: 0.033333335
   m_SyncRotationAxis: 7
   m_RotationSyncCompression: 0
   m_SyncSpin: 0
@@ -5315,6 +5315,7 @@ MonoBehaviour:
   backwardsKey: 115
   leftKey: 97
   rightKey: 100
+  fireKey: 32
   cannonBall: {fileID: 1000013620427708, guid: 999d70260556d6a4d99c8c6ca2089051, type: 2}
 --- !u!114 &114000012025936968
 MonoBehaviour:
