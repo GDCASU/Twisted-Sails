@@ -12,21 +12,21 @@ public class BoatCamera : MonoBehaviour
 	public float maxAngleFromUp = Mathf.PI;
 	public float minAngleFromUp = 0f;
 
-	private float angleFromUp;
+	private float angleFromUp = Mathf.PI/4;
 	private float rotation;
 
 	private void Update()
 	{
-		if (Input.GetAxis("Horizontal") > 0)
+		if (Input.GetAxis("CameraHorizontal") > 0)
 		{
 			rotation += rotationSpeed * Time.deltaTime;
         }
-		else if (Input.GetAxis("Horizontal") < 0)
+		else if (Input.GetAxis("CameraHorizontal") < 0)
 		{
 			rotation -= rotationSpeed * Time.deltaTime;
 		}
 
-		if (Input.GetAxis("Vertical") < 0)
+		if (Input.GetAxis("CameraVertical") < 0)
 		{
 			angleFromUp += upAngleChangeSpeed * Time.deltaTime;
 			if (angleFromUp > maxAngleFromUp)
@@ -34,7 +34,7 @@ public class BoatCamera : MonoBehaviour
 				angleFromUp = maxAngleFromUp;
             }
 		}
-		else if (Input.GetAxis("Vertical") > 0)
+		else if (Input.GetAxis("CameraVertical") > 0)
 		{
 			angleFromUp -= upAngleChangeSpeed * Time.deltaTime;
 			if (angleFromUp < minAngleFromUp)
