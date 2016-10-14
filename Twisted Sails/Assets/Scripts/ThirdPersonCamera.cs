@@ -14,8 +14,15 @@ public class ThirdPersonCamera : MonoBehaviour {
 	private float distance = 5.0f;
 	private float currentX = 0.0f;
 	private float currentY = 0.0f;
-	public float sensitivityX = 15.0f;
+
+	public float sensitivityX = 4.0f;
 	public float sensitivityY = 1.0f;
+
+	//float variables for adjusting sensitivity for first person view
+	// Setting offset to 0 will disable the camera rotation, recommend using numbers greather than 0.
+	public float offsetX = 1.0f;
+	public float offsetY = 1.0f;
+
 	private bool fps = false;
 
 	 
@@ -33,12 +40,21 @@ public class ThirdPersonCamera : MonoBehaviour {
 		// Update is called once per frame
 	private void Update ()
 	{
-		currentX += Input.GetAxis ("Mouse X");
-		currentY -= Input.GetAxis ("Mouse Y");
+		if (fps == false) 
+		{
+			currentX += Input.GetAxis ("Mouse X") * sensitivityX;
+			currentY -= Input.GetAxis ("Mouse Y") * sensitivityY;
 
-		currentY = Mathf.Clamp (currentY, Y_angle_Min, Y_angle_Max);
+			currentY = Mathf.Clamp (currentY, Y_angle_Min, Y_angle_Max);
+		} 
+		else if(fps == true)
+		{
+			currentX += Input.GetAxis ("Mouse X") * offsetX;
+			currentY -= Input.GetAxis ("Mouse Y") * offsetY;
 
-
+			currentY = Mathf.Clamp (currentY, Y_angle_Min, Y_angle_Max);
+		}
+	
 		//Tab Key allows to switch between first person and third person view
 		if (Input.GetKeyDown(KeyCode.Tab)) 
 		{
@@ -46,7 +62,7 @@ public class ThirdPersonCamera : MonoBehaviour {
 				
 				fps = true;
 				Y_angle_Max = 30.0f;
-				sensitivityY = 2.0f;
+				sensitivityY = 2.0f * offsetY;
 				distance = 1.5f;
 
 			} 
