@@ -12,6 +12,18 @@ using System;
 
 public class CuboidMaker : EditorWindow
 {
+	private Camera camera;
+	private GameObject cuboidViewer;
+	RenderTexture renderTexture;
+	private const int doubleBufferSize = 10;
+	private const int topAdditionalBuffer = 16;
+
+	//error message
+	private String errorMessage;
+
+	//viewer properties
+	private String nameOfViewPrefab = "CuboidViewer";
+
 	//the object bases four corners
 	private Vector3 farLeftCorner;
 	private Vector3 farRightCorner;
@@ -39,12 +51,91 @@ public class CuboidMaker : EditorWindow
 	[MenuItem("Window/Cuboid Maker")]
 	private static void ShowWindow()
 	{
-		EditorWindow.GetWindow(typeof(CuboidMaker));
+		EditorWindow editorWindow = EditorWindow.GetWindow(typeof(CuboidMaker));
+		editorWindow.autoRepaintOnSceneChange = true;
+    }
+
+	public void Awake()
+	{
+		renderTexture = new RenderTexture((int)position.width,
+					(int)position.height,
+					(int)RenderTextureFormat.ARGB32);
+	}
+	public void Update()
+	{
+		if (camera != null)
+		{
+			camera.targetTexture = renderTexture;
+			camera.Render();
+			camera.targetTexture = null;
+		}
+
+		if (renderTexture.width != position.width || renderTexture.height != position.height)
+		{
+			renderTexture = new RenderTexture((int)position.width, (int)position.height, (int)RenderTextureFormat.ARGB32);
+		}
+	}
+
+	private void OnDestroy()
+	{
+		if (camera != null)
+		{
+			DestroyImmediate(cuboidViewer);
+		}
 	}
 
 	//dictates the UI of the window, with labels, text areas and buttons
 	private void OnGUI()
 	{
+		if (errorMessage != null)
+		{
+			GUI.color = Color.red;
+			GUILayout.Label(errorMessage);
+			GUI.color = Color.white;
+		}
+
+		//if the viewer hasnt been initialized yet
+		if (camera == null)
+		{
+			GUILayout.BeginHorizontal();
+			GUILayout.Label("Viewer Prefab Path: ");
+			nameOfViewPrefab = EditorGUILayout.TextField(nameOfViewPrefab);
+			GUILayout.EndHorizontal();
+			if (GUILayout.Button("Initialize Viewer"))
+			{
+				GameObject viewerPrefab = Resources.Load<GameObject>(nameOfViewPrefab);
+				if (viewerPrefab != null)
+				{
+					cuboidViewer = Instantiate(viewerPrefab);
+					camera = cuboidViewer.GetComponent<Camera>();
+					errorMessage = null;
+                }
+				else
+				{	
+					errorMessage = "Could not find object at that path.";
+				}
+			}
+			return;
+		}
+
+		//http://answers.unity3d.com/questions/900091/custom-scene-view-in-editor-window.html
+		GUILayout.Box("Top View", GUILayout.Height(200), GUILayout.Width(200));
+
+		// important: only render during the repaint event
+		if (Event.current.type == EventType.Repaint)
+		{
+			Rect rectangleToRenderTextureTo = GUILayoutUtility.GetLastRect();
+
+			//add in the buffers
+			rectangleToRenderTextureTo.x += doubleBufferSize/2;
+			rectangleToRenderTextureTo.y += doubleBufferSize/2 + topAdditionalBuffer;
+			rectangleToRenderTextureTo.height -= doubleBufferSize + topAdditionalBuffer;
+			rectangleToRenderTextureTo.width -= doubleBufferSize;
+
+			//render the rendertexture to the screen
+			GUI.DrawTexture(rectangleToRenderTextureTo, renderTexture);
+		}
+
 		Rect farLeftRect = EditorGUILayout.BeginHorizontal();
 		GUILayout.Label("Far Left Corner: ");
 		float fl1 = EditorGUILayout.FloatField(farLeftCorner.x);
