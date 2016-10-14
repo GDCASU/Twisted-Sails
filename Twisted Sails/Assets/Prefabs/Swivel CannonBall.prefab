@@ -14,7 +14,7 @@ GameObject:
   - 54: {fileID: 5401906}
   - 114: {fileID: 11450318}
   m_Layer: 0
-  m_Name: CannonBall
+  m_Name: Swivel CannonBall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -96,7 +96,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   despawnDepth: -3
-  scaleFactor: 0.25
+  scaleFactor: 0.1
 --- !u!135 &13589724
 SphereCollider:
   m_ObjectHideFlags: 1
