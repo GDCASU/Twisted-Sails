@@ -37,7 +37,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44692492, g: 0.4967869, b: 0.57508546, a: 1}
+  m_IndirectSpecularColor: {r: 0.44692504, g: 0.4967869, b: 0.57508504, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -404,9 +404,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 496ee5a705844d9448a44b931308e40c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  acceleration: 20
-  topSpeed: 30
-  rotationalVelocity: 50
+  forceMultiplier: 2.5
+  torque: 1
+  minTorque: 0.1
+  speedBoostValue: 100
+  speedBoost: 0
   forwardKey: 119
   backwardsKey: 115
   leftKey: 97
@@ -422,9 +424,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f995605d3062064b98d8e45139f8c2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speedButton: Speed Crew
-  fireRateButton: Attack Crew
-  defenseButton: Defense Crew
   currentSpeed: 0
   currentFireRate: 0
   currentDefense: 0
@@ -479,7 +478,7 @@ Rigidbody:
   serializedVersion: 2
   m_Mass: 0.1
   m_Drag: 0
-  m_AngularDrag: 0.05
+  m_AngularDrag: 5
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
@@ -498,9 +497,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   buoyancyFactor: 15
   objectHeight: 1.4
-  airDrag: 0.2
-  surfaceDrag: 2
-  submergedDrag: 4
+  airDrag: 0
+  surfaceDrag: 10
+  submergedDrag: 2
   waterLevel: 0
 --- !u!4 &227816591 stripped
 Transform:
