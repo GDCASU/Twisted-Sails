@@ -7,7 +7,7 @@ using System.Collections;
  * 
  * Author: Diego Wilde
  * Date Modified: September 30th, 2016
- **/
+ */
 //9th Oct 16 Scotty Molt 
 //	- Networked movement and attach camera on Start()
 //	- Attempt to fire cannons from here instead of from BroadsideCannonFire
@@ -27,6 +27,7 @@ public class BoatMovementNetworked : NetworkBehaviour
     public float minorRotationalVelocity = 5;
     public float speedBoostValue = 100;
     public bool speedBoost = false;
+    public float torque = 10;
 
 	//Boat Input
     public KeyCode forwardKey	= KeyCode.A;
@@ -121,14 +122,20 @@ public class BoatMovementNetworked : NetworkBehaviour
             if (speedBoost)
                 boat.velocity += transform.forward * speedBoostValue;
             // boat can only turn if moving
+
             if (KeysDown.right)
+                //boat.AddTorque(transform.right * torque);
                 boat.transform.Rotate(Vector3.up * rotationalVelocity * Time.deltaTime);
-            if (KeysDown.left)
+                if (KeysDown.left)
+                    //boat.AddTorque(-transform.right * torque);
                 boat.transform.Rotate(-Vector3.up * rotationalVelocity * Time.deltaTime);
+            
+            
         }
         if (KeysDown.backwards && forwardSpeed > 0)
             boat.velocity -= transform.forward * (acceleration * Time.deltaTime);
         // Minor turning ability, needed in case the boat is stuck on a rock or something
+        
         if (KeysDown.right)
         {
             boat.transform.Rotate(Vector3.up * minorRotationalVelocity * Time.deltaTime);
@@ -137,6 +144,8 @@ public class BoatMovementNetworked : NetworkBehaviour
         {
             boat.transform.Rotate(-Vector3.up * minorRotationalVelocity * Time.deltaTime);
         }
+        
+        
     }
 
 	//Called by client, runs on server.
@@ -159,4 +168,3 @@ public class BoatMovementNetworked : NetworkBehaviour
 		NetworkServer.Spawn(_cannonBall);
 	}
 }
-
