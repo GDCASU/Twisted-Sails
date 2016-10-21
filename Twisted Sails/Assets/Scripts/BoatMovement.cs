@@ -18,75 +18,59 @@ public class BoatMovement : MonoBehaviour
 {
     private Rigidbody boat;
 
-    public float forceMultiplier = 2.5f;
-    //public float minorRotationalVelocity = 5;
-    public float torque = 1f;
-    public float minTorque = 0.5f;
-    public float speedBoostValue = 100;
+    public float forwardsAcceleration = 500;
+	public float backwardsAcceleration = 200;
+    public float rotationalControl = 1f;
+    public float speedBoostValue = 2;
     public bool speedBoost = false;
-
-    private float forwardSpeed;
 
     public KeyCode forwardKey;
     public KeyCode backwardsKey;
     public KeyCode leftKey;
     public KeyCode rightKey;
 
-    private Vector3 boatTurningPoint;
-    // Use this for initialization
+    public float boatPropulsionPointOffset;
+
     private void Start()
     {
         boat = this.GetComponent<Rigidbody>();
-        forwardSpeed = 1;
     }
 
-
-    private void FixedUpdate()
+	private Vector3 forcePosition;
+    private void Update()
     {
-        forwardSpeed = 1 + Vector3.Dot(boat.velocity, transform.forward);
-        if (Input.GetKey(forwardKey) )
-        {
-            boat.AddRelativeForce(Vector3.forward * forceMultiplier);
+		Debug.DrawRay(transform.position, transform.forward * 10, Color.green, 0, false);
 
-            // Possible Speed Boost code
-            if (speedBoost)
-                boat.AddForce(transform.forward * speedBoostValue);
+		if (Input.GetAxis("Vertical") > 0)
+		{
+			float acceleration = forwardsAcceleration * Time.deltaTime;
 
+			if (speedBoost)
+				acceleration *= speedBoostValue;
 
-        }
-        if (forwardSpeed > 1) 
-        {
-            if (Input.GetKey(rightKey))
-            {
-                boat.AddForceAtPosition
-                    (boat.transform.right * (torque / forwardSpeed + minTorque), boat.position);
-                //boat.AddTorque(this.transform.up * (torque / forwardSpeed + minTorque));
-            }
-            if (Input.GetKey(leftKey))
-            {
-                boat.AddForceAtPosition
-                    (-boat.transform.right * (torque / forwardSpeed + minTorque), boat.position);
-                //boat.AddTorque(-this.transform.up * (torque / forwardSpeed + minTorque));
-            }
-        }
+			Vector3 forceOffset = -transform.right * (Input.GetAxis("Horizontal") * rotationalControl) + transform.forward * boatPropulsionPointOffset; ;
 
-        if (Input.GetKey(backwardsKey) && boat.velocity.magnitude > 0)
-            boat.AddRelativeForce(Vector3.back);
-            
+			forcePosition = transform.position + forceOffset;
 
-        // OLD
-        // will be removed once we're sure we don't need it
-        // Minor turning ability, needed in case the boat is stuck on a rock or something
-    /*    if (Input.GetKey(rightKey))
-        {
-            boat.transform.Rotate(Vector3.up * minorRotationalVelocity * Time.deltaTime);
-        }
-        if (Input.GetKey(leftKey))
-        {
-            boat.transform.Rotate(-Vector3.up * minorRotationalVelocity * Time.deltaTime);
-        } */
+			boat.AddForceAtPosition(transform.forward * acceleration, forcePosition, ForceMode.Acceleration);
+		}
+		else if (Input.GetAxis("Vertical") < 0)
+		{
+			float acceleration = backwardsAcceleration * Time.deltaTime;
+
+			if (speedBoost)
+				acceleration *= speedBoostValue;
+
+			Vector3 forceDirection = -transform.forward;
+
+			forcePosition = transform.position + transform.forward * boatPropulsionPointOffset;
+			boat.AddForceAtPosition(forceDirection * acceleration, forcePosition, ForceMode.Acceleration);
+		}
     }
 
-        
-    }
+	private void OnDrawGizmos()
+	{
+		Gizmos.DrawSphere(forcePosition, .2f);
+	}
+}
 
