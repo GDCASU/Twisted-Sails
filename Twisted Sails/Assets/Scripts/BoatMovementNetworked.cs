@@ -87,6 +87,23 @@ public class BoatMovementNetworked : NetworkBehaviour
 			KeysDown.left		= Input.GetKey(leftKey);
 			KeysDown.right		= Input.GetKey(rightKey);
 			KeysDown.fire		= Input.GetKey(fireKey);
+
+			if (KeysDown.fire)
+			{
+				foreach (BroadsideCannonFireNetworked cScript in cannonScripts)
+				{
+					if (cScript.CanFire())
+					{
+						cScript.ResetFireTimer();
+						//Get spawn Position, Velocity of projectile 
+						//(Scale is static to CannonBallNetworked script)
+						cannonPosition = cScript.transform.position;
+						cannonBallVelocity = cScript.GetCannonBallVelocity();
+						//Pass information to server and spawn cannonball on all cients
+						CmdFire(cannonPosition, cannonBallVelocity, this.GetComponent<NetworkIdentity>().netId);
+					}
+				}
+			}
 		}
 	}
 
@@ -97,26 +114,6 @@ public class BoatMovementNetworked : NetworkBehaviour
 		{
 			return;
 		}
-
-		//Fire Input
-		if (KeysDown.fire)
-		{ 
-			foreach(BroadsideCannonFireNetworked cScript in cannonScripts)
-			{
-				if ( cScript.CanFire() )
-				{
-					cScript.ResetFireTimer();
-					//Get spawn Position, Velocity of projectile 
-					//(Scale is static to CannonBallNetworked script)
-					cannonPosition = cScript.transform.position;
-					cannonBallVelocity = cScript.GetCannonBallVelocity(); 
-					//Pass information to server and spawn cannonball on all cients
-					CmdFire(cannonPosition, cannonBallVelocity, this.GetComponent<NetworkIdentity>().netId);
-				}
-			}
-		}
-
-		Debug.DrawRay(transform.position, transform.forward * 10, Color.green, 0, false);
 
 		float horizontalAxis = 0;
 		if (KeysDown.left)
@@ -162,8 +159,7 @@ public class BoatMovementNetworked : NetworkBehaviour
 		_cannonBall.GetComponent<Rigidbody>().velocity = spawnVelocity;
 		
 		//Ignore collision between cannonball and ship that shot it
-		Physics.IgnoreCollision(_cannonBall.GetComponent<Collider>(), 
-			NetworkServer.FindLocalObject(shooterID).GetComponent<Collider>());
+		Physics.IgnoreCollision(_cannonBall.GetComponent<Collider>(), NetworkServer.FindLocalObject(shooterID).GetComponent<Collider>());
 
 		//Spawn the object across all clients
 		NetworkServer.Spawn(_cannonBall);

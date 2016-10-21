@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using UnityEngine.Networking;
 // Developer:   Cory Wyman
 // Date:        9/12/2016
 // Description: Initial code
@@ -16,7 +17,11 @@ using System.Collections;
 //                  ADDED cannonball explosions!
 //                  CHANGED public variables organized into groups because there's too many
 //                  CHANGED OnTriggerEnter to OnCollisionEnter because the cannonballs are not triggers
-public class Health : MonoBehaviour
+
+//Developed:		Kyle Chapman
+//Date:				10/20/2016
+//Description:		Added hurt self button and enabled multiplayer functionality.
+public class Health : NetworkBehaviour
 {
     [Header("Health")]
     public float health;
@@ -26,7 +31,8 @@ public class Health : MonoBehaviour
     public float sinkSpeed;
     public float sinkAngle;
     public float secondsToRespawn;
-    [Header("Misc")]
+	[Header("Misc")]
+	public KeyCode hurtSelfButton;
     public bool dead;
     public GameObject activeCamera;
     public GameObject explosion;
@@ -88,7 +94,13 @@ public class Health : MonoBehaviour
             }
         }
 
-    }
+		if (isLocalPlayer && Input.GetKeyDown(hurtSelfButton))
+		{
+			ChangeHealth(-5);
+			return;
+		}
+
+	}
 
     /*IEnumerator Wait() {
 		yield return new WaitForSeconds (1f);
@@ -99,7 +111,7 @@ public class Health : MonoBehaviour
     void OnCollisionEnter(Collision c)
     {
         //CannonBall collision - Comment this out if cannon testing is needed
-        if (c.transform.gameObject.name.Equals("CannonBall(Clone)")) //todo: change this to use tags when possible
+        if (c.transform.gameObject.tag.Equals("Cannonball")) //todo: change this to use tags when possible
         { 
             ChangeHealth(-35);
             GameObject explode = (GameObject)Instantiate(explosion, c.contacts[0].point, Quaternion.identity);

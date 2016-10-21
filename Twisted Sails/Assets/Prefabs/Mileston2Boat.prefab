@@ -5261,7 +5261,7 @@ MonoBehaviour:
     i14: 251
     i15: 231
   m_ServerOnly: 0
-  m_LocalPlayerAuthority: 0
+  m_LocalPlayerAuthority: 1
 --- !u!114 &114000010556032994
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5353,9 +5353,10 @@ MonoBehaviour:
   sinkSpeed: 1
   sinkAngle: 40
   secondsToRespawn: 8
+  hurtSelfButton: 107
   dead: 0
   activeCamera: {fileID: 0}
-  explosion: {fileID: 0}
+  explosion: {fileID: 1000011769946516, guid: 8af0c4ff01de10c4a9980db85d6bf910, type: 2}
   spawnPoint: {x: 0, y: 0, z: 0}
 --- !u!114 &114000011472782010
 MonoBehaviour:

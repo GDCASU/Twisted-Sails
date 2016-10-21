@@ -5305,12 +5305,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d96c63565d5fa664fb9ee29cfb3dceb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  acceleration: 20
-  topSpeed: 30
-  rotationalVelocity: 50
-  minorRotationalVelocity: 5
+  forwardsAcceleration: 500
+  backwardsAcceleration: 200
+  rotationalControl: 1
   speedBoostValue: 100
   speedBoost: 0
+  boatPropulsionPointOffset: -1
   forwardKey: 119
   backwardsKey: 115
   leftKey: 97
