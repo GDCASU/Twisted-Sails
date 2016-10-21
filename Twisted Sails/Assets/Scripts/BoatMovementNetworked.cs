@@ -21,16 +21,16 @@ public class BoatMovementNetworked : NetworkBehaviour
 {
 	//Movement values
     private Rigidbody boat;
-    public float acceleration = 20f;
-    public float topSpeed = 30;
-    public float rotationalVelocity = 50;
-    public float minorRotationalVelocity = 5;
-    public float speedBoostValue = 100;
-    public bool speedBoost = false;
-    public float torque = 10;
+
+	public float forwardsAcceleration = 500;
+	public float backwardsAcceleration = 200;
+	public float rotationalControl = 1f;
+	public float speedBoostValue = 2;
+	public bool speedBoost = false;
+	public float boatPropulsionPointOffset = -1f;
 
 	//Boat Input
-    public KeyCode forwardKey	= KeyCode.A;
+	public KeyCode forwardKey	= KeyCode.A;
     public KeyCode backwardsKey = KeyCode.S;
     public KeyCode leftKey		= KeyCode.A;
     public KeyCode rightKey		= KeyCode.D;
@@ -113,40 +113,38 @@ public class BoatMovementNetworked : NetworkBehaviour
 			}
 		}
 
-		//Movement Input
-        float forwardSpeed = Vector3.Dot(boat.velocity, transform.forward);
-        if (KeysDown.forward && forwardSpeed < topSpeed)
-        {
-            boat.velocity += transform.forward * acceleration * Time.deltaTime;
-            // Possible Speed Boost code
-            if (speedBoost)
-                boat.velocity += transform.forward * speedBoostValue;
-            // boat can only turn if moving
+		Debug.DrawRay(transform.position, transform.forward * 10, Color.green, 0, false);
 
-            if (KeysDown.right)
-                //boat.AddTorque(transform.right * torque);
-                boat.transform.Rotate(Vector3.up * rotationalVelocity * Time.deltaTime);
-                if (KeysDown.left)
-                    //boat.AddTorque(-transform.right * torque);
-                boat.transform.Rotate(-Vector3.up * rotationalVelocity * Time.deltaTime);
-            
-            
-        }
-        if (KeysDown.backwards && forwardSpeed > 0)
-            boat.velocity -= transform.forward * (acceleration * Time.deltaTime);
-        // Minor turning ability, needed in case the boat is stuck on a rock or something
-        
-        if (KeysDown.right)
-        {
-            boat.transform.Rotate(Vector3.up * minorRotationalVelocity * Time.deltaTime);
-        }
-        if (KeysDown.left)
-        {
-            boat.transform.Rotate(-Vector3.up * minorRotationalVelocity * Time.deltaTime);
-        }
-        
-        
-    }
+		float horizontalAxis = 0;
+		if (KeysDown.left)
+			horizontalAxis--;
+		if (KeysDown.right)
+			horizontalAxis++;
+
+		if (KeysDown.forward && !KeysDown.backwards)
+		{
+			float acceleration = forwardsAcceleration * Time.deltaTime;
+
+			if (speedBoost)
+				acceleration *= speedBoostValue;
+
+			Vector3 forceOffset = -transform.right * (horizontalAxis * rotationalControl) + transform.forward * boatPropulsionPointOffset;
+
+			boat.AddForceAtPosition(transform.forward * acceleration, transform.position + forceOffset, ForceMode.Acceleration);
+		}
+		else if (!KeysDown.forward && KeysDown.backwards)
+		{
+			float acceleration = backwardsAcceleration * Time.deltaTime;
+
+			if (speedBoost)
+				acceleration *= speedBoostValue;
+
+			Vector3 forceDirection = -transform.forward;
+
+			boat.AddForceAtPosition(forceDirection * acceleration, transform.position + transform.forward * boatPropulsionPointOffset, ForceMode.Acceleration);
+		}
+
+	}
 
 	//Called by client, runs on server.
 	//Spawns cannonball on server, then on all clients.

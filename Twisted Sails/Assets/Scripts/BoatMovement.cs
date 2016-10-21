@@ -48,7 +48,7 @@ public class BoatMovement : MonoBehaviour
 			if (speedBoost)
 				acceleration *= speedBoostValue;
 
-			Vector3 forceOffset = -transform.right * (Input.GetAxis("Horizontal") * rotationalControl) + transform.forward * boatPropulsionPointOffset; ;
+			Vector3 forceOffset = -transform.right * (Input.GetAxis("Horizontal") * rotationalControl) + transform.forward * boatPropulsionPointOffset;
 
 			forcePosition = transform.position + forceOffset;
 
