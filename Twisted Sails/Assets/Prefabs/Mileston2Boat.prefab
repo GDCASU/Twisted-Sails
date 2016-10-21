@@ -5220,7 +5220,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   forwardsAcceleration: 200
   backwardsAcceleration: 50
-  rotationalControl: 0.5
+  rotationalControl: 1
   speedBoostValue: 2
   speedBoost: 0
   boatPropulsionPointOffset: -1

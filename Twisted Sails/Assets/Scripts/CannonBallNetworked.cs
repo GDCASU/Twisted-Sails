@@ -12,12 +12,16 @@
 
 using UnityEngine;
 using System.Collections;
+using UnityEngine.Networking;
 
-public class CannonBallNetworked : MonoBehaviour {
+public class CannonBallNetworked : NetworkBehaviour {
 
 	public float despawnDepth = -3f;
 	public float scaleFactor = 0.1f;
 	private static Vector3 initScale = Vector3.zero;
+
+    [SyncVar]
+    public NetworkInstanceId owner;
 
 	//Set size of cannonball
 	void Start()
@@ -25,8 +29,8 @@ public class CannonBallNetworked : MonoBehaviour {
 		this.transform.localScale = initScale;
 	}
 
-	//Set default scale of all cannonballs
-	public static void SetInitScale (Vector3 newInitScale)
+    //Set default scale of all cannonballs
+    public static void SetInitScale (Vector3 newInitScale)
 	{
 		initScale = newInitScale;
 	}

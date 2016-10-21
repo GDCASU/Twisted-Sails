@@ -19,8 +19,8 @@ public class BoatCameraNetworked : MonoBehaviour
     //private float angleFromUp = Mathf.PI/4;
     //private float rotation; 
 
-    private float Y_angle_Min = 18.0f;
-    private float Y_angle_Max = 25.0f;
+    public float Y_angle_Min = 18.0f;
+	public float Y_angle_Max = 25.0f;
 
     public Transform camTransform;
 
@@ -49,9 +49,16 @@ public class BoatCameraNetworked : MonoBehaviour
 
     private void Update()
 	{
-		if (!boatToFollow) { return; }
+		if (!boatToFollow)
+		{
+			Cursor.visible = true;
+			Cursor.lockState = CursorLockMode.Confined;
+			return;
+		}
+		Cursor.visible = false;
+		Cursor.lockState = CursorLockMode.Locked;
 
-        currentX += Input.GetAxis("Mouse X") * sensitivityX;
+		currentX += Input.GetAxis("Mouse X") * sensitivityX;
         currentY -= Input.GetAxis("Mouse Y") * sensitivityY;
 
         currentY = Mathf.Clamp(currentY, Y_angle_Min, Y_angle_Max);
@@ -64,7 +71,7 @@ public class BoatCameraNetworked : MonoBehaviour
         Vector3 dir = new Vector3(0, 0, -distance);
         Vector3 offset = new Vector3(0, 1.0f, 0);
 
-        Quaternion rotation = Quaternion.Euler(currentY, currentX, 0);
+        Quaternion rotation = Quaternion.Euler(currentY, boatToFollow.transform.rotation.eulerAngles.y + currentX, 0);
         camTransform.position = boatToFollow.transform.position + rotation * dir;
         camTransform.LookAt(boatToFollow.transform.position);
     }

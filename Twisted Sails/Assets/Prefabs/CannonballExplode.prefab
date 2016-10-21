@@ -22,6 +22,8 @@ GameObject:
   - 198: {fileID: 198000011298217432}
   - 199: {fileID: 199000012965099832}
   - 114: {fileID: 114000010337513910}
+  - 114: {fileID: 114000012950867904}
+  - 114: {fileID: 114000010163378602}
   m_Layer: 0
   m_Name: CannonballExplode
   m_TagString: Untagged
@@ -42,6 +44,26 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
+--- !u!114 &114000010163378602
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000011769946516}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1768714887, guid: 870353891bb340e2b2a9c8707e7419ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_TransformSyncMode: 1
+  m_SendInterval: 0
+  m_SyncRotationAxis: 7
+  m_RotationSyncCompression: 0
+  m_SyncSpin: 0
+  m_MovementTheshold: 0.001
+  m_SnapThreshold: 5
+  m_InterpolateRotation: 1
+  m_InterpolateMovement: 1
 --- !u!114 &114000010337513910
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -53,6 +75,38 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f9010fda9a05674796738b1023a0fb0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &114000012950867904
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000011769946516}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 372142912, guid: 870353891bb340e2b2a9c8707e7419ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 138
+    i1: 240
+    i2: 196
+    i3: 255
+    i4: 1
+    i5: 222
+    i6: 16
+    i7: 196
+    i8: 169
+    i9: 152
+    i10: 13
+    i11: 184
+    i12: 93
+    i13: 107
+    i14: 249
+    i15: 16
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 0
 --- !u!198 &198000011298217432
 ParticleSystem:
   m_ObjectHideFlags: 1
