@@ -1,0 +1,538 @@
+fileFormatVersion: 2
+guid: c0dfe7ef6159ddc459f0e03367154a8c
+timeCreated: 1477057029
+licenseType: Free
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: plane-retopo 1-retopo 1_MeshPart0
+    100002: plane-retopo 1-retopo 1_MeshPart1
+    100004: plane-retopo 1-retopo 1_MeshPart10
+    100006: plane-retopo 1-retopo 1_MeshPart11
+    100008: plane-retopo 1-retopo 1_MeshPart12
+    100010: plane-retopo 1-retopo 1_MeshPart13
+    100012: plane-retopo 1-retopo 1_MeshPart14
+    100014: plane-retopo 1-retopo 1_MeshPart15
+    100016: plane-retopo 1-retopo 1_MeshPart16
+    100018: plane-retopo 1-retopo 1_MeshPart17
+    100020: plane-retopo 1-retopo 1_MeshPart18
+    100022: plane-retopo 1-retopo 1_MeshPart19
+    100024: plane-retopo 1-retopo 1_MeshPart2
+    100026: plane-retopo 1-retopo 1_MeshPart20
+    100028: plane-retopo 1-retopo 1_MeshPart21
+    100030: plane-retopo 1-retopo 1_MeshPart22
+    100032: plane-retopo 1-retopo 1_MeshPart23
+    100034: plane-retopo 1-retopo 1_MeshPart24
+    100036: plane-retopo 1-retopo 1_MeshPart25
+    100038: plane-retopo 1-retopo 1_MeshPart26
+    100040: plane-retopo 1-retopo 1_MeshPart27
+    100042: plane-retopo 1-retopo 1_MeshPart28
+    100044: plane-retopo 1-retopo 1_MeshPart29
+    100046: plane-retopo 1-retopo 1_MeshPart3
+    100048: plane-retopo 1-retopo 1_MeshPart30
+    100050: plane-retopo 1-retopo 1_MeshPart31
+    100052: plane-retopo 1-retopo 1_MeshPart32
+    100054: plane-retopo 1-retopo 1_MeshPart33
+    100056: plane-retopo 1-retopo 1_MeshPart34
+    100058: plane-retopo 1-retopo 1_MeshPart35
+    100060: plane-retopo 1-retopo 1_MeshPart36
+    100062: plane-retopo 1-retopo 1_MeshPart37
+    100064: plane-retopo 1-retopo 1_MeshPart38
+    100066: plane-retopo 1-retopo 1_MeshPart39
+    100068: plane-retopo 1-retopo 1_MeshPart4
+    100070: plane-retopo 1-retopo 1_MeshPart40
+    100072: plane-retopo 1-retopo 1_MeshPart41
+    100074: plane-retopo 1-retopo 1_MeshPart42
+    100076: plane-retopo 1-retopo 1_MeshPart43
+    100078: plane-retopo 1-retopo 1_MeshPart44
+    100080: plane-retopo 1-retopo 1_MeshPart45
+    100082: plane-retopo 1-retopo 1_MeshPart46
+    100084: plane-retopo 1-retopo 1_MeshPart47
+    100086: plane-retopo 1-retopo 1_MeshPart48
+    100088: plane-retopo 1-retopo 1_MeshPart49
+    100090: plane-retopo 1-retopo 1_MeshPart5
+    100092: plane-retopo 1-retopo 1_MeshPart50
+    100094: plane-retopo 1-retopo 1_MeshPart51
+    100096: plane-retopo 1-retopo 1_MeshPart52
+    100098: plane-retopo 1-retopo 1_MeshPart53
+    100100: plane-retopo 1-retopo 1_MeshPart54
+    100102: plane-retopo 1-retopo 1_MeshPart55
+    100104: plane-retopo 1-retopo 1_MeshPart56
+    100106: plane-retopo 1-retopo 1_MeshPart57
+    100108: plane-retopo 1-retopo 1_MeshPart58
+    100110: plane-retopo 1-retopo 1_MeshPart59
+    100112: plane-retopo 1-retopo 1_MeshPart6
+    100114: plane-retopo 1-retopo 1_MeshPart60
+    100116: plane-retopo 1-retopo 1_MeshPart61
+    100118: plane-retopo 1-retopo 1_MeshPart62
+    100120: plane-retopo 1-retopo 1_MeshPart63
+    100122: plane-retopo 1-retopo 1_MeshPart64
+    100124: plane-retopo 1-retopo 1_MeshPart65
+    100126: plane-retopo 1-retopo 1_MeshPart66
+    100128: plane-retopo 1-retopo 1_MeshPart67
+    100130: plane-retopo 1-retopo 1_MeshPart68
+    100132: plane-retopo 1-retopo 1_MeshPart69
+    100134: plane-retopo 1-retopo 1_MeshPart7
+    100136: plane-retopo 1-retopo 1_MeshPart70
+    100138: plane-retopo 1-retopo 1_MeshPart71
+    100140: plane-retopo 1-retopo 1_MeshPart72
+    100142: plane-retopo 1-retopo 1_MeshPart73
+    100144: plane-retopo 1-retopo 1_MeshPart74
+    100146: plane-retopo 1-retopo 1_MeshPart75
+    100148: plane-retopo 1-retopo 1_MeshPart76
+    100150: plane-retopo 1-retopo 1_MeshPart77
+    100152: plane-retopo 1-retopo 1_MeshPart78
+    100154: plane-retopo 1-retopo 1_MeshPart79
+    100156: plane-retopo 1-retopo 1_MeshPart8
+    100158: plane-retopo 1-retopo 1_MeshPart80
+    100160: plane-retopo 1-retopo 1_MeshPart81
+    100162: plane-retopo 1-retopo 1_MeshPart82
+    100164: plane-retopo 1-retopo 1_MeshPart83
+    100166: plane-retopo 1-retopo 1_MeshPart84
+    100168: plane-retopo 1-retopo 1_MeshPart85
+    100170: plane-retopo 1-retopo 1_MeshPart86
+    100172: plane-retopo 1-retopo 1_MeshPart87
+    100174: plane-retopo 1-retopo 1_MeshPart88
+    100176: plane-retopo 1-retopo 1_MeshPart89
+    100178: plane-retopo 1-retopo 1_MeshPart9
+    100180: plane-retopo 1-retopo 1_MeshPart90
+    100182: plane-retopo 1-retopo 1_MeshPart91
+    100184: plane-retopo 1-retopo 1_MeshPart92
+    100186: //RootNode
+    400000: plane-retopo 1-retopo 1_MeshPart0
+    400002: plane-retopo 1-retopo 1_MeshPart1
+    400004: plane-retopo 1-retopo 1_MeshPart10
+    400006: plane-retopo 1-retopo 1_MeshPart11
+    400008: plane-retopo 1-retopo 1_MeshPart12
+    400010: plane-retopo 1-retopo 1_MeshPart13
+    400012: plane-retopo 1-retopo 1_MeshPart14
+    400014: plane-retopo 1-retopo 1_MeshPart15
+    400016: plane-retopo 1-retopo 1_MeshPart16
+    400018: plane-retopo 1-retopo 1_MeshPart17
+    400020: plane-retopo 1-retopo 1_MeshPart18
+    400022: plane-retopo 1-retopo 1_MeshPart19
+    400024: plane-retopo 1-retopo 1_MeshPart2
+    400026: plane-retopo 1-retopo 1_MeshPart20
+    400028: plane-retopo 1-retopo 1_MeshPart21
+    400030: plane-retopo 1-retopo 1_MeshPart22
+    400032: plane-retopo 1-retopo 1_MeshPart23
+    400034: plane-retopo 1-retopo 1_MeshPart24
+    400036: plane-retopo 1-retopo 1_MeshPart25
+    400038: plane-retopo 1-retopo 1_MeshPart26
+    400040: plane-retopo 1-retopo 1_MeshPart27
+    400042: plane-retopo 1-retopo 1_MeshPart28
+    400044: plane-retopo 1-retopo 1_MeshPart29
+    400046: plane-retopo 1-retopo 1_MeshPart3
+    400048: plane-retopo 1-retopo 1_MeshPart30
+    400050: plane-retopo 1-retopo 1_MeshPart31
+    400052: plane-retopo 1-retopo 1_MeshPart32
+    400054: plane-retopo 1-retopo 1_MeshPart33
+    400056: plane-retopo 1-retopo 1_MeshPart34
+    400058: plane-retopo 1-retopo 1_MeshPart35
+    400060: plane-retopo 1-retopo 1_MeshPart36
+    400062: plane-retopo 1-retopo 1_MeshPart37
+    400064: plane-retopo 1-retopo 1_MeshPart38
+    400066: plane-retopo 1-retopo 1_MeshPart39
+    400068: plane-retopo 1-retopo 1_MeshPart4
+    400070: plane-retopo 1-retopo 1_MeshPart40
+    400072: plane-retopo 1-retopo 1_MeshPart41
+    400074: plane-retopo 1-retopo 1_MeshPart42
+    400076: plane-retopo 1-retopo 1_MeshPart43
+    400078: plane-retopo 1-retopo 1_MeshPart44
+    400080: plane-retopo 1-retopo 1_MeshPart45
+    400082: plane-retopo 1-retopo 1_MeshPart46
+    400084: plane-retopo 1-retopo 1_MeshPart47
+    400086: plane-retopo 1-retopo 1_MeshPart48
+    400088: plane-retopo 1-retopo 1_MeshPart49
+    400090: plane-retopo 1-retopo 1_MeshPart5
+    400092: plane-retopo 1-retopo 1_MeshPart50
+    400094: plane-retopo 1-retopo 1_MeshPart51
+    400096: plane-retopo 1-retopo 1_MeshPart52
+    400098: plane-retopo 1-retopo 1_MeshPart53
+    400100: plane-retopo 1-retopo 1_MeshPart54
+    400102: plane-retopo 1-retopo 1_MeshPart55
+    400104: plane-retopo 1-retopo 1_MeshPart56
+    400106: plane-retopo 1-retopo 1_MeshPart57
+    400108: plane-retopo 1-retopo 1_MeshPart58
+    400110: plane-retopo 1-retopo 1_MeshPart59
+    400112: plane-retopo 1-retopo 1_MeshPart6
+    400114: plane-retopo 1-retopo 1_MeshPart60
+    400116: plane-retopo 1-retopo 1_MeshPart61
+    400118: plane-retopo 1-retopo 1_MeshPart62
+    400120: plane-retopo 1-retopo 1_MeshPart63
+    400122: plane-retopo 1-retopo 1_MeshPart64
+    400124: plane-retopo 1-retopo 1_MeshPart65
+    400126: plane-retopo 1-retopo 1_MeshPart66
+    400128: plane-retopo 1-retopo 1_MeshPart67
+    400130: plane-retopo 1-retopo 1_MeshPart68
+    400132: plane-retopo 1-retopo 1_MeshPart69
+    400134: plane-retopo 1-retopo 1_MeshPart7
+    400136: plane-retopo 1-retopo 1_MeshPart70
+    400138: plane-retopo 1-retopo 1_MeshPart71
+    400140: plane-retopo 1-retopo 1_MeshPart72
+    400142: plane-retopo 1-retopo 1_MeshPart73
+    400144: plane-retopo 1-retopo 1_MeshPart74
+    400146: plane-retopo 1-retopo 1_MeshPart75
+    400148: plane-retopo 1-retopo 1_MeshPart76
+    400150: plane-retopo 1-retopo 1_MeshPart77
+    400152: plane-retopo 1-retopo 1_MeshPart78
+    400154: plane-retopo 1-retopo 1_MeshPart79
+    400156: plane-retopo 1-retopo 1_MeshPart8
+    400158: plane-retopo 1-retopo 1_MeshPart80
+    400160: plane-retopo 1-retopo 1_MeshPart81
+    400162: plane-retopo 1-retopo 1_MeshPart82
+    400164: plane-retopo 1-retopo 1_MeshPart83
+    400166: plane-retopo 1-retopo 1_MeshPart84
+    400168: plane-retopo 1-retopo 1_MeshPart85
+    400170: plane-retopo 1-retopo 1_MeshPart86
+    400172: plane-retopo 1-retopo 1_MeshPart87
+    400174: plane-retopo 1-retopo 1_MeshPart88
+    400176: plane-retopo 1-retopo 1_MeshPart89
+    400178: plane-retopo 1-retopo 1_MeshPart9
+    400180: plane-retopo 1-retopo 1_MeshPart90
+    400182: plane-retopo 1-retopo 1_MeshPart91
+    400184: plane-retopo 1-retopo 1_MeshPart92
+    400186: //RootNode
+    2300000: plane-retopo 1-retopo 1_MeshPart0
+    2300002: plane-retopo 1-retopo 1_MeshPart1
+    2300004: plane-retopo 1-retopo 1_MeshPart10
+    2300006: plane-retopo 1-retopo 1_MeshPart11
+    2300008: plane-retopo 1-retopo 1_MeshPart12
+    2300010: plane-retopo 1-retopo 1_MeshPart13
+    2300012: plane-retopo 1-retopo 1_MeshPart14
+    2300014: plane-retopo 1-retopo 1_MeshPart15
+    2300016: plane-retopo 1-retopo 1_MeshPart16
+    2300018: plane-retopo 1-retopo 1_MeshPart17
+    2300020: plane-retopo 1-retopo 1_MeshPart18
+    2300022: plane-retopo 1-retopo 1_MeshPart19
+    2300024: plane-retopo 1-retopo 1_MeshPart2
+    2300026: plane-retopo 1-retopo 1_MeshPart20
+    2300028: plane-retopo 1-retopo 1_MeshPart21
+    2300030: plane-retopo 1-retopo 1_MeshPart22
+    2300032: plane-retopo 1-retopo 1_MeshPart23
+    2300034: plane-retopo 1-retopo 1_MeshPart24
+    2300036: plane-retopo 1-retopo 1_MeshPart25
+    2300038: plane-retopo 1-retopo 1_MeshPart26
+    2300040: plane-retopo 1-retopo 1_MeshPart27
+    2300042: plane-retopo 1-retopo 1_MeshPart28
+    2300044: plane-retopo 1-retopo 1_MeshPart29
+    2300046: plane-retopo 1-retopo 1_MeshPart3
+    2300048: plane-retopo 1-retopo 1_MeshPart30
+    2300050: plane-retopo 1-retopo 1_MeshPart31
+    2300052: plane-retopo 1-retopo 1_MeshPart32
+    2300054: plane-retopo 1-retopo 1_MeshPart33
+    2300056: plane-retopo 1-retopo 1_MeshPart34
+    2300058: plane-retopo 1-retopo 1_MeshPart35
+    2300060: plane-retopo 1-retopo 1_MeshPart36
+    2300062: plane-retopo 1-retopo 1_MeshPart37
+    2300064: plane-retopo 1-retopo 1_MeshPart38
+    2300066: plane-retopo 1-retopo 1_MeshPart39
+    2300068: plane-retopo 1-retopo 1_MeshPart4
+    2300070: plane-retopo 1-retopo 1_MeshPart40
+    2300072: plane-retopo 1-retopo 1_MeshPart41
+    2300074: plane-retopo 1-retopo 1_MeshPart42
+    2300076: plane-retopo 1-retopo 1_MeshPart43
+    2300078: plane-retopo 1-retopo 1_MeshPart44
+    2300080: plane-retopo 1-retopo 1_MeshPart45
+    2300082: plane-retopo 1-retopo 1_MeshPart46
+    2300084: plane-retopo 1-retopo 1_MeshPart47
+    2300086: plane-retopo 1-retopo 1_MeshPart48
+    2300088: plane-retopo 1-retopo 1_MeshPart49
+    2300090: plane-retopo 1-retopo 1_MeshPart5
+    2300092: plane-retopo 1-retopo 1_MeshPart50
+    2300094: plane-retopo 1-retopo 1_MeshPart51
+    2300096: plane-retopo 1-retopo 1_MeshPart52
+    2300098: plane-retopo 1-retopo 1_MeshPart53
+    2300100: plane-retopo 1-retopo 1_MeshPart54
+    2300102: plane-retopo 1-retopo 1_MeshPart55
+    2300104: plane-retopo 1-retopo 1_MeshPart56
+    2300106: plane-retopo 1-retopo 1_MeshPart57
+    2300108: plane-retopo 1-retopo 1_MeshPart58
+    2300110: plane-retopo 1-retopo 1_MeshPart59
+    2300112: plane-retopo 1-retopo 1_MeshPart6
+    2300114: plane-retopo 1-retopo 1_MeshPart60
+    2300116: plane-retopo 1-retopo 1_MeshPart61
+    2300118: plane-retopo 1-retopo 1_MeshPart62
+    2300120: plane-retopo 1-retopo 1_MeshPart63
+    2300122: plane-retopo 1-retopo 1_MeshPart64
+    2300124: plane-retopo 1-retopo 1_MeshPart65
+    2300126: plane-retopo 1-retopo 1_MeshPart66
+    2300128: plane-retopo 1-retopo 1_MeshPart67
+    2300130: plane-retopo 1-retopo 1_MeshPart68
+    2300132: plane-retopo 1-retopo 1_MeshPart69
+    2300134: plane-retopo 1-retopo 1_MeshPart7
+    2300136: plane-retopo 1-retopo 1_MeshPart70
+    2300138: plane-retopo 1-retopo 1_MeshPart71
+    2300140: plane-retopo 1-retopo 1_MeshPart72
+    2300142: plane-retopo 1-retopo 1_MeshPart73
+    2300144: plane-retopo 1-retopo 1_MeshPart74
+    2300146: plane-retopo 1-retopo 1_MeshPart75
+    2300148: plane-retopo 1-retopo 1_MeshPart76
+    2300150: plane-retopo 1-retopo 1_MeshPart77
+    2300152: plane-retopo 1-retopo 1_MeshPart78
+    2300154: plane-retopo 1-retopo 1_MeshPart79
+    2300156: plane-retopo 1-retopo 1_MeshPart8
+    2300158: plane-retopo 1-retopo 1_MeshPart80
+    2300160: plane-retopo 1-retopo 1_MeshPart81
+    2300162: plane-retopo 1-retopo 1_MeshPart82
+    2300164: plane-retopo 1-retopo 1_MeshPart83
+    2300166: plane-retopo 1-retopo 1_MeshPart84
+    2300168: plane-retopo 1-retopo 1_MeshPart85
+    2300170: plane-retopo 1-retopo 1_MeshPart86
+    2300172: plane-retopo 1-retopo 1_MeshPart87
+    2300174: plane-retopo 1-retopo 1_MeshPart88
+    2300176: plane-retopo 1-retopo 1_MeshPart89
+    2300178: plane-retopo 1-retopo 1_MeshPart9
+    2300180: plane-retopo 1-retopo 1_MeshPart90
+    2300182: plane-retopo 1-retopo 1_MeshPart91
+    2300184: plane-retopo 1-retopo 1_MeshPart92
+    3300000: plane-retopo 1-retopo 1_MeshPart0
+    3300002: plane-retopo 1-retopo 1_MeshPart1
+    3300004: plane-retopo 1-retopo 1_MeshPart10
+    3300006: plane-retopo 1-retopo 1_MeshPart11
+    3300008: plane-retopo 1-retopo 1_MeshPart12
+    3300010: plane-retopo 1-retopo 1_MeshPart13
+    3300012: plane-retopo 1-retopo 1_MeshPart14
+    3300014: plane-retopo 1-retopo 1_MeshPart15
+    3300016: plane-retopo 1-retopo 1_MeshPart16
+    3300018: plane-retopo 1-retopo 1_MeshPart17
+    3300020: plane-retopo 1-retopo 1_MeshPart18
+    3300022: plane-retopo 1-retopo 1_MeshPart19
+    3300024: plane-retopo 1-retopo 1_MeshPart2
+    3300026: plane-retopo 1-retopo 1_MeshPart20
+    3300028: plane-retopo 1-retopo 1_MeshPart21
+    3300030: plane-retopo 1-retopo 1_MeshPart22
+    3300032: plane-retopo 1-retopo 1_MeshPart23
+    3300034: plane-retopo 1-retopo 1_MeshPart24
+    3300036: plane-retopo 1-retopo 1_MeshPart25
+    3300038: plane-retopo 1-retopo 1_MeshPart26
+    3300040: plane-retopo 1-retopo 1_MeshPart27
+    3300042: plane-retopo 1-retopo 1_MeshPart28
+    3300044: plane-retopo 1-retopo 1_MeshPart29
+    3300046: plane-retopo 1-retopo 1_MeshPart3
+    3300048: plane-retopo 1-retopo 1_MeshPart30
+    3300050: plane-retopo 1-retopo 1_MeshPart31
+    3300052: plane-retopo 1-retopo 1_MeshPart32
+    3300054: plane-retopo 1-retopo 1_MeshPart33
+    3300056: plane-retopo 1-retopo 1_MeshPart34
+    3300058: plane-retopo 1-retopo 1_MeshPart35
+    3300060: plane-retopo 1-retopo 1_MeshPart36
+    3300062: plane-retopo 1-retopo 1_MeshPart37
+    3300064: plane-retopo 1-retopo 1_MeshPart38
+    3300066: plane-retopo 1-retopo 1_MeshPart39
+    3300068: plane-retopo 1-retopo 1_MeshPart4
+    3300070: plane-retopo 1-retopo 1_MeshPart40
+    3300072: plane-retopo 1-retopo 1_MeshPart41
+    3300074: plane-retopo 1-retopo 1_MeshPart42
+    3300076: plane-retopo 1-retopo 1_MeshPart43
+    3300078: plane-retopo 1-retopo 1_MeshPart44
+    3300080: plane-retopo 1-retopo 1_MeshPart45
+    3300082: plane-retopo 1-retopo 1_MeshPart46
+    3300084: plane-retopo 1-retopo 1_MeshPart47
+    3300086: plane-retopo 1-retopo 1_MeshPart48
+    3300088: plane-retopo 1-retopo 1_MeshPart49
+    3300090: plane-retopo 1-retopo 1_MeshPart5
+    3300092: plane-retopo 1-retopo 1_MeshPart50
+    3300094: plane-retopo 1-retopo 1_MeshPart51
+    3300096: plane-retopo 1-retopo 1_MeshPart52
+    3300098: plane-retopo 1-retopo 1_MeshPart53
+    3300100: plane-retopo 1-retopo 1_MeshPart54
+    3300102: plane-retopo 1-retopo 1_MeshPart55
+    3300104: plane-retopo 1-retopo 1_MeshPart56
+    3300106: plane-retopo 1-retopo 1_MeshPart57
+    3300108: plane-retopo 1-retopo 1_MeshPart58
+    3300110: plane-retopo 1-retopo 1_MeshPart59
+    3300112: plane-retopo 1-retopo 1_MeshPart6
+    3300114: plane-retopo 1-retopo 1_MeshPart60
+    3300116: plane-retopo 1-retopo 1_MeshPart61
+    3300118: plane-retopo 1-retopo 1_MeshPart62
+    3300120: plane-retopo 1-retopo 1_MeshPart63
+    3300122: plane-retopo 1-retopo 1_MeshPart64
+    3300124: plane-retopo 1-retopo 1_MeshPart65
+    3300126: plane-retopo 1-retopo 1_MeshPart66
+    3300128: plane-retopo 1-retopo 1_MeshPart67
+    3300130: plane-retopo 1-retopo 1_MeshPart68
+    3300132: plane-retopo 1-retopo 1_MeshPart69
+    3300134: plane-retopo 1-retopo 1_MeshPart7
+    3300136: plane-retopo 1-retopo 1_MeshPart70
+    3300138: plane-retopo 1-retopo 1_MeshPart71
+    3300140: plane-retopo 1-retopo 1_MeshPart72
+    3300142: plane-retopo 1-retopo 1_MeshPart73
+    3300144: plane-retopo 1-retopo 1_MeshPart74
+    3300146: plane-retopo 1-retopo 1_MeshPart75
+    3300148: plane-retopo 1-retopo 1_MeshPart76
+    3300150: plane-retopo 1-retopo 1_MeshPart77
+    3300152: plane-retopo 1-retopo 1_MeshPart78
+    3300154: plane-retopo 1-retopo 1_MeshPart79
+    3300156: plane-retopo 1-retopo 1_MeshPart8
+    3300158: plane-retopo 1-retopo 1_MeshPart80
+    3300160: plane-retopo 1-retopo 1_MeshPart81
+    3300162: plane-retopo 1-retopo 1_MeshPart82
+    3300164: plane-retopo 1-retopo 1_MeshPart83
+    3300166: plane-retopo 1-retopo 1_MeshPart84
+    3300168: plane-retopo 1-retopo 1_MeshPart85
+    3300170: plane-retopo 1-retopo 1_MeshPart86
+    3300172: plane-retopo 1-retopo 1_MeshPart87
+    3300174: plane-retopo 1-retopo 1_MeshPart88
+    3300176: plane-retopo 1-retopo 1_MeshPart89
+    3300178: plane-retopo 1-retopo 1_MeshPart9
+    3300180: plane-retopo 1-retopo 1_MeshPart90
+    3300182: plane-retopo 1-retopo 1_MeshPart91
+    3300184: plane-retopo 1-retopo 1_MeshPart92
+    4300000: plane-retopo 1-retopo 1_MeshPart0
+    4300002: plane-retopo 1-retopo 1_MeshPart1
+    4300004: plane-retopo 1-retopo 1_MeshPart2
+    4300006: plane-retopo 1-retopo 1_MeshPart3
+    4300008: plane-retopo 1-retopo 1_MeshPart4
+    4300010: plane-retopo 1-retopo 1_MeshPart5
+    4300012: plane-retopo 1-retopo 1_MeshPart6
+    4300014: plane-retopo 1-retopo 1_MeshPart7
+    4300016: plane-retopo 1-retopo 1_MeshPart8
+    4300018: plane-retopo 1-retopo 1_MeshPart9
+    4300020: plane-retopo 1-retopo 1_MeshPart10
+    4300022: plane-retopo 1-retopo 1_MeshPart11
+    4300024: plane-retopo 1-retopo 1_MeshPart12
+    4300026: plane-retopo 1-retopo 1_MeshPart13
+    4300028: plane-retopo 1-retopo 1_MeshPart14
+    4300030: plane-retopo 1-retopo 1_MeshPart15
+    4300032: plane-retopo 1-retopo 1_MeshPart16
+    4300034: plane-retopo 1-retopo 1_MeshPart17
+    4300036: plane-retopo 1-retopo 1_MeshPart18
+    4300038: plane-retopo 1-retopo 1_MeshPart19
+    4300040: plane-retopo 1-retopo 1_MeshPart20
+    4300042: plane-retopo 1-retopo 1_MeshPart21
+    4300044: plane-retopo 1-retopo 1_MeshPart22
+    4300046: plane-retopo 1-retopo 1_MeshPart23
+    4300048: plane-retopo 1-retopo 1_MeshPart24
+    4300050: plane-retopo 1-retopo 1_MeshPart25
+    4300052: plane-retopo 1-retopo 1_MeshPart26
+    4300054: plane-retopo 1-retopo 1_MeshPart27
+    4300056: plane-retopo 1-retopo 1_MeshPart28
+    4300058: plane-retopo 1-retopo 1_MeshPart29
+    4300060: plane-retopo 1-retopo 1_MeshPart30
+    4300062: plane-retopo 1-retopo 1_MeshPart31
+    4300064: plane-retopo 1-retopo 1_MeshPart32
+    4300066: plane-retopo 1-retopo 1_MeshPart33
+    4300068: plane-retopo 1-retopo 1_MeshPart34
+    4300070: plane-retopo 1-retopo 1_MeshPart35
+    4300072: plane-retopo 1-retopo 1_MeshPart36
+    4300074: plane-retopo 1-retopo 1_MeshPart37
+    4300076: plane-retopo 1-retopo 1_MeshPart38
+    4300078: plane-retopo 1-retopo 1_MeshPart39
+    4300080: plane-retopo 1-retopo 1_MeshPart40
+    4300082: plane-retopo 1-retopo 1_MeshPart41
+    4300084: plane-retopo 1-retopo 1_MeshPart42
+    4300086: plane-retopo 1-retopo 1_MeshPart43
+    4300088: plane-retopo 1-retopo 1_MeshPart44
+    4300090: plane-retopo 1-retopo 1_MeshPart45
+    4300092: plane-retopo 1-retopo 1_MeshPart46
+    4300094: plane-retopo 1-retopo 1_MeshPart47
+    4300096: plane-retopo 1-retopo 1_MeshPart48
+    4300098: plane-retopo 1-retopo 1_MeshPart49
+    4300100: plane-retopo 1-retopo 1_MeshPart50
+    4300102: plane-retopo 1-retopo 1_MeshPart51
+    4300104: plane-retopo 1-retopo 1_MeshPart52
+    4300106: plane-retopo 1-retopo 1_MeshPart53
+    4300108: plane-retopo 1-retopo 1_MeshPart54
+    4300110: plane-retopo 1-retopo 1_MeshPart55
+    4300112: plane-retopo 1-retopo 1_MeshPart56
+    4300114: plane-retopo 1-retopo 1_MeshPart57
+    4300116: plane-retopo 1-retopo 1_MeshPart58
+    4300118: plane-retopo 1-retopo 1_MeshPart59
+    4300120: plane-retopo 1-retopo 1_MeshPart60
+    4300122: plane-retopo 1-retopo 1_MeshPart61
+    4300124: plane-retopo 1-retopo 1_MeshPart62
+    4300126: plane-retopo 1-retopo 1_MeshPart63
+    4300128: plane-retopo 1-retopo 1_MeshPart64
+    4300130: plane-retopo 1-retopo 1_MeshPart65
+    4300132: plane-retopo 1-retopo 1_MeshPart66
+    4300134: plane-retopo 1-retopo 1_MeshPart67
+    4300136: plane-retopo 1-retopo 1_MeshPart68
+    4300138: plane-retopo 1-retopo 1_MeshPart69
+    4300140: plane-retopo 1-retopo 1_MeshPart70
+    4300142: plane-retopo 1-retopo 1_MeshPart71
+    4300144: plane-retopo 1-retopo 1_MeshPart72
+    4300146: plane-retopo 1-retopo 1_MeshPart73
+    4300148: plane-retopo 1-retopo 1_MeshPart74
+    4300150: plane-retopo 1-retopo 1_MeshPart75
+    4300152: plane-retopo 1-retopo 1_MeshPart76
+    4300154: plane-retopo 1-retopo 1_MeshPart77
+    4300156: plane-retopo 1-retopo 1_MeshPart78
+    4300158: plane-retopo 1-retopo 1_MeshPart79
+    4300160: plane-retopo 1-retopo 1_MeshPart80
+    4300162: plane-retopo 1-retopo 1_MeshPart81
+    4300164: plane-retopo 1-retopo 1_MeshPart82
+    4300166: plane-retopo 1-retopo 1_MeshPart83
+    4300168: plane-retopo 1-retopo 1_MeshPart84
+    4300170: plane-retopo 1-retopo 1_MeshPart85
+    4300172: plane-retopo 1-retopo 1_MeshPart86
+    4300174: plane-retopo 1-retopo 1_MeshPart87
+    4300176: plane-retopo 1-retopo 1_MeshPart88
+    4300178: plane-retopo 1-retopo 1_MeshPart89
+    4300180: plane-retopo 1-retopo 1_MeshPart90
+    4300182: plane-retopo 1-retopo 1_MeshPart91
+    4300184: plane-retopo 1-retopo 1_MeshPart92
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
