@@ -9,61 +9,64 @@ public class BoatCameraNetworked : MonoBehaviour
 {
 	public GameObject boatToFollow = null;
 
-	public float orbitalDistance = 10f;
-	public float rotationSpeed = 1f;
-	public float upAngleChangeSpeed = 1f;
+    //public float orbitalDistance = 10f;
+    //public float rotationSpeed = 1f;
+    //public float upAngleChangeSpeed = 1f;
 
-	public float maxAngleFromUp = 1.4f;
-	public float minAngleFromUp = 0.1f;
+    //public float maxAngleFromUp = 1.4f;
+    //public float minAngleFromUp = 0.1f;
 
-	private float angleFromUp = Mathf.PI/4;
-	private float rotation;
+    //private float angleFromUp = Mathf.PI/4;
+    //private float rotation; 
 
-	private void Update()
+    private float Y_angle_Min = 18.0f;
+    private float Y_angle_Max = 25.0f;
+
+    public Transform camTransform;
+
+    private Camera cam;
+
+    private float distance = 15.0f; // adjust this value to determine distrance from boat to camera
+    private float currentX = 0.0f;
+    private float currentY = 0.0f;
+
+    public float sensitivityX = 4.0f;
+    public float sensitivityY = 1.0f;
+
+    //float variables for adjusting sensitivity for first person view
+    // Setting offset to 0 will disable the camera rotation, recommend using numbers greather than 0.
+    public float offsetX = 1.0f;
+    public float offsetY = 1.0f;
+
+    private bool fps = false;
+
+    // Use this for initialization
+    private void Start()
+    {
+        camTransform = this.transform;
+        cam = Camera.main;
+    }
+
+    private void Update()
 	{
 		if (!boatToFollow) { return; }
 
-		if (Input.GetAxis("CameraHorizontal") > 0)
-		{
-			rotation += rotationSpeed * Time.deltaTime;
-        }
-		else if (Input.GetAxis("CameraHorizontal") < 0)
-		{
-			rotation -= rotationSpeed * Time.deltaTime;
-		}
+        currentX += Input.GetAxis("Mouse X") * sensitivityX;
+        currentY -= Input.GetAxis("Mouse Y") * sensitivityY;
 
-		if (Input.GetAxis("CameraVertical") < 0)
-		{
-			angleFromUp += upAngleChangeSpeed * Time.deltaTime;
-			if (angleFromUp > maxAngleFromUp)
-			{
-				angleFromUp = maxAngleFromUp;
-            }
-		}
-		else if (Input.GetAxis("CameraVertical") > 0)
-		{
-			angleFromUp -= upAngleChangeSpeed * Time.deltaTime;
-			if (angleFromUp < minAngleFromUp)
-			{
-				angleFromUp = minAngleFromUp;
-			}
-		}
-	}
+        currentY = Mathf.Clamp(currentY, Y_angle_Min, Y_angle_Max);
+    }
 
-	private void FixedUpdate()
+	private void LateUpdate()
 	{
 		if (!boatToFollow) { return; }
 
-		float offsetX = orbitalDistance * Mathf.Sin(angleFromUp) * Mathf.Cos(rotation);
-		float offsetY = orbitalDistance * Mathf.Cos(angleFromUp);
-        float offsetZ = orbitalDistance * Mathf.Sin(angleFromUp) * Mathf.Sin(rotation);
+        Vector3 dir = new Vector3(0, 0, -distance);
+        Vector3 offset = new Vector3(0, 1.0f, 0);
 
-		float newX = boatToFollow.transform.position.x + offsetX;
-		float newY = boatToFollow.transform.position.y + offsetY;
-		float newZ = boatToFollow.transform.position.z + offsetZ;
-
-		transform.position = new Vector3(newX, newY, newZ);
-		transform.LookAt(boatToFollow.transform);
-	}
+        Quaternion rotation = Quaternion.Euler(currentY, currentX, 0);
+        camTransform.position = boatToFollow.transform.position + rotation * dir;
+        camTransform.LookAt(boatToFollow.transform.position);
+    }
 
 }
