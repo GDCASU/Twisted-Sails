@@ -24,7 +24,7 @@ using UnityEngine.Networking;
 public class Health : NetworkBehaviour
 {
     [Header("Health")]
-    public float health;
+    [SyncVar] public float health;
     public Text healthText;
     public Slider healthSlider;
     [Header("Sinking")]
@@ -107,16 +107,25 @@ public class Health : NetworkBehaviour
 		Destroy (this.gameObject);
 	}*/
 
+    [Command]
+    void CmdOnHit(NetworkInstanceId id, Vector3 point)
+    {
+        
+        GameObject explode = (GameObject)Instantiate(explosion, point, Quaternion.identity);
+        explode.GetComponent<ParticleSystem>().Emit(100);
+        NetworkServer.Spawn(explode);
+        Destroy(NetworkServer.FindLocalObject(id));
+    }
+
     //Whenever ship collides with something else
     void OnCollisionEnter(Collision c)
     {
+        
         //CannonBall collision - Comment this out if cannon testing is needed
-        if (c.transform.gameObject.tag.Equals("Cannonball")) //todo: change this to use tags when possible
-        { 
+        if (isLocalPlayer && c.transform.gameObject.tag.Equals("Cannonball") && c.gameObject.GetComponent<CannonBallNetworked>().owner != GetComponent<NetworkIdentity>().netId) //todo: change this to use tags when possible
+        {
             ChangeHealth(-35);
-            GameObject explode = (GameObject)Instantiate(explosion, c.contacts[0].point, Quaternion.identity);
-            explode.GetComponent<ParticleSystem>().Emit(100);
-            Destroy(c.transform.gameObject);
+            CmdOnHit(c.gameObject.GetComponent<NetworkIdentity>().netId, c.contacts[0].point);
         }
 
         //Debug.Log ("Collided with something");
