@@ -24,17 +24,24 @@ public class OrbitalCamera : MonoBehaviour
 
     void OnEnable()
     {
-        lerpProgress = 0f;
-        Vector3 relativePos = transform.position - target.transform.position;
-        startAngle = Mathf.Atan2(relativePos.z, relativePos.x);
-
+        // NK 10/20 added target check to avoid null exceptions
+        if (target)
+        {
+            lerpProgress = 0f;
+            Vector3 relativePos = transform.position - target.transform.position;
+            startAngle = Mathf.Atan2(relativePos.z, relativePos.x);
+        }
     }
 
     void Update()
     {
-        Vector3 targetPos = target.transform.position + new Vector3(Mathf.Cos(lerpProgress * rotationSpeed + startAngle) * orbitRadius, orbitHeight, Mathf.Sin(lerpProgress * rotationSpeed + startAngle) * orbitRadius);
-        transform.position = Vector3.Slerp(transform.position, targetPos, lerpProgress);
-        transform.LookAt(target.transform);
-        lerpProgress += updateSpeed * Time.deltaTime;
+        // NK 10/20 added target check to avoid null exceptions
+        if (target)
+        {
+            Vector3 targetPos = target.transform.position + new Vector3(Mathf.Cos(lerpProgress * rotationSpeed + startAngle) * orbitRadius, orbitHeight, Mathf.Sin(lerpProgress * rotationSpeed + startAngle) * orbitRadius);
+            transform.position = Vector3.Slerp(transform.position, targetPos, lerpProgress);
+            transform.LookAt(target.transform);
+            lerpProgress += updateSpeed * Time.deltaTime;
+        }
     }
 }

@@ -29,6 +29,8 @@ public class CrewUserInterface : MonoBehaviour
     public string attackButton = "Attack Crew"; // At the moment set to 'Z'
     public string defenseButton = "Defense Crew"; // At the moment set to 'X'
 
+    public GameObject boat;
+
     Slider attackBar;
     Slider defenseBar;
     Slider speedBar;
@@ -36,8 +38,7 @@ public class CrewUserInterface : MonoBehaviour
     Text attackText;
     Text defenseText;
     Text speedText;
-
-    GameObject boat;
+    
     CrewManagement crewManagement;
     
 	// Use this for initialization
@@ -51,7 +52,6 @@ public class CrewUserInterface : MonoBehaviour
         defenseText = GameObject.Find("DefenseText").GetComponent<Text>();
         speedText = GameObject.Find("SpeedText").GetComponent<Text>();
 
-        boat = GameObject.Find("Boat");
         crewManagement = boat.GetComponent<CrewManagement>();
 
         attackBar.maxValue = attackMax;

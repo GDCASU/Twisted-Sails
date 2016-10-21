@@ -66,12 +66,15 @@ public class BoatMovementNetworked : NetworkBehaviour
 
 		boat = this.GetComponent<Rigidbody>();
 		
-		//Make camera follow boat
+		//Make orbital and boat camera follow boat
 		BoatCameraNetworked boatCam = Camera.main.GetComponent<BoatCameraNetworked>();
-		boatCam.boatToFollow = this.gameObject;
+        OrbitalCamera orbCam = Camera.main.GetComponent<OrbitalCamera>();
+        orbCam.target = this.gameObject;
+        Camera.main.GetComponent<OrbitalCamera>().enabled = false;
+        boatCam.boatToFollow = this.gameObject;
 
 		//Get cannon scripts
-		cannonScripts = this.GetComponentsInChildren<BroadsideCannonFireNetworked>();
+		cannonScripts = this.GetComponentsInChildren<BroadsideCannonFireNetworked>(); 
     }
 
 	//Get input for player

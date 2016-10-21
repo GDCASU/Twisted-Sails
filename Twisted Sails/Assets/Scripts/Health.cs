@@ -30,6 +30,7 @@ public class Health : MonoBehaviour
     public bool dead;
     public GameObject activeCamera;
     public GameObject explosion;
+    public Vector3 spawnPoint; // NK 10/20 added original spawnpoint
 
     //public int teamNumber;
     
@@ -39,11 +40,15 @@ public class Health : MonoBehaviour
     void Start()
     {
         //Variable initialization
+        activeCamera = Camera.main.gameObject;
         dead = false;
         tilting = false;
+        healthSlider = GameObject.FindGameObjectWithTag("HealthUI").GetComponent<Slider>(); // NK 10/20: locates the health UI in the scene
+        healthText = healthSlider.GetComponentInChildren<Text>(); // NK 10/20 locates the health text in the scene
         healthSlider.minValue = 0f;
         healthSlider.maxValue = 100f;
         ChangeHealth(0);
+        spawnPoint = this.transform.position;
     }
 
     // Update is called once per frame
@@ -68,16 +73,16 @@ public class Health : MonoBehaviour
             {
                 //The following block effectively "re-initializes" the boat to its original state
                 //Re-enable normal boat scripts, disable death-related scripts, re-initialize positions, rotations, forces
-                activeCamera.GetComponent<BoatCamera>().enabled = true; //must change this to match whatever the active camera controller is
+                activeCamera.GetComponent<BoatCameraNetworked>().enabled = true; //must change this to match whatever the active camera controller is
                 activeCamera.GetComponent<OrbitalCamera>().enabled = false;
-                GetComponent<BoatMovement>().enabled = true;
+                GetComponent<BoatMovementNetworked>().enabled = true;
                 GetComponent<Buoyancy>().enabled = true;
                 GetComponent<Rigidbody>().useGravity = true;
                 GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
                 GetComponent<Rigidbody>().velocity = Vector3.zero;
                 GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
                 ChangeHealth(100f - health);
-                transform.position = Vector3.zero;
+                transform.position = spawnPoint;
                 transform.rotation = Quaternion.identity;
                 dead = false;
             }
@@ -135,9 +140,9 @@ public class Health : MonoBehaviour
             //Destroy (this.gameObject);
             
             //The code below puts the ship into an automated death sequence
-            activeCamera.GetComponent<BoatCamera>().enabled = false; //change BoatCamera to match whatever the active camera controller script is
+            activeCamera.GetComponent<BoatCameraNetworked>().enabled = false; //change BoatCamera to match whatever the active camera controller script is
             activeCamera.GetComponent<OrbitalCamera>().enabled = true;
-            GetComponent<BoatMovement>().enabled = false;
+            GetComponent<BoatMovementNetworked>().enabled = false;
             GetComponent<Buoyancy>().enabled = false;
             GetComponent<Rigidbody>().useGravity = false;
             GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
