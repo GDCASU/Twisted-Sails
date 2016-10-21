@@ -161,6 +161,8 @@ public class BoatMovementNetworked : NetworkBehaviour
 		//Ignore collision between cannonball and ship that shot it
 		Physics.IgnoreCollision(_cannonBall.GetComponent<Collider>(), NetworkServer.FindLocalObject(shooterID).GetComponent<Collider>());
 
+        _cannonBall.GetComponent<CannonBallNetworked>().owner = shooterID;
+
 		//Spawn the object across all clients
 		NetworkServer.Spawn(_cannonBall);
 	}
