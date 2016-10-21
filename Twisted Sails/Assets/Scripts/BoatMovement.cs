@@ -1,8 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 /************************** BOAT MOVEMENT SCRIPT *******************************
- * This script controls the movement of the boat, now with key bindings and 
- * deceleration physics! The boat now has more realistic motion.
+ * This script controls the movement of the boat.
+ * 
+ * Added Force based movement and revised turning. Turning is now proportional to 
+ * the boat's forward speed, meaning that as the forward speed of the boat increases,
+ * the torque the boat experiences is decreased. The total torque will never be less 
+ * than minTorque, and thus the boat handling can be tuned by adjusting both torque 
+ * and minTorque.
  * 
  * Author: Diego Wilde
  * Date Modified: September 30th, 2016
@@ -12,11 +17,11 @@ using System.Collections;
 public class BoatMovement : MonoBehaviour
 {
     private Rigidbody boat;
-    public float acceleration = 15f;
-    public float topSpeed = 60;
-    public float rotationalVelocity = 25;
-    public float minorRotationalVelocity = 5;
-    public float speedBoostValue = 100;
+
+    public float forwardsAcceleration = 500;
+	public float backwardsAcceleration = 200;
+    public float rotationalControl = 1f;
+    public float speedBoostValue = 2;
     public bool speedBoost = false;
 
     public KeyCode forwardKey;
@@ -24,41 +29,48 @@ public class BoatMovement : MonoBehaviour
     public KeyCode leftKey;
     public KeyCode rightKey;
 
-    // Use this for initialization
+    public float boatPropulsionPointOffset;
+
     private void Start()
     {
         boat = this.GetComponent<Rigidbody>();
     }
 
-
-    private void FixedUpdate()
+	private Vector3 forcePosition;
+    private void Update()
     {
-        float forwardSpeed = Vector3.Dot(boat.velocity, transform.forward);
-        if (Input.GetKey(forwardKey) && forwardSpeed < topSpeed)
-        {
-            boat.velocity += transform.forward * acceleration * Time.deltaTime;
-            // Possible Speed Boost code
-            if (speedBoost)
-                boat.velocity += transform.forward * speedBoostValue;
-            // boat can only turn if moving
-            if (Input.GetKey(rightKey))
-                boat.transform.Rotate(Vector3.up * rotationalVelocity * Time.deltaTime);
-            if (Input.GetKey(leftKey))
-                boat.transform.Rotate(-Vector3.up * rotationalVelocity * Time.deltaTime);
-        }
-        if (Input.GetKey(backwardsKey) && forwardSpeed > 0)
-            boat.velocity -= transform.forward * (acceleration * Time.deltaTime);
-        // Minor turning ability, needed in case the boat is stuck on a rock or something
-        if (Input.GetKey(rightKey))
-        {
-            boat.transform.Rotate(Vector3.up * minorRotationalVelocity * Time.deltaTime);
-        }
-        if (Input.GetKey(leftKey))
-        {
-            boat.transform.Rotate(-Vector3.up * minorRotationalVelocity * Time.deltaTime);
-        }
+		Debug.DrawRay(transform.position, transform.forward * 10, Color.green, 0, false);
+
+		if (Input.GetAxis("Vertical") > 0)
+		{
+			float acceleration = forwardsAcceleration * Time.deltaTime;
+
+			if (speedBoost)
+				acceleration *= speedBoostValue;
+
+			Vector3 forceOffset = -transform.right * (Input.GetAxis("Horizontal") * rotationalControl) + transform.forward * boatPropulsionPointOffset;
+
+			forcePosition = transform.position + forceOffset;
+
+			boat.AddForceAtPosition(transform.forward * acceleration, forcePosition, ForceMode.Acceleration);
+		}
+		else if (Input.GetAxis("Vertical") < 0)
+		{
+			float acceleration = backwardsAcceleration * Time.deltaTime;
+
+			if (speedBoost)
+				acceleration *= speedBoostValue;
+
+			Vector3 forceDirection = -transform.forward;
+
+			forcePosition = transform.position + transform.forward * boatPropulsionPointOffset;
+			boat.AddForceAtPosition(forceDirection * acceleration, forcePosition, ForceMode.Acceleration);
+		}
     }
 
-        
-    }
+	private void OnDrawGizmos()
+	{
+		Gizmos.DrawSphere(forcePosition, .2f);
+	}
+}
 

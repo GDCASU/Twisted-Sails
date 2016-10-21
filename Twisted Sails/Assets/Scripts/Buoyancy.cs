@@ -48,7 +48,7 @@ public class Buoyancy : MonoBehaviour {
         }
 
         //Adjust drag based on object situation
-        if (bouyancyMult > .5f) //Under water
+        if (bouyancyMult > .75f) //Under water
         {
             rb.drag = submergedDrag;
         }
