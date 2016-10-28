@@ -38,6 +38,9 @@ public class Buoyancy : MonoBehaviour {
 		float bouyancyMult = 0;
 		float boatHeight = transform.position.y;
 
+        waterLevel = Mathf.Sin(Time.time);
+
+
 		//Add upward force when Center of Mass falls below the water level
 		if (boatHeight < waterLevel)
         {
