@@ -21,10 +21,17 @@ using UnityEngine.Networking;
 //Developed:		Kyle Chapman
 //Date:				10/20/2016
 //Description:		Added hurt self button and enabled multiplayer functionality.
+
+// Developer:       Kyle Aycock
+// Date:            10/21/2016
+// Description:     Fixed cannonball collisions for networking
+//                  Cleaned up code a bit
+//                  Added code to support health bars above other ships
 public class Health : NetworkBehaviour
 {
     [Header("Health")]
-    [SyncVar] public float health;
+    //Decided to just have it hook to the ChangeHealth function
+    [SyncVar(hook = "OnChangeHealth")] public float health;
     public Text healthText;
     public Slider healthSlider;
     [Header("Sinking")]
@@ -37,8 +44,6 @@ public class Health : NetworkBehaviour
     public GameObject activeCamera;
     public GameObject explosion;
     public Vector3 spawnPoint; // NK 10/20 added original spawnpoint
-
-    //public int teamNumber;
     
     private float respawnTimer;
     private bool tilting;
@@ -49,12 +54,26 @@ public class Health : NetworkBehaviour
         activeCamera = Camera.main.gameObject;
         dead = false;
         tilting = false;
-        healthSlider = GameObject.FindGameObjectWithTag("HealthUI").GetComponent<Slider>(); // NK 10/20: locates the health UI in the scene
-        healthText = healthSlider.GetComponentInChildren<Text>(); // NK 10/20 locates the health text in the scene
+        spawnPoint = this.transform.position;
+
+        if (isLocalPlayer)
+        {
+            //Use the main HealthUI at the top of the screen if this ship is the local player's ship
+            GameObject UI = GameObject.FindGameObjectWithTag("HealthUI");
+            healthSlider = UI.GetComponent<Slider>(); // NK 10/20: locates the health UI in the scene
+            healthText = UI.GetComponentInChildren<Text>(); // NK 10/20 locates the health text in the scene
+        }
+        else
+        {
+            //Otherwise, use the healthbar that's currently disabled within the ship
+            GameObject UI = transform.FindChild("Canvas").FindChild("HealthUI").gameObject;
+            healthSlider = UI.GetComponent<Slider>();
+            healthText = UI.GetComponentInChildren<Text>();
+            UI.SetActive(true);
+        }
         healthSlider.minValue = 0f;
         healthSlider.maxValue = 100f;
-        ChangeHealth(0);
-        spawnPoint = this.transform.position;
+        OnChangeHealth(health);
     }
 
     // Update is called once per frame
@@ -77,17 +96,21 @@ public class Health : NetworkBehaviour
             respawnTimer += Time.deltaTime;
             if (respawnTimer > secondsToRespawn)
             {
-                //The following block effectively "re-initializes" the boat to its original state
+                //The following code effectively "re-initializes" the boat to its original state
                 //Re-enable normal boat scripts, disable death-related scripts, re-initialize positions, rotations, forces
-                activeCamera.GetComponent<BoatCameraNetworked>().enabled = true; //must change this to match whatever the active camera controller is
-                activeCamera.GetComponent<OrbitalCamera>().enabled = false;
+                if (isLocalPlayer)
+                {
+                    //Only manipulate the camera if it's our ship that's respawning
+                    activeCamera.GetComponent<BoatCameraNetworked>().enabled = true; //must change this to match whatever the active camera controller is
+                    activeCamera.GetComponent<OrbitalCamera>().enabled = false;
+                    CmdChangeHealth(100);
+                }
                 GetComponent<BoatMovementNetworked>().enabled = true;
                 GetComponent<Buoyancy>().enabled = true;
                 GetComponent<Rigidbody>().useGravity = true;
                 GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
                 GetComponent<Rigidbody>().velocity = Vector3.zero;
                 GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
-                ChangeHealth(100f - health);
                 transform.position = spawnPoint;
                 transform.rotation = Quaternion.identity;
                 dead = false;
@@ -96,39 +119,28 @@ public class Health : NetworkBehaviour
 
 		if (isLocalPlayer && Input.GetKeyDown(hurtSelfButton))
 		{
-			ChangeHealth(-5);
+            CmdChangeHealth(-5);
 			return;
 		}
 
 	}
 
-    /*IEnumerator Wait() {
-		yield return new WaitForSeconds (1f);
-		Destroy (this.gameObject);
-	}*/
-
-    [Command]
-    void CmdOnHit(NetworkInstanceId id, Vector3 point)
-    {
-        
-        GameObject explode = (GameObject)Instantiate(explosion, point, Quaternion.identity);
-        explode.GetComponent<ParticleSystem>().Emit(100);
-        NetworkServer.Spawn(explode);
-        Destroy(NetworkServer.FindLocalObject(id));
-    }
 
     //Whenever ship collides with something else
     void OnCollisionEnter(Collision c)
     {
-        
-        //CannonBall collision - Comment this out if cannon testing is needed
-        if (isLocalPlayer && c.transform.gameObject.tag.Equals("Cannonball") && c.gameObject.GetComponent<CannonBallNetworked>().owner != GetComponent<NetworkIdentity>().netId) //todo: change this to use tags when possible
+        //Ignore cannonball collisions with owner
+        if (c.transform.gameObject.tag.Equals("Cannonball") && c.gameObject.GetComponent<CannonBallNetworked>().owner != GetComponent<NetworkIdentity>().netId) //todo: change this to use tags when possible
         {
-            ChangeHealth(-35);
-            CmdOnHit(c.gameObject.GetComponent<NetworkIdentity>().netId, c.contacts[0].point);
+            if (isLocalPlayer)
+            {
+                Debug.Log("Health changed!");
+                CmdChangeHealth(-35);
+            }
+            GameObject explode = (GameObject)Instantiate(explosion, c.contacts[0].point, Quaternion.identity);
+            explode.GetComponent<ParticleSystem>().Emit(100);
+            Destroy(c.gameObject);
         }
-
-        //Debug.Log ("Collided with something");
 
         /*if (other.name.Equals ("Health Pack")) { //should replace with tags
 			Debug.Log ("Collided with Health Pack");
@@ -142,27 +154,38 @@ public class Health : NetworkBehaviour
 		}*/
     }
 
-    //Use this method to add/remove health from the ship
-    public void ChangeHealth(float change)
+    //Apparently, SyncVars with hooks only call one way (Server -> Client)
+    //So I had to make a command so that health changes only happen on the server
+    [Command]
+    public void CmdChangeHealth(float amt)
     {
-        health += change;
-        healthSlider.value = health;
-        healthText.text = "Health: " + (int)health + "/100";
-        //staticHealth = health;
+        health = Mathf.Clamp(health+amt,0,100);
+    }
+
+
+    //This method should not be called to change health, use CmdChangeHealth for that.
+    //This method is automatically called on each client when the health changes on the server (through CmdChangeHealth)
+    public void OnChangeHealth(float newHealth)
+    {
+        health = newHealth;
+        if (isClient)
+        {
+            healthSlider.value = health;
+            healthText.text = "Health: " + (int)health + "/100";
+        }
         if (health <= 0 && !dead)
         {
             dead = true;
             tilting = true;
             respawnTimer = 0;
-            //Debug.Log ("Are they dead?: " + dead);
-            //Master.arrayOfLives[teamNumber - 1] = Master.arrayOfLives[teamNumber - 1] - 1;
-            //Instantiate (explosion, this.transform.position, this.transform.rotation);
-            //StartCoroutine( Wait());
-            //Destroy (this.gameObject);
-            
+
             //The code below puts the ship into an automated death sequence
-            activeCamera.GetComponent<BoatCameraNetworked>().enabled = false; //change BoatCamera to match whatever the active camera controller script is
-            activeCamera.GetComponent<OrbitalCamera>().enabled = true;
+            if (isLocalPlayer)
+            {
+                //Only manipulate the camera if it's the player's ship that's dying
+                activeCamera.GetComponent<BoatCameraNetworked>().enabled = false; //change BoatCamera to match whatever the active camera controller script is
+                activeCamera.GetComponent<OrbitalCamera>().enabled = true;
+            }
             GetComponent<BoatMovementNetworked>().enabled = false;
             GetComponent<Buoyancy>().enabled = false;
             GetComponent<Rigidbody>().useGravity = false;

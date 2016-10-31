@@ -142,6 +142,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   despawnDepth: -3
   scaleFactor: 0.1
+  splashPrefab: {fileID: 1000011780809054, guid: 67fb2972fe278384c8dacd728cd04bc6,
+    type: 2}
 --- !u!114 &114000013921448674
 MonoBehaviour:
   m_ObjectHideFlags: 1
