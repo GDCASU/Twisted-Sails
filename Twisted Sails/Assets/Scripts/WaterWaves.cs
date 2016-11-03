@@ -9,7 +9,7 @@ public class WaterWaves : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        water = this.GetComponent<MeshFilter>;
+        water = this.GetComponent<MeshFilter>().mesh;
 
 	}
 	
