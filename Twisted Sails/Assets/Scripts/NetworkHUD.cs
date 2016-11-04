@@ -1,5 +1,6 @@
 ﻿#if ENABLE_UNET
 
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -9,6 +10,7 @@ using UnityEngine.Networking;
 // NetworkManagerHUD is open source at: https://bitbucket.org/Unity-Technologies/networking/
 //
 // Added new GUI controls to input name and preferred team
+// Added scoreboard & recent score gain feed.
 
 [RequireComponent(typeof(NetworkManager))]
 public class NetworkHUD : MonoBehaviour
@@ -22,11 +24,24 @@ public class NetworkHUD : MonoBehaviour
     public int offsetY;
 
     int teamSelection;
+    bool showScoreboard;
+    List<string> messageStack;
+    float messageTimer;
+
+    private GUIStyle scoreboardStyle;
+    private GUIStyle scoreFeedStyle;
+    private Color redColor;
+    private Color blueColor;
+    private Color defaultColor;
 
     void Awake()
     {
         manager = GetComponent<MultiplayerManager>();
+        showScoreboard = false;
         teamSelection = Random.Range(0, 2);
+        messageStack = new List<string>();
+        redColor = new Color(100, 0, 0, 0.4f);
+        blueColor = new Color(0, 0, 100, 0.4f);
     }
 
     void Update()
@@ -39,7 +54,33 @@ public class NetworkHUD : MonoBehaviour
             {
                 manager.StopHost();
             }
+            if (Input.GetKey(KeyCode.Tab))
+                showScoreboard = true;
+            else
+                showScoreboard = false;
         }
+        if (messageTimer > 0)
+        {
+            messageTimer -= Time.deltaTime;
+            if (messageTimer <= 0)
+            {
+                messageStack.RemoveAt(0);
+                if (messageStack.Count > 0)
+                    messageTimer = 2.5f;
+                else
+                    messageTimer = 0;
+            }
+        }
+    }
+
+    public void OnKill(NetworkMessage netMsg)
+    {
+        messageStack.Add("Kill! +1");
+        MultiplayerManager.KillMessage msg = netMsg.ReadMessage<MultiplayerManager.KillMessage>();
+        if (msg.bountyGained > 0)
+            messageStack.Add("Bounty! +" + msg.bountyGained);
+        if (messageTimer == 0)
+            messageTimer = 2.5f;
     }
 
     void OnGUI()
@@ -86,7 +127,6 @@ public class NetworkHUD : MonoBehaviour
             }
         }
 
-        //New stuff starts here
         if (NetworkClient.active && !ClientScene.ready)
         {
             GUI.Label(new Rect(xpos, ypos, 50, 20), "Name: ");
@@ -105,15 +145,16 @@ public class NetworkHUD : MonoBehaviour
                 {
                     //Instructs the manager to spawn the client with the given name and team
                     manager.SpawnClient();
+                    manager.client.RegisterHandler(MultiplayerManager.ExtMsgType.Kill, OnKill);
                 }
             }
             ypos += spacing;
         }
-        
+
 
         if (NetworkServer.active || manager.IsClientConnected())
         {
-            if(ClientScene.ready)
+            if (ClientScene.ready)
             {
                 GUI.Label(new Rect(xpos, ypos, 300, 20), "Name: " + manager.localPlayerName);
                 ypos += spacing;
@@ -125,8 +166,88 @@ public class NetworkHUD : MonoBehaviour
                 manager.StopHost();
             }
             ypos += spacing;
+
         }
-        //New stuff ends here
+
+        //***SCORE FEED***
+        GUI.color = Color.black;
+        if (messageStack.Count > 0)
+        {
+            if (scoreFeedStyle == null)
+            {
+                scoreFeedStyle = new GUIStyle(GUI.skin.label);
+                scoreFeedStyle.fontSize = 20;
+            }
+            ypos = Screen.height / 2;
+            xpos = Screen.width / 2 - 30;
+            foreach (string msg in messageStack)
+            {
+                GUI.Label(new Rect(xpos, ypos, 200, 30), msg, scoreFeedStyle);
+                ypos += 33;
+            }
+        }
+        GUI.color = Color.white;
+
+        //***SCOREBOARD***
+        if (showScoreboard)
+        {
+            if (scoreboardStyle == null)
+            {
+                scoreboardStyle = new GUIStyle(GUI.skin.box);
+                scoreboardStyle.normal.background = Texture2D.whiteTexture;
+            }
+            int cellCount = manager.playerList.Count + 2;
+            int cellHeight = Mathf.Clamp(Screen.height / cellCount, 1, Mathf.RoundToInt(Screen.height * 0.1f));
+            int cellWidth = Mathf.RoundToInt(Screen.width * 0.75f);
+
+            xpos = Screen.width / 2 - cellWidth / 2;
+            if (cellCount < 20)
+                ypos = Screen.height / 2 - (cellCount * cellHeight) / 2;
+            else
+                ypos = 0;
+
+            defaultColor = GUI.backgroundColor;
+            GUI.contentColor = Color.black;
+            GUI.backgroundColor = blueColor;
+            DrawScoreboardRow(xpos, ypos, cellWidth, cellHeight, "Blue Team", "Kills/Deaths/Bounty", manager.teamScores[Team.Blue].ToString());
+            ypos += cellHeight + 1;
+            foreach (Player player in manager.playerList)
+            {
+                if (player.team == Team.Blue)
+                {
+                    if (player.connectionId == manager.client.connection.connectionId)
+                    {
+                        GUI.Box(new Rect(xpos, ypos, cellWidth, cellHeight), GUIContent.none, scoreboardStyle);
+                    }
+                    DrawScoreboardRow(xpos, ypos, cellWidth, cellHeight, player.name, player.kills + "/" + player.deaths + "/" + player.bounty, player.score.ToString());
+                    ypos += cellHeight + 1;
+                }
+            }
+            GUI.backgroundColor = redColor;
+            DrawScoreboardRow(xpos, ypos, cellWidth, cellHeight, "Red Team", "Kills/Deaths/Bounty", manager.teamScores[Team.Red].ToString());
+            ypos += cellHeight + 1;
+            foreach (Player player in manager.playerList)
+            {
+                if (player.team == Team.Red)
+                {
+                    if (player.connectionId == manager.client.connection.connectionId)
+                    { 
+                        GUI.Box(new Rect(xpos, ypos, cellWidth, cellHeight), GUIContent.none, scoreboardStyle);
+                    }
+                    DrawScoreboardRow(xpos, ypos, cellWidth, cellHeight, player.name, player.kills + "/" + player.deaths + "/" + player.bounty, player.score.ToString());
+                    ypos += cellHeight + 1;
+                }
+            }
+            GUI.backgroundColor = defaultColor;
+            GUI.contentColor = Color.white;
+        }
+    }
+
+    public void DrawScoreboardRow(int xpos, int ypos, int cellWidth, int cellHeight, string name, string stats, string score)
+    {
+        GUI.Box(new Rect(xpos, ypos, cellWidth, cellHeight), stats, scoreboardStyle);
+        GUI.Label(new Rect(xpos + 10, ypos + 5, cellWidth, cellHeight), name);
+        GUI.Label(new Rect(xpos + cellWidth - 20, ypos + 5, cellWidth, cellHeight), score);
     }
 }
 #endif //ENABLE_UNET
