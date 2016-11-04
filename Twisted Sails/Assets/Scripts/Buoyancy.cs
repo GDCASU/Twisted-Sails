@@ -37,12 +37,16 @@ public class Buoyancy : MonoBehaviour {
 	{
 		float bouyancyMult = 0;
 		float boatHeight = transform.position.y;
+        /** Attempt at getting the boat to move with the waves
+        RaycastHit water;
+        if (Physics.Raycast(rb.position, Vector3.down, out water, 1f))
+        {
+            waterLevel = water.point.y;
+        }
+        */
 
-        waterLevel = Mathf.Sin(Time.time);
-
-
-		//Add upward force when Center of Mass falls below the water level
-		if (boatHeight < waterLevel)
+        //Add upward force when Center of Mass falls below the water level
+        if (boatHeight < waterLevel)
         {
             bouyancyMult = Mathf.Max(0, Mathf.Min(Mathf.Abs((waterLevel - boatHeight)) / objectHeight, 1));
 			float buoyancyAmount = bouyancyMult * buoyancyFactor;
@@ -64,4 +68,7 @@ public class Buoyancy : MonoBehaviour {
             rb.drag = airDrag;
         }
     }
+
+    public void setWaterLevel(float newLevel) { waterLevel = newLevel; }
+    public Vector3 getPosition() {   return rb.position;    }
 }

@@ -37,7 +37,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44692534, g: 0.49678725, b: 0.57508564, a: 1}
+  m_IndirectSpecularColor: {r: 0.44692504, g: 0.4967869, b: 0.57508504, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -744,6 +744,7 @@ MonoBehaviour:
   camTransform: {fileID: 0}
   sensitivityX: 4
   sensitivityY: 1
+  scrollSensitivity: 10
   offsetX: 1
   offsetY: 1
 --- !u!81 &1219771392
@@ -1300,6 +1301,7 @@ GameObject:
   - 64: {fileID: 1941594099}
   - 23: {fileID: 1941594098}
   - 114: {fileID: 1941594102}
+  - 114: {fileID: 1941594103}
   m_Layer: 4
   m_Name: Water
   m_TagString: Untagged
@@ -1389,6 +1391,21 @@ MonoBehaviour:
   refractLayers:
     serializedVersion: 2
     m_Bits: 1
+--- !u!114 &1941594103
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1941594097}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3558e298a5611641ab0c24143b23b2f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  amplitude: 1
+  frequency: 1
+  noiseStrength: 1
+  noiseWalk: 1
 --- !u!1001 &2074960382
 Prefab:
   m_ObjectHideFlags: 0
