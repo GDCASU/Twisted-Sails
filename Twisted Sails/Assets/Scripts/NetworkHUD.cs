@@ -22,6 +22,8 @@ public class NetworkHUD : MonoBehaviour
     public int offsetX;
     [SerializeField]
     public int offsetY;
+    [SerializeField]
+    public float messageDisplayDuration;
 
     int teamSelection;
     bool showScoreboard;
@@ -66,7 +68,7 @@ public class NetworkHUD : MonoBehaviour
             {
                 messageStack.RemoveAt(0);
                 if (messageStack.Count > 0)
-                    messageTimer = 2.5f;
+                    messageTimer = messageDisplayDuration;
                 else
                     messageTimer = 0;
             }
@@ -80,7 +82,7 @@ public class NetworkHUD : MonoBehaviour
         if (msg.bountyGained > 0)
             messageStack.Add("Bounty! +" + msg.bountyGained);
         if (messageTimer == 0)
-            messageTimer = 2.5f;
+            messageTimer = messageDisplayDuration;
     }
 
     void OnGUI()

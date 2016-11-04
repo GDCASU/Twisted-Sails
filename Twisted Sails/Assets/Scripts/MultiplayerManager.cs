@@ -90,9 +90,12 @@ public class MultiplayerManager : NetworkManager
     public Gamemode currentGamemode = Gamemode.TeamDeathmatch;
     public string localPlayerName;
     public Team localPlayerTeam;
+    public int pointsToWin;
     public List<Player> playerList;
     public Dictionary<Team, int> teamScores;
     public static MultiplayerManager instance;
+
+    
 
     private float gameRestartTimer;
 
@@ -157,7 +160,7 @@ public class MultiplayerManager : NetworkManager
     public void CheckEndGame()
     {
         foreach (Team team in Enum.GetValues(typeof(Team)))
-            if (teamScores[team] >= 10)
+            if (teamScores[team] >= pointsToWin)
             {
                 gameRestartTimer = 10;
                 foreach (Player player in playerList)

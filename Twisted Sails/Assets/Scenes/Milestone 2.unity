@@ -307,6 +307,7 @@ MonoBehaviour:
   showGUI: 1
   offsetX: 0
   offsetY: 0
+  messageDisplayDuration: 2.5
 --- !u!114 &584372608
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -380,6 +381,7 @@ MonoBehaviour:
   currentGamemode: 0
   localPlayerName: 
   localPlayerTeam: 0
+  pointsToWin: 10
 --- !u!4 &584372609
 Transform:
   m_ObjectHideFlags: 0
@@ -497,7 +499,7 @@ Prefab:
     - target: {fileID: 224000011118632542, guid: d5a7615a31cde7d4c9dab5c7b4234ff6,
         type: 2}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d5a7615a31cde7d4c9dab5c7b4234ff6, type: 2}
@@ -585,14 +587,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   boatToFollow: {fileID: 0}
-  Y_angle_Min: 10
-  Y_angle_Max: 50
-  camTransform: {fileID: 0}
+  minimumVerticalRotation: 10
+  maximumVerticalRotation: 50
+  minimumZoomDistance: 5
+  maximumZoomDistance: 25
   sensitivityX: 4
   sensitivityY: 1
   scrollSensitivity: 10
-  offsetX: 1
-  offsetY: 1
+  invertX: 0
+  invertY: 0
+  quickTurnAxis: 
+  quickTurnSpeed: 1
 --- !u!81 &1219771392
 AudioListener:
   m_ObjectHideFlags: 0
