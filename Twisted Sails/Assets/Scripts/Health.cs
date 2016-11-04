@@ -79,7 +79,6 @@ public class Health : NetworkBehaviour
             healthSlider = UI.GetComponent<Slider>(); // NK 10/20: locates the health UI in the scene
             healthText = UI.GetComponentInChildren<Text>(); // NK 10/20 locates the health text in the scene
             Player player = new Player(playerName, team, GetComponent<NetworkIdentity>().netId, MultiplayerManager.instance.client.connection.connectionId);
-            MultiplayerManager.localPlayer = player;
             CmdPlayerInit(playerName, team, player.connectionId);
         }
         else
@@ -170,7 +169,7 @@ public class Health : NetworkBehaviour
     public void CmdPlayerInit(string name, Team team, int connectionId)
     {
         Player newPlayer = new Player(name, team, GetComponent<NetworkIdentity>().netId, connectionId);
-        MultiplayerManager.instance.playerList.Add(newPlayer);
+        MultiplayerManager.instance.RegisterPlayer(newPlayer);
     }
 
     //Apparently, SyncVars with hooks only call one way (Server -> Client)

@@ -14,6 +14,10 @@ using System;
 // This class is currently serving as a general multiplayer game controller. The functionality
 // of the default NetworkManager has been extended to make it easier to work with.
 // Also included are two enums and a container class that I didn't feel deserved their own file.
+// Added code for broadcasting current game state (score, player stats, etc) to all players whenever
+// a change is made. This may be inefficient, but it's okay for now. At the very least it's needed
+// for when a new player joins, to synchronize the current game state with that player and tell everyone
+// else that a new player has joined. Also added stuff to help with the scoreboard and score feed.
 
 //Enum for all teams
 public enum Team
@@ -41,6 +45,8 @@ public class Player
     public int bounty;
     public int score;
 
+    public Player() { }
+
     public Player(string name, Team team, NetworkInstanceId shipId, int connectionId)
     {
         this.name = name;
@@ -52,6 +58,30 @@ public class Player
         bounty = 0;
         score = 0;
     }
+
+    public void Serialize(NetworkWriter writer)
+    {
+        writer.Write(name);
+        writer.Write((short)team);
+        writer.Write(shipId);
+        writer.Write(connectionId);
+        writer.Write(kills);
+        writer.Write(deaths);
+        writer.Write(bounty);
+        writer.Write(score);
+    }
+
+    public void Deserialize(NetworkReader reader)
+    {
+        name = reader.ReadString();
+        team = (Team)reader.ReadInt16();
+        shipId = reader.ReadNetworkId();
+        connectionId = reader.ReadInt32();
+        kills = reader.ReadInt32();
+        deaths = reader.ReadInt32();
+        bounty = reader.ReadInt32();
+        score = reader.ReadInt32();
+    }
 }
 
 public class MultiplayerManager : NetworkManager
@@ -60,10 +90,12 @@ public class MultiplayerManager : NetworkManager
     public Gamemode currentGamemode = Gamemode.TeamDeathmatch;
     public string localPlayerName;
     public Team localPlayerTeam;
+    public int pointsToWin;
     public List<Player> playerList;
     public Dictionary<Team, int> teamScores;
-    public static Player localPlayer;
     public static MultiplayerManager instance;
+
+    
 
     private float gameRestartTimer;
 
@@ -108,10 +140,19 @@ public class MultiplayerManager : NetworkManager
         if (killer != null && killer.team != victim.team)
         {
             killer.kills++;
+            int scoreGain = 1 + victim.bounty;
             teamScores[killer.team] += 1;
+            killer.score += scoreGain;
+            KillMessage msg = new KillMessage();
+            msg.bountyGained = victim.bounty;
+            NetworkServer.SendToClient(killer.connectionId, ExtMsgType.Kill, msg);
+            victim.bounty = 0;
+            killer.bounty++;
             Debug.Log("Player " + killer.name + " killed player " + victim.name + "!");
         }
         else Debug.Log("Player " + victim.name + " suicided!");
+        
+        NetworkServer.SendToAll(ExtMsgType.State, new GameStateMessage(playerList, teamScores));
         CheckEndGame();
     }
 
@@ -119,7 +160,7 @@ public class MultiplayerManager : NetworkManager
     public void CheckEndGame()
     {
         foreach (Team team in Enum.GetValues(typeof(Team)))
-            if (teamScores[team] >= 10)
+            if (teamScores[team] >= pointsToWin)
             {
                 gameRestartTimer = 10;
                 foreach (Player player in playerList)
@@ -189,10 +230,17 @@ public class MultiplayerManager : NetworkManager
         NetworkServer.AddPlayerForConnection(conn, player, playerControllerId);
     }
 
+    public void RegisterPlayer(Player player)
+    {
+        playerList.Add(player);
+        NetworkServer.SendToAll(ExtMsgType.State, new GameStateMessage(playerList, teamScores));
+    }
+
     //Only purpose of overriding this is to make it do nothing
     //The base method readies the scene & spawns the player immediately upon connection
     public override void OnClientConnect(NetworkConnection conn)
     {
+        client.RegisterHandler(ExtMsgType.State, OnStateUpdate);
     }
 
     //Only purpose of overriding is to properly manage the playerList
@@ -207,6 +255,13 @@ public class MultiplayerManager : NetworkManager
     public void SpawnClient()
     {
         ClientScene.AddPlayer(client.connection, 0, new SpawnMessage(localPlayerName, localPlayerTeam));
+    }
+
+    public void OnStateUpdate(NetworkMessage netMsg)
+    {
+        GameStateMessage msg = netMsg.ReadMessage<GameStateMessage>();
+        playerList = msg.playerList;
+        teamScores = msg.teamScores;
     }
 
     //This is a custom message to send name and team choices to the server
@@ -232,5 +287,62 @@ public class MultiplayerManager : NetworkManager
             name = reader.ReadString();
             team = reader.ReadInt16();
         }
+    }
+
+    class GameStateMessage : MessageBase
+    {
+        public List<Player> playerList;
+        public Dictionary<Team, int> teamScores;
+
+        public GameStateMessage()
+        {
+            playerList = new List<Player>();
+            teamScores = new Dictionary<Team, int>();
+        }
+
+        public GameStateMessage(List<Player> plyList, Dictionary<Team, int> scores)
+        {
+            playerList = plyList;
+            teamScores = scores;
+        }
+
+        public override void Serialize(NetworkWriter writer)
+        {
+            foreach(Team team in Enum.GetValues(typeof(Team)))
+            {
+                writer.Write(teamScores[team]);
+            }
+            writer.Write(playerList.Count);
+            foreach(Player player in playerList)
+            {
+                player.Serialize(writer);
+            }
+        }
+
+        public override void Deserialize(NetworkReader reader)
+        {
+            foreach (Team team in Enum.GetValues(typeof(Team)))
+            {
+                teamScores[team] = reader.ReadInt32();
+            }
+            int count = reader.ReadInt32();
+            for(int i=0; i< count; i++)
+            {
+                Player player = new Player();
+                player.Deserialize(reader);
+                playerList.Add(player);
+            }
+        }
+    }
+
+    public class KillMessage : MessageBase
+    {
+        public int bountyGained;
+    }
+
+    public class ExtMsgType
+    {
+        public static short State = MsgType.Highest + 1;
+        public static short Kill = MsgType.Highest + 2;
     }
 }
