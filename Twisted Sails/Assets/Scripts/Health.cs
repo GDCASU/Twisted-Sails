@@ -61,7 +61,6 @@ public class Health : NetworkBehaviour
 
     private float respawnTimer;
     private bool tilting;
-    private NetworkInstanceId lastHitBy;
     private bool gameOver;
 
     void Start()
@@ -99,7 +98,6 @@ public class Health : NetworkBehaviour
         }
         healthSlider.minValue = 0f;
         healthSlider.maxValue = 100f;
-        lastHitBy = NetworkInstanceId.Invalid;
         OnChangeHealth(health);
     }
 
@@ -141,14 +139,18 @@ public class Health : NetworkBehaviour
     void OnCollisionEnter(Collision c)
     {
         //Ignore cannonball collisions with owner
-        if (c.transform.gameObject.tag.Equals("Cannonball") && c.gameObject.GetComponent<CannonBallNetworked>().owner != GetComponent<NetworkIdentity>().netId) //todo: change this to use tags when possible
+        if (c.transform.gameObject.tag.Equals("Cannonball") && c.gameObject.GetComponent<CannonBallNetworked>().owner != GetComponent<NetworkIdentity>().netId)
         {
-            if (isLocalPlayer)
+            Team cannonballTeam = ClientScene.FindLocalObject(c.gameObject.GetComponent<CannonBallNetworked>().owner).GetComponent<Health>().team;
+            if (cannonballTeam != team)
             {
-                CmdChangeHealth(-35, c.transform.gameObject.GetComponent<CannonBallNetworked>().owner);
+                if (isLocalPlayer)
+                {
+                    CmdChangeHealth(-35, c.transform.gameObject.GetComponent<CannonBallNetworked>().owner);
+                }
+                GameObject explode = (GameObject)Instantiate(explosion, c.contacts[0].point, Quaternion.identity);
+                explode.GetComponent<ParticleSystem>().Emit(100);
             }
-            GameObject explode = (GameObject)Instantiate(explosion, c.contacts[0].point, Quaternion.identity);
-            explode.GetComponent<ParticleSystem>().Emit(100);
             Destroy(c.gameObject);
         }
 
