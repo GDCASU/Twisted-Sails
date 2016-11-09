@@ -2,6 +2,8 @@
 using UnityEngine.UI;
 using System.Collections;
 using UnityEngine.Networking;
+
+/**
 // Developer:   Cory Wyman
 // Date:        9/12/2016
 // Description: Initial code
@@ -36,6 +38,14 @@ using UnityEngine.Networking;
 //                  Updated CmdChangeHealth to communicate with server manager on death
 //                  Added CmdPlayerInit, the purpose of which is to tell the server the player was successfully spawned
 //                  Added RpcEndGame and RpcRestartGame which communicate with new elements of the main Canvas object
+
+//Developer:        Erick Ramirez Cordero
+//Date:             11/9/2016
+//Description:      Added the defenseStat variable to influence damage calculation. When the player
+//                  chooses to allocate crew members to defense, the defense stat should be updated
+//                  by the Crew Management Script.
+*/
+
 public class Health : NetworkBehaviour
 {
     [Header("Health")]
@@ -54,6 +64,7 @@ public class Health : NetworkBehaviour
     public GameObject activeCamera;
     public GameObject explosion;
     public Vector3 spawnPoint; // NK 10/20 added original spawnpoint
+    public float defenseStat; // Crew Management - Defense Crew
     [SyncVar]
     public Team team;
     [SyncVar]
@@ -71,6 +82,7 @@ public class Health : NetworkBehaviour
         tilting = false;
         spawnPoint = this.transform.position;
         gameOver = false;
+        defenseStat = 1.0f; // 100% damage taken initially
 
         if (isLocalPlayer)
         {
@@ -178,6 +190,8 @@ public class Health : NetworkBehaviour
     public void CmdChangeHealth(float amt, NetworkInstanceId src)
     {
         if (health == 0 && amt < 0) return; //don't register damage taken after death
+        amt *= defenseStat; // Multiplier effect for defense stat
+
         health = Mathf.Clamp(health + amt, 0, 100);
         if (health == 0)
             MultiplayerManager.instance.PlayerKill(GetComponent<NetworkIdentity>().netId, src);

@@ -7,27 +7,25 @@ using System.Collections;
 // (on the keyboard or a UI) to modify one of three stats for their ship: Speed of the ship, 
 // Fire Rate/Attack of the weapons, and Durability/Defense of the ship. 
 //
-// Initial Author: Erick Ramirez Cordero
+// Initial Author:  Erick Ramirez Cordero
 // Initial Version: October 2, 2016
-// Recent Author:
-// Recent Version:
 //
-// Recent Version Update:
+// Update:      Erick Ramirez Cordero
+// Date:        November 9, 2016
+// Description: Variables were changed to reflect the new multiplier stat system implemented
+//              in the Crew Management Script. Furthermore, the text above the bars now
+//              display the current stage of each stat rather than percentages.
 */
 
 public class CrewUserInterface : MonoBehaviour
 {
-    // The min and max of each stat should match those in the CrewManagement Script
-    private float attackMax = 10.0f;
-    private float attackMin = 0.0f;
-    private float defenseMax = 10.0f;
-    private float defenseMin = 0.0f;
-    private float speedMax = 10.0f;
-    private float speedMin = 0.0f;
-
-    public string speedButton = "Speed Crew"; // At the moment set to 'C'
-    public string attackButton = "Attack Crew"; // At the moment set to 'Z'
-    public string defenseButton = "Defense Crew"; // At the moment set to 'X'
+    // Limit Variables
+    private float minStat = -4.0f;
+    private float maxStat = 4.0f;
+    
+    public string attackButton = "Attack Crew"; // At the moment set to '1'
+    public string defenseButton = "Defense Crew"; // At the moment set to '2'
+    public string speedButton = "Speed Crew"; // At the moment set to '3'
 
     public GameObject boat;
 
@@ -44,6 +42,7 @@ public class CrewUserInterface : MonoBehaviour
 	// Use this for initialization
 	void Start ()
     {
+        // Locate UI and script components
         attackBar = GameObject.Find("AttackBar").GetComponent<Slider>();
         defenseBar = GameObject.Find("DefenseBar").GetComponent<Slider>();
         speedBar = GameObject.Find("SpeedBar").GetComponent<Slider>();
@@ -54,91 +53,62 @@ public class CrewUserInterface : MonoBehaviour
 
         crewManagement = boat.GetComponent<CrewManagement>();
 
-        attackBar.maxValue = attackMax;
-        attackBar.minValue = attackMin;
-        defenseBar.maxValue = defenseMax;
-        defenseBar.minValue = defenseMin;
-        speedBar.maxValue = speedMax;
-        speedBar.minValue = speedMin;
+        // Initialize UI bar min / max values
+        attackBar.maxValue = maxStat;
+        attackBar.minValue = minStat;
 
-        attackBar.value = crewManagement.currentFireRate;
-        defenseBar.value = crewManagement.currentDefense;
-        speedBar.value = crewManagement.currentSpeed;
+        defenseBar.maxValue = maxStat;
+        defenseBar.minValue = minStat;
 
-        attackText.text = "" + crewManagement.currentFireRate / attackMax * 100 + "%";
-        defenseText.text = "" + crewManagement.currentDefense / defenseMax * 100 + "%";
-        speedText.text = "" + crewManagement.currentSpeed / speedMax * 100 + "%";
+        speedBar.maxValue = maxStat;
+        speedBar.minValue = minStat;
+
+        DisplayUpdate();
     }
 	
-    // The Update event checks for button inputs.
+    /*
+    // The Update event checks for button inputs. When a stat buff is chosen, the
+    // appropriate stat function from the CrewManagement script is called. After
+    // stat calculations are done, DisplayUpdate() is called to update the UI.
+    */
 
 	// Update is called once per frame
 	void Update ()
     {
-        if (Input.GetButtonDown(speedButton))
-        { CallSpeedCrew(); }
-
-        else if (Input.GetButtonDown(attackButton))
-        { CallAttackCrew(); }
+        if (Input.GetButtonDown(attackButton))
+        {
+            crewManagement.AttackCrew();
+            DisplayUpdate();
+        }
 
         else if (Input.GetButtonDown(defenseButton))
-        { CallDefenseCrew(); }
+        {
+            crewManagement.DefenseCrew();
+            DisplayUpdate();
+        }
+
+        else if (Input.GetButtonDown(speedButton))
+        {
+            crewManagement.SpeedCrew();
+            DisplayUpdate();
+        }
     }
 
-    /*
-    // When CallAttackCrew() is called, AttackCrew() is called in the CrewManagement
-    // Script. After stats are calculated, the bars and text displaying the stats to
-    // the player are updated.
-    */
-
-    public void CallAttackCrew()
+    // This function updates the UI bars and text
+    private void DisplayUpdate()
     {
-        crewManagement.AttackCrew();
+        /*
+        // Since Attack & Defense stats in the Crew Management Script improve with a lower
+        // multiplier, their displayed stages are multiplied by -1 to show the player a
+        // positive stage
+        */
 
-        attackBar.value = crewManagement.currentFireRate;
-        defenseBar.value = crewManagement.currentDefense;
-        speedBar.value = crewManagement.currentSpeed;
+        attackBar.value = crewManagement.currentFireRateStage * -1.0f;
+        defenseBar.value = crewManagement.currentDefenseStage * -1.0f;
+        speedBar.value = crewManagement.currentSpeedStage;
 
-        attackText.text = "" + crewManagement.currentFireRate / attackMax * 100 + "%";
-        defenseText.text = "" + crewManagement.currentDefense / defenseMax * 100 + "%";
-        speedText.text = "" + crewManagement.currentSpeed / speedMax * 100 + "%";
-    }
-
-    /*
-    // When CallDefenseCrew() is called, DefenseCrew() is called in the CrewManagement
-    // Script. After stats are calculated, the bars and text displaying the stats to
-    // the player are updated.
-    */
-
-    public void CallDefenseCrew()
-    {
-        crewManagement.DefenseCrew();
-
-        attackBar.value = crewManagement.currentFireRate;
-        defenseBar.value = crewManagement.currentDefense;
-        speedBar.value = crewManagement.currentSpeed;
-
-        attackText.text = "" + crewManagement.currentFireRate / attackMax * 100 + "%";
-        defenseText.text = "" + crewManagement.currentDefense / defenseMax * 100 + "%";
-        speedText.text = "" + crewManagement.currentSpeed / speedMax * 100 + "%";
-    }
-
-    /*
-    // When CallSpeedCrew() is called, SpeedCrew() is called in the CrewManagement
-    // Script. After stats are calculated, the bars and text displaying the stats to
-    // the player are updated.
-    */
-
-    public void CallSpeedCrew()
-    {
-        crewManagement.SpeedCrew();
-
-        attackBar.value = crewManagement.currentFireRate;
-        defenseBar.value = crewManagement.currentDefense;
-        speedBar.value = crewManagement.currentSpeed;
-
-        attackText.text = "" + crewManagement.currentFireRate / attackMax * 100 + "%";
-        defenseText.text = "" + crewManagement.currentDefense / defenseMax * 100 + "%";
-        speedText.text = "" + crewManagement.currentSpeed / speedMax * 100 + "%";
+        attackText.text = "Stage: " + (int) attackBar.value;
+        defenseText.text = "Stage: " + (int) defenseBar.value;
+        speedText.text = "Stage: " + (int) speedBar.value;
     }
 }
