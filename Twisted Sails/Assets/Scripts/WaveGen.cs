@@ -14,31 +14,38 @@ Diego Wilde
 
 
 public class WaveGen : MonoBehaviour {
-
-    public float amplitude = 1f;
+    public bool enableWaves = true;
+    public float initialWaterLevel = 0;
+    public float amplitude = 0.1f;
     public float frequency = 1.0f;
     public float noiseStrength = 1f;
     public float noiseWalk = 1f;
 
+
     private Vector3[] baseHeight;
-    private Vector3[] vertices;
+   // private Vector3[] vertices;
+    public Mesh water;
+
     void Start()
     {
 
     }
 
 	void FixedUpdate () {
+        if (!enableWaves)
+            return;
+
         Buoyancy buoyancy = GetComponent<Buoyancy>();
-        Mesh mesh = GetComponent<MeshFilter>().mesh;
+       water = GetComponent<MeshFilter>().mesh;
         if (baseHeight == null)
         {
-            baseHeight = mesh.vertices;
+            baseHeight = water.vertices;
         }
-        vertices = new Vector3[baseHeight.Length];
+        Vector3[] vertices = new Vector3[baseHeight.Length];
         for (int i = 0; i < vertices.Length; i++)
         {
             Vector3 vertex = baseHeight[i];
-            vertex.y += Mathf.Sin(Time.time * frequency + baseHeight[i].x + baseHeight[i].y + baseHeight[i].z) * amplitude;
+            vertex.y += Mathf.Sin(Time.time * frequency + baseHeight[i].x + baseHeight[i].y + baseHeight[i].z) * amplitude + initialWaterLevel;
             vertex.y += Mathf.PerlinNoise(baseHeight[i].x + noiseWalk, baseHeight[i].y + Mathf.Sin(Time.time * 0.1f)) * noiseStrength;
             vertices[i] = vertex;
         }
@@ -53,13 +60,18 @@ public class WaveGen : MonoBehaviour {
         */
         
 
-        mesh.vertices = vertices;
-        mesh.RecalculateNormals();
+        water.vertices = vertices;
+        water.RecalculateNormals();
+        
+        MeshCollider waterCollider = GetComponent<MeshCollider>();
+        waterCollider.sharedMesh = water;
+    
     }
 
-    public Vector3[] getWaves()
+    public Mesh getWaves()
     {
         //Mesh mesh = GetComponent<MeshFilter>().mesh;
-        return vertices;
+        return water;
     }
+
 }

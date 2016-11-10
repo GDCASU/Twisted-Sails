@@ -28,25 +28,47 @@ public class Buoyancy : MonoBehaviour {
 
     public float waterLevel;
     private Rigidbody rb;
+    //private Mesh waveMesh;
+
 
     void Start () {
         rb = this.GetComponent<Rigidbody>();
+        //waterLevel = 0.5f;
+        //Physics.IgnoreCollision(rb.GetComponent<Collider>(), GetComponent<MeshCollider>());
     }
-	
-	void FixedUpdate ()
+
+    void FixedUpdate ()
 	{
+
 		float bouyancyMult = 0;
 		float boatHeight = transform.position.y;
-        /** Attempt at getting the boat to move with the waves
-        RaycastHit water;
-        if (Physics.Raycast(rb.position, Vector3.down, out water, 1f))
-        {
-            waterLevel = water.point.y;
-        }
-        */
 
-        //Add upward force when Center of Mass falls below the water level
-        if (boatHeight < waterLevel)
+        //WaveGen waves = GetComponent<WaveGen>();
+        //waveMesh = waves.getWaves();
+
+        /** Attempt at getting the boat to move with the waves
+        */
+        RaycastHit water;
+        if (Physics.Raycast(rb.position, Vector3.down, out water, 50f))
+        {
+            Physics.IgnoreCollision(rb.GetComponent<Collider>(), water.collider);
+            waterLevel = water.point.y;
+            //print("water Detected");
+            //print(waterLevel);
+        }
+        RaycastHit water2;
+        if (Physics.Raycast(rb.position, Vector3.up, out water2, Mathf.Infinity))
+        {
+            Physics.IgnoreCollision(rb.GetComponent<Collider>(), water2.collider);
+            print("water detected");
+            waterLevel = water2.point.y;
+        } 
+
+            //*/
+        //Physics.IgnoreCollision(water, rb.GetComponent<Collider>());
+        //waterLevel = Mathf.Sin(Time.time);
+            //Add upward force when Center of Mass falls below the water level
+            if (boatHeight < waterLevel)
         {
             bouyancyMult = Mathf.Max(0, Mathf.Min(Mathf.Abs((waterLevel - boatHeight)) / objectHeight, 1));
 			float buoyancyAmount = bouyancyMult * buoyancyFactor;
@@ -58,7 +80,7 @@ public class Buoyancy : MonoBehaviour {
         if (bouyancyMult > .75f) //Under water
         {
             rb.drag = submergedDrag;
-        }
+        } 
 		else if (bouyancyMult > 0f) //On water
 		{
 			rb.drag = surfaceDrag;
