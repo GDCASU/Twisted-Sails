@@ -36,6 +36,10 @@ using UnityEngine.Networking;
 //                  Updated CmdChangeHealth to communicate with server manager on death
 //                  Added CmdPlayerInit, the purpose of which is to tell the server the player was successfully spawned
 //                  Added RpcEndGame and RpcRestartGame which communicate with new elements of the main Canvas object
+//Developer:          Ryan Black
+//Date:               11/9/2016
+//Description:        Added functionality for health packs
+
 public class Health : NetworkBehaviour
 {
     [Header("Health")]
