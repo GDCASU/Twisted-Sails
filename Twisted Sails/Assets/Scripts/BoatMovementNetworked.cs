@@ -149,7 +149,7 @@ public class BoatMovementNetworked : NetworkBehaviour
 		{
 			float acceleration = backwardsAcceleration * Time.deltaTime;
 
-            acceleration *= speedStat; // Multiplier effect for speed stat (Range: 50% to 150%)
+            acceleration *= speedStat; // Multiplier effect for speed stat
 
             if (speedBoost)
 				acceleration *= speedBoostValue;

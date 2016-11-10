@@ -77,19 +77,19 @@ public class CrewUserInterface : MonoBehaviour
     {
         if (Input.GetButtonDown(attackButton))
         {
-            crewManagement.AttackCrew();
+            //crewManagement.AttackCrew();
             DisplayUpdate();
         }
 
         else if (Input.GetButtonDown(defenseButton))
         {
-            crewManagement.DefenseCrew();
+            //crewManagement.DefenseCrew();
             DisplayUpdate();
         }
 
         else if (Input.GetButtonDown(speedButton))
         {
-            crewManagement.SpeedCrew();
+            //crewManagement.SpeedCrew();
             DisplayUpdate();
         }
     }
