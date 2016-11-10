@@ -63,6 +63,8 @@ public class Health : NetworkBehaviour
     private bool tilting;
     private bool gameOver;
 
+    public float healthPackAmount = 25.0f;
+
     void Start()
     {
         //Variable initialization
@@ -153,6 +155,15 @@ public class Health : NetworkBehaviour
             Destroy(c.gameObject);
         }
 
+        if(c.transform.gameObject.tag.Equals("HealthPickUp"))
+        {
+            if (isLocalPlayer)
+            {
+                CmdChangeHealth(healthPackAmount, NetworkInstanceId.Invalid);
+            }
+
+            Destroy(c.gameObject);
+        }
         /*if (other.name.Equals ("Health Pack")) { //should replace with tags
 			Debug.Log ("Collided with Health Pack");
             ChangeHealth(50);
