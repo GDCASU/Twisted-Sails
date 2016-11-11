@@ -36,10 +36,15 @@ using UnityEngine.Networking;
 //                  Updated CmdChangeHealth to communicate with server manager on death
 //                  Added CmdPlayerInit, the purpose of which is to tell the server the player was successfully spawned
 //                  Added RpcEndGame and RpcRestartGame which communicate with new elements of the main Canvas object
+
+//Developer:        Kyle Aycock
+//Date:             11/9/2016
+//Description:      Cleaned up documentation to be more friendly to developers who need to understand how this script works
+//                  Made small changes to CmdPlayerInit to match the new system
 public class Health : NetworkBehaviour
 {
     [Header("Health")]
-    //Decided to just have it hook to the ChangeHealth function
+    //Syncvars work one-way (Server->Client)
     [SyncVar(hook = "OnChangeHealth")]
     public float health;
     public Text healthText;
@@ -48,21 +53,25 @@ public class Health : NetworkBehaviour
     public float sinkSpeed;
     public float sinkAngle;
     public float secondsToRespawn;
+    [Header("Player")]
+    [SyncVar]
+    public string playerName;
+    [SyncVar]
+    public Team team;
+    public bool dead;
     [Header("Misc")]
     public KeyCode hurtSelfButton;
-    public bool dead;
     public GameObject activeCamera;
     public GameObject explosion;
     public Vector3 spawnPoint; // NK 10/20 added original spawnpoint
-    [SyncVar]
-    public Team team;
-    [SyncVar]
-    public string playerName;
 
     private float respawnTimer;
     private bool tilting;
     private bool gameOver;
 
+    //Hooks are called automatically, usually there's no reason to manually call these hooks
+    #region Hooks
+    //Initialization
     void Start()
     {
         //Variable initialization
@@ -72,14 +81,14 @@ public class Health : NetworkBehaviour
         spawnPoint = this.transform.position;
         gameOver = false;
 
+        //Setting up health bars & nametags
         if (isLocalPlayer)
         {
             //Use the main HealthUI at the top of the screen if this ship is the local player's ship
             GameObject UI = GameObject.FindGameObjectWithTag("HealthUI");
             healthSlider = UI.GetComponent<Slider>(); // NK 10/20: locates the health UI in the scene
             healthText = UI.GetComponentInChildren<Text>(); // NK 10/20 locates the health text in the scene
-            Player player = new Player(playerName, team, GetComponent<NetworkIdentity>().netId, MultiplayerManager.instance.client.connection.connectionId);
-            CmdPlayerInit(playerName, team, player.connectionId);
+            CmdPlayerInit(MultiplayerManager.instance.client.connection.connectionId);
         }
         else
         {
@@ -97,7 +106,7 @@ public class Health : NetworkBehaviour
         }
         healthSlider.minValue = 0f;
         healthSlider.maxValue = 100f;
-        OnChangeHealth(health);
+        OnChangeHealth(health); //Set health bars to initial values
     }
 
     // Update is called once per frame
@@ -134,6 +143,7 @@ public class Health : NetworkBehaviour
     }
 
 
+
     //Whenever ship collides with something else
     void OnCollisionEnter(Collision c)
     {
@@ -165,28 +175,9 @@ public class Health : NetworkBehaviour
 		}*/
     }
 
-    [Command]
-    public void CmdPlayerInit(string name, Team team, int connectionId)
-    {
-        Player newPlayer = new Player(name, team, GetComponent<NetworkIdentity>().netId, connectionId);
-        MultiplayerManager.instance.RegisterPlayer(newPlayer);
-    }
-
-    //Apparently, SyncVars with hooks only call one way (Server -> Client)
-    //So I had to make a command so that health changes only happen on the server
-    [Command]
-    public void CmdChangeHealth(float amt, NetworkInstanceId src)
-    {
-        if (health == 0 && amt < 0) return; //don't register damage taken after death
-        health = Mathf.Clamp(health + amt, 0, 100);
-        if (health == 0)
-            MultiplayerManager.instance.PlayerKill(GetComponent<NetworkIdentity>().netId, src);
-    }
-
-
     //This method should not be called to change health, use CmdChangeHealth for that.
     //This method is automatically called on each client when the health changes on the server (through CmdChangeHealth)
-    public void OnChangeHealth(float newHealth)
+    private void OnChangeHealth(float newHealth)
     {
         health = newHealth;
         if (isClient)
@@ -199,7 +190,84 @@ public class Health : NetworkBehaviour
             Death();
         }
     }
+    #endregion
 
+    //Commands are called on the client to send information to the server
+    #region Commands
+    /// <summary>
+    /// This method is used to tell the server a player has spawned.
+    /// </summary>
+    /// <param name="name">Name of the player</param>
+    /// <param name="team">Player's current team</param>
+    /// <param name="connectionId">Player's connection ID</param>
+    [Command]
+    public void CmdPlayerInit(int connectionId)
+    {
+        MultiplayerManager.instance.RegisterPlayer(connectionId, GetComponent<NetworkIdentity>().netId);
+    }
+
+    /// <summary>
+    /// This method should be used for all changes to a ship's health.
+    /// It should only be called on clients (as it is a command).
+    /// </summary>
+    /// <param name="amount">Amount to change health by</param>
+    /// <param name="source">ID of the damage/heal source. Can be NetworkInstanceId.Invalid</param>
+    [Command]
+    public void CmdChangeHealth(float amount, NetworkInstanceId source)
+    {
+        if (health == 0 && amount < 0) return; //don't register damage taken after death
+        health = Mathf.Clamp(health + amount, 0, 100);
+        if (health == 0)
+            MultiplayerManager.instance.PlayerKill(GetComponent<NetworkIdentity>().netId, source);
+    }
+    #endregion
+
+    //ClientRpc methods are called on the server to send information to the client
+    #region ClientRpcs
+    /// <summary>
+    /// Called by the server to notify clients that the game is over.
+    /// </summary>
+    /// <param name="winner">Team that won this round</param>
+    /// <param name="redScore"></param>
+    /// <param name="blueScore"></param>
+    [ClientRpc]
+    public void RpcEndGame(Team winner, int redScore, int blueScore)
+    {
+        if (!isLocalPlayer) return;
+        activeCamera.GetComponent<BoatCameraNetworked>().enabled = false; //change BoatCamera to match whatever the active camera controller script is
+        activeCamera.GetComponent<OrbitalCamera>().enabled = true;
+        gameOver = true;
+        GameObject endScreen = GameObject.Find("Canvas(Health)").transform.FindChild("EndScreen").gameObject;
+        endScreen.SetActive(true);
+        if (winner == Team.Blue)
+            endScreen.transform.FindChild("BlueTeamWins").gameObject.SetActive(true);
+        else
+            endScreen.transform.FindChild("RedTeamWins").gameObject.SetActive(true);
+        if (winner == team)
+            endScreen.transform.FindChild("YouWin").gameObject.SetActive(true);
+        else
+            endScreen.transform.FindChild("YouLose").gameObject.SetActive(true);
+        endScreen.transform.FindChild("FinalScore").GetComponent<Text>().text = "Score: Red: " + redScore + " Blue: " + blueScore;
+    }
+
+    /// <summary>
+    /// Called by the server when a game is restarted in identical conditions.
+    /// </summary>
+    [ClientRpc]
+    public void RpcRestartGame()
+    {
+        gameOver = false;
+        Respawn();
+        GameObject endScreen = GameObject.Find("Canvas(Health)").transform.FindChild("EndScreen").gameObject;
+        endScreen.SetActive(false);
+        endScreen.transform.FindChild("BlueTeamWins").gameObject.SetActive(false);
+        endScreen.transform.FindChild("RedTeamWins").gameObject.SetActive(false);
+        endScreen.transform.FindChild("YouWin").gameObject.SetActive(false);
+        endScreen.transform.FindChild("YouLose").gameObject.SetActive(false);
+    }
+    #endregion
+
+    #region Other
     public void Death()
     {
         dead = true;
@@ -241,37 +309,5 @@ public class Health : NetworkBehaviour
         transform.rotation = Quaternion.identity;
         dead = false;
     }
-
-    [ClientRpc]
-    public void RpcEndGame(Team winner, int redScore, int blueScore)
-    {
-        if (!isLocalPlayer) return;
-        activeCamera.GetComponent<BoatCameraNetworked>().enabled = false; //change BoatCamera to match whatever the active camera controller script is
-        activeCamera.GetComponent<OrbitalCamera>().enabled = true;
-        gameOver = true;
-        GameObject endScreen = GameObject.Find("Canvas(Health)").transform.FindChild("EndScreen").gameObject;
-        endScreen.SetActive(true);
-        if (winner == Team.Blue)
-            endScreen.transform.FindChild("BlueTeamWins").gameObject.SetActive(true);
-        else
-            endScreen.transform.FindChild("RedTeamWins").gameObject.SetActive(true);
-        if (winner == team)
-            endScreen.transform.FindChild("YouWin").gameObject.SetActive(true);
-        else
-            endScreen.transform.FindChild("YouLose").gameObject.SetActive(true);
-        endScreen.transform.FindChild("FinalScore").GetComponent<Text>().text = "Score: Red: " + redScore + " Blue: " + blueScore;
-    }
-
-    [ClientRpc]
-    public void RpcRestartGame()
-    {
-        gameOver = false;
-        Respawn();
-        GameObject endScreen = GameObject.Find("Canvas(Health)").transform.FindChild("EndScreen").gameObject;
-        endScreen.SetActive(false);
-        endScreen.transform.FindChild("BlueTeamWins").gameObject.SetActive(false);
-        endScreen.transform.FindChild("RedTeamWins").gameObject.SetActive(false);
-        endScreen.transform.FindChild("YouWin").gameObject.SetActive(false);
-        endScreen.transform.FindChild("YouLose").gameObject.SetActive(false);
-    }
+    #endregion
 }
