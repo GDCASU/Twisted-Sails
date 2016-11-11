@@ -19,74 +19,13 @@ using System;
 // for when a new player joins, to synchronize the current game state with that player and tell everyone
 // else that a new player has joined. Also added stuff to help with the scoreboard and score feed.
 
-//Enum for all teams
-public enum Team
-{
-    Red,
-    Blue,
-    Spectator
-}
-
-//Unnecessary right now but can be extended to include other gamemodes and time/stock options
-public enum Gamemode
-{
-    TeamDeathmatch
-}
-
-//container class for all info for a single player
-public class Player
-{
-    public string name;
-    public Team team;
-    public NetworkInstanceId shipId;
-    public int connectionId;
-    public int kills;
-    public int deaths;
-    public int bounty;
-    public int score;
-
-    public Player() { }
-
-    public Player(string name, Team team, NetworkInstanceId shipId, int connectionId)
-    {
-        this.name = name;
-        this.team = team;
-        this.shipId = shipId;
-        this.connectionId = connectionId;
-        kills = 0;
-        deaths = 0;
-        bounty = 0;
-        score = 0;
-    }
-
-    public void Serialize(NetworkWriter writer)
-    {
-        writer.Write(name);
-        writer.Write((short)team);
-        writer.Write(shipId);
-        writer.Write(connectionId);
-        writer.Write(kills);
-        writer.Write(deaths);
-        writer.Write(bounty);
-        writer.Write(score);
-    }
-
-    public void Deserialize(NetworkReader reader)
-    {
-        name = reader.ReadString();
-        team = (Team)reader.ReadInt16();
-        shipId = reader.ReadNetworkId();
-        connectionId = reader.ReadInt32();
-        kills = reader.ReadInt32();
-        deaths = reader.ReadInt32();
-        bounty = reader.ReadInt32();
-        score = reader.ReadInt32();
-    }
-}
+// Developer:   Kyle Aycock
+// Date:        11/10/2016
+// Description: Expanded to include lobby functionality
+//              Fixed a bunch of stuff to allow more control over when/what the player object spawns in
 
 public class MultiplayerManager : NetworkManager
 {
-
     public Gamemode currentGamemode = Gamemode.TeamDeathmatch;
     public string localPlayerName;
     public Team localPlayerTeam;
@@ -94,13 +33,13 @@ public class MultiplayerManager : NetworkManager
     public List<Player> playerList;
     public Dictionary<Team, int> teamScores;
     public static MultiplayerManager instance;
-
-    
+    public GameObject lobbyPrefab;
+    public string inGameScene;
 
     private float gameRestartTimer;
 
     //Initialization of variables
-    public void Start()
+    void Start()
     {
         localPlayerName = "???";
         localPlayerTeam = Team.Spectator;
@@ -113,8 +52,24 @@ public class MultiplayerManager : NetworkManager
         }
     }
 
-    //Only used for restarting the game
-    public void Update()
+    void Update()
+    {
+        if (NetworkServer.active)
+        {
+            CheckRestartGame();
+        }
+    }
+
+    //Checks if the current scene is lobby
+    public bool IsLobby()
+    {
+        return networkSceneName.Equals(onlineScene);
+    }
+
+    //Methods only for use serverside
+    #region Server
+    //Timer to restart game
+    private void CheckRestartGame()
     {
         if (gameRestartTimer > 0)
         {
@@ -126,7 +81,7 @@ public class MultiplayerManager : NetworkManager
                     teamScores[team] = 0;
                 }
                 foreach (Player player in playerList)
-                    NetworkServer.FindLocalObject(player.shipId).GetComponent<Health>().RpcRestartGame();
+                    NetworkServer.FindLocalObject(player.objectId).GetComponent<Health>().RpcRestartGame();
             }
         }
     }
@@ -134,37 +89,37 @@ public class MultiplayerManager : NetworkManager
     //Processes a player death, this method is called from the Health script
     public void PlayerKill(NetworkInstanceId killed, NetworkInstanceId by)
     {
-        Player victim = playerList.Find(p => p.shipId == killed);
-        Player killer = playerList.Find(p => p.shipId == by);
+        Player victim = playerList.Find(p => p.objectId == killed);
+        Player killer = playerList.Find(p => p.objectId == by);
         victim.deaths++;
         if (killer != null && killer.team != victim.team)
         {
             killer.kills++;
-            int scoreGain = 1 + victim.bounty;
-            teamScores[killer.team] += 1;
-            killer.score += scoreGain;
+            int scoreGain = victim.GetBounty() + 1;
+            teamScores[killer.team] += scoreGain;
+            killer.score += (short)scoreGain;
             KillMessage msg = new KillMessage();
-            msg.bountyGained = victim.bounty;
+            msg.bountyGained = victim.GetBounty();
             NetworkServer.SendToClient(killer.connectionId, ExtMsgType.Kill, msg);
-            victim.bounty = 0;
-            killer.bounty++;
+            victim.killstreak = 0;
+            killer.killstreak++;
             Debug.Log("Player " + killer.name + " killed player " + victim.name + "!");
         }
         else Debug.Log("Player " + victim.name + " suicided!");
-        
-        NetworkServer.SendToAll(ExtMsgType.State, new GameStateMessage(playerList, teamScores));
+
+        SendGameState();
         CheckEndGame();
     }
 
     //The functionality of this method can be expanded when multiple gamemodes are added
-    public void CheckEndGame()
+    private void CheckEndGame()
     {
         foreach (Team team in Enum.GetValues(typeof(Team)))
             if (teamScores[team] >= pointsToWin)
             {
                 gameRestartTimer = 10;
                 foreach (Player player in playerList)
-                    NetworkServer.FindLocalObject(player.shipId).GetComponent<Health>().RpcEndGame(team, teamScores[Team.Red], teamScores[Team.Blue]);
+                    NetworkServer.FindLocalObject(player.objectId).GetComponent<Health>().RpcEndGame(team, teamScores[Team.Red], teamScores[Team.Blue]);
             }
     }
 
@@ -205,58 +160,131 @@ public class MultiplayerManager : NetworkManager
             return;
         }
 
-        GameObject player;
+        GameObject playerObj;
         Transform startPos = GetStartPosition();
-        if (startPos != null)
+        if (IsLobby())
         {
-            player = (GameObject)Instantiate(playerPrefab, startPos.position, startPos.rotation);
-        }
-        else
-        {
-            player = (GameObject)Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
-        }
-        if(playerTeam == Team.Spectator)
-        {
-            int redCount = playerList.FindAll(p => p.team == Team.Red).Count;
-            int blueCount = playerList.FindAll(p => p.team == Team.Blue).Count;
-            if (redCount > blueCount)
-                playerTeam = Team.Blue;
+            Player player = new Player(playerName, playerTeam, NetworkInstanceId.Invalid, conn.connectionId);
+            playerList.Add(player);
+            if (startPos != null)
+            {
+                RectTransform rectTransform = (RectTransform)startPos;
+                playerObj = (GameObject)Instantiate(lobbyPrefab, Vector3.zero, startPos.rotation);
+                playerObj.transform.SetParent(rectTransform.parent, false);
+                ((RectTransform)playerObj.transform).anchoredPosition = rectTransform.anchoredPosition;
+            }
             else
-                playerTeam = Team.Red;
+            {
+                playerObj = (GameObject)Instantiate(lobbyPrefab, Vector3.zero, Quaternion.identity);
+            }
+            playerObj.GetComponent<PlayerIconController>().playerName = playerName;
         }
-        player.GetComponent<Health>().team = playerTeam;
-        player.GetComponent<Health>().playerName = playerName;
+        else {
+            if (startPos != null)
+            {
+                playerObj = (GameObject)Instantiate(playerPrefab, startPos.position, startPos.rotation);
+            }
+            else
+            {
+                playerObj = (GameObject)Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
+            }
+            if (playerTeam == Team.Spectator)
+            {
+                int redCount = playerList.FindAll(p => p.team == Team.Red).Count;
+                int blueCount = playerList.FindAll(p => p.team == Team.Blue).Count;
+                if (redCount > blueCount)
+                    playerTeam = Team.Blue;
+                else
+                    playerTeam = Team.Red;
+            }
+            playerObj.GetComponent<Health>().team = playerTeam;
+            playerObj.GetComponent<Health>().playerName = playerName;
+        }
 
-        NetworkServer.AddPlayerForConnection(conn, player, playerControllerId);
+        NetworkServer.AddPlayerForConnection(conn, playerObj, playerControllerId);
     }
 
-    public void RegisterPlayer(Player player)
+    //Overridden for purposes of maintaining playerlist
+    public override void OnServerDisconnect(NetworkConnection conn)
     {
-        playerList.Add(player);
+        playerList.Remove(playerList.Find(x => x.connectionId == conn.connectionId));
+        SendGameState();
+        Debug.Log("Server remove player");
+        base.OnServerDisconnect(conn);
+    }
+
+    //Overridden for purposes of maintaining playerlist
+    public override void OnServerRemovePlayer(NetworkConnection conn, PlayerController player)
+    {
+        playerList.Remove(playerList.Find(x => x.connectionId == conn.connectionId));
+        SendGameState();
+        Debug.Log("Server remove player");
+        base.OnServerRemovePlayer(conn, player);
+    }
+
+    //Overridden for purposes of maintaining playerlist
+    public override void OnStopServer()
+    {
+        playerList.Clear();
+        base.OnStopServer();
+    }
+
+    //Hooks an object to a Player object
+    public void RegisterPlayer(int connId, NetworkInstanceId objId)
+    {
+        playerList.Find(p => p.connectionId == connId).objectId = objId;
+        if (IsLobby() && playerList.Count == 1) //bad code
+            NetworkServer.FindLocalObject(objId).GetComponent<PlayerIconController>().RpcMarkHost();
+        SendGameState();
+    }
+
+    //Changes a player's team and sends the change out
+    public void ChangePlayerTeam(NetworkInstanceId source, Team newTeam)
+    {
+        playerList.Find(p => p.objectId == source).team = newTeam;
+        SendGameState();
+    }
+
+    //Called when a player clicks 'ready' in the lobby
+    public void SetPlayerReady(NetworkInstanceId source, bool ready)
+    {
+        playerList.Find(p => p.objectId == source).ready = ready;
+        if (IsLobby())
+        {
+            LobbyManager manager = GameObject.Find("Canvas").GetComponent<LobbyManager>();
+            int readyCount = playerList.FindAll(p => p.ready).Count;
+            if (readyCount == playerList.Count - 1)
+                manager.SetAllReady(true);
+            else if (readyCount == playerList.Count)
+                ServerChangeScene(inGameScene);
+            else
+                manager.SetAllReady(false);
+        }
+    }
+
+    //Convenience method for sending the current game state to all clients
+    public void SendGameState()
+    {
         NetworkServer.SendToAll(ExtMsgType.State, new GameStateMessage(playerList, teamScores));
     }
+    #endregion
 
-    //Only purpose of overriding this is to make it do nothing
-    //The base method readies the scene & spawns the player immediately upon connection
+    //Methods only for use clientside
+    #region Client
+    //Overridden to register handlers and prevent spawning at this stage
     public override void OnClientConnect(NetworkConnection conn)
     {
         client.RegisterHandler(ExtMsgType.State, OnStateUpdate);
     }
 
-    //Only purpose of overriding is to properly manage the playerList
-    public override void OnServerRemovePlayer(NetworkConnection conn, PlayerController player)
+    //Overridden to customize player spawning
+    public override void OnClientSceneChanged(NetworkConnection conn)
     {
-        playerList.Remove(playerList.Find(x => x.connectionId == conn.connectionId));
-        base.OnServerRemovePlayer(conn, player);
+        if (!ClientScene.ready) ClientScene.Ready(client.connection);
+        SpawnClient();
     }
 
-    //Called by NetworkHUD - tells the network client to tell the server to spawn a player
-    //The result of this method is that OnServerAddPlayer is called
-    public void SpawnClient()
-    {
-        ClientScene.AddPlayer(client.connection, 0, new SpawnMessage(localPlayerName, localPlayerTeam));
-    }
-
+    //Hook to receive & update game state
     public void OnStateUpdate(NetworkMessage netMsg)
     {
         GameStateMessage msg = netMsg.ReadMessage<GameStateMessage>();
@@ -264,7 +292,36 @@ public class MultiplayerManager : NetworkManager
         teamScores = msg.teamScores;
     }
 
-    //This is a custom message to send name and team choices to the server
+    //Tells the network client to tell the server to spawn a player
+    //The result of this method is that OnServerAddPlayer is called
+    public void SpawnClient()
+    {
+
+        bool addPlayer = (ClientScene.localPlayers.Count == 0);
+        bool foundPlayer = false;
+        foreach (var playerController in ClientScene.localPlayers)
+        {
+            if (playerController.gameObject != null)
+            {
+                foundPlayer = true;
+                break;
+            }
+        }
+        if (!foundPlayer)
+        {
+            // there are players, but their game objects have all been deleted
+            addPlayer = true;
+        }
+        if (addPlayer)
+        {
+            ClientScene.AddPlayer(client.connection,0,new SpawnMessage(localPlayerName,localPlayerTeam));
+        }
+        client.RegisterHandler(ExtMsgType.Kill, GetComponent<NetworkHUD>().OnKill);
+    }
+    #endregion
+
+    //Custom messages for sending packets of information between client and server
+    #region Messages
     class SpawnMessage : MessageBase
     {
         public string name;
@@ -308,12 +365,12 @@ public class MultiplayerManager : NetworkManager
 
         public override void Serialize(NetworkWriter writer)
         {
-            foreach(Team team in Enum.GetValues(typeof(Team)))
+            foreach (Team team in Enum.GetValues(typeof(Team)))
             {
                 writer.Write(teamScores[team]);
             }
             writer.Write(playerList.Count);
-            foreach(Player player in playerList)
+            foreach (Player player in playerList)
             {
                 player.Serialize(writer);
             }
@@ -326,7 +383,7 @@ public class MultiplayerManager : NetworkManager
                 teamScores[team] = reader.ReadInt32();
             }
             int count = reader.ReadInt32();
-            for(int i=0; i< count; i++)
+            for (int i = 0; i < count; i++)
             {
                 Player player = new Player();
                 player.Deserialize(reader);
@@ -340,9 +397,30 @@ public class MultiplayerManager : NetworkManager
         public int bountyGained;
     }
 
+    public class ReadyMessage : MessageBase
+    {
+        public bool ready;
+    }
+
     public class ExtMsgType
     {
         public static short State = MsgType.Highest + 1;
         public static short Kill = MsgType.Highest + 2;
+        public static short Ready = MsgType.Highest + 3;
     }
+    #endregion
+}
+
+//Enum for all teams
+public enum Team
+{
+    Red,
+    Blue,
+    Spectator
+}
+
+//Unnecessary right now but can be extended to include other gamemodes and time/stock options
+public enum Gamemode
+{
+    TeamDeathmatch
 }
