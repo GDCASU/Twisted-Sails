@@ -3069,6 +3069,7 @@ MonoBehaviour:
   pointsToWin: 10
   lobbyPrefab: {fileID: 1000012157780100, guid: 89d5d58f166bbd14eb4daf206f37a9fe,
     type: 2}
+  inGameScene: Milestone 2_Lobby
 --- !u!4 &1764216002
 Transform:
   m_ObjectHideFlags: 0

@@ -34,6 +34,7 @@ public class MultiplayerManager : NetworkManager
     public Dictionary<Team, int> teamScores;
     public static MultiplayerManager instance;
     public GameObject lobbyPrefab;
+    public string inGameScene;
 
     private float gameRestartTimer;
 
@@ -255,7 +256,7 @@ public class MultiplayerManager : NetworkManager
             if (readyCount == playerList.Count - 1)
                 manager.SetAllReady(true);
             else if (readyCount == playerList.Count)
-                ServerChangeScene("Milestone 2_Lobby");
+                ServerChangeScene(inGameScene);
             else
                 manager.SetAllReady(false);
         }
