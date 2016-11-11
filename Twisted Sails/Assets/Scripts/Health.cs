@@ -228,7 +228,7 @@ public class Health : NetworkBehaviour
     {
         if (health == 0 && amount < 0) return; //don't register damage taken after death
 	
-	amt *= defenseStat; // Multiplier effect for defense stat
+	    amount *= defenseStat; // Multiplier effect for defense stat
         health = Mathf.Clamp(health + amount, 0, 100);
         if (health == 0)
             MultiplayerManager.instance.PlayerKill(GetComponent<NetworkIdentity>().netId, source);
