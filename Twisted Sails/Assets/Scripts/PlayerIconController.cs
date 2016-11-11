@@ -44,7 +44,6 @@ public class PlayerIconController : NetworkBehaviour {
         }
         OnReadyStateChange(ready);
         OnNameChange(playerName);
-        Debug.Log("PlayerStart");
     }
 	
 	// Update is called once per frame
@@ -91,7 +90,6 @@ public class PlayerIconController : NetworkBehaviour {
     {
         MultiplayerManager.instance.ChangePlayerTeam(GetComponent<NetworkIdentity>().netId, team);
         RpcDoMove(team, parentName, localTarget);
-        Debug.Log("Movement command received. Start pos: " + startPos + " Target pos: " + targetPos);
     }
 
     /// <summary>

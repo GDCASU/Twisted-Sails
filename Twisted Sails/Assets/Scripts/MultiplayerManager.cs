@@ -40,7 +40,6 @@ public class MultiplayerManager : NetworkManager
     //Initialization of variables
     void Start()
     {
-        Debug.Log("Start!");
         localPlayerName = "???";
         localPlayerTeam = Team.Spectator;
         playerList = new List<Player>();
@@ -142,7 +141,6 @@ public class MultiplayerManager : NetworkManager
     //This method performs the actual spawning of a player
     void ServerAddPlayer(NetworkConnection conn, short playerControllerId, string playerName, Team playerTeam)
     {
-        Debug.Log("Adding player " + playerName);
         if (playerPrefab == null)
         {
             if (LogFilter.logError) { Debug.LogError("The PlayerPrefab is empty on the NetworkManager. Please setup a PlayerPrefab object."); }
