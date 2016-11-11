@@ -30,7 +30,7 @@ public class BoatMovementNetworked : NetworkBehaviour
 	public float boatPropulsionPointOffset = -1f;
 
 	//Boat Input
-	public KeyCode forwardKey	= KeyCode.A;
+	public KeyCode forwardKey	= KeyCode.W;
     public KeyCode backwardsKey = KeyCode.S;
     public KeyCode leftKey		= KeyCode.A;
     public KeyCode rightKey		= KeyCode.D;

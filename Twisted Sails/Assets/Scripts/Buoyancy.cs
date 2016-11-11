@@ -24,7 +24,8 @@ public class Buoyancy : MonoBehaviour {
     public float objectHeight = 0.0f;
     public float airDrag = 0.2f;
     public float surfaceDrag = 1.0f;
-    public float submergedDrag = 1.25f;
+	public float submergedDrag = 1.25f;
+	public KeyCode forwardKey = KeyCode.W;
 
     public float waterLevel;
     private Rigidbody rb;
@@ -53,15 +54,15 @@ public class Buoyancy : MonoBehaviour {
         //Adjust drag based on object situation
         if (bouyancyMult > .75f) //Under water
         {
-            rb.drag = submergedDrag;
+            rb.drag = Input.GetKey(forwardKey) ? 0 : submergedDrag;
         }
 		else if (bouyancyMult > 0f) //On water
 		{
-			rb.drag = surfaceDrag;
+			rb.drag = Input.GetKey(forwardKey) ? 0 : surfaceDrag;
 		}
         else //Above water
         {
-            rb.drag = airDrag;
+			rb.drag = Input.GetKey(forwardKey) ? 0 : airDrag;
         }
     }
 }
