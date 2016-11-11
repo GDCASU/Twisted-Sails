@@ -41,6 +41,14 @@ using UnityEngine.Networking;
 //Date:             11/9/2016
 //Description:      Cleaned up documentation to be more friendly to developers who need to understand how this script works
 //                  Made small changes to CmdPlayerInit to match the new system
+
+//Developer:        Erick Ramirez Cordero
+//Date:             11/9/2016
+//Description:      Added the defenseStat variable to influence damage calculation. When the player
+//                  chooses to allocate crew members to defense, the defense stat should be updated
+//                  by the Crew Management Script.
+
+
 public class Health : NetworkBehaviour
 {
     [Header("Health")]
@@ -64,6 +72,7 @@ public class Health : NetworkBehaviour
     public GameObject activeCamera;
     public GameObject explosion;
     public Vector3 spawnPoint; // NK 10/20 added original spawnpoint
+    public float defenseStat; // Crew Management - Defense Crew
 
     public float healthPackAmount = 25.0f;
 
@@ -82,6 +91,7 @@ public class Health : NetworkBehaviour
         tilting = false;
         spawnPoint = this.transform.position;
         gameOver = false;
+	defenseStat = 1.0f; // 100% damage taken initially
 
         //Setting up health bars & nametags
         if (isLocalPlayer)
@@ -217,6 +227,8 @@ public class Health : NetworkBehaviour
     public void CmdChangeHealth(float amount, NetworkInstanceId source)
     {
         if (health == 0 && amount < 0) return; //don't register damage taken after death
+	
+	amt *= defenseStat; // Multiplier effect for defense stat
         health = Mathf.Clamp(health + amount, 0, 100);
         if (health == 0)
             MultiplayerManager.instance.PlayerKill(GetComponent<NetworkIdentity>().netId, source);
