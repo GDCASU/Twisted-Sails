@@ -382,6 +382,8 @@ MonoBehaviour:
   localPlayerName: 
   localPlayerTeam: 0
   pointsToWin: 10
+  lobbyPrefab: {fileID: 0}
+  inGameScene: 
 --- !u!4 &584372609
 Transform:
   m_ObjectHideFlags: 0
@@ -501,6 +503,21 @@ Prefab:
       propertyPath: m_AnchorMax.y
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 224000011125442554, guid: d5a7615a31cde7d4c9dab5c7b4234ff6,
+        type: 2}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 224000011314774494, guid: d5a7615a31cde7d4c9dab5c7b4234ff6,
+        type: 2}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 224000011790169756, guid: d5a7615a31cde7d4c9dab5c7b4234ff6,
+        type: 2}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d5a7615a31cde7d4c9dab5c7b4234ff6, type: 2}
   m_IsPrefabParent: 0
@@ -587,15 +604,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   boatToFollow: {fileID: 0}
+  cameraOffset: {x: 1, y: 4, z: 1}
   minimumVerticalRotation: 10
   maximumVerticalRotation: 50
   minimumZoomDistance: 5
   maximumZoomDistance: 25
-  sensitivityX: 4
-  sensitivityY: 1
+  smartCameraLayerMask:
+    serializedVersion: 2
+    m_Bits: 1
+  horizontalSensitivity: 4
+  verticalSensitivity: 1
   scrollSensitivity: 10
-  invertX: 0
-  invertY: 0
+  invertHorizontal: 0
+  invertVertical: 0
   quickTurnAxis: Camera Quickturn
   quickTurnSpeed: 1
 --- !u!81 &1219771392
