@@ -65,6 +65,8 @@ public class Health : NetworkBehaviour
     public GameObject explosion;
     public Vector3 spawnPoint; // NK 10/20 added original spawnpoint
 
+    public float healthPackAmount = 25.0f;
+
     private float respawnTimer;
     private bool tilting;
     private bool gameOver;
@@ -163,16 +165,15 @@ public class Health : NetworkBehaviour
             Destroy(c.gameObject);
         }
 
-        /*if (other.name.Equals ("Health Pack")) { //should replace with tags
-			Debug.Log ("Collided with Health Pack");
-            ChangeHealth(50);
-			other.gameObject.GetComponent<HealthPack> ().healing = false;
-		}
-		if (other.name.Equals ("Damage Object")) { //should replace with tags
-			Debug.Log ("Collided with Damage Object");
-            ChangeHealth(-25);
-			other.gameObject.GetComponent<HealthPack> ().healing = false;
-		}*/
+        if(c.transform.gameObject.tag.Equals("HealthPickUp"))
+          {
+              if (isLocalPlayer)
+              {
+                  CmdChangeHealth(healthPackAmount, NetworkInstanceId.Invalid);
+              }
+ 
+              Destroy(c.gameObject);
+          }
     }
 
     //This method should not be called to change health, use CmdChangeHealth for that.
