@@ -16,13 +16,10 @@ using UnityEngine.Networking;
 public class NetworkHUD : MonoBehaviour
 {
     private MultiplayerManager manager;
-    [SerializeField]
+
     public bool showGUI = true;
-    [SerializeField]
     public int offsetX;
-    [SerializeField]
     public int offsetY;
-    [SerializeField]
     public float messageDisplayDuration;
 
     int teamSelection;
@@ -94,7 +91,7 @@ public class NetworkHUD : MonoBehaviour
         int ypos = 40 + offsetY;
         int spacing = 24;
 
-        if (!NetworkClient.active && !NetworkServer.active && manager.matchMaker == null)
+        /*if (!NetworkClient.active && !NetworkServer.active && manager.matchMaker == null)
         {
             if (GUI.Button(new Rect(xpos, ypos, 200, 20), "LAN Host"))
             {
@@ -116,7 +113,7 @@ public class NetworkHUD : MonoBehaviour
             ypos += spacing;
         }
         else
-        {
+        {*/
             if (NetworkServer.active)
             {
                 GUI.Label(new Rect(xpos, ypos, 300, 20), "Server: port=" + manager.networkPort);
@@ -127,7 +124,7 @@ public class NetworkHUD : MonoBehaviour
                 GUI.Label(new Rect(xpos, ypos, 300, 20), "Client: address=" + manager.networkAddress + " port=" + manager.networkPort);
                 ypos += spacing;
             }
-        }
+        //}
 
         if (NetworkClient.active && !ClientScene.ready)
         {
@@ -136,19 +133,11 @@ public class NetworkHUD : MonoBehaviour
             ypos += spacing;
 
             GUI.Label(new Rect(xpos, ypos, 50, 20), "Team: ");
-            teamSelection = GUI.SelectionGrid(new Rect(xpos + 60, ypos, 140, 20), teamSelection, new string[] { "Red", "Blue" }, 2);
-            manager.localPlayerTeam = (Team)teamSelection;
+            manager.localPlayerTeam = (Team) GUI.SelectionGrid(new Rect(xpos + 60, ypos, 140, 20), (int)manager.localPlayerTeam, new string[] { "Red", "Blue" }, 2);
             ypos += spacing;
             if (GUI.Button(new Rect(xpos, ypos, 200, 20), "Join"))
             {
-                ClientScene.Ready(manager.client.connection);
-
-                if (ClientScene.localPlayers.Count == 0)
-                {
-                    //Instructs the manager to spawn the client with the given name and team
-                    manager.SpawnClient();
-                    manager.client.RegisterHandler(MultiplayerManager.ExtMsgType.Kill, OnKill);
-                }
+                manager.SpawnClient();
             }
             ypos += spacing;
         }
@@ -221,7 +210,7 @@ public class NetworkHUD : MonoBehaviour
                     {
                         GUI.Box(new Rect(xpos, ypos, cellWidth, cellHeight), GUIContent.none, scoreboardStyle);
                     }
-                    DrawScoreboardRow(xpos, ypos, cellWidth, cellHeight, player.name, player.kills + "/" + player.deaths + "/" + player.bounty, player.score.ToString());
+                    DrawScoreboardRow(xpos, ypos, cellWidth, cellHeight, player.name, player.kills + "/" + player.deaths + "/" + player.killstreak, player.score.ToString());
                     ypos += cellHeight + 1;
                 }
             }
@@ -236,7 +225,7 @@ public class NetworkHUD : MonoBehaviour
                     { 
                         GUI.Box(new Rect(xpos, ypos, cellWidth, cellHeight), GUIContent.none, scoreboardStyle);
                     }
-                    DrawScoreboardRow(xpos, ypos, cellWidth, cellHeight, player.name, player.kills + "/" + player.deaths + "/" + player.bounty, player.score.ToString());
+                    DrawScoreboardRow(xpos, ypos, cellWidth, cellHeight, player.name, player.kills + "/" + player.deaths + "/" + player.killstreak, player.score.ToString());
                     ypos += cellHeight + 1;
                 }
             }

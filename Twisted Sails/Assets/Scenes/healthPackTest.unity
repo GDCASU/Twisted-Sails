@@ -37,7 +37,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44692534, g: 0.49678725, b: 0.57508564, a: 1}
+  m_IndirectSpecularColor: {r: 0.44692492, g: 0.4967869, b: 0.57508546, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -144,6 +144,48 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: a4be78f671260ee40b2e958e6489f1c8, type: 2}
   m_IsPrefabParent: 0
+--- !u!1001 &22213101
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4000012691085784, guid: 084b1360f0dcaec439080eb421385f18, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4000012691085784, guid: 084b1360f0dcaec439080eb421385f18, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4000012691085784, guid: 084b1360f0dcaec439080eb421385f18, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4000012691085784, guid: 084b1360f0dcaec439080eb421385f18, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4000012691085784, guid: 084b1360f0dcaec439080eb421385f18, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4000012691085784, guid: 084b1360f0dcaec439080eb421385f18, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4000012691085784, guid: 084b1360f0dcaec439080eb421385f18, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4000012691085784, guid: 084b1360f0dcaec439080eb421385f18, type: 2}
+      propertyPath: m_RootOrder
+      value: 14
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: 084b1360f0dcaec439080eb421385f18, type: 2}
+  m_IsPrefabParent: 0
 --- !u!1001 &105631841
 Prefab:
   m_ObjectHideFlags: 0
@@ -182,6 +224,10 @@ Prefab:
     - target: {fileID: 4000012373711734, guid: 6d531ecf61d10f845b8c4b8c40a3fbe7, type: 2}
       propertyPath: m_RootOrder
       value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 1000013458966376, guid: 6d531ecf61d10f845b8c4b8c40a3fbe7, type: 2}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 6d531ecf61d10f845b8c4b8c40a3fbe7, type: 2}
@@ -336,6 +382,7 @@ MonoBehaviour:
   m_OnlineScene: 
   m_SpawnPrefabs:
   - {fileID: 1000013620427708, guid: 999d70260556d6a4d99c8c6ca2089051, type: 2}
+  - {fileID: 1000013244966996, guid: a6e3ee8e63d09f84eac7541da6317ea2, type: 2}
   m_CustomConfig: 0
   m_MaxConnections: 4
   m_ConnectionConfig:
@@ -382,8 +429,6 @@ MonoBehaviour:
   localPlayerName: 
   localPlayerTeam: 0
   pointsToWin: 10
-  lobbyPrefab: {fileID: 0}
-  inGameScene: 
 --- !u!4 &584372609
 Transform:
   m_ObjectHideFlags: 0
@@ -401,6 +446,52 @@ Transform:
   - {fileID: 1574484978}
   m_Father: {fileID: 0}
   m_RootOrder: 0
+--- !u!1001 &630761786
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4000013649584482, guid: a6e3ee8e63d09f84eac7541da6317ea2, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4000013649584482, guid: a6e3ee8e63d09f84eac7541da6317ea2, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4000013649584482, guid: a6e3ee8e63d09f84eac7541da6317ea2, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4000013649584482, guid: a6e3ee8e63d09f84eac7541da6317ea2, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 4000013649584482, guid: a6e3ee8e63d09f84eac7541da6317ea2, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4000013649584482, guid: a6e3ee8e63d09f84eac7541da6317ea2, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4000013649584482, guid: a6e3ee8e63d09f84eac7541da6317ea2, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 4000013649584482, guid: a6e3ee8e63d09f84eac7541da6317ea2, type: 2}
+      propertyPath: m_RootOrder
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 1000013244966996, guid: a6e3ee8e63d09f84eac7541da6317ea2, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: a6e3ee8e63d09f84eac7541da6317ea2, type: 2}
+  m_IsPrefabParent: 0
 --- !u!1001 &864195705
 Prefab:
   m_ObjectHideFlags: 0
@@ -503,21 +594,6 @@ Prefab:
       propertyPath: m_AnchorMax.y
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 224000011125442554, guid: d5a7615a31cde7d4c9dab5c7b4234ff6,
-        type: 2}
-      propertyPath: m_AnchorMax.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 224000011314774494, guid: d5a7615a31cde7d4c9dab5c7b4234ff6,
-        type: 2}
-      propertyPath: m_AnchorMax.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 224000011790169756, guid: d5a7615a31cde7d4c9dab5c7b4234ff6,
-        type: 2}
-      propertyPath: m_AnchorMax.y
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d5a7615a31cde7d4c9dab5c7b4234ff6, type: 2}
   m_IsPrefabParent: 0
@@ -604,19 +680,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   boatToFollow: {fileID: 0}
-  cameraOffset: {x: 1, y: 4, z: 1}
   minimumVerticalRotation: 10
   maximumVerticalRotation: 50
   minimumZoomDistance: 5
   maximumZoomDistance: 25
-  smartCameraLayerMask:
-    serializedVersion: 2
-    m_Bits: 1
-  horizontalSensitivity: 4
-  verticalSensitivity: 1
+  sensitivityX: 4
+  sensitivityY: 1
   scrollSensitivity: 10
-  invertHorizontal: 0
-  invertVertical: 0
+  invertX: 0
+  invertY: 0
   quickTurnAxis: Camera Quickturn
   quickTurnSpeed: 1
 --- !u!81 &1219771392

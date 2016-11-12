@@ -6,6 +6,8 @@ TagManager:
   tags:
   - HealthUI
   - Cannonball
+  - HealthPickUp
+  - CrewManagementUI
   layers:
   - Default
   - TransparentFX
@@ -15,7 +17,7 @@ TagManager:
   - UI
   - 
   - 
-  - 
+  - Boat
   - 
   - 
   - 
