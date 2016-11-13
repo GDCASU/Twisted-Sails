@@ -1180,6 +1180,7 @@ GameObject:
   - 114: {fileID: 114000010556032994}
   - 114: {fileID: 114000010184600050}
   - 114: {fileID: 114000011436452340}
+  - 114: {fileID: 114000010202202694}
   m_Layer: 8
   m_Name: Mileston2Boat
   m_TagString: Untagged
@@ -5361,6 +5362,24 @@ MonoBehaviour:
   rightKey: 100
   fireKey: 32
   cannonBall: {fileID: 1000013620427708, guid: 999d70260556d6a4d99c8c6ca2089051, type: 2}
+--- !u!114 &114000010202202694
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000013458966376}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73d13c19b678e36498f56f62c3095503, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  messageSendKey: MessageEnter
+  inputField: {fileID: 0}
+  chatEnterField: {fileID: 0}
+  chatRecord: {fileID: 0}
+  messagesShownOnScreen: 5
+  maxNumberOfMessagesStored: 5
+  chatSlotPrefab: {fileID: 0}
 --- !u!114 &114000010219481882
 MonoBehaviour:
   m_ObjectHideFlags: 1
