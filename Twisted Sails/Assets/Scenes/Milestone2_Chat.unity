@@ -288,6 +288,10 @@ MonoBehaviour:
   inputField: {fileID: 1941968937}
   chatEnterField: {fileID: 1941968935}
   chatRecord: {fileID: 770922490}
+  chatSlotPrefab: {fileID: 1000012855331122, guid: 6ff87776c38948f48b9aacb05bee7d00,
+    type: 2}
+  messagesShownOnScreen: 5
+  maxNumberOfMessagesStored: 10
 --- !u!222 &504066930
 CanvasRenderer:
   m_ObjectHideFlags: 0
