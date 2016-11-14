@@ -37,7 +37,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44692492, g: 0.4967869, b: 0.57508546, a: 1}
+  m_IndirectSpecularColor: {r: 0.44692534, g: 0.49678725, b: 0.57508564, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -307,6 +307,7 @@ MonoBehaviour:
   showGUI: 1
   offsetX: 0
   offsetY: 0
+  messageDisplayDuration: 2.5
 --- !u!114 &584372608
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -380,6 +381,9 @@ MonoBehaviour:
   currentGamemode: 0
   localPlayerName: 
   localPlayerTeam: 0
+  pointsToWin: 10
+  lobbyPrefab: {fileID: 0}
+  inGameScene: 
 --- !u!4 &584372609
 Transform:
   m_ObjectHideFlags: 0
@@ -497,7 +501,22 @@ Prefab:
     - target: {fileID: 224000011118632542, guid: d5a7615a31cde7d4c9dab5c7b4234ff6,
         type: 2}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 224000011125442554, guid: d5a7615a31cde7d4c9dab5c7b4234ff6,
+        type: 2}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 224000011314774494, guid: d5a7615a31cde7d4c9dab5c7b4234ff6,
+        type: 2}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 224000011790169756, guid: d5a7615a31cde7d4c9dab5c7b4234ff6,
+        type: 2}
+      propertyPath: m_AnchorMax.y
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d5a7615a31cde7d4c9dab5c7b4234ff6, type: 2}
@@ -585,14 +604,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   boatToFollow: {fileID: 0}
-  Y_angle_Min: 10
-  Y_angle_Max: 50
-  camTransform: {fileID: 0}
-  sensitivityX: 4
-  sensitivityY: 1
+  cameraOffset: {x: 1, y: 4, z: 1}
+  minimumVerticalRotation: 10
+  maximumVerticalRotation: 50
+  minimumZoomDistance: 5
+  maximumZoomDistance: 25
+  smartCameraLayerMask:
+    serializedVersion: 2
+    m_Bits: 1
+  horizontalSensitivity: 4
+  verticalSensitivity: 1
   scrollSensitivity: 10
-  offsetX: 1
-  offsetY: 1
+  invertHorizontal: 0
+  invertVertical: 0
+  quickTurnAxis: Camera Quickturn
+  quickTurnSpeed: 1
 --- !u!81 &1219771392
 AudioListener:
   m_ObjectHideFlags: 0

@@ -7,13 +7,18 @@
  * its focus point
  * */
 
- /* *
-	October 29th, 2016: Kyle Chapman
-	Implemented Kyle Aycocks smart camera fix(fixing weird behavior from incorrect raycasting code);
-	Added options to invert the camera movement
-	Changed back boat turning interaction with the camera
-	Cleaned up fields, added headers, commented out confusing stuff related to first person view (unimplemented)
-	Implemented quickturning
+/* *
+   October 29th, 2016: Kyle Chapman
+   Implemented Kyle Aycocks smart camera fix(fixing weird behavior from incorrect raycasting code);
+   Added options to invert the camera movement
+   Changed back boat turning interaction with the camera
+   Cleaned up fields, added headers, commented out confusing stuff related to first person view (unimplemented)
+   Implemented quickturning
+*/
+
+/* *
+   November 9th, 2016: Kyle Chapman
+   Added a simple system for adding an offset to where the camera is looking near the boat.
 */
 
 using UnityEngine;
@@ -23,39 +28,38 @@ public class BoatCameraNetworked : MonoBehaviour
 {
 	public GameObject boatToFollow = null;
 
-	[Header("Rotation and Zoom Bounds")]
+	public Vector3 cameraOffset= new Vector3(1, 4, 1);
+
+	[Header("Rotation and Zoom Settings")]
 	public float minimumVerticalRotation = 10.0f;
 	public float maximumVerticalRotation = 50.0f;
 
 	public float minimumZoomDistance = 5f;
 	public float maximumZoomDistance = 25f;
 
+	public LayerMask smartCameraLayerMask;
+
 	[Header("Camera Control Settings")]
 
-	public float sensitivityX = 4.0f;
-    public float sensitivityY = 1.0f;
-    public float scrollSensitivity = 10.0f; // Used for scroll camera instead of bend camera
+	public float horizontalSensitivity = 4.0f;
+    public float verticalSensitivity = 1.0f;
+    public float scrollSensitivity = 10.0f; // the speed at which the camera zooms in or out
 
-	public bool invertX = false;
-	public bool invertY = false;
+	//whether to invert the direction the camera moves in each dimmension
+	public bool invertHorizontal = false;
+	public bool invertVertical = false;
 
-	private float targetDistance; //the distance the player has set the camera to (they want it at)
-	private float distance = 15.0f; //the distance it actually has to be at the moment
+	private float targetDistance; //the distance the player wants the camera to be at from the boat
+	private float distance = 15.0f; //the distance it actually has to be at
 	private float currentHorizontalRotation = 0.0f;
 	private float currentVerticalRotation = 0.0f;
 
 	[Header("Quick Turn Settings")]
-	public string quickTurnAxis;
+	public string quickTurnAxis; //the input axis for detecing quickturn button inputs
 	public float quickTurnSpeed = 1f;
+
 	private bool quickTurning = false;
 	private float quickTurnTargetHorizontalRotation;
-
-	/*
-	//float variables for adjusting sensitivity for first person view
-	// Setting offset to 0 will disable the camera rotation, recommend using numbers greather than 0.
-	public float offsetX = 1.0f;
-    public float offsetY = 1.0f;
-	*/
 
 	private Camera cam;
 	private Transform camTransform;
@@ -83,8 +87,8 @@ public class BoatCameraNetworked : MonoBehaviour
 		if (!quickTurning)
 		{
 			//get and apply mouse movement input
-			currentHorizontalRotation += Input.GetAxis("Mouse X") * sensitivityX * (invertX ? -1 : 1);
-			currentVerticalRotation += Input.GetAxis("Mouse Y") * sensitivityY * (invertY ? -1 : 1);
+			currentHorizontalRotation += Input.GetAxis("Mouse X") * horizontalSensitivity * (invertHorizontal ? -1 : 1);
+			currentVerticalRotation += Input.GetAxis("Mouse Y") * verticalSensitivity * (invertVertical ? -1 : 1);
 			currentVerticalRotation = Mathf.Clamp(currentVerticalRotation, minimumVerticalRotation, maximumVerticalRotation);
 
 			//get and apply zoom input
@@ -122,19 +126,21 @@ public class BoatCameraNetworked : MonoBehaviour
 	{
 		if (!boatToFollow) { return; }
 
+		Quaternion rotation = Quaternion.Euler(currentVerticalRotation, currentHorizontalRotation, 0);
+
+		Vector3 followingPosition = boatToFollow.transform.position + boatToFollow.transform.right * cameraOffset.x + Vector3.up * cameraOffset.x + boatToFollow.transform.forward * cameraOffset.z;
+
 		distance = targetDistance;
-        Ray camRay = new Ray(boatToFollow.transform.position, -camTransform.forward);
+        Ray camRay = new Ray(followingPosition, -camTransform.forward);
         RaycastHit hit;
-        if (Physics.Raycast(camRay, out hit, targetDistance)){
+        if (Physics.Raycast(camRay, out hit, targetDistance, smartCameraLayerMask)){
             distance = hit.distance;
         }
 
         Vector3 dir = new Vector3(0, 0, -distance);
-        //Vector3 offset = new Vector3(0, 1.0f, 0);
 
-        Quaternion rotation = Quaternion.Euler(currentVerticalRotation, currentHorizontalRotation, 0);
-        camTransform.position = boatToFollow.transform.position + rotation * dir;
-        camTransform.LookAt(boatToFollow.transform.position);
+        camTransform.position = followingPosition + rotation * dir;
+        camTransform.LookAt(followingPosition);
     }
 
 }
