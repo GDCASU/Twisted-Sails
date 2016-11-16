@@ -1163,6 +1163,7 @@ GameObject:
   - 114: {fileID: 114000010556032994}
   - 114: {fileID: 114000010184600050}
   - 114: {fileID: 114000011436452340}
+  - 114: {fileID: 114000011215966412}
   m_Layer: 0
   m_Name: Mileston2Boat
   m_TagString: Untagged
@@ -5504,6 +5505,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fireDelay: 1
   projectileSpeed: 20
+--- !u!114 &114000011215966412
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000013458966376}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 026774d5719fd2f498ac980f0e0dbe02, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_TimeBetweenLogs: 0.5
 --- !u!114 &114000011401448514
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5636,9 +5649,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   buoyancyFactor: 15
   objectHeight: 1.4
-  airDrag: 0
-  surfaceDrag: 0.5
+  airDrag: 2
+  surfaceDrag: 2
   submergedDrag: 2
+  forwardKey: 119
   waterLevel: 0
 --- !u!114 &114000012457255960
 MonoBehaviour:
