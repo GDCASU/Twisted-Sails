@@ -17,7 +17,9 @@ public class MotionLogger : MonoBehaviour
     {
         if (Time.time - m_LastLog > m_TimeBetweenLogs)
         {
-            Debug.Log("Velocity: " + m_Body.velocity);
+            Vector3 velocity = m_Body.velocity;
+            velocity.y = 0.0f;
+            Debug.Log("Velocity: " + velocity.magnitude);
             m_LastLog = Time.time;
         }
 	}
