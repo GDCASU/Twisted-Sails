@@ -1,0 +1,123 @@
+fileFormatVersion: 2
+guid: 57144c771df8dc140859e9a7414e47a0
+timeCreated: 1476004023
+licenseType: Free
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: BaseWingBulb
+    100002: BottomSail
+    100004: Hull
+    100006: Sun
+    100008: SunBase
+    100010: SunFloat1
+    100012: SunFloat2
+    100014: //RootNode
+    100016: WingSail
+    100018: WingSeparators
+    100020: WingSkeleton
+    400000: BaseWingBulb
+    400002: BottomSail
+    400004: Hull
+    400006: Sun
+    400008: SunBase
+    400010: SunFloat1
+    400012: SunFloat2
+    400014: //RootNode
+    400016: WingSail
+    400018: WingSeparators
+    400020: WingSkeleton
+    2300000: BaseWingBulb
+    2300002: BottomSail
+    2300004: Hull
+    2300006: Sun
+    2300008: SunBase
+    2300010: SunFloat1
+    2300012: SunFloat2
+    2300014: WingSail
+    2300016: WingSeparators
+    2300018: WingSkeleton
+    3300000: BaseWingBulb
+    3300002: BottomSail
+    3300004: Hull
+    3300006: Sun
+    3300008: SunBase
+    3300010: SunFloat1
+    3300012: SunFloat2
+    3300014: WingSail
+    3300016: WingSeparators
+    3300018: WingSkeleton
+    4300000: Sun
+    4300002: SunFloat2
+    4300004: SunFloat1
+    4300006: SunBase
+    4300008: WingSail
+    4300010: WingSeparators
+    4300012: WingSkeleton
+    4300014: BottomSail
+    4300016: BaseWingBulb
+    4300018: Hull
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleRotations: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
