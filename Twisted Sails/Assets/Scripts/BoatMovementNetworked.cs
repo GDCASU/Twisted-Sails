@@ -25,6 +25,9 @@ using System.Collections;
 // Description: Added the speedStat variable to influence boat movement. When the player chooses
 //              to allocate crew members to speed, the speed stat should be updated by the Crew
 //              Management Script.
+
+    Updated 2016-11-15 by S. Alex Bradt.
+    Removed part where acceleration was multiplied by deltaTime, which required us to use extremely large acceleration values. Default values adjusted to something more reasonable.
 */
 
 public class BoatMovementNetworked : NetworkBehaviour
@@ -32,8 +35,8 @@ public class BoatMovementNetworked : NetworkBehaviour
 	//Movement values
     private Rigidbody boat;
 
-	public float forwardsAcceleration = 500;
-	public float backwardsAcceleration = 200;
+	public float forwardsAcceleration = 5;
+	public float backwardsAcceleration = 2;
 	public float rotationalControl = 1f;
 	public float speedBoostValue = 2;
 	public bool speedBoost = false;
@@ -134,7 +137,7 @@ public class BoatMovementNetworked : NetworkBehaviour
 
 		if (KeysDown.forward && !KeysDown.backwards)
 		{
-			float acceleration = forwardsAcceleration * Time.deltaTime;
+			float acceleration = forwardsAcceleration;
 
             acceleration *= speedStat; // Multiplier effect for speed stat
 

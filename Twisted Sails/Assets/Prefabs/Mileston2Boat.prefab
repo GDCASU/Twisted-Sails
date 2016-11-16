@@ -1181,6 +1181,7 @@ GameObject:
   - 114: {fileID: 114000010184600050}
   - 114: {fileID: 114000011436452340}
   - 114: {fileID: 114000010202202694}
+  - 114: {fileID: 114000010449331112}
   m_Layer: 8
   m_Name: Mileston2Boat
   m_TagString: Untagged
@@ -5349,8 +5350,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d96c63565d5fa664fb9ee29cfb3dceb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  forwardsAcceleration: 200
-  backwardsAcceleration: 50
+  forwardsAcceleration: 6
+  backwardsAcceleration: 2
   rotationalControl: 1
   speedBoostValue: 2
   speedBoost: 0
@@ -5373,13 +5374,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73d13c19b678e36498f56f62c3095503, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  messageSendKey: MessageEnter
-  inputField: {fileID: 0}
-  chatEnterField: {fileID: 0}
-  chatRecord: {fileID: 0}
-  messagesShownOnScreen: 5
-  maxNumberOfMessagesStored: 5
-  chatSlotPrefab: {fileID: 0}
 --- !u!114 &114000010219481882
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5412,6 +5406,18 @@ MonoBehaviour:
     i15: 231
   m_ServerOnly: 0
   m_LocalPlayerAuthority: 1
+--- !u!114 &114000010449331112
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000013458966376}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 026774d5719fd2f498ac980f0e0dbe02, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_TimeBetweenLogs: 0.5
 --- !u!114 &114000010556032994
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5689,7 +5695,6 @@ MonoBehaviour:
   airDrag: 0
   surfaceDrag: 0.5
   submergedDrag: 2
-  waterLevel: 0
 --- !u!114 &114000012457255960
 MonoBehaviour:
   m_ObjectHideFlags: 1
