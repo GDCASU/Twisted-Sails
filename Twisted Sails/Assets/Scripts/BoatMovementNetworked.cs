@@ -150,7 +150,7 @@ public class BoatMovementNetworked : NetworkBehaviour
 		}
 		else if (!KeysDown.forward && KeysDown.backwards)
 		{
-			float acceleration = backwardsAcceleration * Time.deltaTime;
+			float acceleration = backwardsAcceleration;
 
             acceleration *= speedStat; // Multiplier effect for speed stat
 
