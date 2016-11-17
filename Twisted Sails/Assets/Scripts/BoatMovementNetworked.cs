@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Networking;
 using System.Collections;
+
 /************************** BOAT MOVEMENT SCRIPT *******************************
  * This script controls the movement of the boat, now with key bindings and 
  * deceleration physics! The boat now has more realistic motion.
@@ -8,6 +9,8 @@ using System.Collections;
  * Author: Diego Wilde
  * Date Modified: September 30th, 2016
  */
+
+/**
 //9th Oct 16 Scotty Molt 
 //	- Networked movement and attach camera on Start()
 //	- Attempt to fire cannons from here instead of from BroadsideCannonFire
@@ -16,6 +19,13 @@ using System.Collections;
 //	11th Oct
 //	-	Implemented BoatInput struct in preparation for sending input to server
 //	-	Added BoatState struct, does nothing yet
+
+// Update:      Erick Ramirez Cordero
+// Date:        Novemeber 9, 2016
+// Description: Added the speedStat variable to influence boat movement. When the player chooses
+//              to allocate crew members to speed, the speed stat should be updated by the Crew
+//              Management Script.
+*/
 
 public class BoatMovementNetworked : NetworkBehaviour
 {
@@ -28,9 +38,10 @@ public class BoatMovementNetworked : NetworkBehaviour
 	public float speedBoostValue = 2;
 	public bool speedBoost = false;
 	public float boatPropulsionPointOffset = -1f;
+    public float speedStat = 1.0f; // Crew Management - Speed Crew
 
-	//Boat Input
-	public KeyCode forwardKey	= KeyCode.A;
+    //Boat Input
+    public KeyCode forwardKey	= KeyCode.A;
     public KeyCode backwardsKey = KeyCode.S;
     public KeyCode leftKey		= KeyCode.A;
     public KeyCode rightKey		= KeyCode.D;
@@ -74,7 +85,7 @@ public class BoatMovementNetworked : NetworkBehaviour
         boatCam.boatToFollow = this.gameObject;
 
 		//Get cannon scripts
-		cannonScripts = this.GetComponentsInChildren<BroadsideCannonFireNetworked>(); 
+		cannonScripts = this.GetComponentsInChildren<BroadsideCannonFireNetworked>();
     }
 
 	//Get input for player
@@ -125,7 +136,9 @@ public class BoatMovementNetworked : NetworkBehaviour
 		{
 			float acceleration = forwardsAcceleration * Time.deltaTime;
 
-			if (speedBoost)
+            acceleration *= speedStat; // Multiplier effect for speed stat
+
+            if (speedBoost)
 				acceleration *= speedBoostValue;
 
 			Vector3 forceOffset = -transform.right * (horizontalAxis * rotationalControl) + transform.forward * boatPropulsionPointOffset;
@@ -136,7 +149,9 @@ public class BoatMovementNetworked : NetworkBehaviour
 		{
 			float acceleration = backwardsAcceleration * Time.deltaTime;
 
-			if (speedBoost)
+            acceleration *= speedStat; // Multiplier effect for speed stat
+
+            if (speedBoost)
 				acceleration *= speedBoostValue;
 
 			Vector3 forceDirection = -transform.forward;

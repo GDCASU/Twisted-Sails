@@ -1,4 +1,5 @@
-﻿// The BroadsideCannonFire class governs the firing behavior of the broadside cannons
+﻿/**
+// The BroadsideCannonFire class governs the firing behavior of the broadside cannons
 // such as what projectile is fired, the rate of fire of the broadside cannons, and the
 // speed of the projectile.
 
@@ -9,6 +10,13 @@
 //	- Added helper functions CanFire(), ResetFireTimer(), GetCannonBallVelocity()
 //	- Updated default values to Inspector values
 
+// Update:      Erick Ramirez Cordero
+// Date:        Novemeber 9, 2016
+// Description: Added the attackStat variable to influence fire rate. When the player chooses to
+//              allocate crew members to attack (fire rate), the attack stat should be updated by
+//              the Crew Management Script.
+*/
+
 using UnityEngine;
 using System.Collections;
 
@@ -17,9 +25,10 @@ public class BroadsideCannonFireNetworked : MonoBehaviour {
 	private float reloadTime = 0f;
 	public float fireDelay = 1f;
 	public float projectileSpeed = 20f;
+    public float attackStat = 1.0f; // Crew Management - Attack Crew
 
-	//Make cannonballs spawn at Cannon scale
-	void Start()
+    //Make cannonballs spawn at Cannon scale
+    void Start()
 	{
 		CannonBallNetworked.SetInitScale(transform.lossyScale);
 	}
@@ -33,7 +42,7 @@ public class BroadsideCannonFireNetworked : MonoBehaviour {
 	//Return true if enough time has passed
 	public bool CanFire()
 	{
-		return reloadTime >= fireDelay;
+		return reloadTime >= fireDelay * attackStat;
 	}
 
 	//Reset time to fire cannon

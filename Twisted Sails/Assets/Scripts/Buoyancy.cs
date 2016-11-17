@@ -16,37 +16,68 @@ using System.Collections;
 
     Made 9/21/16 by Ryan Black
     Last updated 9/28/16 by Ryan Black
+
+
+    Updated 11/7/16 by Diego Wilde
+    This script should now perform a raycast to the water mesh and set the current water height equal to the point at which the raycast
+    hits. The ray is cast from an arbitrary high point above the boat and looks for colliders not marked as terrain. When one is found, the water level for the
+    bouyancy algorithm is set to the height of the point that the ray hits. In Scene view, a line will be drawn from the boat to where it thinks the water is
 */
 
-public class Buoyancy : MonoBehaviour {
+public class Buoyancy : MonoBehaviour
+{
 
-    public float buoyancyFactor = 10.0f;
+    public float buoyancyFactor = 15.0f;
     public float objectHeight = 0.0f;
     public float airDrag = 0.2f;
     public float surfaceDrag = 1.0f;
     public float submergedDrag = 1.25f;
 
-    public float waterLevel;
+    private float waterLevel;
     private Rigidbody rb;
 
-    void Start () {
+
+
+    void Start()
+    {
         rb = this.GetComponent<Rigidbody>();
     }
-	
-	void FixedUpdate ()
-	{
-		float bouyancyMult = 0;
-		float boatHeight = transform.position.y;
-
-        waterLevel = Mathf.Sin(Time.time);
 
 
-		//Add upward force when Center of Mass falls below the water level
-		if (boatHeight < waterLevel)
+    void FixedUpdate()
+    {
+
+
+        float bouyancyMult = 0;
+        float boatHeight = transform.position.y;
+        //float bouyancyMult = 0;
+        //float boatHeight = transform.position.y;
+
+        RaycastHit water;
+
+        if (Physics.Raycast(rb.position + Vector3.up * 100000, Vector3.down, out water, Mathf.Infinity, 22))
+        {
+            Debug.DrawLine(rb.position, water.point);
+            Physics.IgnoreCollision(rb.GetComponent<Collider>(), water.collider);
+            waterLevel = water.point.y;
+            //print("water Detected"); print(waterLevel); // Used for debug
+        }
+        /** // This didn't work for like, no reason at all I guess
+        if (Physics.Raycast(rb.position, Vector3.up, out water, Mathf.Infinity, 22))
+        {
+            Debug.DrawRay(rb.position, water.point.y * Vector3.up);
+            Physics.IgnoreCollision(rb.GetComponent<Collider>(), water.collider);
+            print("water detected up");
+            waterLevel = water.point.y;
+        }
+    //*/
+
+        //Add upward force when Center of Mass falls below the water level
+        if (boatHeight < waterLevel)
         {
             bouyancyMult = Mathf.Max(0, Mathf.Min(Mathf.Abs((waterLevel - boatHeight)) / objectHeight, 1));
-			float buoyancyAmount = bouyancyMult * buoyancyFactor;
-			Vector3 force = transform.up * buoyancyAmount;
+            float buoyancyAmount = bouyancyMult * buoyancyFactor;
+            Vector3 force = transform.up * buoyancyAmount;
             rb.AddForce(force, ForceMode.Acceleration);
         }
 
@@ -55,13 +86,16 @@ public class Buoyancy : MonoBehaviour {
         {
             rb.drag = submergedDrag;
         }
-		else if (bouyancyMult > 0f) //On water
-		{
-			rb.drag = surfaceDrag;
-		}
+        else if (bouyancyMult > 0f) //On water
+        {
+            rb.drag = surfaceDrag;
+        }
         else //Above water
         {
             rb.drag = airDrag;
         }
     }
+
+    public void setWaterLevel(float newLevel) { waterLevel = newLevel; }
+    public Vector3 getPosition() { return rb.position; }
 }
