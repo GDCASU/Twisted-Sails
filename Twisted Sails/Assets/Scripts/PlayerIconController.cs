@@ -7,6 +7,9 @@ using UnityEngine.UI;
 // Date:        11/10/2016
 // Description: Initial creation. This script takes input and controls
 //              the player's icon in the lobby.
+//              I implemented this the simplest and most effective way
+//              I could imagine, but the "icon" system can be changed 
+//              easily if need be
 
 // Developer:   Nizar Kury
 // Date:        11/17/2016
@@ -14,13 +17,26 @@ using UnityEngine.UI;
 //              Added RpcShipSelect for ship selection
 //              Added a ship icons instance variable for storage of sprites
 
+// Developer:   Kyle Aycock
+// Date:        11/17/2016
+// Description: Code cleanup
+//              Fixed newly connected clients spawning icons off-screen
+//              Fixed host seeing "ready" button when not all clients ready
 
 //This is the input/player controller for a player's lobby icon
-public class PlayerIconController : NetworkBehaviour {
-
-    [SyncVar(hook = "OnReadyStateChange")] public bool ready;
-    [SyncVar(hook = "OnNameChange")] public string playerName;
-    [SyncVar] public bool host;
+//Input is given to this script from LobbyManager.cs currently
+public class PlayerIconController : NetworkBehaviour
+{
+    [SyncVar(hook = "OnReadyStateChange")]
+    public bool ready;
+    [SyncVar(hook = "OnNameChange")]
+    public string playerName;
+    [SyncVar]
+    public bool host;
+    [SyncVar]
+    public Vector2 effectivePosition;
+    public Color defaultColor;
+    public Color readyColor;
 
     private Sprite[] shipIcons; // list of ship icons taken from LobbyManager for RPC use
     private Text nameText;
@@ -29,51 +45,64 @@ public class PlayerIconController : NetworkBehaviour {
     private float progress;
     private RectTransform rectTransform;
     private GameObject canvas;
-    public Color defaultColor;
-    public Color readyColor;
-    
 
-	// Use this for initialization
-	void Start () {
-        ready = false;
+    #region Hooks
+    // Use this for initialization
+    void Start()
+    {
+        ready = false; 
         if (host) MarkHost();
         canvas = GameObject.Find("Canvas");
         transform.SetParent(canvas.transform.Find("TeamSelect"), false);
         nameText = transform.Find("PlayerName").GetComponent<Text>();
         rectTransform = GetComponent<RectTransform>();
-        targetPos = rectTransform.anchoredPosition;
-        
-        if(isLocalPlayer)
+        rectTransform.anchoredPosition = effectivePosition;
+        targetPos = effectivePosition;
+
+        if (isLocalPlayer)
         {
             defaultColor.a = 255;
             readyColor.a = 255;
-            CmdPlayerInit(MultiplayerManager.instance.client.connection.connectionId);  
+            CmdPlayerInit(MultiplayerManager.instance.client.connection.connectionId);
+            CmdReady(ready);
         }
         OnReadyStateChange(ready);
         OnNameChange(playerName);
     }
-	
-	// Update is called once per frame
-	void Update () {
-	    if(rectTransform.anchoredPosition != targetPos)
+
+    // Update is called once per frame
+    void Update()
+    {
+        //Smooth movement
+        if (rectTransform.anchoredPosition != targetPos)
         {
-            progress += Time.deltaTime*2;
+            progress += Time.deltaTime * 2;
             Vector2 newPos = Vector2.Lerp(startPos, targetPos, progress);
             rectTransform.anchoredPosition = newPos;
+            effectivePosition = newPos;
         }
-	}
-
-    public void SetName(string name)
-    {
-        nameText.text = name;
     }
 
-    public void MarkHost()
+    /// <summary>
+    /// Automatically called when this icon is readied or unreadied
+    /// </summary>
+    /// <param name="newState"></param>
+    public void OnReadyStateChange(bool newState)
     {
-        defaultColor.b = 0;
-        readyColor.r = 255;
-        OnReadyStateChange(ready);
+        ready = newState;
+        GetComponent<Image>().color = (ready ? readyColor : defaultColor);
     }
+
+    /// <summary>
+    /// Automatically called when playerName is changed on this icon serverside
+    /// </summary>
+    /// <param name="newName"></param>
+    public void OnNameChange(string newName)
+    {
+        playerName = newName;
+        transform.Find("PlayerName").GetComponent<Text>().text = newName;
+    }
+    #endregion
 
     #region Commands
     /// <summary>
@@ -111,10 +140,10 @@ public class PlayerIconController : NetworkBehaviour {
     /// Toggles readiness for match to start
     /// </summary>
     [Command]
-    public void CmdReady()
+    public void CmdReady(bool ready)
     {
-        MultiplayerManager.instance.SetPlayerReady(GetComponent<NetworkIdentity>().netId, !ready);
-        ready = !ready;
+        MultiplayerManager.instance.SetPlayerReady(GetComponent<NetworkIdentity>().netId, ready);
+        this.ready = ready;
     }
     #endregion
 
@@ -152,29 +181,23 @@ public class PlayerIconController : NetworkBehaviour {
     [ClientRpc]
     public void RpcShipSelect(Ship ship)
     {
-        transform.Find("ShipIcon").GetComponent<Image>().sprite = shipIcons[(int)ship];     
+        transform.Find("ShipIcon").GetComponent<Image>().sprite = shipIcons[(int)ship];    
+    }
+
+    #region Misc
+    //Changes the name displayed on this icon
+    public void SetName(string name)
+    {
+        nameText.text = name;
     }
     #endregion
 
-    #region Hooks
-    /// <summary>
-    /// Automatically called when this icon is readied or unreadied
-    /// </summary>
-    /// <param name="newState"></param>
-    public void OnReadyStateChange(bool newState)
+    //This icon is the host's icon
+    public void MarkHost()
     {
-        ready = newState;
-        GetComponent<Image>().color = (ready ? readyColor : defaultColor);
-    }
-
-    /// <summary>
-    /// Automatically called when playerName is changed on this icon serverside
-    /// </summary>
-    /// <param name="newName"></param>
-    public void OnNameChange(string newName)
-    {
-        playerName = newName;
-        transform.Find("PlayerName").GetComponent<Text>().text = newName;
+        defaultColor.b = 0;
+        readyColor.r = 255;
+        OnReadyStateChange(ready);
     }
     #endregion
 }

@@ -15,8 +15,6 @@ using UnityEngine.Networking;
 [RequireComponent(typeof(NetworkManager))]
 public class NetworkHUD : MonoBehaviour
 {
-    private MultiplayerManager manager;
-
     public bool showGUI = true;
     public int offsetX;
     public int offsetY;
@@ -27,6 +25,7 @@ public class NetworkHUD : MonoBehaviour
     List<string> messageStack;
     float messageTimer;
 
+    private MultiplayerManager manager;
     private GUIStyle scoreboardStyle;
     private GUIStyle scoreFeedStyle;
     private Color redColor;
@@ -91,6 +90,8 @@ public class NetworkHUD : MonoBehaviour
         int ypos = 40 + offsetY;
         int spacing = 24;
 
+        //This disabled code is what makes the standard buttons for starting/joining a server appear
+        //Uncomment this block if that is desired
         /*if (!NetworkClient.active && !NetworkServer.active && manager.matchMaker == null)
         {
             if (GUI.Button(new Rect(xpos, ypos, 200, 20), "LAN Host"))
@@ -114,19 +115,21 @@ public class NetworkHUD : MonoBehaviour
         }
         else
         {*/
-            if (NetworkServer.active)
-            {
-                GUI.Label(new Rect(xpos, ypos, 300, 20), "Server: port=" + manager.networkPort);
-                ypos += spacing;
-            }
-            if (NetworkClient.active)
-            {
-                GUI.Label(new Rect(xpos, ypos, 300, 20), "Client: address=" + manager.networkAddress + " port=" + manager.networkPort);
-                ypos += spacing;
-            }
+        if (NetworkServer.active)
+        {
+            GUI.Label(new Rect(xpos, ypos, 300, 20), "Server: port=" + manager.networkPort);
+            ypos += spacing;
+        }
+        if (NetworkClient.active)
+        {
+            GUI.Label(new Rect(xpos, ypos, 300, 20), "Client: address=" + manager.networkAddress + " port=" + manager.networkPort);
+            ypos += spacing;
+        }
         //}
 
-        if (NetworkClient.active && !ClientScene.ready)
+        //This disabled code was where the player specified name/team in the HUD
+        //Uncomment if that behaviour is desired
+        /*if (NetworkClient.active && !ClientScene.ready)
         {
             GUI.Label(new Rect(xpos, ypos, 50, 20), "Name: ");
             manager.localPlayerName = GUI.TextField(new Rect(xpos + 60, ypos, 140, 20), manager.localPlayerName);
@@ -140,7 +143,7 @@ public class NetworkHUD : MonoBehaviour
                 manager.SpawnClient();
             }
             ypos += spacing;
-        }
+        }*/
 
 
         if (NetworkServer.active || manager.IsClientConnected())
@@ -200,7 +203,7 @@ public class NetworkHUD : MonoBehaviour
             defaultColor = GUI.backgroundColor;
             GUI.contentColor = Color.black;
             GUI.backgroundColor = blueColor;
-            DrawScoreboardRow(xpos, ypos, cellWidth, cellHeight, "Blue Team", "Kills/Deaths/Bounty", manager.teamScores[Team.Blue].ToString());
+            DrawScoreboardRow(xpos, ypos, cellWidth, cellHeight, "Blue Team", "Kills/Deaths/TopBounty", manager.teamScores[Team.Blue].ToString());
             ypos += cellHeight + 1;
             foreach (Player player in manager.playerList)
             {
@@ -210,22 +213,22 @@ public class NetworkHUD : MonoBehaviour
                     {
                         GUI.Box(new Rect(xpos, ypos, cellWidth, cellHeight), GUIContent.none, scoreboardStyle);
                     }
-                    DrawScoreboardRow(xpos, ypos, cellWidth, cellHeight, player.name, player.kills + "/" + player.deaths + "/" + player.killstreak, player.score.ToString());
+                    DrawScoreboardRow(xpos, ypos, cellWidth, cellHeight, player.name, player.kills + "/" + player.deaths + "/" + player.maxBounty, player.score.ToString());
                     ypos += cellHeight + 1;
                 }
             }
             GUI.backgroundColor = redColor;
-            DrawScoreboardRow(xpos, ypos, cellWidth, cellHeight, "Red Team", "Kills/Deaths/Bounty", manager.teamScores[Team.Red].ToString());
+            DrawScoreboardRow(xpos, ypos, cellWidth, cellHeight, "Red Team", "Kills/Deaths/TopBounty", manager.teamScores[Team.Red].ToString());
             ypos += cellHeight + 1;
             foreach (Player player in manager.playerList)
             {
                 if (player.team == Team.Red)
                 {
                     if (player.connectionId == manager.client.connection.connectionId)
-                    { 
+                    {
                         GUI.Box(new Rect(xpos, ypos, cellWidth, cellHeight), GUIContent.none, scoreboardStyle);
                     }
-                    DrawScoreboardRow(xpos, ypos, cellWidth, cellHeight, player.name, player.kills + "/" + player.deaths + "/" + player.killstreak, player.score.ToString());
+                    DrawScoreboardRow(xpos, ypos, cellWidth, cellHeight, player.name, player.kills + "/" + player.deaths + "/" + player.maxBounty, player.score.ToString());
                     ypos += cellHeight + 1;
                 }
             }

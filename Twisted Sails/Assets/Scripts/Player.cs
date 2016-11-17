@@ -9,9 +9,7 @@ using UnityEngine.Networking;
 // Date:        11/17/2016
 // Description: Added  a ship instance variable for ship selection
 
-/// <summary>
-/// Container class for all info for a single player
-/// </summary>
+// Container class for all info for a single player
 public class Player
 {
     public string name;
@@ -26,7 +24,7 @@ public class Player
     public short maxBounty;
     public short score;
 
-    public Player() { }
+    public Player() : this("???", Team.Spectator, NetworkInstanceId.Invalid, -1) { }
 
     public Player(string name, Team team, NetworkInstanceId objectId, int connectionId)
     {
