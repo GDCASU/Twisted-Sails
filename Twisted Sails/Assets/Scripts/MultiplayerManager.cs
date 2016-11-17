@@ -24,11 +24,17 @@ using System;
 // Description: Expanded to include lobby functionality
 //              Fixed a bunch of stuff to allow more control over when/what the player object spawns in
 
+// Developer:   Nizar Kury
+// Date:        11/17/2016
+// Description: Expanded to include ship selection
+//              
+
 public class MultiplayerManager : NetworkManager
 {
     public Gamemode currentGamemode = Gamemode.TeamDeathmatch;
     public string localPlayerName;
     public Team localPlayerTeam;
+    public Ship localShipType;
     public int pointsToWin;
     public List<Player> playerList;
     public Dictionary<Team, int> teamScores;
@@ -417,6 +423,14 @@ public enum Team
     Red,
     Blue,
     Spectator
+}
+
+// NK: Enums for type of ship
+public enum Ship
+{
+    Trireme,
+    Human,
+    Bramble
 }
 
 //Unnecessary right now but can be extended to include other gamemodes and time/stock options
