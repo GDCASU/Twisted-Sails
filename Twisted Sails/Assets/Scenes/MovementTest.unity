@@ -596,7 +596,8 @@ MonoBehaviour:
   forwardKey: 119
   fireKey: 32
   restartKey: 115
-  speed: 8
+  speed: 12
+  angularSpeed: 40
   alpha: 1
   beta: {fileID: 1434091074}
 --- !u!23 &995265700
@@ -760,14 +761,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   boatToFollow: {fileID: 995265698}
-  Y_angle_Min: 10
-  Y_angle_Max: 50
-  camTransform: {fileID: 0}
-  sensitivityX: 4
-  sensitivityY: 1
+  cameraOffset: {x: 0, y: 4, z: 0}
+  minimumVerticalRotation: 10
+  maximumVerticalRotation: 50
+  minimumZoomDistance: 20
+  maximumZoomDistance: 25
+  smartCameraLayerMask:
+    serializedVersion: 2
+    m_Bits: 0
+  horizontalSensitivity: 4
+  verticalSensitivity: 1
   scrollSensitivity: 10
-  offsetX: 1
-  offsetY: 1
+  invertHorizontal: 0
+  invertVertical: 0
+  quickTurnAxis: Camera Quickturn
+  quickTurnSpeed: 1
 --- !u!81 &1219771392
 AudioListener:
   m_ObjectHideFlags: 0
@@ -947,7 +955,8 @@ MonoBehaviour:
   forwardKey: 119
   fireKey: 32
   restartKey: 115
-  speed: 8
+  speed: 12
+  angularSpeed: -40
   alpha: 0
   beta: {fileID: 0}
 --- !u!23 &1434091075
@@ -993,7 +1002,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1434091073}
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: -5, y: 0, z: 80}
+  m_LocalPosition: {x: 0, y: 0, z: 65}
   m_LocalScale: {x: 2, y: 1, z: 4}
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
   m_Children: []
