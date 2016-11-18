@@ -13,13 +13,20 @@ using UnityEngine.UI;
 // Developer:   Nizar Kury
 // Date:        11/17/2016
 // Description: Added the SwitchShip() class which deals with a player picking a ship
-//              they want to use.
+//              they want to use. Also added shipIcons instance variable for the 
+//              representation of a person's selection.
 
 // This is mainly a clientside class
 public class LobbyManager : MonoBehaviour
 {
     public RectTransform[] teams; //assigned in inspector
     public GameObject readyButton; //assigned in inspector
+
+    // index corresponds to ship type. In this case,
+    // 0 = trireme
+    // 1 = human
+    // 2 = living wood
+    public Sprite[] shipIcons;
 
     private MultiplayerManager manager;
     private bool allReady;
@@ -80,6 +87,7 @@ public class LobbyManager : MonoBehaviour
     public void SwitchShip(int ship)
     {
         manager.localShipType = (Ship)ship;
+        GetLocalPlayer().GetComponent<PlayerIconController>().CmdChangeShip((Ship)ship, shipIcons);
     }
 
     //Convenience method to fetch local player object (only works clientside)

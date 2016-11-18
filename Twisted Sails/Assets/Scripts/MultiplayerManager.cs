@@ -27,6 +27,8 @@ using System;
 // Developer:   Nizar Kury
 // Date:        11/17/2016
 // Description: Expanded to include ship selection
+//              - Modified SpawnMessage
+//              - Added localShipType
 //              
 
 public class MultiplayerManager : NetworkManager
@@ -138,7 +140,7 @@ public class MultiplayerManager : NetworkManager
     //This hook method is automatically called when the server is instructed to spawn a player (and provided extra info)
     public override void OnServerAddPlayer(NetworkConnection conn, short playerControllerId, NetworkReader extraMessageReader)
     {
-        SpawnMessage msg = new SpawnMessage("", Team.Spectator);
+        SpawnMessage msg = new SpawnMessage("", Team.Spectator, 0); 
         msg.Deserialize(extraMessageReader);
         ServerAddPlayer(conn, playerControllerId, msg.name, (Team)msg.team);
 
@@ -251,6 +253,14 @@ public class MultiplayerManager : NetworkManager
         SendGameState();
     }
 
+    //NK
+    //Changes a player's ship to their selected one and sends the changes out
+    public void ChangePlayerShip(NetworkInstanceId source, Ship newShip)
+    {
+        playerList.Find(p => p.objectId == source).ship = newShip;
+        SendGameState();
+    }
+
     //Called when a player clicks 'ready' in the lobby
     public void SetPlayerReady(NetworkInstanceId source, bool ready)
     {
@@ -320,7 +330,7 @@ public class MultiplayerManager : NetworkManager
         }
         if (addPlayer)
         {
-            ClientScene.AddPlayer(client.connection,0,new SpawnMessage(localPlayerName,localPlayerTeam));
+            ClientScene.AddPlayer(client.connection,0,new SpawnMessage(localPlayerName,localPlayerTeam, localShipType));
         }
         client.RegisterHandler(ExtMsgType.Kill, GetComponent<NetworkHUD>().OnKill);
     }
@@ -332,11 +342,13 @@ public class MultiplayerManager : NetworkManager
     {
         public string name;
         public short team;
+        public short ship;
 
-        public SpawnMessage(string name, Team team)
+        public SpawnMessage(string name, Team team, Ship ship)
         {
             this.name = name;
             this.team = (short)team;
+            this.ship = (short)ship;
         }
 
         public override void Serialize(NetworkWriter writer)
