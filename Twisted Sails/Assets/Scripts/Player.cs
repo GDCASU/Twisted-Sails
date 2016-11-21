@@ -5,6 +5,10 @@ using UnityEngine.Networking;
 // Date:        11/10/2016
 // Description: Exported this class from the MultiplayerManager as it was getting too big.
 
+// Developer:   Nizar Kury
+// Date:        11/17/2016
+// Description: Added  a ship instance variable for ship selection
+
 /// <summary>
 /// Container class for all info for a single player
 /// </summary>
@@ -12,6 +16,7 @@ public class Player
 {
     public string name;
     public Team team;
+    public Ship ship;
     public NetworkInstanceId objectId;
     public int connectionId;
     public bool ready;
