@@ -30,12 +30,14 @@ public class BoatCameraNetworked : MonoBehaviour
 
 	public Vector3 cameraOffset= new Vector3(1, 4, 1);
 
-	[Header("Rotation and Zoom Bounds")]
+	[Header("Rotation and Zoom Settings")]
 	public float minimumVerticalRotation = 10.0f;
 	public float maximumVerticalRotation = 50.0f;
 
 	public float minimumZoomDistance = 5f;
 	public float maximumZoomDistance = 25f;
+
+	public LayerMask smartCameraLayerMask;
 
 	[Header("Camera Control Settings")]
 
@@ -131,7 +133,7 @@ public class BoatCameraNetworked : MonoBehaviour
 		distance = targetDistance;
         Ray camRay = new Ray(followingPosition, -camTransform.forward);
         RaycastHit hit;
-        if (Physics.Raycast(camRay, out hit, targetDistance)){
+        if (Physics.Raycast(camRay, out hit, targetDistance, smartCameraLayerMask)){
             distance = hit.distance;
         }
 

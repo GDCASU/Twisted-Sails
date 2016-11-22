@@ -37,7 +37,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44692534, g: 0.49678725, b: 0.57508564, a: 1}
+  m_IndirectSpecularColor: {r: 0.44692504, g: 0.4967869, b: 0.57508504, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -182,6 +182,16 @@ Prefab:
     - target: {fileID: 4000012373711734, guid: 6d531ecf61d10f845b8c4b8c40a3fbe7, type: 2}
       propertyPath: m_RootOrder
       value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 114000012413589446, guid: 6d531ecf61d10f845b8c4b8c40a3fbe7,
+        type: 2}
+      propertyPath: buoyancyFactor
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 136000013548959800, guid: 6d531ecf61d10f845b8c4b8c40a3fbe7,
+        type: 2}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 6d531ecf61d10f845b8c4b8c40a3fbe7, type: 2}
@@ -382,8 +392,6 @@ MonoBehaviour:
   localPlayerName: 
   localPlayerTeam: 0
   pointsToWin: 10
-  lobbyPrefab: {fileID: 0}
-  inGameScene: 
 --- !u!4 &584372609
 Transform:
   m_ObjectHideFlags: 0
@@ -503,21 +511,6 @@ Prefab:
       propertyPath: m_AnchorMax.y
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 224000011125442554, guid: d5a7615a31cde7d4c9dab5c7b4234ff6,
-        type: 2}
-      propertyPath: m_AnchorMax.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 224000011314774494, guid: d5a7615a31cde7d4c9dab5c7b4234ff6,
-        type: 2}
-      propertyPath: m_AnchorMax.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 224000011790169756, guid: d5a7615a31cde7d4c9dab5c7b4234ff6,
-        type: 2}
-      propertyPath: m_AnchorMax.y
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d5a7615a31cde7d4c9dab5c7b4234ff6, type: 2}
   m_IsPrefabParent: 0
@@ -604,19 +597,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   boatToFollow: {fileID: 0}
-  cameraOffset: {x: 1, y: 4, z: 1}
   minimumVerticalRotation: 10
   maximumVerticalRotation: 50
   minimumZoomDistance: 5
   maximumZoomDistance: 25
-  smartCameraLayerMask:
-    serializedVersion: 2
-    m_Bits: 1
-  horizontalSensitivity: 4
-  verticalSensitivity: 1
+  sensitivityX: 4
+  sensitivityY: 1
   scrollSensitivity: 10
-  invertHorizontal: 0
-  invertVertical: 0
+  invertX: 0
+  invertY: 0
   quickTurnAxis: Camera Quickturn
   quickTurnSpeed: 1
 --- !u!81 &1219771392
@@ -1024,7 +1013,7 @@ GameObject:
   - 4: {fileID: 1809362394}
   - 218: {fileID: 1809362393}
   - 154: {fileID: 1809362392}
-  m_Layer: 0
+  m_Layer: 22
   m_Name: Terrain
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1097,6 +1086,7 @@ GameObject:
   - 64: {fileID: 1941594099}
   - 23: {fileID: 1941594098}
   - 114: {fileID: 1941594102}
+  - 114: {fileID: 1941594103}
   m_Layer: 4
   m_Name: Water
   m_TagString: Untagged
@@ -1141,7 +1131,7 @@ MeshCollider:
   m_GameObject: {fileID: 1941594097}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 2
   m_Convex: 0
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
@@ -1186,6 +1176,25 @@ MonoBehaviour:
   refractLayers:
     serializedVersion: 2
     m_Bits: 1
+--- !u!114 &1941594103
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1941594097}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3558e298a5611641ab0c24143b23b2f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enableWaves: 1
+  initialWaterLevel: 0
+  amplitude: 1
+  frequency: 0.5
+  noiseStrength: 1
+  noiseWalk: 1
+  phase: 0
+  water: {fileID: 0}
 --- !u!1001 &2074960382
 Prefab:
   m_ObjectHideFlags: 0

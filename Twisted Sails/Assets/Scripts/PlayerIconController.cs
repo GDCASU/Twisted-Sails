@@ -8,6 +8,12 @@ using UnityEngine.UI;
 // Description: Initial creation. This script takes input and controls
 //              the player's icon in the lobby.
 
+// Developer:   Nizar Kury
+// Date:        11/17/2016
+// Description: Added CmdChangeShip for ship selection
+//              Added RpcShipSelect for ship selection
+//              Added a ship icons instance variable for storage of sprites
+
 
 //This is the input/player controller for a player's lobby icon
 public class PlayerIconController : NetworkBehaviour {
@@ -16,6 +22,7 @@ public class PlayerIconController : NetworkBehaviour {
     [SyncVar(hook = "OnNameChange")] public string playerName;
     [SyncVar] public bool host;
 
+    private Sprite[] shipIcons; // list of ship icons taken from LobbyManager for RPC use
     private Text nameText;
     private Vector2 startPos;
     private Vector2 targetPos;
@@ -92,6 +99,14 @@ public class PlayerIconController : NetworkBehaviour {
         RpcDoMove(team, parentName, localTarget);
     }
 
+    [Command]
+    public void CmdChangeShip(Ship ship, Sprite[] shipPics)
+    {
+        MultiplayerManager.instance.ChangePlayerShip(GetComponent<NetworkIdentity>().netId, ship);
+        shipIcons = shipPics;
+        RpcShipSelect(ship);
+    }
+
     /// <summary>
     /// Toggles readiness for match to start
     /// </summary>
@@ -127,6 +142,17 @@ public class PlayerIconController : NetworkBehaviour {
         startPos = rectTransform.anchoredPosition;
         targetPos = localTarget;
         progress = 0;
+    }
+
+    // NK
+    /// <summary>
+    /// Called by server to perform a ship switch for the player
+    /// </summary>
+    /// <param name="ship">Ship to switch to</param>
+    [ClientRpc]
+    public void RpcShipSelect(Ship ship)
+    {
+        transform.Find("ShipIcon").GetComponent<Image>().sprite = shipIcons[(int)ship];     
     }
     #endregion
 
