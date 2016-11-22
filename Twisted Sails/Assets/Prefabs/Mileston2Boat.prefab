@@ -1181,6 +1181,7 @@ GameObject:
   - 114: {fileID: 114000010184600050}
   - 114: {fileID: 114000011436452340}
   - 114: {fileID: 114000010202202694}
+  - 114: {fileID: 114000010222649082}
   m_Layer: 8
   m_Name: Mileston2Boat
   m_TagString: Untagged
@@ -5373,13 +5374,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73d13c19b678e36498f56f62c3095503, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  messageSendKey: MessageEnter
-  inputField: {fileID: 0}
-  chatEnterField: {fileID: 0}
-  chatRecord: {fileID: 0}
-  messagesShownOnScreen: 5
-  maxNumberOfMessagesStored: 5
-  chatSlotPrefab: {fileID: 0}
 --- !u!114 &114000010219481882
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5412,6 +5406,25 @@ MonoBehaviour:
     i15: 231
   m_ServerOnly: 0
   m_LocalPlayerAuthority: 1
+--- !u!114 &114000010222649082
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000013458966376}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82148e684e6b18142b2ef9910a029c4b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fireRateStage: 0
+  defenseStage: 0
+  speedStage: 0
+  crewCount: 0
+  attackButton: Attack Crew
+  defenseButton: Defense Crew
+  speedButton: Speed Crew
+  resetButton: Reset Crew
 --- !u!114 &114000010556032994
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5659,7 +5672,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000013458966376}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3f995605d3062064b98d8e45139f8c2e, type: 3}
   m_Name: 
@@ -5689,7 +5702,6 @@ MonoBehaviour:
   airDrag: 0
   surfaceDrag: 0.5
   submergedDrag: 2
-  waterLevel: 0
 --- !u!114 &114000012457255960
 MonoBehaviour:
   m_ObjectHideFlags: 1
