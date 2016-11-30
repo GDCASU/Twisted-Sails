@@ -335,7 +335,7 @@ public class MultiplayerManager : NetworkManager
         }
         if (addPlayer)
         {
-            ClientScene.AddPlayer(client.connection, 0, new SpawnMessage(localPlayerName, localPlayerTeam));
+            ClientScene.AddPlayer(client.connection, 0, new SpawnMessage(localPlayerName, localPlayerTeam, localShipType));
         }
         client.RegisterHandler(ExtMsgType.Kill, GetComponent<NetworkHUD>().OnKill);
     }

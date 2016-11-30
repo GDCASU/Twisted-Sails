@@ -20,7 +20,6 @@ public class NetworkHUD : MonoBehaviour
     public int offsetY;
     public float messageDisplayDuration;
 
-    int teamSelection;
     bool showScoreboard;
     List<string> messageStack;
     float messageTimer;
@@ -36,7 +35,6 @@ public class NetworkHUD : MonoBehaviour
     {
         manager = GetComponent<MultiplayerManager>();
         showScoreboard = false;
-        teamSelection = Random.Range(0, 2);
         messageStack = new List<string>();
         redColor = new Color(100, 0, 0, 0.4f);
         blueColor = new Color(0, 0, 100, 0.4f);
