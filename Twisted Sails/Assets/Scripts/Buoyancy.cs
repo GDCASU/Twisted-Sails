@@ -22,6 +22,9 @@ using System.Collections;
     This script should now perform a raycast to the water mesh and set the current water height equal to the point at which the raycast
     hits. The ray is cast from an arbitrary high point above the boat and looks for colliders not marked as terrain. When one is found, the water level for the
     bouyancy algorithm is set to the height of the point that the ray hits. In Scene view, a line will be drawn from the boat to where it thinks the water is
+
+    Updated 2016-11-15 by S. Alex Bradt
+    Now references Vector3.up, rather than transform.up.
 */
 
 public class Buoyancy : MonoBehaviour
@@ -77,7 +80,7 @@ public class Buoyancy : MonoBehaviour
         {
             bouyancyMult = Mathf.Max(0, Mathf.Min(Mathf.Abs((waterLevel - boatHeight)) / objectHeight, 1));
             float buoyancyAmount = bouyancyMult * buoyancyFactor;
-            Vector3 force = transform.up * buoyancyAmount;
+            Vector3 force = Vector3.up * buoyancyAmount;
             rb.AddForce(force, ForceMode.Acceleration);
         }
 
