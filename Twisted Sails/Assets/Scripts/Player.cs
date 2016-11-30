@@ -45,6 +45,7 @@ public class Player
     {
         writer.Write(name);
         writer.Write((byte)team);
+        writer.Write((byte)ship);
         writer.Write(objectId);
         writer.Write(connectionId);
         writer.Write(ready);
@@ -60,6 +61,7 @@ public class Player
     {
         name = reader.ReadString();
         team = (Team)reader.ReadByte();
+        ship = (Ship)reader.ReadByte();
         objectId = reader.ReadNetworkId();
         connectionId = reader.ReadInt32();
         ready = reader.ReadBoolean();

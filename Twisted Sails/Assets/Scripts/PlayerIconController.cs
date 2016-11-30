@@ -59,6 +59,8 @@ public class PlayerIconController : NetworkBehaviour
         rectTransform.anchoredPosition = effectivePosition;
         targetPos = effectivePosition;
 
+        shipIcons = canvas.GetComponent<LobbyManager>().shipIcons;
+
         if (isLocalPlayer)
         {
             defaultColor.a = 255;
@@ -129,10 +131,9 @@ public class PlayerIconController : NetworkBehaviour
     }
 
     [Command]
-    public void CmdChangeShip(Ship ship, Sprite[] shipPics)
+    public void CmdChangeShip(Ship ship)
     {
         MultiplayerManager.instance.ChangePlayerShip(GetComponent<NetworkIdentity>().netId, ship);
-        shipIcons = shipPics;
         RpcShipSelect(ship);
     }
 

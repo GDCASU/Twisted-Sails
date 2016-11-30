@@ -85,7 +85,7 @@ public class LobbyManager : MonoBehaviour
     public void SwitchShip(int ship)
     {
         manager.localShipType = (Ship)ship;
-        GetLocalPlayer().GetComponent<PlayerIconController>().CmdChangeShip((Ship)ship, shipIcons);
+        GetLocalPlayer().GetComponent<PlayerIconController>().CmdChangeShip((Ship)ship);
     }
 
     /// <summary>
