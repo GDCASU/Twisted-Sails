@@ -1,10 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-//  Programmer:     Nizar Kury
-//  Date:           11/30/2016
-//  Description:    Base template designers can duplicate and work from when implementing their heavy weapons
-public class BasicHeavyWeapon : HeavyWeapon {
+/**
+	[Template Class Header]
+	Template Makers:	Nizar Kury and Kyle Chapman
+	Date:				11/30/2016
+	If need help using this template, contact the programmer's above.
+**/
+
+public class HeavyWeaponTemplate : HeavyWeapon {
 
 	// Use this for initialization
 	new void Start () {
@@ -83,5 +87,33 @@ public class BasicHeavyWeapon : HeavyWeapon {
         base.OnTriggerStay(other);
         // ADD YOUR CODE HERE
     }
-    #endregion
+	#endregion
+
+	#region HeavyWeaponSystemFunctions
+
+	override protected void ActivateWeapon()
+	{
+	}
+
+	override protected void AmmoDepleted()
+	{
+	}
+
+	override protected void AmmoMaxedOut()
+	{
+	}
+
+	override protected void CollectedAmmo(int amountCollected)
+	{
+	}
+
+	override protected void WeaponActivatedNotEnoughAmmo(int currentAmmo)
+	{
+	}
+
+	override protected void WeaponActivatedOnCooldown(float currentCooldown)
+	{
+	}
+
+	#endregion
 }
