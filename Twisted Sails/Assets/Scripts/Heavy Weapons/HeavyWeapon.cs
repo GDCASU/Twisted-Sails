@@ -11,6 +11,9 @@ using System.Collections;
 
 public class HeavyWeapon : MonoBehaviour
 {
+    [Header("Weapon")]
+    public GameObject weaponPrefab;
+
 	[Header("Activation")]
 	public KeyCode weaponUseKey;
 
@@ -65,7 +68,7 @@ public class HeavyWeapon : MonoBehaviour
 						AmmoDepleted();
 					}
 				}
-				//if wepaon is on cooldown, report activation while on cooldown
+				//if weapon is on cooldown, report activation while on cooldown
 				else
 				{
 					WeaponActivatedOnCooldown(coolDownTimer);
@@ -95,8 +98,8 @@ public class HeavyWeapon : MonoBehaviour
 
 			AddAmmo(ammoPerPack);
 
-			CollectedAmmo(ammoPerPack);
-		}
+			CollectedAmmo(ammoPerPack);           
+        }
     }
 
     public virtual void OnCollisionExit(Collision other)
@@ -146,7 +149,7 @@ public class HeavyWeapon : MonoBehaviour
 
 	protected virtual void CollectedAmmo(int amountCollected)
 	{
-	}
+    }
 
 	protected virtual void WeaponActivatedNotEnoughAmmo(int currentAmmo)
 	{

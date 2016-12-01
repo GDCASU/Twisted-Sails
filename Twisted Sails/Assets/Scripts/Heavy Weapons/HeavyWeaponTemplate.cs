@@ -87,32 +87,62 @@ public class HeavyWeaponTemplate : HeavyWeapon {
         base.OnTriggerStay(other);
         // ADD YOUR CODE HERE
     }
-	#endregion
+    #endregion
 
-	#region HeavyWeaponSystemFunctions
+    #region HeavyWeaponSystemFunctions
 
-	override protected void ActivateWeapon()
+    /// <summary>
+    /// This function is called when the player presses the activation key (the keyboard input to 
+    /// shoot the weapon-- weaponUseKey). It is only called when the weapon is off cooldown and
+    /// the player has enough ammo to activate it.
+    /// </summary>
+    override protected void ActivateWeapon()
 	{
+        // ADD YOUR CODE HERE
 	}
 
-	override protected void AmmoDepleted()
+    /// <summary>
+    /// This function is called when the player has 0 ammo left after activating their weapon.
+    /// </summary>
+    override protected void AmmoDepleted()
 	{
+        // ADD YOUR CODE
 	}
 
-	override protected void AmmoMaxedOut()
+    /// <summary>
+    /// This function is called when the player collects ammo, but the ammo capacity has already
+    /// been reached.
+    /// </summary>
+    override protected void AmmoMaxedOut()
 	{
+        // ADD YOUR CODE
 	}
 
-	override protected void CollectedAmmo(int amountCollected)
+    /// <summary>
+    /// This function is called when the player collects ammo.
+    /// </summary>
+    /// <param name="amountCollected"> Determine the amount of ammo collected by a single ammo pack
+    override protected void CollectedAmmo(int amountCollected)
 	{
+        // ADD YOUR CODE
 	}
 
-	override protected void WeaponActivatedNotEnoughAmmo(int currentAmmo)
+    /// <summary>
+    /// This function is called when the player does not have enough ammo to activate their weapon.
+    /// </summary>
+    /// <param name="currentAmmo"> Determine the amount of ammo to be set when ammo has been depleted
+    override protected void WeaponActivatedNotEnoughAmmo(int currentAmmo)
 	{
+        // ADD YOUR CODE
 	}
 
-	override protected void WeaponActivatedOnCooldown(float currentCooldown)
+    /// <summary>
+    /// This function is called when the player activates weapon while it is still on cooldown.
+    /// </summary>
+    /// <param name="currentCooldown"> The current cooldown the heavy weapon has to go.
+    override protected void WeaponActivatedOnCooldown(float currentCooldown)
 	{
+        // ADD YOUR CODE
 	}
 
 	#endregion
