@@ -5,6 +5,13 @@ using System.Collections;
 	[Template Class Header]
 	Template Makers:	Nizar Kury and Kyle Chapman
 	Date:				11/30/2016
+
+    Rename and place this script on the boat prefab game object.
+    Each boat type should have a different heavy weapon script
+    associated with it. For instance, a trireme would have a 
+    TriremeHeavyWeapon script while the dragon boat would have
+    a DragonBoatHeavyWeapon script attached to it.
+
 	If need help using this template, contact the programmer's above.
 **/
 
@@ -99,6 +106,9 @@ public class HeavyWeaponTemplate : HeavyWeapon {
     override protected void ActivateWeapon()
 	{
         // ADD YOUR CODE HERE
+        //  modify spawn position with weaponStartingPosition
+        //  modify velocity with weaponVelocity
+        base.ActivateWeapon();
 	}
 
     /// <summary>
