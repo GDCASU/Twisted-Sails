@@ -6,9 +6,10 @@ using UnityEngine.UI;
 
 // Developer:   Kyle Aycock
 // Date:        11/10/2016
-// Description: This class takes care of the "administrative" work of running the lobby.
-//              It is also what all the buttons, etc. are hooked up to by default.
-//              It passes input to the local icon, which bounces it to the server.
+// Description: This class is responsible for bouncing input to the
+//              object representing the player, which bounces it to the server.
+//              It is currently also responsible for controlling the UI.
+//              It is sufficient for now, but probably should networked later.
 
 // Developer:   Nizar Kury
 // Date:        11/17/2016
@@ -16,11 +17,10 @@ using UnityEngine.UI;
 //              they want to use. Also added shipIcons instance variable for the 
 //              representation of a person's selection.
 
-// This is mainly a clientside class
 public class LobbyManager : MonoBehaviour
 {
-    public RectTransform[] teams; //assigned in inspector
-    public GameObject readyButton; //assigned in inspector
+    public RectTransform[] teams;
+    public GameObject readyButton;
 
     // index corresponds to ship type. In this case,
     // 0 = trireme
@@ -34,8 +34,11 @@ public class LobbyManager : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        //Variable initialization
         manager = MultiplayerManager.instance;
         allReady = false;
+
+        //This if statement statement checks if it's running on the host
         if (NetworkServer.active)
         {
             readyButton.transform.GetChild(0).GetComponent<Text>().text = "Start";
@@ -44,17 +47,11 @@ public class LobbyManager : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
     /// <summary>
     /// Called by server when all players except host have readied up, or when
     /// a new player joins
     /// </summary>
-    /// <param name="ready"></param>
+    /// <param name="ready">Are all players except the host ready?</param>
     public void SetAllReady(bool ready)
     {
         allReady = ready;
@@ -66,7 +63,8 @@ public class LobbyManager : MonoBehaviour
     /// </summary>
     public void Ready()
     {
-        GetLocalPlayer().GetComponent<PlayerIconController>().CmdReady();
+        PlayerIconController controller = GetLocalPlayer().GetComponent<PlayerIconController>();
+        controller.CmdReady(!controller.ready);
     }
 
     /// <summary>
@@ -87,10 +85,12 @@ public class LobbyManager : MonoBehaviour
     public void SwitchShip(int ship)
     {
         manager.localShipType = (Ship)ship;
-        GetLocalPlayer().GetComponent<PlayerIconController>().CmdChangeShip((Ship)ship, shipIcons);
+        GetLocalPlayer().GetComponent<PlayerIconController>().CmdChangeShip((Ship)ship);
     }
 
-    //Convenience method to fetch local player object (only works clientside)
+    /// <summary>
+    /// Convenience method to fetch local player object (only works clientside)
+    /// </summary>
     private GameObject GetLocalPlayer()
     {
         return manager.client.connection.playerControllers[0].gameObject;

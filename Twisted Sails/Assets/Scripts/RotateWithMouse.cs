@@ -30,11 +30,14 @@ public class RotateWithMouse : MonoBehaviour {
             _mouseOffset = (Input.mousePosition - _mouseReference);
 
             // apply rotation
-            _rotation.z = (_mouseOffset.x) * _sensitivity;
+            _rotation.z = -(_mouseOffset.x) * _sensitivity;
             _rotation.x = (_mouseOffset.y) * _sensitivity;
 
             // rotate
-            transform.Rotate(_rotation);
+            // no rotation in y-axis
+            transform.Rotate(_rotation.y,_rotation.y,_rotation.z);
+            // normal Rotation
+            //transform.Rotate(_rotation);
 
             // store mouse
             _mouseReference = Input.mousePosition;
