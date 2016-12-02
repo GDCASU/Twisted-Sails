@@ -13,7 +13,7 @@ using System;
 //
 // This class is currently serving as a general multiplayer game controller. The functionality
 // of the default NetworkManager has been extended to make it easier to work with.
-// Also included are two enums and a container class that I didn't feel deserved their own file.
+// Also included are two enums and several message classes that I didn't feel deserved their own file.
 // Added code for broadcasting current game state (score, player stats, etc) to all players whenever
 // a change is made. This may be inefficient, but it's okay for now. At the very least it's needed
 // for when a new player joins, to synchronize the current game state with that player and tell everyone
@@ -172,6 +172,7 @@ public class MultiplayerManager : NetworkManager
         Transform startPos = GetStartPosition();
         if (IsLobby())
         {
+            //We are spawning a lobby icon representation of the player
             Player player = new Player(playerName, playerTeam, NetworkInstanceId.Invalid, conn.connectionId);
             playerList.Add(player);
             if (startPos != null)
@@ -180,14 +181,17 @@ public class MultiplayerManager : NetworkManager
                 playerObj = (GameObject)Instantiate(lobbyPrefab, Vector3.zero, startPos.rotation);
                 playerObj.transform.SetParent(rectTransform.parent, false);
                 ((RectTransform)playerObj.transform).anchoredPosition = rectTransform.anchoredPosition;
+                playerObj.GetComponent<PlayerIconController>().effectivePosition = rectTransform.anchoredPosition;
             }
             else
             {
+                //shouldn't happen - needs failsafe
                 playerObj = (GameObject)Instantiate(lobbyPrefab, Vector3.zero, Quaternion.identity);
             }
             playerObj.GetComponent<PlayerIconController>().playerName = playerName;
         }
         else {
+            //We are spawning a ship in game
             if (startPos != null)
             {
                 playerObj = (GameObject)Instantiate(playerPrefab, startPos.position, startPos.rotation);
@@ -196,6 +200,9 @@ public class MultiplayerManager : NetworkManager
             {
                 playerObj = (GameObject)Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
             }
+
+            //Actual spectator functionality can be added in later, but for now it's basically "unknown"
+            //Autoassign team based on whichever has less players
             if (playerTeam == Team.Spectator)
             {
                 int redCount = playerList.FindAll(p => p.team == Team.Red).Count;
@@ -217,7 +224,6 @@ public class MultiplayerManager : NetworkManager
     {
         playerList.Remove(playerList.Find(x => x.connectionId == conn.connectionId));
         SendGameState();
-        Debug.Log("Server remove player");
         base.OnServerDisconnect(conn);
     }
 
@@ -226,7 +232,6 @@ public class MultiplayerManager : NetworkManager
     {
         playerList.Remove(playerList.Find(x => x.connectionId == conn.connectionId));
         SendGameState();
-        Debug.Log("Server remove player");
         base.OnServerRemovePlayer(conn, player);
     }
 
@@ -237,7 +242,7 @@ public class MultiplayerManager : NetworkManager
         base.OnStopServer();
     }
 
-    //Hooks an object to a Player object
+    //Hooks an object to a Player
     public void RegisterPlayer(int connId, NetworkInstanceId objId)
     {
         playerList.Find(p => p.connectionId == connId).objectId = objId;
@@ -246,7 +251,7 @@ public class MultiplayerManager : NetworkManager
         SendGameState();
     }
 
-    //Changes a player's team and sends the change out
+    //Changes a player's team
     public void ChangePlayerTeam(NetworkInstanceId source, Team newTeam)
     {
         playerList.Find(p => p.objectId == source).team = newTeam;
@@ -312,7 +317,7 @@ public class MultiplayerManager : NetworkManager
     //The result of this method is that OnServerAddPlayer is called
     public void SpawnClient()
     {
-
+        //Most of this code taken from original NetworkManager
         bool addPlayer = (ClientScene.localPlayers.Count == 0);
         bool foundPlayer = false;
         foreach (var playerController in ClientScene.localPlayers)
@@ -330,7 +335,7 @@ public class MultiplayerManager : NetworkManager
         }
         if (addPlayer)
         {
-            ClientScene.AddPlayer(client.connection,0,new SpawnMessage(localPlayerName,localPlayerTeam, localShipType));
+            ClientScene.AddPlayer(client.connection, 0, new SpawnMessage(localPlayerName, localPlayerTeam, localShipType));
         }
         client.RegisterHandler(ExtMsgType.Kill, GetComponent<NetworkHUD>().OnKill);
     }
@@ -338,6 +343,17 @@ public class MultiplayerManager : NetworkManager
 
     //Custom messages for sending packets of information between client and server
     #region Messages
+    //All new message types must be registered here using this format with the exception of SpawnMessage.
+    public class ExtMsgType
+    {
+        public static short State = MsgType.Highest + 1;
+        public static short Kill = MsgType.Highest + 2;
+        public static short Ready = MsgType.Highest + 3;
+    }
+
+    //This message is sent from client to server to tell the server what the client chose for name & team.
+    //It needs to be a message because name information is chosen before the server is started and before
+    //the player has authority over any object with which to send commands.
     class SpawnMessage : MessageBase
     {
         public string name;
@@ -364,6 +380,8 @@ public class MultiplayerManager : NetworkManager
         }
     }
 
+    //This message is broadcasted to clients whenever the state of the game is changed.
+    //For example, player joins, player leaves, team scores, player scores, etc.
     class GameStateMessage : MessageBase
     {
         public List<Player> playerList;
@@ -410,21 +428,18 @@ public class MultiplayerManager : NetworkManager
         }
     }
 
+    //This message is sent from server to the client that just made a kill.
+    //The client merely receiving this message lets it know it just made a kill,
+    //and variables within the message notifies it of any additional score it gained.
     public class KillMessage : MessageBase
     {
         public int bountyGained;
     }
 
+    //Sent from client to server when a client clicks the "Ready" button in the lobby.
     public class ReadyMessage : MessageBase
     {
         public bool ready;
-    }
-
-    public class ExtMsgType
-    {
-        public static short State = MsgType.Highest + 1;
-        public static short Kill = MsgType.Highest + 2;
-        public static short Ready = MsgType.Highest + 3;
     }
     #endregion
 }
