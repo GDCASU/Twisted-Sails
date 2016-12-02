@@ -6,7 +6,8 @@ using System.Collections;
 	Template Makers:	Nizar Kury and Kyle Chapman
 	Date:				11/30/2016
 
-    Rename and place this script on the boat prefab game object.
+    Duplicate this script and rename the duplicate
+	to place on a boat prefab game object.
     Each boat type should have a different heavy weapon script
     associated with it. For instance, a trireme would have a 
     TriremeHeavyWeapon script while the dragon boat would have
