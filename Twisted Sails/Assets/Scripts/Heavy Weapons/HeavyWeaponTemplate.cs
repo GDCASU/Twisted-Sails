@@ -121,8 +121,8 @@ public class HeavyWeaponTemplate : HeavyWeapon {
 	}
 
     /// <summary>
-    /// This function is called when the player collects ammo, but the ammo capacity has already
-    /// been reached.
+    /// This function is called when the player collects ammo, and the ammo capacity has now
+    /// been reached or already was reached.
     /// </summary>
     override protected void AmmoMaxedOut()
 	{
@@ -130,28 +130,25 @@ public class HeavyWeaponTemplate : HeavyWeapon {
 	}
 
     /// <summary>
-    /// This function is called when the player collects ammo.
+    /// This function is called when the player collect (causes to be destroyed) an ammo pack.
     /// </summary>
-    /// <param name="amountCollected"> Determine the amount of ammo collected by a single ammo pack
-    override protected void CollectedAmmo(int amountCollected)
+    override protected void CollectedAmmoPack()
 	{
         // ADD YOUR CODE
 	}
 
     /// <summary>
-    /// This function is called when the player does not have enough ammo to activate their weapon.
+    /// This function is called when the player tries to activate their weapon, but does not have enough ammo.
     /// </summary>
-    /// <param name="currentAmmo"> Determine the amount of ammo to be set when ammo has been depleted
-    override protected void WeaponActivatedNotEnoughAmmo(int currentAmmo)
+    override protected void WeaponActivatedNotEnoughAmmo()
 	{
         // ADD YOUR CODE
 	}
 
     /// <summary>
-    /// This function is called when the player activates weapon while it is still on cooldown.
+    /// This function is called when the player tries to activate thier weapon, but it is still on cooldown.
     /// </summary>
-    /// <param name="currentCooldown"> The current cooldown the heavy weapon has to go.
-    override protected void WeaponActivatedOnCooldown(float currentCooldown)
+    override protected void WeaponActivatedOnCooldown()
 	{
         // ADD YOUR CODE
 	}
