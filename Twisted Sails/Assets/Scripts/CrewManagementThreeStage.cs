@@ -37,6 +37,10 @@ using UnityEngine.Networking;
 // Date:        December 26, 2016
 // Description: Cleaning up code for easier readability (i.e. adding headers, adding summaries)
 //              Also fixed an error with the "reset stats" section of the Update function
+
+// Update:      Erick Ramirez Cordero
+// Date:        January 6, 2017
+// Description: Added ResetStats function.
 */
 
 public class CrewManagementThreeStage : NetworkBehaviour
@@ -94,22 +98,11 @@ public class CrewManagementThreeStage : NetworkBehaviour
     {
         if (isLocalPlayer)
         {
-            // Initialize stages, multipliers, and scripts
-            crewCount = CREW_MAX - 1;
-            fireRateStage = CREW_MIN;
-            defenseStage = CREW_MIN;
-            speedStage = CREW_MIN;
-            cooldownTimer = 0;
-
-            attackMultiplier = BASE_MULTIPLIER;
-            defenseMultiplier = BASE_MULTIPLIER;
-            speedMultiplier = BASE_MULTIPLIER;
-
+            // Initialize scripts and UI
             healthScript = GetComponentInChildren<Health>();
             boatScript = GetComponentInChildren<BoatMovementNetworked>();
             fireScripts = GetComponentsInChildren<BroadsideCannonFireNetworked>();
-
-            // Locate & initialize UI Elements
+            
             Transform crewUI = GameObject.FindGameObjectWithTag("CrewManagementUI").transform;
             Transform attackUI = crewUI.FindChild("AttackCrewUI");
             Transform defenseUI = crewUI.FindChild("DefenseCrewUI");
@@ -134,10 +127,8 @@ public class CrewManagementThreeStage : NetworkBehaviour
             speedBar.minValue = CREW_MIN;
             speedBar.maxValue = CREW_MAX;
 
-            DisplayUpdate(ref fireRateStage, ref attackBar, ref attackText);
-            DisplayUpdate(ref defenseStage, ref defenseBar, ref defenseText);
-            DisplayUpdate(ref speedStage, ref speedBar, ref speedText);
-
+            // Call ResetStats to initialize stages, multipliers, and UI current values
+            ResetStats();
         }
     }
 
@@ -188,30 +179,7 @@ public class CrewManagementThreeStage : NetworkBehaviour
                 }
 
                 else if (Input.GetButtonDown(resetButton))
-                {
-                    fireRateStage = CREW_MIN;
-                    defenseStage = CREW_MIN;
-                    speedStage = CREW_MIN;
-                    crewCount = CREW_MAX - 1;
-
-                    attackMultiplier = BASE_MULTIPLIER;
-                    defenseMultiplier = BASE_MULTIPLIER;
-                    speedMultiplier = BASE_MULTIPLIER;
-
-                    cooldownTimer = 0;
-
-                    // Reset variables in other scripts
-                    for (int i = 0; i < CANNON_COUNT; i++)
-                    { fireScripts[i].attackStat = 1 / attackMultiplier; }
-
-                    healthScript.defenseStat = 1 / defenseMultiplier;
-                    boatScript.speedStat = speedMultiplier;
-
-                    // Reset UI variables
-                    DisplayUpdate(ref fireRateStage, ref attackBar, ref attackText);
-                    DisplayUpdate(ref defenseStage, ref defenseBar, ref defenseText);
-                    DisplayUpdate(ref speedStage, ref speedBar, ref speedText);
-                }
+                { ResetStats(); }
             }
         }
 	}
@@ -266,5 +234,37 @@ public class CrewManagementThreeStage : NetworkBehaviour
         statBar.value = stat;
         statText.text = "Stage: " + stat;
         counterText.text = "Available Crew: " + crewCount;
+    }
+
+    /// <summary>
+    /// ResetStats is called when the crew management system is first instantiated
+    /// and when the reset key is pressed.
+    /// </summary>
+    
+    void ResetStats()
+    {
+        // Reset stages, multipliers, and timer
+        fireRateStage = CREW_MIN;
+        defenseStage = CREW_MIN;
+        speedStage = CREW_MIN;
+
+        attackMultiplier = BASE_MULTIPLIER;
+        defenseMultiplier = BASE_MULTIPLIER;
+        speedMultiplier = BASE_MULTIPLIER;
+
+        crewCount = CREW_MAX - 1;
+        cooldownTimer = 0;
+
+        // Reset variables in other scripts
+        for (int i = 0; i < CANNON_COUNT; i++)
+        { fireScripts[i].attackStat = 1 / attackMultiplier; }
+
+        healthScript.defenseStat = 1 / defenseMultiplier;
+        boatScript.speedStat = speedMultiplier;
+
+        // Reset UI
+        DisplayUpdate(ref fireRateStage, ref attackBar, ref attackText);
+        DisplayUpdate(ref defenseStage, ref defenseBar, ref defenseText);
+        DisplayUpdate(ref speedStage, ref speedBar, ref speedText);
     }
 }
