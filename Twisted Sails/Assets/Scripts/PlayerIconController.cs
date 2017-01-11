@@ -65,7 +65,7 @@ public class PlayerIconController : NetworkBehaviour
         {
             defaultColor.a = 255;
             readyColor.a = 255;
-            CmdPlayerInit(MultiplayerManager.instance.client.connection.connectionId);
+            CmdPlayerInit(MultiplayerManager.GetLocalClient().connection.connectionId);
             CmdReady(ready);
         }
         OnReadyStateChange(ready);
@@ -114,7 +114,7 @@ public class PlayerIconController : NetworkBehaviour
     [Command]
     public void CmdPlayerInit(int connId)
     {
-        MultiplayerManager.instance.RegisterPlayer(connId, GetComponent<NetworkIdentity>().netId);
+        MultiplayerManager.SetPlayerObject(connId, GetComponent<NetworkIdentity>().netId);
     }
 
     /// <summary>
@@ -126,14 +126,14 @@ public class PlayerIconController : NetworkBehaviour
     [Command]
     public void CmdMoveReq(Team team, string parentName, Vector2 localTarget)
     {
-        MultiplayerManager.instance.ChangePlayerTeam(GetComponent<NetworkIdentity>().netId, team);
+        MultiplayerManager.SetPlayerTeam(GetComponent<NetworkIdentity>().netId, team);
         RpcDoMove(team, parentName, localTarget);
     }
 
     [Command]
     public void CmdChangeShip(Ship ship)
     {
-        MultiplayerManager.instance.ChangePlayerShip(GetComponent<NetworkIdentity>().netId, ship);
+        MultiplayerManager.SetPlayerShip(GetComponent<NetworkIdentity>().netId, ship);
         RpcShipSelect(ship);
     }
 
@@ -143,7 +143,7 @@ public class PlayerIconController : NetworkBehaviour
     [Command]
     public void CmdReady(bool ready)
     {
-        MultiplayerManager.instance.SetPlayerReady(GetComponent<NetworkIdentity>().netId, ready);
+        MultiplayerManager.GetInstance().SetPlayerReady(GetComponent<NetworkIdentity>().netId, ready);
         this.ready = ready;
     }
     #endregion
