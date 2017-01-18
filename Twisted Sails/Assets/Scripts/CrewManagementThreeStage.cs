@@ -32,31 +32,43 @@ using UnityEngine.Networking;
 
 // Author:      Erick Ramirez Cordero
 // Date:        November 21, 2016
+
+// Update:      Erick Ramirez Cordero
+// Date:        December 26, 2016
+// Description: Cleaning up code for easier readability (i.e. adding headers, adding summaries)
+//              Also fixed an error with the "reset stats" section of the Update function
+
+// Update:      Erick Ramirez Cordero
+// Date:        January 6, 2017
+// Description: Added ResetStats function.
 */
 
 public class CrewManagementThreeStage : NetworkBehaviour
 {
     // Current Stage Variables
+    [Header ("Stage Variables")]
     public int fireRateStage;
     public int defenseStage;
     public int speedStage;
     public int crewCount;
 
-    public const int crewMin = 1;
-    public const int crewMax = 4;
+    public const int CREW_MIN = 1;
+    public const int CREW_MAX = 4;
 
     // Multiplier Variables
+    [Header ("Multiplier Variables")]
     public float attackMultiplier;
     public float defenseMultiplier;
     public float speedMultiplier;
     public float multiplier = 1;
-    private const float baseMultiplier = 1.0f;
+    private const float BASE_MULTIPLIER = 1.0f;
 
     // Timer variables
     private float cooldown = 3.0f;
     private float cooldownTimer;
 
     // User Interface Variables
+    [Header ("UI / Input Variables")]
     public string attackButton = "Attack Crew"; // At the moment set to '1'
     public string defenseButton = "Defense Crew"; // At the moment set to '2'
     public string speedButton = "Speed Crew"; // At the moment set to '3'
@@ -76,8 +88,8 @@ public class CrewManagementThreeStage : NetworkBehaviour
     private BoatMovementNetworked boatScript;
 
     // Set to the number of cannons on the ship (Currently 8)
-    private const int cannonCount = 8;
-    private BroadsideCannonFireNetworked[] fireScripts = new BroadsideCannonFireNetworked[cannonCount];
+    private const int CANNON_COUNT = 8;
+    private BroadsideCannonFireNetworked[] fireScripts = new BroadsideCannonFireNetworked[CANNON_COUNT];
 
     private bool debugFlag = true;
 
@@ -86,22 +98,11 @@ public class CrewManagementThreeStage : NetworkBehaviour
     {
         if (isLocalPlayer)
         {
-            // Initialize stages, multipliers, and scripts
-            crewCount = crewMax - 1;
-            fireRateStage = crewMin;
-            defenseStage = crewMin;
-            speedStage = crewMin;
-            cooldownTimer = 0;
-
-            attackMultiplier = baseMultiplier;
-            defenseMultiplier = baseMultiplier;
-            speedMultiplier = baseMultiplier;
-
+            // Initialize scripts and UI
             healthScript = GetComponentInChildren<Health>();
             boatScript = GetComponentInChildren<BoatMovementNetworked>();
             fireScripts = GetComponentsInChildren<BroadsideCannonFireNetworked>();
-
-            // Locate & initialize UI Elements
+            
             Transform crewUI = GameObject.FindGameObjectWithTag("CrewManagementUI").transform;
             Transform attackUI = crewUI.FindChild("AttackCrewUI");
             Transform defenseUI = crewUI.FindChild("DefenseCrewUI");
@@ -117,31 +118,28 @@ public class CrewManagementThreeStage : NetworkBehaviour
             counterText = crewUI.GetComponentInChildren<Text>();
 
             // Initialize UI bar min / max values
-            attackBar.minValue = crewMin;
-            attackBar.maxValue = crewMax;
+            attackBar.minValue = CREW_MIN;
+            attackBar.maxValue = CREW_MAX;
 
-            defenseBar.minValue = crewMin;
-            defenseBar.maxValue = crewMax;
+            defenseBar.minValue = CREW_MIN;
+            defenseBar.maxValue = CREW_MAX;
 
-            speedBar.minValue = crewMin;
-            speedBar.maxValue = crewMax;
+            speedBar.minValue = CREW_MIN;
+            speedBar.maxValue = CREW_MAX;
 
-            DisplayUpdate(ref fireRateStage, ref attackBar, ref attackText);
-            DisplayUpdate(ref defenseStage, ref defenseBar, ref defenseText);
-            DisplayUpdate(ref speedStage, ref speedBar, ref speedText);
-
+            // Call ResetStats to initialize stages, multipliers, and UI current values
+            ResetStats();
         }
     }
 
-    /*
-    // In the Update event, the script checks if the cooldown timer has reached its
-    // end. If not, the cooldown timer is incremented by Time.deltaTime.
-    
-    // Otherwise, the script checks for player input. If a crew button is selected,
-    // then the function StatUpdate is called to update the stat, the stat is updated
-    // in the respective script, the function DisplayUpdate is called to update the UI,
-    // and the cooldown timer is reset.
-    */
+    /// <summary>
+    /// In the Update event, the script checks if the cooldown timer has reached its
+    /// end. If not, the cooldown timer is incremented by Time.deltaTime.
+    /// Otherwise, the script checks for player input. If a crew button is selected,
+    /// then the function StatUpdate is called to update the stat, the stat is updated
+    /// in the respective script, the function DisplayUpdate is called to update the UI,
+    /// and the cooldown timer is reset.
+    /// </summary>
 
     // Update is called once per frame
     void Update ()
@@ -157,7 +155,7 @@ public class CrewManagementThreeStage : NetworkBehaviour
                 {
                     StatUpdate(ref fireRateStage, ref attackMultiplier);
 
-                    for (int i = 0; i < cannonCount; i++)
+                    for (int i = 0; i < CANNON_COUNT; i++)
                     { fireScripts[i].attackStat = 1 / attackMultiplier; }
 
                     DisplayUpdate(ref fireRateStage, ref attackBar, ref attackText);
@@ -181,53 +179,39 @@ public class CrewManagementThreeStage : NetworkBehaviour
                 }
 
                 else if (Input.GetButtonDown(resetButton))
-                {
-                    fireRateStage = crewMin;
-                    defenseStage = crewMin;
-                    speedStage = crewMin;
-                    crewCount = crewMax - 1;
-
-                    attackMultiplier = baseMultiplier;
-                    defenseMultiplier = baseMultiplier;
-                    speedMultiplier = baseMultiplier;
-
-                    cooldownTimer = 0;
-
-                    DisplayUpdate(ref fireRateStage, ref attackBar, ref attackText);
-                    DisplayUpdate(ref defenseStage, ref defenseBar, ref defenseText);
-                    DisplayUpdate(ref speedStage, ref speedBar, ref speedText);
-                }
+                { ResetStats(); }
             }
         }
 	}
 
-    /*
-    // StatUpdate takes the reference of the stat to be updated as an argument.
-    // The function first checks the current number of available crew members (currentCrew).
-    // If currentCrew is above the minimum, the stat gains one point and currentCrew loses
-    // one point. If currentCrew is at or below the minimum, then currentCrew is reset to the
-    // minimum plus one point that is taken away from the stat.
-    */
+    /// <summary>
+    /// The function first checks the current number of available crew members (currentCrew).
+    /// If currentCrew is above the minimum, the stat gains one point and currentCrew loses
+    /// one point. If currentCrew is at or below the minimum, then currentCrew is reset to the
+    /// minimum plus one point that is taken away from the stat.
+    /// </summary>
+    /// <param name="stat"> The stat's stage to be updated </param>
+    /// <param name="statMultiplier"> The stat multiplier to be updated </param>
 
     void StatUpdate(ref int stat, ref float statMultiplier)
     {
-        if (crewCount >= crewMin && stat < crewMax)
+        if (crewCount >= CREW_MIN && stat < CREW_MAX)
         {
             stat++;
             statMultiplier += multiplier;
             crewCount--;
         }
 
-        else if (stat > crewMin)
+        else if (stat > CREW_MIN)
         {
             stat--;
             statMultiplier -= multiplier;
-            crewCount = crewMin;
+            crewCount = CREW_MIN;
         }
 
         // Check to ensure stat has not fallen below the min or max
-        if (stat < crewMin) { stat = crewMin; }
-        else if (stat > crewMax) { stat = crewMax; }
+        if (stat < CREW_MIN) { stat = CREW_MIN; }
+        else if (stat > CREW_MAX) { stat = CREW_MAX; }
 
         if (debugFlag)
         {
@@ -237,15 +221,50 @@ public class CrewManagementThreeStage : NetworkBehaviour
         }
     }
 
-    /*
-    // DisplayUpdate updates the Crew Management portion of the UI with current
-    // stat information.
-    */
+    /// <summary>
+    /// DisplayUpdate updates the Crew Management portion of the UI with current
+    /// stat information.
+    /// </summary>
+    /// <param name="stat"> The stat's stage </param>
+    /// <param name="statBar"> The stat's UI slider </param>
+    /// <param name="statText"> The stat's UI text </param>
 
     void DisplayUpdate(ref int stat, ref Slider statBar, ref Text statText)
     {
         statBar.value = stat;
         statText.text = "Stage: " + stat;
         counterText.text = "Available Crew: " + crewCount;
+    }
+
+    /// <summary>
+    /// ResetStats is called when the crew management system is first instantiated
+    /// and when the reset key is pressed.
+    /// </summary>
+    
+    void ResetStats()
+    {
+        // Reset stages, multipliers, and timer
+        fireRateStage = CREW_MIN;
+        defenseStage = CREW_MIN;
+        speedStage = CREW_MIN;
+
+        attackMultiplier = BASE_MULTIPLIER;
+        defenseMultiplier = BASE_MULTIPLIER;
+        speedMultiplier = BASE_MULTIPLIER;
+
+        crewCount = CREW_MAX - 1;
+        cooldownTimer = 0;
+
+        // Reset variables in other scripts
+        for (int i = 0; i < CANNON_COUNT; i++)
+        { fireScripts[i].attackStat = 1 / attackMultiplier; }
+
+        healthScript.defenseStat = 1 / defenseMultiplier;
+        boatScript.speedStat = speedMultiplier;
+
+        // Reset UI
+        DisplayUpdate(ref fireRateStage, ref attackBar, ref attackText);
+        DisplayUpdate(ref defenseStage, ref defenseBar, ref defenseText);
+        DisplayUpdate(ref speedStage, ref speedBar, ref speedText);
     }
 }
