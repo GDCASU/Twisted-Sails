@@ -28,13 +28,32 @@ public class HeavyWeapon : NetworkBehaviour
 	public float coolDownTotalSeconds;
 	private float coolDownTimer;
 
+	//public readonly interface for the coolDownTimer
+	public float CoolDownTimer
+	{
+		get
+		{
+			return coolDownTimer;
+		}
+	}
+
 	[Header("Ammo")]
 	public int startingAmmoAmount = 0;
     public int ammoCapacity;
 	public int ammoPerPack = 1;
 	public int ammoUsePerActivation = 1;
 	public string ammoPackTag = "AmmoPack";
+	public bool collectPacksWhileAtMaxAmmo = true;
 	private int ammoCount;
+
+	//public readonly interface for ammoCount
+	public int AmmoCount
+	{
+		get
+		{
+			return ammoCount;
+		}
+	}
 
 	[Header("Debug")]
 	public KeyCode addAmmoKey = KeyCode.U;
@@ -82,13 +101,13 @@ public class HeavyWeapon : NetworkBehaviour
                     //if weapon is on cooldown, report activation while on cooldown
                     else
                     {
-                        WeaponActivatedOnCooldown(coolDownTimer);
+                        WeaponActivatedOnCooldown();
                     }
                 }
                 //if not enough ammo to use weapon, report activation while no ammo
                 else
                 {
-                    WeaponActivatedNotEnoughAmmo(ammoCount);
+                    WeaponActivatedNotEnoughAmmo();
                 }
             }
 
@@ -106,11 +125,16 @@ public class HeavyWeapon : NetworkBehaviour
 		//if collides with an ammo pack, destroy it and gain its ammo
 		if (other.gameObject.tag.Equals(ammoPackTag))
 		{
-			Destroy(other.gameObject);
+			//if not at max ammo capacity, collect ammo
+			//if at max ammo capacity, but still collect while at max, collect ammo
+			if (ammoCount < ammoCapacity || collectPacksWhileAtMaxAmmo)
+			{
+				Destroy(other.gameObject);
 
-			AddAmmo(ammoPerPack);
+				AddAmmo(ammoPerPack);
 
-			CollectedAmmo(ammoPerPack);           
+				CollectedAmmoPack();
+			}        
         }
     }
 
@@ -161,15 +185,15 @@ public class HeavyWeapon : NetworkBehaviour
 	{
 	}
 
-	protected virtual void CollectedAmmo(int amountCollected)
+	protected virtual void CollectedAmmoPack()
 	{
     }
 
-	protected virtual void WeaponActivatedNotEnoughAmmo(int currentAmmo)
+	protected virtual void WeaponActivatedNotEnoughAmmo()
 	{
 	}
 
-	protected virtual void WeaponActivatedOnCooldown(float currentCooldown)
+	protected virtual void WeaponActivatedOnCooldown()
 	{
 	}
 
@@ -177,12 +201,19 @@ public class HeavyWeapon : NetworkBehaviour
 
 	#region InterfaceFunctions
 
-	public void AddAmmo(int amount)
+	/// <summary>
+	/// Adds to the ammo count the given amount of ammo, capping at the ammo capacity.
+	/// If this causes the ammo capacity to be reached, call AmmoMaxedOut() to report it.
+	/// </summary>
+	/// <param name="amount"></param> The amount of ammo to add to the count.
+	/// <param name="ignoreCap"></param> Whether or not to ignore the ammo count when giving the ammo. Optional parameter.
+	public void AddAmmo(int amount, bool ignoreCap = false)
 	{
 		ammoCount += amount;
 
 		//if now at ammo max capacity, cap ammo and report maxing out
-		if (ammoCount >= ammoCapacity)
+		//don't do so if ignoring the cap
+		if (ammoCount >= ammoCapacity && !ignoreCap)
 		{
 			ammoCount = ammoCapacity;
 
