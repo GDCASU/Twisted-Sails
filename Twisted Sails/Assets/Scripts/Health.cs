@@ -84,16 +84,21 @@ public class Health : NetworkBehaviour
 
     //Hooks are called automatically, usually there's no reason to manually call these hooks
     #region Hooks
-    //Initialization
+    //Init. non-dependent variables
+    void Awake()
+    {
+        dead = false;
+        tilting = false;
+        gameOver = false;
+        defenseStat = 1.0f; // 100% damage taken initially
+    }
+    
+    //Init. dependent variables
     void Start()
     {
         //Variable initialization
         activeCamera = Camera.main.gameObject;
-        dead = false;
-        tilting = false;
         spawnPoint = transform.position;
-        gameOver = false;
-        defenseStat = 1.0f; // 100% damage taken initially
 
         //Setting up health bars & nametags
         if (isLocalPlayer) //This is the local player's ship -- use the HUD healthbar
@@ -160,6 +165,7 @@ public class Health : NetworkBehaviour
     //Whenever ship collides with something else
     void OnCollisionEnter(Collision c)
     {
+        Debug.Log("client?: " + isClient + "  server?: " + isServer + " local player?: " + isLocalPlayer);
         //Cannonball collision
         if (c.transform.gameObject.tag.Equals("Cannonball") && c.gameObject.GetComponent<CannonBallNetworked>().owner != GetComponent<NetworkIdentity>().netId)
         {
@@ -169,11 +175,13 @@ public class Health : NetworkBehaviour
                 if (isLocalPlayer)
                 {
                     CmdChangeHealth(-35, c.transform.gameObject.GetComponent<CannonBallNetworked>().owner);
+                    RpcEndGame(Team.Blue, 0, 1000);
                 }
                 GameObject explode = (GameObject)Instantiate(explosion, c.contacts[0].point, Quaternion.identity);
                 explode.GetComponent<ParticleSystem>().Emit(100);
             }
-            Destroy(c.gameObject);
+            if(isServer)
+                Destroy(c.gameObject);
         }
 
         //Health Pickup collision
@@ -183,7 +191,8 @@ public class Health : NetworkBehaviour
             {
                 CmdChangeHealth(healthPackAmount, NetworkInstanceId.Invalid);
             }
-            Destroy(c.gameObject);
+            if(isServer)
+                Destroy(c.gameObject);
         }
     }
 
@@ -213,7 +222,7 @@ public class Health : NetworkBehaviour
     [Command]
     public void CmdPlayerInit(int connectionId)
     {
-        MultiplayerManager.SetPlayerObject(MultiplayerManager.FindPlayer(connectionId), GetComponent<NetworkIdentity>().netId);
+        MultiplayerManager.FindPlayer(connectionId).objectId = GetComponent<NetworkIdentity>().netId;
     }
 
     /// <summary>
@@ -233,7 +242,7 @@ public class Health : NetworkBehaviour
         //By setting this variable in a serverside context, the OnChangeHealth hook is called on all clients
         health = Mathf.Clamp(health + amount, 0, 100);
         if (health == 0) //Tell the server about this kill
-            MultiplayerManager.PlayerDeath(GetComponent<NetworkIdentity>().netId, source);
+            MultiplayerManager.GetInstance().PlayerKill(MultiplayerManager.FindPlayer(GetComponent<NetworkIdentity>().netId), source);
     }
     #endregion
 

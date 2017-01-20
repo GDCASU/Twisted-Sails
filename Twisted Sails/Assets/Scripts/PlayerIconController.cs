@@ -50,8 +50,7 @@ public class PlayerIconController : NetworkBehaviour
     // Use this for initialization
     void Start()
     {
-        ready = false; 
-        if (host) MarkHost();
+        ready = false;
         canvas = GameObject.Find("Canvas");
         transform.SetParent(canvas.transform.Find("TeamSelect"), false);
         nameText = transform.Find("PlayerName").GetComponent<Text>();
@@ -60,6 +59,11 @@ public class PlayerIconController : NetworkBehaviour
         targetPos = effectivePosition;
 
         shipIcons = canvas.GetComponent<LobbyManager>().shipIcons;
+
+        if (host)
+            MarkHost();
+        else if (MultiplayerManager.IsHost() && isLocalPlayer) //temporary solution
+            CmdMarkHost();
 
         if (isLocalPlayer)
         {
@@ -114,7 +118,7 @@ public class PlayerIconController : NetworkBehaviour
     [Command]
     public void CmdPlayerInit(int connId)
     {
-        MultiplayerManager.SetPlayerObject(connId, GetComponent<NetworkIdentity>().netId);
+        MultiplayerManager.FindPlayer(connId).objectId = GetComponent<NetworkIdentity>().netId;
     }
 
     /// <summary>
@@ -126,15 +130,22 @@ public class PlayerIconController : NetworkBehaviour
     [Command]
     public void CmdMoveReq(Team team, string parentName, Vector2 localTarget)
     {
-        MultiplayerManager.SetPlayerTeam(GetComponent<NetworkIdentity>().netId, team);
+        MultiplayerManager.FindPlayer(GetComponent<NetworkIdentity>().netId).team = team;
         RpcDoMove(team, parentName, localTarget);
     }
 
     [Command]
     public void CmdChangeShip(Ship ship)
     {
-        MultiplayerManager.SetPlayerShip(GetComponent<NetworkIdentity>().netId, ship);
+        MultiplayerManager.FindPlayer(GetComponent<NetworkIdentity>().netId).ship = ship;
         RpcShipSelect(ship);
+    }
+
+    [Command]
+    public void CmdMarkHost()
+    {
+        host = true;
+        RpcMarkHost();
     }
 
     /// <summary>

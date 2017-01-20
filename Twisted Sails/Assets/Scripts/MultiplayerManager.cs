@@ -35,8 +35,8 @@ using System;
 // Date:        1/11/2016
 // Description: Added a selection of convenience methods that should be used by other scripts
 //              to interact with the MultiplayerManager. The intention is that if another programmer
-//              needs to do something with networking, they may simply type "MultiplayerManager." and
-//              find the static method to do what they're looking for in the list. Will most likely need to
+//              needs to do something with networking, they may simply refer to the static methods either here
+//              or in the autocomplete and find the one that does what they need to do. Will most likely need to
 //              be expanded upon after designers start doing more stuff and the need for more methods arises.
 
 public class MultiplayerManager : NetworkManager
@@ -56,7 +56,7 @@ public class MultiplayerManager : NetworkManager
     private float gameRestartTimer;
 
     //Initialization of variables
-    void Start()
+    void Awake()
     {
         localPlayerName = "???";
         localPlayerTeam = Team.Spectator;
@@ -77,13 +77,28 @@ public class MultiplayerManager : NetworkManager
         }
     }
 
+    #region Static Methods
+
     //Checks if the current scene is lobby
-    public bool IsLobby()
+    public static bool IsLobby()
     {
-        return networkSceneName.Equals(onlineScene);
+        return networkSceneName.Equals(instance.onlineScene);
     }
 
-    #region Static Methods
+    public static bool IsClient()
+    {
+        return NetworkClient.active;
+    }
+
+    public static bool IsServer()
+    {
+        return NetworkServer.active;
+    }
+
+    public static bool IsHost()
+    {
+        return NetworkClient.active && NetworkServer.active;
+    }
 
     /// <summary>
     /// Returns the NetworkClient object of the local player connection.
@@ -144,116 +159,6 @@ public class MultiplayerManager : NetworkManager
     public static Player FindPlayer(NetworkInstanceId shipId)
     {
         return instance.playerList.Find(p => p.objectId == shipId);
-    }
-
-    /// <summary>
-    /// Notify the server of a player's death. Updates score, statistics.
-    /// A damage source must be given, but it can be NetworkInstanceId.Invalid.
-    /// Can only be used on server.
-    /// </summary>
-    /// <param name="player">Player whose death is occuring</param>
-    /// <param name="source">Source of the damage (can be NetworkInstanceId.Invalid)</param>
-    public static void PlayerDeath(Player player, NetworkInstanceId source)
-    {
-        if (NetworkClient.active || !NetworkServer.active)
-        {
-            Debug.LogError("Error: PlayerDeath called on client!");
-            return;
-        }
-        instance.PlayerKill(player, source);
-    }
-
-    /// <summary>
-    /// Notify the server of a player's death. Updates score, statistics.
-    /// A damage source must be given, but it can be NetworkInstanceId.Invalid.
-    /// Can only be used on server.
-    /// </summary>
-    /// <param name="playerObjectId">NetworkInstanceId of the player's object</param>
-    /// <param name="source">Source of the damage (can be NetworkInstanceId.Invalid)</param>
-    public static void PlayerDeath(NetworkInstanceId playerObjectId, NetworkInstanceId source)
-    {
-        PlayerDeath(FindPlayer(playerObjectId), source);
-    }
-
-    /// <summary>
-    /// Sets the given player's current player object to the object with the given NetworkInstanceId.
-    /// Can only be used on server.
-    /// </summary>
-    /// <param name="player">Player whose player object is being set</param>
-    /// <param name="objectId">NetworkInstanceId of the object to be assigned to the player</param>
-    public static void SetPlayerObject(Player player, NetworkInstanceId objectId)
-    {
-        if (NetworkClient.active || !NetworkServer.active)
-        {
-            Debug.LogError("Error: SetPlayerObject called on client!");
-            return;
-        }
-        instance.RegisterPlayer(player, objectId);
-    }
-
-    /// <summary>
-    /// Sets the given player's current player object to the object with the given NetworkInstanceId.
-    /// Can only be used on server.
-    /// </summary>
-    /// <param name="playerConnectionId">Conection ID of the player</param>
-    /// <param name="objectId">NetworkInstanceId of the object</param>
-    public static void SetPlayerObject(int playerConnectionId, NetworkInstanceId objectId)
-    {
-        SetPlayerObject(FindPlayer(playerConnectionId), objectId);
-    }
-
-    /// <summary>
-    /// Sets the given player's team to the given team.
-    /// Can only be used on server.
-    /// </summary>
-    /// <param name="player">Player whose team is being set</param>
-    /// <param name="team">New team for the player</param>
-    public static void SetPlayerTeam(Player player, Team team)
-    {
-        if (NetworkClient.active || !NetworkServer.active)
-        {
-            Debug.LogError("Error: SetPlayerTeam called on client!");
-            return;
-        }
-        instance.ChangePlayerTeam(player, team);
-    }
-
-    /// <summary>
-    /// Sets the given player's team to the given team.
-    /// Can only be used on server.
-    /// </summary>
-    /// <param name="playerObjectId">NetworkInstanceId of current player controlled object</param>
-    /// <param name="team">New team for the player</param>
-    public static void SetPlayerTeam(NetworkInstanceId playerObjectId, Team team)
-    {
-        SetPlayerTeam(FindPlayer(playerObjectId), team);
-    }
-
-    /// <summary>
-    /// Changes the given player's ship to the specified ship.
-    /// Can only be used on server.
-    /// </summary>
-    /// <param name="player">Player whose ship is being set</param>
-    /// <param name="ship">Player's new ship</param>
-    public static void SetPlayerShip(Player player, Ship ship)
-    {
-        if (NetworkClient.active || !NetworkServer.active)
-        {
-            Debug.LogError("Error: SetPlayerShip called on client!");
-            return;
-        }
-        instance.ChangePlayerShip(player, ship);
-    }
-
-    /// <summary>
-    /// Changes the given player's ship to the specified ship.
-    /// Can only be used on server.
-    /// </summary>
-    /// <param name="playerObjectId">NetworkInstanceId of current player controlled object</param>
-    /// <param name="ship">Player's new ship</param>
-    public static void SetPlayerShip(NetworkInstanceId playerObjectId, Ship ship)
-    {
-        SetPlayerShip(FindPlayer(playerObjectId), ship);
     }
 
     /// <summary>
@@ -432,30 +337,6 @@ public class MultiplayerManager : NetworkManager
     {
         playerList.Clear();
         base.OnStopServer();
-    }
-
-    //Hooks an object to a Player
-    public void RegisterPlayer(Player player, NetworkInstanceId objId)
-    {
-        player.objectId = objId;
-        if (IsLobby() && playerList.Count == 1) //bad code
-            NetworkServer.FindLocalObject(objId).GetComponent<PlayerIconController>().RpcMarkHost();
-        SendGameState();
-    }
-
-    //Changes a player's team
-    public void ChangePlayerTeam(Player player, Team newTeam)
-    {
-        player.team = newTeam;
-        SendGameState();
-    }
-
-    //NK
-    //Changes a player's ship to their selected one and sends the changes out
-    public void ChangePlayerShip(Player player, Ship newShip)
-    {
-        player.ship = newShip;
-        SendGameState();
     }
 
     //Called when a player clicks 'ready' in the lobby
