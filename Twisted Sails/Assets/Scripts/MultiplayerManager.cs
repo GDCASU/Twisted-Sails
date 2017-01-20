@@ -79,22 +79,37 @@ public class MultiplayerManager : NetworkManager
 
     #region Static Methods
 
-    //Checks if the current scene is lobby
+    /// <summary>
+    /// Checks if game is currently in lobby phase.
+    /// </summary>
+    /// <returns>True if in lobby, false if otherwise.</returns>
     public static bool IsLobby()
     {
         return networkSceneName.Equals(instance.onlineScene);
     }
 
+    /// <summary>
+    /// Checks if current code is being run on the client.
+    /// </summary>
+    /// <returns>True if on client, false otherwise.</returns>
     public static bool IsClient()
     {
         return NetworkClient.active;
     }
 
+    /// <summary>
+    /// Checks if current code is being run on the server.
+    /// </summary>
+    /// <returns>True if on server, false otherwise.</returns>
     public static bool IsServer()
     {
         return NetworkServer.active;
     }
 
+    /// <summary>
+    /// Checks if current code is being run on the host.
+    /// </summary>
+    /// <returns>True if code is being run on the host, false otherwise</returns>
     public static bool IsHost()
     {
         return NetworkClient.active && NetworkServer.active;

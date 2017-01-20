@@ -244,16 +244,24 @@ public class Player
         return (short)Mathf.Clamp(_killstreak, 2, 5);
     }
 
+    /// <summary>
+    /// Returns this player's ship's health, or -1 if no ship found.
+    /// </summary>
+    /// <returns>Ship's current health or -1 if no ship was found.</returns>
     public float GetShipHealth()
     {
-        if (MultiplayerManager.IsLobby())
+        if (MultiplayerManager.IsLobby() || GetPlayerObject() == null)
         {
-            Debug.Log("ERROR: Ship health requested while still in lobby!");
+            Debug.Log("ERROR: Ship health requested but no ship was found!");
             return -1;
         }
         return GetPlayerObject().GetComponent<Health>().health;
     }
 
+    /// <summary>
+    /// Returns the current GameObject assigned as the player controller.
+    /// </summary>
+    /// <returns>GameObject serving as player controller.</returns>
     public GameObject GetPlayerObject()
     {
         if (_objectId == NetworkInstanceId.Invalid)
@@ -272,7 +280,7 @@ public class Player
     }
 
     /// <summary>
-    /// Use this to add to a player's killstreak
+    /// Adds one kill to the player's killstreak.
     /// </summary>
     public void AddKill()
     {
