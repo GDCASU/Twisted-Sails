@@ -44,6 +44,7 @@ public class MultiplayerManager : NetworkManager
     public GameObject lobbyPrefab;
     public string inGameScene;
 
+
     private float gameRestartTimer;
 
     //Initialization of variables
