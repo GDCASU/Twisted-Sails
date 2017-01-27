@@ -35,7 +35,7 @@ public class LobbyManager : MonoBehaviour
     void Start()
     {
         //Variable initialization
-        manager = MultiplayerManager.instance;
+        manager = MultiplayerManager.GetInstance();
         allReady = false;
 
         //This if statement statement checks if it's running on the host
