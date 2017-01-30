@@ -43,7 +43,7 @@ using System.Collections;
 //              the faster the cannons should be able to fire.
 //              The BroadsideCannonFireNetworked script uses currentFireRate.
 
-// Damage:      Influences damage calculation. The lower the currentDamage, the less damage a
+// Defense:     Influences damage calculation. The lower the currentDefense, the less damage a
 //              ship takes from the enemy.
 //              The Health script uses currentDefense.
 */

@@ -308,6 +308,11 @@ Prefab:
       propertyPath: m_RootOrder
       value: 12
       objectReference: {fileID: 0}
+    - target: {fileID: 114000012203035594, guid: 6d531ecf61d10f845b8c4b8c40a3fbe7,
+        type: 2}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 6d531ecf61d10f845b8c4b8c40a3fbe7, type: 2}
   m_IsPrefabParent: 0
@@ -316,6 +321,25 @@ GameObject:
   m_PrefabParentObject: {fileID: 1000013458966376, guid: 6d531ecf61d10f845b8c4b8c40a3fbe7,
     type: 2}
   m_PrefabInternal: {fileID: 105631841}
+--- !u!114 &105631843
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 105631842}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82148e684e6b18142b2ef9910a029c4b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fireRateStage: 0
+  defenseStage: 0
+  speedStage: 0
+  crewCount: 0
+  attackButton: Attack Crew
+  defenseButton: Defense Crew
+  speedButton: Speed Crew
+  resetButton: Reset Crew
 --- !u!1 &318691541
 GameObject:
   m_ObjectHideFlags: 0
@@ -511,7 +535,10 @@ MonoBehaviour:
   currentGamemode: 0
   localPlayerName: 
   localPlayerTeam: 0
+  localShipType: 0
   pointsToWin: 10
+  lobbyPrefab: {fileID: 0}
+  inGameScene: 
 --- !u!4 &584372609
 Transform:
   m_ObjectHideFlags: 0
@@ -612,15 +639,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   boatToFollow: {fileID: 0}
+  cameraOffset: {x: 1, y: 4, z: 1}
   minimumVerticalRotation: 10
   maximumVerticalRotation: 50
   minimumZoomDistance: 5
   maximumZoomDistance: 25
-  sensitivityX: 4
-  sensitivityY: 1
+  smartCameraLayerMask:
+    serializedVersion: 2
+    m_Bits: 0
+  horizontalSensitivity: 4
+  verticalSensitivity: 1
   scrollSensitivity: 10
-  invertX: 0
-  invertY: 0
+  invertHorizontal: 0
+  invertVertical: 0
   quickTurnAxis: Camera Quickturn
   quickTurnSpeed: 1
 --- !u!81 &1219771392
