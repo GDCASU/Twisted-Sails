@@ -31,10 +31,13 @@ public class NetworkHUD : MonoBehaviour
     private Color blueColor;
     private Color defaultColor;
 
+    private bool showDebug;
+
     void Awake()
     {
         manager = GetComponent<MultiplayerManager>();
         showScoreboard = false;
+        showDebug = false;
         messageStack = new List<string>();
         redColor = new Color(100, 0, 0, 0.4f);
         blueColor = new Color(0, 0, 100, 0.4f);
@@ -66,6 +69,10 @@ public class NetworkHUD : MonoBehaviour
                 else
                     messageTimer = 0;
             }
+        }
+        if(Input.GetKey(KeyCode.P))
+        {
+            showDebug = true;
         }
     }
 
@@ -159,6 +166,16 @@ public class NetworkHUD : MonoBehaviour
             }
             ypos += spacing;
 
+        }
+
+        if(showDebug)
+        {
+            GUI.Label(new Rect(xpos, ypos, 300, 20), "Client?: " + MultiplayerManager.IsClient());
+            ypos += spacing;
+            GUI.Label(new Rect(xpos, ypos, 300, 20), "Host?: " + MultiplayerManager.IsHost());
+            ypos += spacing;
+            GUI.Label(new Rect(xpos, ypos, 300, 20), "Server?: " + MultiplayerManager.IsServer());
+            ypos += spacing;
         }
 
         //***SCORE FEED***

@@ -9,67 +9,230 @@ using UnityEngine.Networking;
 // Date:        11/17/2016
 // Description: Added  a ship instance variable for ship selection
 
+// Developer:   Kyle Aycock
+// Date:        1/20/2017
+// Description: Changed to allow coders to directly modify the player object and have it
+//              automatically update the game state in the server
+
 // Container class for all info for a single player
 public class Player
 {
-    public string name;
-    public Team team;
-    public Ship ship;
-    public NetworkInstanceId objectId;
-    public int connectionId;
-    public bool ready;
-    public short kills;
-    public short deaths;
-    public short killstreak;
-    public short maxBounty;
-    public short score;
+    #region Properties
+    //there's probably a more elegant way of doing this
+    public string name
+    {
+        get
+        {
+            return _name;
+        }
+        set
+        {
+            if (!NetworkServer.active)
+                return;
+            _name = value;
+            NotifyServerStateChanged();
+        }
+    }
+    public Team team
+    {
+        get
+        {
+            return _team;
+        }
+        set
+        {
+            if (!NetworkServer.active)
+                return;
+            _team = value;
+            NotifyServerStateChanged();
+        }
+    }
+    public Ship ship
+    {
+        get
+        {
+            return _ship;
+        }
+        set
+        {
+            if (!NetworkServer.active)
+                return;
+            _ship = value;
+            NotifyServerStateChanged();
+        }
+    }
+    public NetworkInstanceId objectId
+    {
+        get
+        {
+            return _objectId;
+        }
+        set
+        {
+            if (!NetworkServer.active)
+                return;
+            _objectId = value;
+            NotifyServerStateChanged();
+        }
+    }
+    public int connectionId
+    {
+        get
+        {
+            return _connectionId;
+        }
+        set
+        {
+            if (!NetworkServer.active)
+                return;
+            _connectionId = value;
+            NotifyServerStateChanged();
+        }
+    }
+    public bool ready
+    {
+        get
+        {
+            return _ready;
+        }
+        set
+        {
+            if (!NetworkServer.active)
+                return;
+            _ready = value;
+            NotifyServerStateChanged();
+        }
+    }
+    public short kills
+    {
+        get
+        {
+            return _kills;
+        }
+        set
+        {
+            if (!NetworkServer.active)
+                return;
+            _kills = value;
+            NotifyServerStateChanged();
+        }
+    }
+    public short deaths
+    {
+        get
+        {
+            return _deaths;
+        }
+        set
+        {
+            if (!NetworkServer.active)
+                return;
+            _deaths = value;
+            NotifyServerStateChanged();
+        }
+    }
+    public short killstreak
+    {
+        get
+        {
+            return _killstreak;
+        }
+        set
+        {
+            if (!NetworkServer.active)
+                return;
+            _killstreak = value;
+            NotifyServerStateChanged();
+        }
+    }
+    public short maxBounty
+    {
+        get
+        {
+            return _maxBounty;
+        }
+        set
+        {
+            if (!NetworkServer.active)
+                return;
+            _maxBounty = value;
+            NotifyServerStateChanged();
+        }
+    }
+    public short score
+    {
+        get
+        {
+            return _score;
+        }
+        set
+        {
+            if (!NetworkServer.active)
+                return;
+            _score = value;
+            NotifyServerStateChanged();
+        }
+    }
+    #endregion
+
+    private string _name;
+    private Team _team;
+    private Ship _ship;
+    private NetworkInstanceId _objectId;
+    private int _connectionId;
+    private bool _ready;
+    private short _kills;
+    private short _deaths;
+    private short _killstreak;
+    private short _maxBounty;
+    private short _score;
 
     public Player() : this("???", Team.Spectator, NetworkInstanceId.Invalid, -1) { }
 
     public Player(string name, Team team, NetworkInstanceId objectId, int connectionId)
     {
-        this.name = name;
-        this.team = team;
-        this.objectId = objectId;
-        this.connectionId = connectionId;
-        ready = false;
-        kills = 0;
-        deaths = 0;
-        killstreak = 0;
-        maxBounty = 0;
-        score = 0;
+        _name = name;
+        _team = team;
+        _objectId = objectId;
+        _connectionId = connectionId;
+        _ready = false;
+        _kills = 0;
+        _deaths = 0;
+        _killstreak = 0;
+        _maxBounty = 0;
+        _score = 0;
     }
 
     //This method needs to write all of the player's information to the given NetworkWriter
     public void Serialize(NetworkWriter writer)
     {
-        writer.Write(name);
-        writer.Write((byte)team);
-        writer.Write((byte)ship);
-        writer.Write(objectId);
-        writer.Write(connectionId);
-        writer.Write(ready);
-        writer.Write(kills);
-        writer.Write(deaths);
-        writer.Write(killstreak);
-        writer.Write(maxBounty);
-        writer.Write(score);
+        writer.Write(_name);
+        writer.Write((byte)_team);
+        writer.Write((byte)_ship);
+        writer.Write(_objectId);
+        writer.Write(_connectionId);
+        writer.Write(_ready);
+        writer.Write(_kills);
+        writer.Write(_deaths);
+        writer.Write(_killstreak);
+        writer.Write(_maxBounty);
+        writer.Write(_score);
     }
 
     //This method is called on a player object to fill it with information from a NetworkReader
     public void Deserialize(NetworkReader reader)
     {
-        name = reader.ReadString();
-        team = (Team)reader.ReadByte();
-        ship = (Ship)reader.ReadByte();
-        objectId = reader.ReadNetworkId();
-        connectionId = reader.ReadInt32();
-        ready = reader.ReadBoolean();
-        kills = reader.ReadInt16();
-        deaths = reader.ReadInt16();
-        killstreak = reader.ReadInt16();
-        maxBounty = reader.ReadInt16();
-        score = reader.ReadInt16();
+        _name = reader.ReadString();
+        _team = (Team)reader.ReadByte();
+        _ship = (Ship)reader.ReadByte();
+        _objectId = reader.ReadNetworkId();
+        _connectionId = reader.ReadInt32();
+        _ready = reader.ReadBoolean();
+        _kills = reader.ReadInt16();
+        _deaths = reader.ReadInt16();
+        _killstreak = reader.ReadInt16();
+        _maxBounty = reader.ReadInt16();
+        _score = reader.ReadInt16();
     }
 
     /// <summary>
@@ -78,15 +241,56 @@ public class Player
     /// <returns>Points of bounty</returns>
     public short GetBounty()
     {
-        return (short)Mathf.Clamp(killstreak, 2, 5);
+        return (short)Mathf.Clamp(_killstreak, 2, 5);
     }
 
     /// <summary>
-    /// Use this to add to a player's killstreak
+    /// Returns this player's ship's health, or -1 if no ship found.
+    /// </summary>
+    /// <returns>Ship's current health or -1 if no ship was found.</returns>
+    public float GetShipHealth()
+    {
+        if (MultiplayerManager.IsLobby() || GetPlayerObject() == null)
+        {
+            Debug.Log("ERROR: Ship health requested but no ship was found!");
+            return -1;
+        }
+        return GetPlayerObject().GetComponent<Health>().health;
+    }
+
+    /// <summary>
+    /// Returns the current GameObject assigned as the player controller.
+    /// </summary>
+    /// <returns>GameObject serving as player controller.</returns>
+    public GameObject GetPlayerObject()
+    {
+        if (_objectId == NetworkInstanceId.Invalid)
+        {
+            Debug.Log("GetPlayerObject() called on player with invalid object!");
+            return null;
+        }
+        if (MultiplayerManager.IsServer())
+        {
+            return NetworkServer.FindLocalObject(_objectId);
+        }
+        else
+        {
+            return ClientScene.FindLocalObject(_objectId);
+        }
+    }
+
+    /// <summary>
+    /// Adds one kill to the player's killstreak.
     /// </summary>
     public void AddKill()
     {
-        killstreak++;
-        if (GetBounty() > maxBounty) maxBounty = GetBounty();
+        _killstreak++;
+        if (GetBounty() > _maxBounty) maxBounty = GetBounty();
+    }
+
+    //tells server about a player variable changing
+    private void NotifyServerStateChanged()
+    {
+        MultiplayerManager.GetInstance().SendGameState();
     }
 }

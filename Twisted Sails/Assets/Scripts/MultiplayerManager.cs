@@ -31,6 +31,14 @@ using System;
 //              - Added localShipType
 //              
 
+// Developer:   Kyle Aycock
+// Date:        1/11/2016
+// Description: Added a selection of convenience methods that should be used by other scripts
+//              to interact with the MultiplayerManager. The intention is that if another programmer
+//              needs to do something with networking, they may simply refer to the static methods either here
+//              or in the autocomplete and find the one that does what they need to do. Will most likely need to
+//              be expanded upon after designers start doing more stuff and the need for more methods arises.
+
 public class MultiplayerManager : NetworkManager
 {
     public Gamemode currentGamemode = Gamemode.TeamDeathmatch;
@@ -40,14 +48,15 @@ public class MultiplayerManager : NetworkManager
     public int pointsToWin;
     public List<Player> playerList;
     public Dictionary<Team, int> teamScores;
-    public static MultiplayerManager instance;
     public GameObject lobbyPrefab;
     public string inGameScene;
+
+    protected static MultiplayerManager instance;
 
     private float gameRestartTimer;
 
     //Initialization of variables
-    void Start()
+    void Awake()
     {
         localPlayerName = "???";
         localPlayerTeam = Team.Spectator;
@@ -68,11 +77,114 @@ public class MultiplayerManager : NetworkManager
         }
     }
 
-    //Checks if the current scene is lobby
-    public bool IsLobby()
+    #region Static Methods
+
+    /// <summary>
+    /// Checks if game is currently in lobby phase.
+    /// </summary>
+    /// <returns>True if in lobby, false if otherwise.</returns>
+    public static bool IsLobby()
     {
-        return networkSceneName.Equals(onlineScene);
+        return networkSceneName.Equals(instance.onlineScene);
     }
+
+    /// <summary>
+    /// Checks if current code is being run on the client.
+    /// </summary>
+    /// <returns>True if on client, false otherwise.</returns>
+    public static bool IsClient()
+    {
+        return NetworkClient.active;
+    }
+
+    /// <summary>
+    /// Checks if current code is being run on the server.
+    /// </summary>
+    /// <returns>True if on server, false otherwise.</returns>
+    public static bool IsServer()
+    {
+        return NetworkServer.active;
+    }
+
+    /// <summary>
+    /// Checks if current code is being run on the host.
+    /// </summary>
+    /// <returns>True if code is being run on the host, false otherwise</returns>
+    public static bool IsHost()
+    {
+        return NetworkClient.active && NetworkServer.active;
+    }
+
+    /// <summary>
+    /// Returns the NetworkClient object of the local player connection.
+    /// Can only be used on client.
+    /// </summary>
+    /// <returns>The local NetworkClient</returns>
+    public static NetworkClient GetLocalClient()
+    {
+        if (!NetworkClient.active)
+        {
+            Debug.LogError("Error: GetLocalClient called on server!");
+            return null;
+        }
+        return instance.client;
+    }
+
+    /// <summary>
+    /// Returns the combined score of all players on a given team.
+    /// Can be used on client and server.
+    /// </summary>
+    /// <param name="team">Team for which the total score will be returned</param>
+    /// <returns></returns>
+    public static int GetTeamScore(Team team)
+    {
+        return instance.teamScores[team];
+    }
+
+    /// <summary>
+    /// Returns the player whose name matches the given name.
+    /// Can be used on client and server.
+    /// If two players have the same name, the one that connected first is returned.
+    /// It is recommended to use an overload of this method.
+    /// </summary>
+    /// <param name="name">The name of the player to find</param>
+    /// <returns></returns>
+    public static Player FindPlayer(string name)
+    {
+        return instance.playerList.Find(p => p.name.Equals(name));
+    }
+
+    /// <summary>
+    /// Returns the player whose connectionId matches the given one.
+    /// Can be used on client and server.
+    /// </summary>
+    /// <param name="connectionId">The connectionId of the player to find</param>
+    /// <returns></returns>
+    public static Player FindPlayer(int connectionId)
+    {
+        return instance.playerList.Find(p => p.connectionId == connectionId);
+    }
+
+    /// <summary>
+    /// Returns the player whose ship has the given NetworkInstanceId.
+    /// Can be used on client and server.
+    /// </summary>
+    /// <param name="shipId">The NetworkInstanceId of the ship whose owner will be found</param>
+    /// <returns></returns>
+    public static Player FindPlayer(NetworkInstanceId shipId)
+    {
+        return instance.playerList.Find(p => p.objectId == shipId);
+    }
+
+    /// <summary>
+    /// Only use this if you need access to something within the MultiplayerManager not given by other methods.
+    /// </summary>
+    /// <returns>Active instance of MultiplayerManager</returns>
+    public static MultiplayerManager GetInstance()
+    {
+        return instance;
+    }
+    #endregion
 
     //Methods only for use serverside
     #region Server
@@ -95,9 +207,9 @@ public class MultiplayerManager : NetworkManager
     }
 
     //Processes a player death, this method is called from the Health script
-    public void PlayerKill(NetworkInstanceId killed, NetworkInstanceId by)
+    public void PlayerKill(Player killed, NetworkInstanceId by)
     {
-        Player victim = playerList.Find(p => p.objectId == killed);
+        Player victim = killed;
         Player killer = playerList.Find(p => p.objectId == by);
         victim.deaths++;
         if (killer != null && killer.team != victim.team)
@@ -240,30 +352,6 @@ public class MultiplayerManager : NetworkManager
     {
         playerList.Clear();
         base.OnStopServer();
-    }
-
-    //Hooks an object to a Player
-    public void RegisterPlayer(int connId, NetworkInstanceId objId)
-    {
-        playerList.Find(p => p.connectionId == connId).objectId = objId;
-        if (IsLobby() && playerList.Count == 1) //bad code
-            NetworkServer.FindLocalObject(objId).GetComponent<PlayerIconController>().RpcMarkHost();
-        SendGameState();
-    }
-
-    //Changes a player's team
-    public void ChangePlayerTeam(NetworkInstanceId source, Team newTeam)
-    {
-        playerList.Find(p => p.objectId == source).team = newTeam;
-        SendGameState();
-    }
-
-    //NK
-    //Changes a player's ship to their selected one and sends the changes out
-    public void ChangePlayerShip(NetworkInstanceId source, Ship newShip)
-    {
-        playerList.Find(p => p.objectId == source).ship = newShip;
-        SendGameState();
     }
 
     //Called when a player clicks 'ready' in the lobby

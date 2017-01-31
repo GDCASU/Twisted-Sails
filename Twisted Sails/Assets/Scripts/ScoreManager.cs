@@ -11,7 +11,7 @@ public class ScoreManager : MonoBehaviour {
     public Text blueScoreText;
 
 	void Update () {
-	    redScoreText.text = MultiplayerManager.instance.teamScores[Team.Red].ToString();
-        blueScoreText.text = MultiplayerManager.instance.teamScores[Team.Blue].ToString();
+	    redScoreText.text = MultiplayerManager.GetTeamScore(Team.Red).ToString();
+        blueScoreText.text = MultiplayerManager.GetTeamScore(Team.Blue).ToString();
     }
 }

@@ -8,6 +8,13 @@ using System.Collections;
 
 public class TitleScreenInput : MonoBehaviour
 {
+    private MultiplayerManager manager;
+
+    void Start()
+    {
+        manager = MultiplayerManager.GetInstance();
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -22,26 +29,26 @@ public class TitleScreenInput : MonoBehaviour
 
     public void StartHost()
     {
-        MultiplayerManager.instance.StartHost();
+        manager.StartHost();
     }
 
     public void StartClient()
     {
-        MultiplayerManager.instance.StartClient();
+        manager.StartClient();
     }
 
     public void SetIP(string ip)
     {
-        MultiplayerManager.instance.networkAddress = ip;
+        manager.networkAddress = ip;
     }
 
     public void SetName(string name)
     {
-        MultiplayerManager.instance.localPlayerName = name;
+        manager.localPlayerName = name;
     }
 
     public void SetPort(string port)
     {
-        MultiplayerManager.instance.networkPort = int.Parse(port);
+        manager.networkPort = int.Parse(port);
     }
 }
