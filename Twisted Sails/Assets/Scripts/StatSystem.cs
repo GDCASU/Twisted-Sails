@@ -3,28 +3,28 @@
 // and mechanics that rely on altering ship stats (i.e. Crew Management). Three stats are
 // available:
 
-//      Attack  - Influences Fire Rate of cannons       - BroadsideCannonFireNetworked Scripts
-//      Defense - Influences amount of damage taken     - Health Script
-//      Speed   - Influences movement of the ship       - BoatMovementNetworked Script
+//      Attack  -> Influences Fire Rate of cannons      -> BroadsideCannonFireNetworked Scripts
+//      Defense -> Influences amount of damage taken    -> Health Script
+//      Speed   -> Influences movement of the ship      -> BoatMovementNetworked Script
 
 // Each stat has a BASE constant to denote the starting value. These values can be changed
 // for ships to have unique stats. To alter the stats of a ship during gameplay, the 
-// appropriate MOD variable should be changed by calling one of the Alter Functions. The
-// stats are calculated as:
+// appropriate MOD variable should be changed by calling one of the Alter Functions.
+// The stats are calculated as:
 
-//      Attack   = BASE / MOD
-//      Defense  = BASE * MOD
-//      Speed    = BASE / MOD
+//      Attack   = 1 / (BASE + MOD)
+//      Defense  = 1 / (BASE + MOD)
+//      Speed    = BASE + MOD
 
 // Author:  Erick Ramirez Cordero
-// Date:    January 22, 2017
+// Date:    January 30, 2017
 */
 
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 
-public class Stat : NetworkBehaviour
+public class StatSystem : NetworkBehaviour
 {
     public float currentAttack
     {
@@ -52,19 +52,18 @@ public class Stat : NetworkBehaviour
     private const float BASE_ATTACK = 1.0f;
     private const float BASE_DEFENSE = 1.0f;
     private const float BASE_SPEED = 1.0f;
+    
+    private const float MOD_MIN = 0.0f;
+    private const float MOD_MAX = 3.0f;
 
-    private const float BASE_MOD = 1.0f;
-    private const float MOD_MIN = 1.0f;
-    private const float MOD_MAX = 5.0f;
+    [Header("UI Variables")]
+    public Slider attackBar;
+    public Slider defenseBar;
+    public Slider speedBar;
 
-    [Header("UI / Input Variables")]
-    private Slider attackBar;
-    private Slider defenseBar;
-    private Slider speedBar;
-
-    private Text attackText;
-    private Text defenseText;
-    private Text speedText;
+    public Text attackText;
+    public Text defenseText;
+    public Text speedText;
 
     // Scripts influenced by Crew Management
     private Health healthScript;
@@ -76,15 +75,16 @@ public class Stat : NetworkBehaviour
 
     private bool debugFlag = true;
 
-    void Awake ()
+    void Start ()
     {
         if (isLocalPlayer)
         {
-            // Initialize scripts and UI components
+            // Initialize scripts
             healthScript = GetComponentInChildren<Health>();
             boatScript = GetComponentInChildren<BoatMovementNetworked>();
             fireScripts = GetComponentsInChildren<BroadsideCannonFireNetworked>();
 
+            // Initialize UI components
             Transform crewUI = GameObject.FindGameObjectWithTag("CrewManagementUI").transform;
             Transform attackUI = crewUI.FindChild("AttackCrewUI");
             Transform defenseUI = crewUI.FindChild("DefenseCrewUI");
@@ -99,10 +99,13 @@ public class Stat : NetworkBehaviour
             speedText = speedUI.GetComponentInChildren<Text>();
 
             // Initialize Stats
-
             currentAttack = BASE_ATTACK;
             currentDefense = BASE_DEFENSE;
             currentSpeed = BASE_SPEED;
+
+            attackMod = MOD_MIN;
+            defenseMod = MOD_MIN;
+            speedMod = MOD_MIN;
 
             for (int i = 0; i < CANNON_COUNT; i++)
             { fireScripts[i].attackStat = currentAttack; }
@@ -111,19 +114,19 @@ public class Stat : NetworkBehaviour
             boatScript.speedStat = currentSpeed;
 
             // Initialize UI values
-            attackBar.minValue = BASE_ATTACK / MOD_MIN;
-            attackBar.maxValue = BASE_ATTACK / MOD_MAX;
-            attackBar.value = currentAttack;
+            attackBar.minValue = 0;
+            attackBar.maxValue = BASE_ATTACK + MOD_MAX;
+            attackBar.value = BASE_ATTACK;
             attackText.text = "Attack: " + currentAttack;
 
-            defenseBar.minValue = BASE_DEFENSE * MOD_MIN;
-            defenseBar.maxValue = BASE_DEFENSE * MOD_MAX;
-            defenseBar.value = currentDefense;
+            defenseBar.minValue = 0;
+            defenseBar.maxValue = BASE_DEFENSE + MOD_MAX;
+            defenseBar.value = BASE_DEFENSE;
             defenseText.text = "Defense: " + currentDefense;
 
-            speedBar.minValue = BASE_SPEED / MOD_MIN;
-            speedBar.maxValue = BASE_SPEED / MOD_MAX;
-            speedBar.value = currentSpeed;
+            speedBar.minValue = 0;
+            speedBar.maxValue = BASE_SPEED + MOD_MAX;
+            speedBar.value = BASE_SPEED;
             speedText.text = "Speed: " + currentSpeed;
         }
 	}
@@ -144,50 +147,49 @@ public class Stat : NetworkBehaviour
     /// <param name="newMod">   The new modification to be applied  </param>
     public void AlterAttack(float newMod)
     {
-        attackMod += newMod;
-        CheckModLimits(ref attackMod);
-        currentAttack = BASE_ATTACK / attackMod;
+        attackMod = Mathf.Clamp(attackMod + newMod, MOD_MIN, MOD_MAX);
+        currentAttack = 1 / (BASE_ATTACK + attackMod);
 
         for (int i = 0; i < CANNON_COUNT; i++)
         { fireScripts[i].attackStat = currentAttack; }
 
-        attackBar.value = currentAttack;
-        attackText.text = "Attack: " + currentAttack;
+        attackBar.value = 1 / currentAttack;
+        attackText.text = "Attack: " + (1 / currentAttack);
     }
 
+    // AlterDefense follows the same logic as AlterAttack
     public void AlterDefense(float newMod)
     {
-        defenseMod += newMod;
-        CheckModLimits(ref defenseMod);
-        currentDefense = BASE_DEFENSE * defenseMod;
+        defenseMod = Mathf.Clamp(defenseMod + newMod, MOD_MIN, MOD_MAX);
+        currentDefense = 1 / (BASE_DEFENSE + defenseMod);
 
         healthScript.defenseStat = currentDefense;
-        defenseBar.value = currentDefense;
-        defenseText.text = "Defense: " + currentDefense;
+        defenseBar.value = 1 / currentDefense;
+        defenseText.text = "Defense: " + (1 / currentDefense);
+
+        if (debugFlag)
+        {
+            Debug.Log("New Mod: " + newMod);
+            Debug.Log("Defense Mod: " + defenseMod);
+            Debug.Log("Current Defense: " + currentDefense);
+        }
     }
 
+    // AlterSpeed follows the same logic as AlterAttack, but speed is not inverted
     public void AlterSpeed(float newMod)
     {
-        speedMod += newMod;
-        CheckModLimits(ref speedMod);
-        currentSpeed = BASE_SPEED / speedMod;
+        speedMod = Mathf.Clamp(speedMod + newMod, MOD_MIN, MOD_MAX);
+        currentSpeed = BASE_SPEED + speedMod;
 
         boatScript.speedStat = currentSpeed;
         speedBar.value = currentSpeed;
         speedText.text = "Speed: " + currentSpeed;
-    }
 
-    /// <summary>
-    /// This function checks if the stat modification in question exceeds the maximum
-    /// or falls below the minimum modification allowed, making corrections if needed.
-    /// </summary>
-    /// <param name="statMod"></param>
-    private void CheckModLimits(ref float statMod)
-    {
-        if (statMod > MOD_MAX)
-        { statMod = MOD_MAX; }
-
-        else if (statMod < MOD_MIN)
-        { statMod = MOD_MIN; }
+        if (debugFlag)
+        {
+            Debug.Log("New Mod: " + newMod);
+            Debug.Log("Speed Mod: " + speedMod);
+            Debug.Log("Current Speed: " + currentSpeed);
+        }
     }
 }
