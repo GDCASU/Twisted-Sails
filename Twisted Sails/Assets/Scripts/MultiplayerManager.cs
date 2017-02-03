@@ -38,34 +38,51 @@ using System;
 //              needs to do something with networking, they may simply refer to the static methods either here
 //              or in the autocomplete and find the one that does what they need to do. Will most likely need to
 //              be expanded upon after designers start doing more stuff and the need for more methods arises.
+//              Documentation will be written to aid with this.
+
+// Developer:   Kyle Aycock
+// Date:        1/26/2017
+// Description: Adapted this class to work with new Gamemode and Team classes
+//              Fixed a bug having to do with starting a session after ending one without restarting the client
+//              Fixed a bug having to do with hosting a game after previously joining one
+//              Added several events for use by other coders
+//              Added code to trigger Player's events at appropriate times
+//              Fixed a bug preventing player ship choice from being sent to the server
 
 public class MultiplayerManager : NetworkManager
 {
-    public Gamemode currentGamemode = Gamemode.TeamDeathmatch;
+    public Gamemode currentGamemode;
     public string localPlayerName;
-    public Team localPlayerTeam;
+    public short localPlayerTeam;
     public Ship localShipType;
     public int pointsToWin;
     public List<Player> playerList;
-    public Dictionary<Team, int> teamScores;
+    public int[] teamScores;
     public GameObject lobbyPrefab;
     public string inGameScene;
 
-    protected static MultiplayerManager instance;
+    public GameObject[] playableShips;
 
     private float gameRestartTimer;
 
     //Initialization of variables
-    void Awake()
+    void Start()
     {
         localPlayerName = "???";
-        localPlayerTeam = Team.Spectator;
+        localPlayerTeam = -1;
         playerList = new List<Player>();
-        instance = this;
-        teamScores = new Dictionary<Team, int>();
-        foreach (Team team in Enum.GetValues(typeof(Team)))
+
+        //Todo: Add UI in lobby to configure chosen gamemode & settings
+        //For now, going with defaults specified by design doc
+        Team[] teams = new Team[2];
+        teams[0] = new Team("Red", Color.red, 0);
+        teams[1] = new Team("Blue", Color.blue, 1);
+        currentGamemode = new TeamDeathmatch(teams, 30, 300);
+
+        teamScores = new int[currentGamemode.NumTeams()];
+        for (int i = 0; i < currentGamemode.NumTeams(); i++)
         {
-            teamScores[team] = 0;
+            teamScores[i] = 0;
         }
     }
 
@@ -74,6 +91,11 @@ public class MultiplayerManager : NetworkManager
         if (NetworkServer.active)
         {
             CheckRestartGame();
+        }
+        if (networkSceneName.Equals(inGameScene))
+        {
+            currentGamemode.Update();
+            CheckEndGame();
         }
     }
 
@@ -85,7 +107,7 @@ public class MultiplayerManager : NetworkManager
     /// <returns>True if in lobby, false if otherwise.</returns>
     public static bool IsLobby()
     {
-        return networkSceneName.Equals(instance.onlineScene);
+        return networkSceneName.Equals(singleton.onlineScene);
     }
 
     /// <summary>
@@ -127,7 +149,18 @@ public class MultiplayerManager : NetworkManager
             Debug.LogError("Error: GetLocalClient called on server!");
             return null;
         }
-        return instance.client;
+        return singleton.client;
+    }
+
+    /// <summary>
+    /// Returns the combined score of all players on a given team.
+    /// Can be used on client and server.
+    /// </summary>
+    /// <param name="team">Team for which the total score will be returned</param>
+    /// <returns></returns>
+    public static int GetTeamScore(short team)
+    {
+        return GetInstance().teamScores[team];
     }
 
     /// <summary>
@@ -138,7 +171,7 @@ public class MultiplayerManager : NetworkManager
     /// <returns></returns>
     public static int GetTeamScore(Team team)
     {
-        return instance.teamScores[team];
+        return GetTeamScore(team.teamNumber);
     }
 
     /// <summary>
@@ -151,7 +184,7 @@ public class MultiplayerManager : NetworkManager
     /// <returns></returns>
     public static Player FindPlayer(string name)
     {
-        return instance.playerList.Find(p => p.name.Equals(name));
+        return GetInstance().playerList.Find(p => p.name.Equals(name));
     }
 
     /// <summary>
@@ -162,7 +195,7 @@ public class MultiplayerManager : NetworkManager
     /// <returns></returns>
     public static Player FindPlayer(int connectionId)
     {
-        return instance.playerList.Find(p => p.connectionId == connectionId);
+        return GetInstance().playerList.Find(p => p.connectionId == connectionId);
     }
 
     /// <summary>
@@ -173,7 +206,26 @@ public class MultiplayerManager : NetworkManager
     /// <returns></returns>
     public static Player FindPlayer(NetworkInstanceId shipId)
     {
-        return instance.playerList.Find(p => p.objectId == shipId);
+        return GetInstance().playerList.Find(p => p.objectId == shipId);
+    }
+
+    /// <summary>
+    /// Returns the current gamemode object.
+    /// </summary>
+    /// <returns>The current gamemode object.</returns>
+    public static Gamemode GetCurrentGamemode()
+    {
+        return GetInstance().currentGamemode;
+    }
+
+    /// <summary>
+    /// Returns the team with given team number.
+    /// </summary>
+    /// <param name="index">Team with given team number.</param>
+    /// <returns></returns>
+    public static Team GetTeam(short number)
+    {
+        return GetInstance().currentGamemode.teams[number];
     }
 
     /// <summary>
@@ -182,8 +234,20 @@ public class MultiplayerManager : NetworkManager
     /// <returns>Active instance of MultiplayerManager</returns>
     public static MultiplayerManager GetInstance()
     {
-        return instance;
+        return singleton as MultiplayerManager;
     }
+    #endregion
+
+    #region Events
+    public static event Action GameStart = delegate { };
+
+    public delegate void GameEndEvent(short winningTeam);
+    public static event GameEndEvent GameEnd = delegate { };
+
+    public delegate void PlayerEvent(Player player);
+    public static event PlayerEvent PlayerConnected = delegate { };
+    public static event PlayerEvent PlayerDisconnected = delegate { };
+
     #endregion
 
     //Methods only for use serverside
@@ -196,9 +260,9 @@ public class MultiplayerManager : NetworkManager
             gameRestartTimer -= Time.deltaTime;
             if (gameRestartTimer <= 0)
             {
-                foreach (Team team in Enum.GetValues(typeof(Team)))
+                for (int i = 0; i < currentGamemode.NumTeams(); i++)
                 {
-                    teamScores[team] = 0;
+                    teamScores[i] = 0;
                 }
                 foreach (Player player in playerList)
                     NetworkServer.FindLocalObject(player.objectId).GetComponent<Health>().RpcRestartGame();
@@ -227,6 +291,7 @@ public class MultiplayerManager : NetworkManager
         }
         else Debug.Log("Player " + victim.name + " suicided!");
 
+        Player.SendPlayerKilled(victim, killer);
         SendGameState();
         CheckEndGame();
     }
@@ -234,33 +299,34 @@ public class MultiplayerManager : NetworkManager
     //The functionality of this method can be expanded when multiple gamemodes are added
     private void CheckEndGame()
     {
-        foreach (Team team in Enum.GetValues(typeof(Team)))
-            if (teamScores[team] >= pointsToWin)
-            {
-                gameRestartTimer = 10;
-                foreach (Player player in playerList)
-                    NetworkServer.FindLocalObject(player.objectId).GetComponent<Health>().RpcEndGame(team, teamScores[Team.Red], teamScores[Team.Blue]);
-            }
+        short res = currentGamemode.CheckEndCondition(teamScores, playerList);
+        if (res >= 0)
+        {
+            GameEnd(res);
+            gameRestartTimer = 10;
+            foreach (Player player in playerList)
+                NetworkServer.FindLocalObject(player.objectId).GetComponent<Health>().RpcEndGame(res, teamScores);
+        }
     }
 
     //This hook method is automatically called when the server is instructed to spawn a player
     public override void OnServerAddPlayer(NetworkConnection conn, short playerControllerId)
     {
-        ServerAddPlayer(conn, playerControllerId, "???", Team.Spectator);
+        ServerAddPlayer(conn, playerControllerId, "???", -1, 0);
     }
 
     //This hook method is automatically called when the server is instructed to spawn a player (and provided extra info)
     public override void OnServerAddPlayer(NetworkConnection conn, short playerControllerId, NetworkReader extraMessageReader)
     {
-        SpawnMessage msg = new SpawnMessage("", Team.Spectator, 0); 
+        SpawnMessage msg = new SpawnMessage("", -1, 0);
         msg.Deserialize(extraMessageReader);
-        ServerAddPlayer(conn, playerControllerId, msg.name, (Team)msg.team);
+        ServerAddPlayer(conn, playerControllerId, msg.name, msg.team, msg.ship);
 
     }
 
     //most of the code for this taken from the internal ServerAddPlayer method used by the default NetworkManager
     //This method performs the actual spawning of a player
-    void ServerAddPlayer(NetworkConnection conn, short playerControllerId, string playerName, Team playerTeam)
+    void ServerAddPlayer(NetworkConnection conn, short playerControllerId, string playerName, short playerTeam, short playerShip)
     {
         if (playerPrefab == null)
         {
@@ -306,28 +372,23 @@ public class MultiplayerManager : NetworkManager
             //We are spawning a ship in game
             if (startPos != null)
             {
-                playerObj = (GameObject)Instantiate(playerPrefab, startPos.position, startPos.rotation);
+                playerObj = (GameObject)Instantiate(playableShips[playerShip], startPos.position, startPos.rotation);
             }
             else
             {
-                playerObj = (GameObject)Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
+                playerObj = (GameObject)Instantiate(playableShips[playerShip], Vector3.zero, Quaternion.identity);
             }
 
-            //Actual spectator functionality can be added in later, but for now it's basically "unknown"
-            //Autoassign team based on whichever has less players
-            if (playerTeam == Team.Spectator)
+            //Player team not chosen - ask gamemode to autoassign
+            if (playerTeam == -1)
             {
-                int redCount = playerList.FindAll(p => p.team == Team.Red).Count;
-                int blueCount = playerList.FindAll(p => p.team == Team.Blue).Count;
-                if (redCount > blueCount)
-                    playerTeam = Team.Blue;
-                else
-                    playerTeam = Team.Red;
+                playerTeam = currentGamemode.AutoAssignTeam(playerList);
             }
             playerObj.GetComponent<Health>().team = playerTeam;
             playerObj.GetComponent<Health>().playerName = playerName;
         }
 
+        PlayerConnected(FindPlayer(conn.connectionId));
         NetworkServer.AddPlayerForConnection(conn, playerObj, playerControllerId);
     }
 
@@ -335,6 +396,7 @@ public class MultiplayerManager : NetworkManager
     public override void OnServerDisconnect(NetworkConnection conn)
     {
         playerList.Remove(playerList.Find(x => x.connectionId == conn.connectionId));
+        PlayerDisconnected(FindPlayer(conn.connectionId));
         SendGameState();
         base.OnServerDisconnect(conn);
     }
@@ -343,6 +405,7 @@ public class MultiplayerManager : NetworkManager
     public override void OnServerRemovePlayer(NetworkConnection conn, PlayerController player)
     {
         playerList.Remove(playerList.Find(x => x.connectionId == conn.connectionId));
+        PlayerDisconnected(FindPlayer(conn.connectionId));
         SendGameState();
         base.OnServerRemovePlayer(conn, player);
     }
@@ -352,6 +415,19 @@ public class MultiplayerManager : NetworkManager
     {
         playerList.Clear();
         base.OnStopServer();
+    }
+
+    public override void OnStopHost()
+    {
+        playerList.Clear();
+        base.OnStopHost();
+    }
+
+    public override void OnServerSceneChanged(string sceneName)
+    {
+        if (sceneName == inGameScene)
+            GameStart();
+        base.OnServerSceneChanged(sceneName);
     }
 
     //Called when a player clicks 'ready' in the lobby
@@ -384,13 +460,14 @@ public class MultiplayerManager : NetworkManager
     public override void OnClientConnect(NetworkConnection conn)
     {
         client.RegisterHandler(ExtMsgType.State, OnStateUpdate);
+        if (!ClientScene.ready) ClientScene.Ready(client.connection);
     }
 
     //Overridden to customize player spawning
     public override void OnClientSceneChanged(NetworkConnection conn)
     {
-        if (!ClientScene.ready) ClientScene.Ready(client.connection);
         SpawnClient();
+        if (!ClientScene.ready) ClientScene.Ready(client.connection);
     }
 
     //Hook to receive & update game state
@@ -427,6 +504,13 @@ public class MultiplayerManager : NetworkManager
         }
         client.RegisterHandler(ExtMsgType.Kill, GetComponent<NetworkHUD>().OnKill);
     }
+
+    //Need to clear the client's player list too
+    public override void OnStopClient()
+    {
+        playerList.Clear();
+        base.OnStopClient();
+    }
     #endregion
 
     //Custom messages for sending packets of information between client and server
@@ -448,10 +532,10 @@ public class MultiplayerManager : NetworkManager
         public short team;
         public short ship;
 
-        public SpawnMessage(string name, Team team, Ship ship)
+        public SpawnMessage(string name, short team, Ship ship)
         {
             this.name = name;
-            this.team = (short)team;
+            this.team = team;
             this.ship = (short)ship;
         }
 
@@ -459,12 +543,14 @@ public class MultiplayerManager : NetworkManager
         {
             writer.Write(name);
             writer.Write(team);
+            writer.Write(ship);
         }
 
         public override void Deserialize(NetworkReader reader)
         {
             name = reader.ReadString();
             team = reader.ReadInt16();
+            ship = reader.ReadInt16();
         }
     }
 
@@ -473,15 +559,13 @@ public class MultiplayerManager : NetworkManager
     class GameStateMessage : MessageBase
     {
         public List<Player> playerList;
-        public Dictionary<Team, int> teamScores;
+        public int[] teamScores;
 
         public GameStateMessage()
         {
-            playerList = new List<Player>();
-            teamScores = new Dictionary<Team, int>();
         }
 
-        public GameStateMessage(List<Player> plyList, Dictionary<Team, int> scores)
+        public GameStateMessage(List<Player> plyList, int[] scores)
         {
             playerList = plyList;
             teamScores = scores;
@@ -489,9 +573,9 @@ public class MultiplayerManager : NetworkManager
 
         public override void Serialize(NetworkWriter writer)
         {
-            foreach (Team team in Enum.GetValues(typeof(Team)))
+            for (int i = 0; i < GetCurrentGamemode().NumTeams(); i++)
             {
-                writer.Write(teamScores[team]);
+                writer.Write(teamScores[i]);
             }
             writer.Write(playerList.Count);
             foreach (Player player in playerList)
@@ -502,9 +586,11 @@ public class MultiplayerManager : NetworkManager
 
         public override void Deserialize(NetworkReader reader)
         {
-            foreach (Team team in Enum.GetValues(typeof(Team)))
+            teamScores = new int[GetCurrentGamemode().NumTeams()];
+            playerList = new List<Player>();
+            for (int i = 0; i < GetCurrentGamemode().NumTeams(); i++)
             {
-                teamScores[team] = reader.ReadInt32();
+                teamScores[i] = reader.ReadInt32();
             }
             int count = reader.ReadInt32();
             for (int i = 0; i < count; i++)
@@ -532,24 +618,10 @@ public class MultiplayerManager : NetworkManager
     #endregion
 }
 
-//Enum for all teams
-public enum Team
-{
-    Red,
-    Blue,
-    Spectator
-}
-
 // NK: Enums for type of ship
 public enum Ship
 {
     Trireme,
     Human,
     Bramble
-}
-
-//Unnecessary right now but can be extended to include other gamemodes and time/stock options
-public enum Gamemode
-{
-    TeamDeathmatch
 }
