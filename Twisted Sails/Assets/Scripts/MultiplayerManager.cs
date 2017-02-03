@@ -13,7 +13,7 @@ using System;
 //
 // This class is currently serving as a general multiplayer game controller. The functionality
 // of the default NetworkManager has been extended to make it easier to work with.
-// Also included are two enums and a container class that I didn't feel deserved their own file.
+// Also included are two enums and several message classes that I didn't feel deserved their own file.
 // Added code for broadcasting current game state (score, player stats, etc) to all players whenever
 // a change is made. This may be inefficient, but it's okay for now. At the very least it's needed
 // for when a new player joins, to synchronize the current game state with that player and tell everyone
@@ -24,22 +24,39 @@ using System;
 // Description: Expanded to include lobby functionality
 //              Fixed a bunch of stuff to allow more control over when/what the player object spawns in
 
+// Developer:   Nizar Kury
+// Date:        11/17/2016
+// Description: Expanded to include ship selection
+//              - Modified SpawnMessage
+//              - Added localShipType
+//              
+
+// Developer:   Kyle Aycock
+// Date:        1/11/2016
+// Description: Added a selection of convenience methods that should be used by other scripts
+//              to interact with the MultiplayerManager. The intention is that if another programmer
+//              needs to do something with networking, they may simply refer to the static methods either here
+//              or in the autocomplete and find the one that does what they need to do. Will most likely need to
+//              be expanded upon after designers start doing more stuff and the need for more methods arises.
+
 public class MultiplayerManager : NetworkManager
 {
     public Gamemode currentGamemode = Gamemode.TeamDeathmatch;
     public string localPlayerName;
     public Team localPlayerTeam;
+    public Ship localShipType;
     public int pointsToWin;
     public List<Player> playerList;
     public Dictionary<Team, int> teamScores;
-    public static MultiplayerManager instance;
     public GameObject lobbyPrefab;
     public string inGameScene;
+
+    protected static MultiplayerManager instance;
 
     private float gameRestartTimer;
 
     //Initialization of variables
-    void Start()
+    void Awake()
     {
         localPlayerName = "???";
         localPlayerTeam = Team.Spectator;
@@ -60,11 +77,114 @@ public class MultiplayerManager : NetworkManager
         }
     }
 
-    //Checks if the current scene is lobby
-    public bool IsLobby()
+    #region Static Methods
+
+    /// <summary>
+    /// Checks if game is currently in lobby phase.
+    /// </summary>
+    /// <returns>True if in lobby, false if otherwise.</returns>
+    public static bool IsLobby()
     {
-        return networkSceneName.Equals(onlineScene);
+        return networkSceneName.Equals(instance.onlineScene);
     }
+
+    /// <summary>
+    /// Checks if current code is being run on the client.
+    /// </summary>
+    /// <returns>True if on client, false otherwise.</returns>
+    public static bool IsClient()
+    {
+        return NetworkClient.active;
+    }
+
+    /// <summary>
+    /// Checks if current code is being run on the server.
+    /// </summary>
+    /// <returns>True if on server, false otherwise.</returns>
+    public static bool IsServer()
+    {
+        return NetworkServer.active;
+    }
+
+    /// <summary>
+    /// Checks if current code is being run on the host.
+    /// </summary>
+    /// <returns>True if code is being run on the host, false otherwise</returns>
+    public static bool IsHost()
+    {
+        return NetworkClient.active && NetworkServer.active;
+    }
+
+    /// <summary>
+    /// Returns the NetworkClient object of the local player connection.
+    /// Can only be used on client.
+    /// </summary>
+    /// <returns>The local NetworkClient</returns>
+    public static NetworkClient GetLocalClient()
+    {
+        if (!NetworkClient.active)
+        {
+            Debug.LogError("Error: GetLocalClient called on server!");
+            return null;
+        }
+        return instance.client;
+    }
+
+    /// <summary>
+    /// Returns the combined score of all players on a given team.
+    /// Can be used on client and server.
+    /// </summary>
+    /// <param name="team">Team for which the total score will be returned</param>
+    /// <returns></returns>
+    public static int GetTeamScore(Team team)
+    {
+        return instance.teamScores[team];
+    }
+
+    /// <summary>
+    /// Returns the player whose name matches the given name.
+    /// Can be used on client and server.
+    /// If two players have the same name, the one that connected first is returned.
+    /// It is recommended to use an overload of this method.
+    /// </summary>
+    /// <param name="name">The name of the player to find</param>
+    /// <returns></returns>
+    public static Player FindPlayer(string name)
+    {
+        return instance.playerList.Find(p => p.name.Equals(name));
+    }
+
+    /// <summary>
+    /// Returns the player whose connectionId matches the given one.
+    /// Can be used on client and server.
+    /// </summary>
+    /// <param name="connectionId">The connectionId of the player to find</param>
+    /// <returns></returns>
+    public static Player FindPlayer(int connectionId)
+    {
+        return instance.playerList.Find(p => p.connectionId == connectionId);
+    }
+
+    /// <summary>
+    /// Returns the player whose ship has the given NetworkInstanceId.
+    /// Can be used on client and server.
+    /// </summary>
+    /// <param name="shipId">The NetworkInstanceId of the ship whose owner will be found</param>
+    /// <returns></returns>
+    public static Player FindPlayer(NetworkInstanceId shipId)
+    {
+        return instance.playerList.Find(p => p.objectId == shipId);
+    }
+
+    /// <summary>
+    /// Only use this if you need access to something within the MultiplayerManager not given by other methods.
+    /// </summary>
+    /// <returns>Active instance of MultiplayerManager</returns>
+    public static MultiplayerManager GetInstance()
+    {
+        return instance;
+    }
+    #endregion
 
     //Methods only for use serverside
     #region Server
@@ -87,9 +207,9 @@ public class MultiplayerManager : NetworkManager
     }
 
     //Processes a player death, this method is called from the Health script
-    public void PlayerKill(NetworkInstanceId killed, NetworkInstanceId by)
+    public void PlayerKill(Player killed, NetworkInstanceId by)
     {
-        Player victim = playerList.Find(p => p.objectId == killed);
+        Player victim = killed;
         Player killer = playerList.Find(p => p.objectId == by);
         victim.deaths++;
         if (killer != null && killer.team != victim.team)
@@ -132,7 +252,7 @@ public class MultiplayerManager : NetworkManager
     //This hook method is automatically called when the server is instructed to spawn a player (and provided extra info)
     public override void OnServerAddPlayer(NetworkConnection conn, short playerControllerId, NetworkReader extraMessageReader)
     {
-        SpawnMessage msg = new SpawnMessage("", Team.Spectator);
+        SpawnMessage msg = new SpawnMessage("", Team.Spectator, 0); 
         msg.Deserialize(extraMessageReader);
         ServerAddPlayer(conn, playerControllerId, msg.name, (Team)msg.team);
 
@@ -164,6 +284,7 @@ public class MultiplayerManager : NetworkManager
         Transform startPos = GetStartPosition();
         if (IsLobby())
         {
+            //We are spawning a lobby icon representation of the player
             Player player = new Player(playerName, playerTeam, NetworkInstanceId.Invalid, conn.connectionId);
             playerList.Add(player);
             if (startPos != null)
@@ -172,14 +293,17 @@ public class MultiplayerManager : NetworkManager
                 playerObj = (GameObject)Instantiate(lobbyPrefab, Vector3.zero, startPos.rotation);
                 playerObj.transform.SetParent(rectTransform.parent, false);
                 ((RectTransform)playerObj.transform).anchoredPosition = rectTransform.anchoredPosition;
+                playerObj.GetComponent<PlayerIconController>().effectivePosition = rectTransform.anchoredPosition;
             }
             else
             {
+                //shouldn't happen - needs failsafe
                 playerObj = (GameObject)Instantiate(lobbyPrefab, Vector3.zero, Quaternion.identity);
             }
             playerObj.GetComponent<PlayerIconController>().playerName = playerName;
         }
         else {
+            //We are spawning a ship in game
             if (startPos != null)
             {
                 playerObj = (GameObject)Instantiate(playerPrefab, startPos.position, startPos.rotation);
@@ -188,6 +312,9 @@ public class MultiplayerManager : NetworkManager
             {
                 playerObj = (GameObject)Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
             }
+
+            //Actual spectator functionality can be added in later, but for now it's basically "unknown"
+            //Autoassign team based on whichever has less players
             if (playerTeam == Team.Spectator)
             {
                 int redCount = playerList.FindAll(p => p.team == Team.Red).Count;
@@ -209,7 +336,6 @@ public class MultiplayerManager : NetworkManager
     {
         playerList.Remove(playerList.Find(x => x.connectionId == conn.connectionId));
         SendGameState();
-        Debug.Log("Server remove player");
         base.OnServerDisconnect(conn);
     }
 
@@ -218,7 +344,6 @@ public class MultiplayerManager : NetworkManager
     {
         playerList.Remove(playerList.Find(x => x.connectionId == conn.connectionId));
         SendGameState();
-        Debug.Log("Server remove player");
         base.OnServerRemovePlayer(conn, player);
     }
 
@@ -227,22 +352,6 @@ public class MultiplayerManager : NetworkManager
     {
         playerList.Clear();
         base.OnStopServer();
-    }
-
-    //Hooks an object to a Player object
-    public void RegisterPlayer(int connId, NetworkInstanceId objId)
-    {
-        playerList.Find(p => p.connectionId == connId).objectId = objId;
-        if (IsLobby() && playerList.Count == 1) //bad code
-            NetworkServer.FindLocalObject(objId).GetComponent<PlayerIconController>().RpcMarkHost();
-        SendGameState();
-    }
-
-    //Changes a player's team and sends the change out
-    public void ChangePlayerTeam(NetworkInstanceId source, Team newTeam)
-    {
-        playerList.Find(p => p.objectId == source).team = newTeam;
-        SendGameState();
     }
 
     //Called when a player clicks 'ready' in the lobby
@@ -296,7 +405,7 @@ public class MultiplayerManager : NetworkManager
     //The result of this method is that OnServerAddPlayer is called
     public void SpawnClient()
     {
-
+        //Most of this code taken from original NetworkManager
         bool addPlayer = (ClientScene.localPlayers.Count == 0);
         bool foundPlayer = false;
         foreach (var playerController in ClientScene.localPlayers)
@@ -314,7 +423,7 @@ public class MultiplayerManager : NetworkManager
         }
         if (addPlayer)
         {
-            ClientScene.AddPlayer(client.connection,0,new SpawnMessage(localPlayerName,localPlayerTeam));
+            ClientScene.AddPlayer(client.connection, 0, new SpawnMessage(localPlayerName, localPlayerTeam, localShipType));
         }
         client.RegisterHandler(ExtMsgType.Kill, GetComponent<NetworkHUD>().OnKill);
     }
@@ -322,15 +431,28 @@ public class MultiplayerManager : NetworkManager
 
     //Custom messages for sending packets of information between client and server
     #region Messages
+    //All new message types must be registered here using this format with the exception of SpawnMessage.
+    public class ExtMsgType
+    {
+        public static short State = MsgType.Highest + 1;
+        public static short Kill = MsgType.Highest + 2;
+        public static short Ready = MsgType.Highest + 3;
+    }
+
+    //This message is sent from client to server to tell the server what the client chose for name & team.
+    //It needs to be a message because name information is chosen before the server is started and before
+    //the player has authority over any object with which to send commands.
     class SpawnMessage : MessageBase
     {
         public string name;
         public short team;
+        public short ship;
 
-        public SpawnMessage(string name, Team team)
+        public SpawnMessage(string name, Team team, Ship ship)
         {
             this.name = name;
             this.team = (short)team;
+            this.ship = (short)ship;
         }
 
         public override void Serialize(NetworkWriter writer)
@@ -346,6 +468,8 @@ public class MultiplayerManager : NetworkManager
         }
     }
 
+    //This message is broadcasted to clients whenever the state of the game is changed.
+    //For example, player joins, player leaves, team scores, player scores, etc.
     class GameStateMessage : MessageBase
     {
         public List<Player> playerList;
@@ -392,21 +516,18 @@ public class MultiplayerManager : NetworkManager
         }
     }
 
+    //This message is sent from server to the client that just made a kill.
+    //The client merely receiving this message lets it know it just made a kill,
+    //and variables within the message notifies it of any additional score it gained.
     public class KillMessage : MessageBase
     {
         public int bountyGained;
     }
 
+    //Sent from client to server when a client clicks the "Ready" button in the lobby.
     public class ReadyMessage : MessageBase
     {
         public bool ready;
-    }
-
-    public class ExtMsgType
-    {
-        public static short State = MsgType.Highest + 1;
-        public static short Kill = MsgType.Highest + 2;
-        public static short Ready = MsgType.Highest + 3;
     }
     #endregion
 }
@@ -417,6 +538,14 @@ public enum Team
     Red,
     Blue,
     Spectator
+}
+
+// NK: Enums for type of ship
+public enum Ship
+{
+    Trireme,
+    Human,
+    Bramble
 }
 
 //Unnecessary right now but can be extended to include other gamemodes and time/stock options

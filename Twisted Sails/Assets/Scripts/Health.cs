@@ -52,21 +52,24 @@ using UnityEngine.Networking;
 public class Health : NetworkBehaviour
 {
     [Header("Health")]
-    //Syncvars work one-way (Server->Client)
     [SyncVar(hook = "OnChangeHealth")]
     public float health;
     public Text healthText;
     public Slider healthSlider;
+    public float healthPackAmount = 25.0f;
+
     [Header("Sinking")]
     public float sinkSpeed;
     public float sinkAngle;
     public float secondsToRespawn;
+
     [Header("Player")]
     [SyncVar]
     public string playerName;
     [SyncVar]
     public Team team;
     public bool dead;
+
     [Header("Misc")]
     public KeyCode hurtSelfButton;
     public GameObject activeCamera;
@@ -74,7 +77,6 @@ public class Health : NetworkBehaviour
     public Vector3 spawnPoint; // NK 10/20 added original spawnpoint
     public float defenseStat; // Crew Management - Defense Crew
 
-    public float healthPackAmount = 25.0f;
 
     private float respawnTimer;
     private bool tilting;
@@ -82,33 +84,37 @@ public class Health : NetworkBehaviour
 
     //Hooks are called automatically, usually there's no reason to manually call these hooks
     #region Hooks
-    //Initialization
+    //Init. non-dependent variables
+    void Awake()
+    {
+        dead = false;
+        tilting = false;
+        gameOver = false;
+        defenseStat = 1.0f; // 100% damage taken initially
+    }
+    
+    //Init. dependent variables
     void Start()
     {
         //Variable initialization
         activeCamera = Camera.main.gameObject;
-        dead = false;
-        tilting = false;
-        spawnPoint = this.transform.position;
-        gameOver = false;
-	defenseStat = 1.0f; // 100% damage taken initially
+        spawnPoint = transform.position;
 
         //Setting up health bars & nametags
-        if (isLocalPlayer)
+        if (isLocalPlayer) //This is the local player's ship -- use the HUD healthbar
         {
-            //Use the main HealthUI at the top of the screen if this ship is the local player's ship
             GameObject UI = GameObject.FindGameObjectWithTag("HealthUI");
             healthSlider = UI.GetComponent<Slider>(); // NK 10/20: locates the health UI in the scene
             healthText = UI.GetComponentInChildren<Text>(); // NK 10/20 locates the health text in the scene
-            CmdPlayerInit(MultiplayerManager.instance.client.connection.connectionId);
+            CmdPlayerInit(MultiplayerManager.GetLocalClient().connection.connectionId);
         }
-        else
+        else //This is a ship belonging to another player -- use the ship's healthbar & nametag
         {
-            //Otherwise, use the healthbar that's currently disabled within the ship
             GameObject UI = transform.FindChild("Canvas").FindChild("HealthUI").gameObject;
             healthSlider = UI.GetComponent<Slider>();
             if (isClient)
             {
+                //Indicate if this ship is on the local player's team
                 if (ClientScene.localPlayers[0].gameObject.GetComponent<Health>().team == team)
                     healthSlider.transform.FindChild("Fill Area").GetChild(0).GetComponent<Image>().color = Color.green;
             }
@@ -118,12 +124,13 @@ public class Health : NetworkBehaviour
         }
         healthSlider.minValue = 0f;
         healthSlider.maxValue = 100f;
-        OnChangeHealth(health); //Set health bars to initial values
+        OnChangeHealth(health); //This is called to commit the initial state of the health bar
     }
 
     // Update is called once per frame
     void Update()
     {
+        //Death effects/respawn timer
         if (dead)
         {
             //Tilting animation
@@ -137,6 +144,7 @@ public class Health : NetworkBehaviour
                     tilting = false;
                 }
             }
+
             //Respawn
             if (gameOver) return;
             respawnTimer += Time.deltaTime;
@@ -146,20 +154,19 @@ public class Health : NetworkBehaviour
             }
         }
 
+        //Hurt self functionality
         if (isLocalPlayer && Input.GetKeyDown(hurtSelfButton))
         {
             CmdChangeHealth(-5, NetworkInstanceId.Invalid);
             return;
         }
-
     }
-
-
 
     //Whenever ship collides with something else
     void OnCollisionEnter(Collision c)
     {
-        //Ignore cannonball collisions with owner
+        Debug.Log("client?: " + isClient + "  server?: " + isServer + " local player?: " + isLocalPlayer);
+        //Cannonball collision
         if (c.transform.gameObject.tag.Equals("Cannonball") && c.gameObject.GetComponent<CannonBallNetworked>().owner != GetComponent<NetworkIdentity>().netId)
         {
             Team cannonballTeam = ClientScene.FindLocalObject(c.gameObject.GetComponent<CannonBallNetworked>().owner).GetComponent<Health>().team;
@@ -168,22 +175,25 @@ public class Health : NetworkBehaviour
                 if (isLocalPlayer)
                 {
                     CmdChangeHealth(-35, c.transform.gameObject.GetComponent<CannonBallNetworked>().owner);
+                    RpcEndGame(Team.Blue, 0, 1000);
                 }
                 GameObject explode = (GameObject)Instantiate(explosion, c.contacts[0].point, Quaternion.identity);
                 explode.GetComponent<ParticleSystem>().Emit(100);
             }
-            Destroy(c.gameObject);
+            if(isServer)
+                Destroy(c.gameObject);
         }
 
-        if(c.transform.gameObject.tag.Equals("HealthPickUp"))
-          {
-              if (isLocalPlayer)
-              {
-                  CmdChangeHealth(healthPackAmount, NetworkInstanceId.Invalid);
-              }
- 
-              Destroy(c.gameObject);
-          }
+        //Health Pickup collision
+        if (c.transform.gameObject.tag.Equals("HealthPickUp"))
+        {
+            if (isLocalPlayer)
+            {
+                CmdChangeHealth(healthPackAmount, NetworkInstanceId.Invalid);
+            }
+            if(isServer)
+                Destroy(c.gameObject);
+        }
     }
 
     //This method should not be called to change health, use CmdChangeHealth for that.
@@ -206,20 +216,19 @@ public class Health : NetworkBehaviour
     //Commands are called on the client to send information to the server
     #region Commands
     /// <summary>
-    /// This method is used to tell the server a player has spawned.
+    /// This method is used to hook this ship to its owner serverside.
     /// </summary>
-    /// <param name="name">Name of the player</param>
-    /// <param name="team">Player's current team</param>
-    /// <param name="connectionId">Player's connection ID</param>
+    /// <param name="connectionId">Owner's connection ID</param>
     [Command]
     public void CmdPlayerInit(int connectionId)
     {
-        MultiplayerManager.instance.RegisterPlayer(connectionId, GetComponent<NetworkIdentity>().netId);
+        MultiplayerManager.FindPlayer(connectionId).objectId = GetComponent<NetworkIdentity>().netId;
     }
 
     /// <summary>
     /// This method should be used for all changes to a ship's health.
     /// It should only be called on clients (as it is a command).
+    /// Use NetworkInstanceId.Invalid if there is no damage source.
     /// </summary>
     /// <param name="amount">Amount to change health by</param>
     /// <param name="source">ID of the damage/heal source. Can be NetworkInstanceId.Invalid</param>
@@ -227,11 +236,13 @@ public class Health : NetworkBehaviour
     public void CmdChangeHealth(float amount, NetworkInstanceId source)
     {
         if (health == 0 && amount < 0) return; //don't register damage taken after death
-	
-	    amount *= defenseStat; // Multiplier effect for defense stat
+
+        amount *= defenseStat; // Multiplier effect for defense stat
+
+        //By setting this variable in a serverside context, the OnChangeHealth hook is called on all clients
         health = Mathf.Clamp(health + amount, 0, 100);
-        if (health == 0)
-            MultiplayerManager.instance.PlayerKill(GetComponent<NetworkIdentity>().netId, source);
+        if (health == 0) //Tell the server about this kill
+            MultiplayerManager.GetInstance().PlayerKill(MultiplayerManager.FindPlayer(GetComponent<NetworkIdentity>().netId), source);
     }
     #endregion
 
@@ -247,9 +258,12 @@ public class Health : NetworkBehaviour
     public void RpcEndGame(Team winner, int redScore, int blueScore)
     {
         if (!isLocalPlayer) return;
-        activeCamera.GetComponent<BoatCameraNetworked>().enabled = false; //change BoatCamera to match whatever the active camera controller script is
+        //Disable active camera controller, enable death camera controller
+        activeCamera.GetComponent<BoatCameraNetworked>().enabled = false;
         activeCamera.GetComponent<OrbitalCamera>().enabled = true;
         gameOver = true;
+
+        //Set up game-over screen with relevant information
         GameObject endScreen = GameObject.Find("Canvas(Health)").transform.FindChild("EndScreen").gameObject;
         endScreen.SetActive(true);
         if (winner == Team.Blue)
@@ -281,17 +295,20 @@ public class Health : NetworkBehaviour
     #endregion
 
     #region Other
+    /// <summary>
+    /// Use this method to tell the ship it's dead.
+    /// All input is disabled and the ship's owner experiences a little death cinematic.
+    /// </summary>
     public void Death()
     {
         dead = true;
         tilting = true;
         respawnTimer = 0;
 
-        //The code below puts the ship into an automated death sequence
+        //Put the ship into death cinematic
         if (isLocalPlayer)
         {
-            //Only manipulate the camera if it's the player's ship that's dying
-            activeCamera.GetComponent<BoatCameraNetworked>().enabled = false; //change BoatCamera to match whatever the active camera controller script is
+            activeCamera.GetComponent<BoatCameraNetworked>().enabled = false;
             activeCamera.GetComponent<OrbitalCamera>().enabled = true;
         }
         GetComponent<BoatMovementNetworked>().enabled = false;
@@ -301,14 +318,17 @@ public class Health : NetworkBehaviour
 
     }
 
+    /// <summary>
+    /// Tentative respawn method. Does not actually destroy&recreate the ship,
+    /// but simulates respawning by re-initializing ship state.
+    /// </summary>
     public void Respawn()
     {
         //The following code effectively "re-initializes" the boat to its original state
         //Re-enable normal boat scripts, disable death-related scripts, re-initialize positions, rotations, forces
         if (isLocalPlayer)
         {
-            //Only manipulate the camera if it's our ship that's respawning
-            activeCamera.GetComponent<BoatCameraNetworked>().enabled = true; //must change this to match whatever the active camera controller is
+            activeCamera.GetComponent<BoatCameraNetworked>().enabled = true;
             activeCamera.GetComponent<OrbitalCamera>().enabled = false;
             CmdChangeHealth(100, NetworkInstanceId.Invalid);
         }
