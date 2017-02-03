@@ -17,6 +17,10 @@ using UnityEngine.UI;
 //              they want to use. Also added shipIcons instance variable for the 
 //              representation of a person's selection.
 
+// Developer:   Kyle Aycock
+// Date:        2/1/2017
+// Description: Adapted to work with new team system
+
 public class LobbyManager : MonoBehaviour
 {
     public RectTransform[] teams;
@@ -35,7 +39,7 @@ public class LobbyManager : MonoBehaviour
     void Start()
     {
         //Variable initialization
-        manager = MultiplayerManager.instance;
+        manager = MultiplayerManager.GetInstance();
         allReady = false;
 
         //This if statement statement checks if it's running on the host
@@ -73,8 +77,8 @@ public class LobbyManager : MonoBehaviour
     /// <param name="team">Index in array of teams to switch to</param>
     public void SwitchTeam(int team)
     {
-        manager.localPlayerTeam = (Team)team;
-        GetLocalPlayer().GetComponent<PlayerIconController>().CmdMoveReq((Team)team, teams[team].gameObject.name, new Vector2(Random.Range(-75, 75), Random.Range(-75, 75)));
+        manager.localPlayerTeam = (short)team;
+        GetLocalPlayer().GetComponent<PlayerIconController>().CmdMoveReq((short)team, teams[team].gameObject.name, new Vector2(Random.Range(-75, 75), Random.Range(-75, 75)));
     }
 
     // NK

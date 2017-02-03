@@ -6,42 +6,54 @@ using System.Collections;
 // Description: Handles input for the title screen, most of which
 //              is currently network related. All buttons hook to this
 
+// Developer:   Kyle Aycock
+// Date:        2/1/2017
+// Description: Fixed strange behavior when joining/hosting a server for the second time in the same session
+//              Added more documentation
+
 public class TitleScreenInput : MonoBehaviour
 {
-    // Update is called once per frame
+
+    // Allows quitting by pressing ESC.
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
             QuitGame();
     }
 
+    // This is hooked to the Quit button
     public void QuitGame()
     {
         Application.Quit();
     }
 
+    //This is hooked to the Host Server button
     public void StartHost()
     {
-        MultiplayerManager.instance.StartHost();
+        MultiplayerManager.GetInstance().StartHost();
     }
 
+    //This is hooked to the Join Server button
     public void StartClient()
     {
-        MultiplayerManager.instance.StartClient();
+        MultiplayerManager.GetInstance().StartClient();
     }
 
+    //This is called when changes to the Server IP field are submitted
     public void SetIP(string ip)
     {
-        MultiplayerManager.instance.networkAddress = ip;
+        MultiplayerManager.GetInstance().networkAddress = ip;
     }
 
+    //Called when the name field is changed
     public void SetName(string name)
     {
-        MultiplayerManager.instance.localPlayerName = name;
+        MultiplayerManager.GetInstance().localPlayerName = name;
     }
 
+    //Called when the port field is changed
     public void SetPort(string port)
     {
-        MultiplayerManager.instance.networkPort = int.Parse(port);
+        MultiplayerManager.GetInstance().networkPort = int.Parse(port);
     }
 }

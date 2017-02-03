@@ -48,6 +48,10 @@ using UnityEngine.Networking;
 //                  chooses to allocate crew members to defense, the defense stat should be updated
 //                  by the Crew Management Script.
 
+// Developer:   Kyle Aycock
+// Date:        2/1/2017
+// Description: Adapted to use new Team system
+//              Added code to trigger appropriate Player events
 
 public class Health : NetworkBehaviour
 {
@@ -67,7 +71,7 @@ public class Health : NetworkBehaviour
     [SyncVar]
     public string playerName;
     [SyncVar]
-    public Team team;
+    public short team;
     public bool dead;
 
     [Header("Misc")]
@@ -84,16 +88,21 @@ public class Health : NetworkBehaviour
 
     //Hooks are called automatically, usually there's no reason to manually call these hooks
     #region Hooks
-    //Initialization
+    //Init. non-dependent variables
+    void Awake()
+    {
+        dead = false;
+        tilting = false;
+        gameOver = false;
+        defenseStat = 1.0f; // 100% damage taken initially
+    }
+
+    //Init. dependent variables
     void Start()
     {
         //Variable initialization
         activeCamera = Camera.main.gameObject;
-        dead = false;
-        tilting = false;
         spawnPoint = transform.position;
-        gameOver = false;
-        defenseStat = 1.0f; // 100% damage taken initially
 
         //Setting up health bars & nametags
         if (isLocalPlayer) //This is the local player's ship -- use the HUD healthbar
@@ -101,7 +110,7 @@ public class Health : NetworkBehaviour
             GameObject UI = GameObject.FindGameObjectWithTag("HealthUI");
             healthSlider = UI.GetComponent<Slider>(); // NK 10/20: locates the health UI in the scene
             healthText = UI.GetComponentInChildren<Text>(); // NK 10/20 locates the health text in the scene
-            CmdPlayerInit(MultiplayerManager.instance.client.connection.connectionId);
+            CmdPlayerInit(MultiplayerManager.GetLocalClient().connection.connectionId);
         }
         else //This is a ship belonging to another player -- use the ship's healthbar & nametag
         {
@@ -163,27 +172,35 @@ public class Health : NetworkBehaviour
         //Cannonball collision
         if (c.transform.gameObject.tag.Equals("Cannonball") && c.gameObject.GetComponent<CannonBallNetworked>().owner != GetComponent<NetworkIdentity>().netId)
         {
-            Team cannonballTeam = ClientScene.FindLocalObject(c.gameObject.GetComponent<CannonBallNetworked>().owner).GetComponent<Health>().team;
+            NetworkInstanceId cannonballOwner = c.gameObject.GetComponent<CannonBallNetworked>().owner;
+            short cannonballTeam = ClientScene.FindLocalObject(cannonballOwner).GetComponent<Health>().team;
             if (cannonballTeam != team)
             {
+                int damage = -35;
+                Player.SendPlayerDamaged(MultiplayerManager.FindPlayer(GetComponent<NetworkIdentity>().netId), MultiplayerManager.FindPlayer(cannonballOwner), ref damage);
                 if (isLocalPlayer)
                 {
-                    CmdChangeHealth(-35, c.transform.gameObject.GetComponent<CannonBallNetworked>().owner);
+                    CmdChangeHealth(damage, c.transform.gameObject.GetComponent<CannonBallNetworked>().owner);
                 }
                 GameObject explode = (GameObject)Instantiate(explosion, c.contacts[0].point, Quaternion.identity);
                 explode.GetComponent<ParticleSystem>().Emit(100);
             }
-            Destroy(c.gameObject);
+            if (isServer)
+            {
+                Destroy(c.gameObject);
+            }
         }
 
         //Health Pickup collision
         if (c.transform.gameObject.tag.Equals("HealthPickUp"))
         {
+            Player.SendPlayerPickup(MultiplayerManager.FindPlayer(GetComponent<NetworkIdentity>().netId), true);
             if (isLocalPlayer)
             {
                 CmdChangeHealth(healthPackAmount, NetworkInstanceId.Invalid);
             }
-            Destroy(c.gameObject);
+            if (isServer)
+                Destroy(c.gameObject);
         }
     }
 
@@ -213,7 +230,7 @@ public class Health : NetworkBehaviour
     [Command]
     public void CmdPlayerInit(int connectionId)
     {
-        MultiplayerManager.instance.RegisterPlayer(connectionId, GetComponent<NetworkIdentity>().netId);
+        MultiplayerManager.FindPlayer(connectionId).objectId = GetComponent<NetworkIdentity>().netId;
     }
 
     /// <summary>
@@ -233,7 +250,7 @@ public class Health : NetworkBehaviour
         //By setting this variable in a serverside context, the OnChangeHealth hook is called on all clients
         health = Mathf.Clamp(health + amount, 0, 100);
         if (health == 0) //Tell the server about this kill
-            MultiplayerManager.instance.PlayerKill(GetComponent<NetworkIdentity>().netId, source);
+            MultiplayerManager.GetInstance().PlayerKill(MultiplayerManager.FindPlayer(GetComponent<NetworkIdentity>().netId), source);
     }
     #endregion
 
@@ -246,7 +263,7 @@ public class Health : NetworkBehaviour
     /// <param name="redScore"></param>
     /// <param name="blueScore"></param>
     [ClientRpc]
-    public void RpcEndGame(Team winner, int redScore, int blueScore)
+    public void RpcEndGame(short winner, int[] teamScores)
     {
         if (!isLocalPlayer) return;
         //Disable active camera controller, enable death camera controller
@@ -257,15 +274,20 @@ public class Health : NetworkBehaviour
         //Set up game-over screen with relevant information
         GameObject endScreen = GameObject.Find("Canvas(Health)").transform.FindChild("EndScreen").gameObject;
         endScreen.SetActive(true);
-        if (winner == Team.Blue)
-            endScreen.transform.FindChild("BlueTeamWins").gameObject.SetActive(true);
-        else
-            endScreen.transform.FindChild("RedTeamWins").gameObject.SetActive(true);
+        Text teamWin = endScreen.transform.FindChild("TeamWinText").GetComponent<Text>();
+        teamWin.gameObject.SetActive(true);
+        teamWin.text = "Team " + MultiplayerManager.GetTeam(winner).teamName + " wins!";
+        teamWin.color = MultiplayerManager.GetTeam(winner).teamColor;
         if (winner == team)
             endScreen.transform.FindChild("YouWin").gameObject.SetActive(true);
         else
             endScreen.transform.FindChild("YouLose").gameObject.SetActive(true);
-        endScreen.transform.FindChild("FinalScore").GetComponent<Text>().text = "Score: Red: " + redScore + " Blue: " + blueScore;
+        Text scoreText = endScreen.transform.FindChild("FinalScore").GetComponent<Text>();
+        scoreText.text = "Scores: \n";
+        for (short i = 0; i < MultiplayerManager.GetCurrentGamemode().NumTeams(); i++)
+        {
+            scoreText.text += MultiplayerManager.GetTeam(i).teamName + ": " + teamScores[i] + "\n";
+        }
     }
 
     /// <summary>
@@ -278,8 +300,7 @@ public class Health : NetworkBehaviour
         Respawn();
         GameObject endScreen = GameObject.Find("Canvas(Health)").transform.FindChild("EndScreen").gameObject;
         endScreen.SetActive(false);
-        endScreen.transform.FindChild("BlueTeamWins").gameObject.SetActive(false);
-        endScreen.transform.FindChild("RedTeamWins").gameObject.SetActive(false);
+        endScreen.transform.FindChild("TeamWinText").gameObject.SetActive(false);
         endScreen.transform.FindChild("YouWin").gameObject.SetActive(false);
         endScreen.transform.FindChild("YouLose").gameObject.SetActive(false);
     }
