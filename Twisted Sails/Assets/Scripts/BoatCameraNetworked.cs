@@ -28,7 +28,7 @@ public class BoatCameraNetworked : MonoBehaviour
 {
 	public GameObject boatToFollow = null;
 
-	public Vector3 cameraOffset= new Vector3(1, 4, 1);
+	public Vector3 cameraOffset= new Vector3(0, 0, 0);
 
 	[Header("Rotation and Zoom Settings")]
 	public float minimumVerticalRotation = 10.0f;
@@ -128,7 +128,7 @@ public class BoatCameraNetworked : MonoBehaviour
 
 		Quaternion rotation = Quaternion.Euler(currentVerticalRotation, currentHorizontalRotation, 0);
 
-		Vector3 followingPosition = boatToFollow.transform.position + boatToFollow.transform.right * cameraOffset.x + Vector3.up * cameraOffset.x + boatToFollow.transform.forward * cameraOffset.z;
+		Vector3 followingPosition = boatToFollow.transform.position + boatToFollow.transform.right * cameraOffset.x + Vector3.up * cameraOffset.y + boatToFollow.transform.forward * cameraOffset.z;
 
 		distance = targetDistance;
         Ray camRay = new Ray(followingPosition, -camTransform.forward);
