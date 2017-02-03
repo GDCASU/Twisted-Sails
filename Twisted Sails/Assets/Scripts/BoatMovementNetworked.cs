@@ -181,8 +181,9 @@ public class BoatMovementNetworked : NetworkBehaviour
 			boat.AddForceAtPosition(forceDirection * acceleration, transform.position + transform.forward * boatPropulsionPointOffset, ForceMode.Acceleration);
 		}
 
-        //Asks the boat's attached swivel gun to update its position based on the rotation of the boat's camera
-        swivelGunScript.updateRotation(boatCam.transform);
+        //Asks the boat's attached swivel gun (if it exists) to update its position based on the rotation of the boat's camera
+        if(swivelGunScript != null)
+            swivelGunScript.updateRotation(boatCam.transform);
 	}
 
     //Called by client, runs on server.
