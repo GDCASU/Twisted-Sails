@@ -14,7 +14,12 @@ using UnityEngine.Networking;
 // Description: Changed to allow coders to directly modify the player object and have it
 //              automatically update the game state in the server
 
-// Container class for all info for a single player
+// Developer:   Kyle Aycock
+// Date:        2/1/2017
+// Description: Adapted to use new team system
+//              Added several events for use by other coders
+
+// Class representing a player in game
 public class Player
 {
     #region Properties
@@ -33,7 +38,7 @@ public class Player
             NotifyServerStateChanged();
         }
     }
-    public Team team
+    public short team
     {
         get
         {
@@ -176,7 +181,7 @@ public class Player
     #endregion
 
     private string _name;
-    private Team _team;
+    private short _team;
     private Ship _ship;
     private NetworkInstanceId _objectId;
     private int _connectionId;
@@ -187,9 +192,42 @@ public class Player
     private short _maxBounty;
     private short _score;
 
-    public Player() : this("???", Team.Spectator, NetworkInstanceId.Invalid, -1) { }
+    #region Events
 
-    public Player(string name, Team team, NetworkInstanceId objectId, int connectionId)
+    //Player Killed event - happens when a player is killed for any reason, 'killer' may be null
+    //This event only works serverside until I get a chance to rewrite the damage handling in the Health script
+    public delegate void PlayerKilledEvent(Player victim, Player killer); //it yelled at me for making these private so they're public
+    public static event PlayerKilledEvent PlayerKilled = delegate { };
+
+    //Player Damaged event - happens when a player takes damage from an attacker
+    //Damage can only be changed clientside for now until I get a chance to rewrite damage handling
+    public delegate void PlayerDamagedEvent(Player victim, Player attacker, ref int damage);
+    public static event PlayerDamagedEvent PlayerDamaged = delegate { };
+
+    //Player Pickup event - happens when a player gets a pickup
+    public delegate void PlayerPickupEvent(Player player, bool isHealthPack);
+    public static event PlayerPickupEvent PlayerGotPickup = delegate { };
+
+    //These methods allow classes other than the Player to trigger the events, as this is not normally possible
+    //It was either this or put the events in the Health script instead, which didn't make sense
+    public static void SendPlayerKilled(Player victim, Player killer)
+    {
+        PlayerKilled(victim, killer);
+    }
+    public static void SendPlayerDamaged(Player victim, Player attacker, ref int damage)
+    {
+        PlayerDamaged(victim, attacker, ref damage);
+    }
+    public static void SendPlayerPickup(Player player, bool isHealthPack)
+    {
+        PlayerGotPickup(player, isHealthPack);
+    }
+
+    #endregion
+
+    public Player() : this("???", -1, NetworkInstanceId.Invalid, -1) { }
+
+    public Player(string name, short team, NetworkInstanceId objectId, int connectionId)
     {
         _name = name;
         _team = team;
@@ -223,7 +261,7 @@ public class Player
     public void Deserialize(NetworkReader reader)
     {
         _name = reader.ReadString();
-        _team = (Team)reader.ReadByte();
+        _team = reader.ReadByte();
         _ship = (Ship)reader.ReadByte();
         _objectId = reader.ReadNetworkId();
         _connectionId = reader.ReadInt32();

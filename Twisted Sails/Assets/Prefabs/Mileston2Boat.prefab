@@ -122,7 +122,6 @@ GameObject:
   - 224: {fileID: 224000010981201950}
   - 223: {fileID: 223000011294269864}
   - 114: {fileID: 114000014197504086}
-  - 114: {fileID: 114000012760718210}
   - 114: {fileID: 114000011652922460}
   m_Layer: 8
   m_Name: Canvas
@@ -194,7 +193,7 @@ GameObject:
   m_Component:
   - 224: {fileID: 224000012422992152}
   - 222: {fileID: 222000013892180662}
-  - 114: {fileID: 114000012887958946}
+  - 114: {fileID: 114000012413589446}
   m_Layer: 8
   m_Name: Background
   m_TagString: Untagged
@@ -540,10 +539,10 @@ GameObject:
   - 136: {fileID: 136000012410807264}
   - 114: {fileID: 114000010825273558}
   - 114: {fileID: 114000012036140506}
-  - 114: {fileID: 114000011101052774}
   - 114: {fileID: 114000014262539570}
   - 114: {fileID: 114000013755637000}
   - 114: {fileID: 114000012580224812}
+  - 114: {fileID: 114000010556032994}
   m_Layer: 8
   m_Name: Mileston2Boat
   m_TagString: Untagged
@@ -715,8 +714,8 @@ GameObject:
   - 33: {fileID: 33000010514697080}
   - 136: {fileID: 136000013258720548}
   - 23: {fileID: 23000012545289210}
-  - 114: {fileID: 114000012052090948}
   - 114: {fileID: 114000012954807566}
+  - 114: {fileID: 114000011401448514}
   m_Layer: 8
   m_Name: Cannon (1)
   m_TagString: Untagged
@@ -1192,17 +1191,11 @@ GameObject:
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 4
   m_Component:
-  - 4: {fileID: 4000012373711734}
-  - 54: {fileID: 54000013705223800}
-  - 114: {fileID: 114000012413589446}
-  - 136: {fileID: 136000013548959800}
-  - 114: {fileID: 114000010219481882}
-  - 114: {fileID: 114000010556032994}
-  - 114: {fileID: 114000010184600050}
-  - 114: {fileID: 114000011436452340}
-  - 114: {fileID: 114000010202202694}
-  - 114: {fileID: 114000010222649082}
+  - 4: {fileID: 4000010042469226}
   - 114: {fileID: 114000011331728158}
+  - 4: {fileID: 4000014182564450}
+  - 23: {fileID: 23000011901779530}
+  - 33: {fileID: 33000012324972308}
   m_Layer: 8
   m_Name: ID197
   m_TagString: Untagged
@@ -1498,8 +1491,8 @@ GameObject:
   - 136: {fileID: 136000013725072328}
   - 23: {fileID: 23000010017654580}
   - 114: {fileID: 114000013310386108}
-  - 114: {fileID: 114000012241342650}
   - 114: {fileID: 114000012589808420}
+  - 114: {fileID: 114000011472782010}
   m_Layer: 8
   m_Name: Cannon (8)
   m_TagString: SwivelGun
@@ -1541,6 +1534,19 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!4 &4000010042469226
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000013389903954}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
 --- !u!4 &4000010053231246
 Transform:
   m_ObjectHideFlags: 1
@@ -5463,6 +5469,31 @@ MonoBehaviour:
   fireDelay: 1
   projectileSpeed: 20
   attackStat: 1
+--- !u!114 &114000010556032994
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000011404560512}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d96c63565d5fa664fb9ee29cfb3dceb9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  forwardsAcceleration: 200
+  backwardsAcceleration: 50
+  rotationalControl: 1
+  speedBoostValue: 2
+  speedBoost: 0
+  boatPropulsionPointOffset: -1
+  speedStat: 1
+  forwardKey: 119
+  backwardsKey: 115
+  leftKey: 97
+  rightKey: 100
+  cannonFireKey: 32
+  swivelGunFireKey: 323
+  cannonBall: {fileID: 1000013620427708, guid: 999d70260556d6a4d99c8c6ca2089051, type: 2}
 --- !u!114 &114000010825273558
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5506,38 +5537,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a07e3ddbb4bc424f8e00f9cd31429ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackStage: 0
-  defenseStage: 0
-  speedStage: 0
-  attackButton: Attack Crew
-  defenseButton: Defense Crew
-  speedButton: Speed Crew
-  resetButton: Reset Crew
---- !u!114 &114000010556032994
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000011404560512}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d96c63565d5fa664fb9ee29cfb3dceb9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  forwardsAcceleration: 200
-  backwardsAcceleration: 50
-  rotationalControl: 1
-  speedBoostValue: 2
-  speedBoost: 0
-  boatPropulsionPointOffset: -1
-  speedStat: 1
-  forwardKey: 119
-  backwardsKey: 115
-  leftKey: 97
-  rightKey: 100
-  cannonFireKey: 32
-  swivelGunFireKey: 323
-  cannonBall: {fileID: 1000013620427708, guid: 999d70260556d6a4d99c8c6ca2089051, type: 2}
+  shipCamera: {fileID: 0}
+  projectileSpeed: 0
+  scaleFactor: 0
 --- !u!114 &114000011121677546
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5552,6 +5554,51 @@ MonoBehaviour:
   shipCamera: {fileID: 0}
   projectileSpeed: 10
   scaleFactor: 0.25
+--- !u!114 &114000011331728158
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000013389903954}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d80cea8be5c26d48b86dcd4bc5e4d0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attackBar: {fileID: 0}
+  defenseBar: {fileID: 0}
+  speedBar: {fileID: 0}
+  attackText: {fileID: 0}
+  defenseText: {fileID: 0}
+  speedText: {fileID: 0}
+--- !u!114 &114000011401448514
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000011984761756}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a07e3ddbb4bc424f8e00f9cd31429ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shipCamera: {fileID: 0}
+  projectileSpeed: 10
+  scaleFactor: 0.25
+--- !u!114 &114000011472782010
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000014178595284}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9bd3a1816f244654ba7d67a6e9ae0c3d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fireDelay: 1
+  projectileSpeed: 20
+  attackStat: 1
 --- !u!114 &114000011590326226
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5602,40 +5649,15 @@ MonoBehaviour:
   m_Script: {fileID: -1768714887, guid: 870353891bb340e2b2a9c8707e7419ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fireDelay: 1
-  projectileSpeed: 20
-  attackStat: 1
---- !u!114 &114000011331728158
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013458966376}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4d80cea8be5c26d48b86dcd4bc5e4d0c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  attackBar: {fileID: 0}
-  defenseBar: {fileID: 0}
-  speedBar: {fileID: 0}
-  attackText: {fileID: 0}
-  defenseText: {fileID: 0}
-  speedText: {fileID: 0}
---- !u!114 &114000011401448514
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000011984761756}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a07e3ddbb4bc424f8e00f9cd31429ef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  shipCamera: {fileID: 0}
-  projectileSpeed: 10
-  scaleFactor: 0.25
+  m_TransformSyncMode: 3
+  m_SendInterval: 0.1
+  m_SyncRotationAxis: 7
+  m_RotationSyncCompression: 0
+  m_SyncSpin: 0
+  m_MovementTheshold: 0.001
+  m_SnapThreshold: 5
+  m_InterpolateRotation: 1
+  m_InterpolateMovement: 1
 --- !u!114 &114000012103009212
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5647,35 +5669,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56cf91456bf1a564388aae248d316dd1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 100
-  healthText: {fileID: 0}
-  healthSlider: {fileID: 0}
-  healthPackAmount: 25
-  sinkSpeed: 1
-  sinkAngle: 40
-  secondsToRespawn: 8
-  playerName: 
-  team: 0
-  dead: 0
-  hurtSelfButton: 107
-  activeCamera: {fileID: 0}
-  explosion: {fileID: 1000011769946516, guid: 8af0c4ff01de10c4a9980db85d6bf910, type: 2}
-  spawnPoint: {x: 0, y: 0, z: 0}
-  defenseStat: 0
---- !u!114 &114000011472782010
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000014178595284}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9bd3a1816f244654ba7d67a6e9ae0c3d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  fireDelay: 1
-  projectileSpeed: 20
-  attackStat: 1
+  buoyancyFactor: 15
+  objectHeight: 0
+  airDrag: 0.2
+  surfaceDrag: 1
+  submergedDrag: 1.25
 --- !u!114 &114000012266866920
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5738,43 +5736,6 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Slider+SliderEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
---- !u!114 &114000012580224812
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000011404560512}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 82148e684e6b18142b2ef9910a029c4b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  fireRateStage: 0
-  defenseStage: 0
-  speedStage: 0
-  crewCount: 0
-  attackMultiplier: 0
-  defenseMultiplier: 0
-  speedMultiplier: 0
-  multiplier: 1
-  attackButton: Attack Crew
-  defenseButton: Defense Crew
-  speedButton: Speed Crew
-  resetButton: Reset Crew
---- !u!114 &114000012589808420
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000014178595284}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1a405163aa8d259448aba12f3179ebe3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  fireDelay: 1
-  projectileSpeed: 20
-  attackStat: 1
 --- !u!114 &114000012413589446
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5802,6 +5763,36 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114000012580224812
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000011404560512}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82148e684e6b18142b2ef9910a029c4b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attackStage: 0
+  defenseStage: 0
+  speedStage: 0
+  attackButton: Attack Crew
+  defenseButton: Defense Crew
+  speedButton: Speed Crew
+  resetButton: Reset Crew
+  crewText: {fileID: 0}
+--- !u!114 &114000012589808420
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000014178595284}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a405163aa8d259448aba12f3179ebe3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114000012915758064
 MonoBehaviour:
   m_ObjectHideFlags: 1
