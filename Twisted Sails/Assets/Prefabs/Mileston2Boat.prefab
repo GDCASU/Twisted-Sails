@@ -1174,7 +1174,6 @@ GameObject:
   - 4: {fileID: 4000012373711734}
   - 54: {fileID: 54000013705223800}
   - 114: {fileID: 114000012413589446}
-  - 114: {fileID: 114000012203035594}
   - 136: {fileID: 136000013548959800}
   - 114: {fileID: 114000010219481882}
   - 114: {fileID: 114000010556032994}
@@ -1182,6 +1181,7 @@ GameObject:
   - 114: {fileID: 114000011436452340}
   - 114: {fileID: 114000010202202694}
   - 114: {fileID: 114000010222649082}
+  - 114: {fileID: 114000011331728158}
   m_Layer: 8
   m_Name: Mileston2Boat
   m_TagString: Untagged
@@ -5417,10 +5417,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82148e684e6b18142b2ef9910a029c4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fireRateStage: 0
+  attackStage: 0
   defenseStage: 0
   speedStage: 0
-  crewCount: 0
   attackButton: Attack Crew
   defenseButton: Defense Crew
   speedButton: Speed Crew
@@ -5556,6 +5555,23 @@ MonoBehaviour:
   fireDelay: 1
   projectileSpeed: 20
   attackStat: 1
+--- !u!114 &114000011331728158
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000013458966376}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d80cea8be5c26d48b86dcd4bc5e4d0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attackBar: {fileID: 0}
+  defenseBar: {fileID: 0}
+  speedBar: {fileID: 0}
+  attackText: {fileID: 0}
+  defenseText: {fileID: 0}
+  speedText: {fileID: 0}
 --- !u!114 &114000011401448514
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5584,6 +5600,7 @@ MonoBehaviour:
   health: 100
   healthText: {fileID: 0}
   healthSlider: {fileID: 0}
+  healthPackAmount: 25
   sinkSpeed: 1
   sinkAngle: 40
   secondsToRespawn: 8
@@ -5595,7 +5612,6 @@ MonoBehaviour:
   explosion: {fileID: 1000011769946516, guid: 8af0c4ff01de10c4a9980db85d6bf910, type: 2}
   spawnPoint: {x: 0, y: 0, z: 0}
   defenseStat: 0
-  healthPackAmount: 25
 --- !u!114 &114000011472782010
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5666,26 +5682,6 @@ MonoBehaviour:
   fireDelay: 1
   projectileSpeed: 20
   attackStat: 1
---- !u!114 &114000012203035594
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013458966376}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3f995605d3062064b98d8e45139f8c2e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  currentSpeed: 0
-  currentFireRate: 0
-  currentDefense: 0
-  currentSpeedStage: 0
-  currentFireRateStage: 0
-  currentDefenseStage: 0
-  attackButton: Attack Crew
-  defenseButton: Defense Crew
-  speedButton: Speed Crew
 --- !u!114 &114000012413589446
 MonoBehaviour:
   m_ObjectHideFlags: 1
