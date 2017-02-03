@@ -1192,9 +1192,17 @@ GameObject:
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 4
   m_Component:
-  - 4: {fileID: 4000014182564450}
-  - 33: {fileID: 33000012324972308}
-  - 23: {fileID: 23000011901779530}
+  - 4: {fileID: 4000012373711734}
+  - 54: {fileID: 54000013705223800}
+  - 114: {fileID: 114000012413589446}
+  - 136: {fileID: 136000013548959800}
+  - 114: {fileID: 114000010219481882}
+  - 114: {fileID: 114000010556032994}
+  - 114: {fileID: 114000010184600050}
+  - 114: {fileID: 114000011436452340}
+  - 114: {fileID: 114000010202202694}
+  - 114: {fileID: 114000010222649082}
+  - 114: {fileID: 114000011331728158}
   m_Layer: 8
   m_Name: ID197
   m_TagString: Untagged
@@ -5498,10 +5506,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a07e3ddbb4bc424f8e00f9cd31429ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shipCamera: {fileID: 0}
-  projectileSpeed: 10
-  scaleFactor: 0.25
---- !u!114 &114000011101052774
+  attackStage: 0
+  defenseStage: 0
+  speedStage: 0
+  attackButton: Attack Crew
+  defenseButton: Defense Crew
+  speedButton: Speed Crew
+  resetButton: Reset Crew
+--- !u!114 &114000010556032994
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -5590,16 +5602,27 @@ MonoBehaviour:
   m_Script: {fileID: -1768714887, guid: 870353891bb340e2b2a9c8707e7419ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_TransformSyncMode: 1
-  m_SendInterval: 0.033333335
-  m_SyncRotationAxis: 7
-  m_RotationSyncCompression: 0
-  m_SyncSpin: 0
-  m_MovementTheshold: 0.001
-  m_SnapThreshold: 5
-  m_InterpolateRotation: 1
-  m_InterpolateMovement: 1
---- !u!114 &114000012052090948
+  fireDelay: 1
+  projectileSpeed: 20
+  attackStat: 1
+--- !u!114 &114000011331728158
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000013458966376}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d80cea8be5c26d48b86dcd4bc5e4d0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attackBar: {fileID: 0}
+  defenseBar: {fileID: 0}
+  speedBar: {fileID: 0}
+  attackText: {fileID: 0}
+  defenseText: {fileID: 0}
+  speedText: {fileID: 0}
+--- !u!114 &114000011401448514
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -5624,12 +5647,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56cf91456bf1a564388aae248d316dd1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buoyancyFactor: 15
-  objectHeight: 1.4
-  airDrag: 0
-  surfaceDrag: 0.5
-  submergedDrag: 2
---- !u!114 &114000012241342650
+  health: 100
+  healthText: {fileID: 0}
+  healthSlider: {fileID: 0}
+  healthPackAmount: 25
+  sinkSpeed: 1
+  sinkAngle: 40
+  secondsToRespawn: 8
+  playerName: 
+  team: 0
+  dead: 0
+  hurtSelfButton: 107
+  activeCamera: {fileID: 0}
+  explosion: {fileID: 1000011769946516, guid: 8af0c4ff01de10c4a9980db85d6bf910, type: 2}
+  spawnPoint: {x: 0, y: 0, z: 0}
+  defenseStat: 0
+--- !u!114 &114000011472782010
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -5739,23 +5772,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a405163aa8d259448aba12f3179ebe3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &114000012760718210
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000010483732842}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1301386320, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_IgnoreReversedGraphics: 1
-  m_BlockingObjects: 0
-  m_BlockingMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
---- !u!114 &114000012887958946
+  fireDelay: 1
+  projectileSpeed: 20
+  attackStat: 1
+--- !u!114 &114000012413589446
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
