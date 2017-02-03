@@ -23,6 +23,10 @@ using UnityEngine.UI;
 //              Fixed newly connected clients spawning icons off-screen
 //              Fixed host seeing "ready" button when not all clients ready
 
+// Developer:   Kyle Aycock
+// Date:        2/1/2017
+// Description: Adapted to use new team system
+
 //This is the input/player controller for a player's lobby icon
 //Input is given to this script from LobbyManager.cs currently
 public class PlayerIconController : NetworkBehaviour
@@ -128,7 +132,7 @@ public class PlayerIconController : NetworkBehaviour
     /// <param name="parentName">Name of the container for the team</param>
     /// <param name="localTarget">Position within the container to move to</param>
     [Command]
-    public void CmdMoveReq(Team team, string parentName, Vector2 localTarget)
+    public void CmdMoveReq(short team, string parentName, Vector2 localTarget)
     {
         MultiplayerManager.FindPlayer(GetComponent<NetworkIdentity>().netId).team = team;
         RpcDoMove(team, parentName, localTarget);
@@ -177,7 +181,7 @@ public class PlayerIconController : NetworkBehaviour
     /// <param name="parentName">Name of the container for the team</param>
     /// <param name="localTarget">Position within the container to move to</param>
     [ClientRpc]
-    public void RpcDoMove(Team team, string parentName, Vector2 localTarget)
+    public void RpcDoMove(short team, string parentName, Vector2 localTarget)
     {
         transform.SetParent(canvas.transform.Find("TeamSelect").Find(parentName));
         startPos = rectTransform.anchoredPosition;
@@ -193,7 +197,7 @@ public class PlayerIconController : NetworkBehaviour
     [ClientRpc]
     public void RpcShipSelect(Ship ship)
     {
-        transform.Find("ShipIcon").GetComponent<Image>().sprite = shipIcons[(int)ship];    
+        transform.Find("ShipIcon").GetComponent<Image>().sprite = shipIcons[(int)ship];
     }
 
     #region Misc
