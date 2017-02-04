@@ -16,27 +16,19 @@ using System.Collections;
 	If need help using this template, contact the programmer's above.
 **/
 
-public class HeavyWeaponHuman : HeavyWeapon {
-    public float weaponDamage; //sets damage weapon does to enemy ship
-    public float activeTime; //sets duration the weapon is active
-    public float speedBoost; //sets speed multiplier
-    public 
-    // Use this for initialization
-    new void Start () {
+public class HeavyWeaponTemplate : HeavyWeapon {
+
+	// Use this for initialization
+	new void Start () {
         base.Start();
-
+        // ADD YOUR CODE HERE
 	}
-
-    // Update is called once per frame
-    new void Update()
+	
+	// Update is called once per frame
+	new void Update()
     {
         base.Update();
-        // for(timeLeft = activeTime; timeLeft>0; timeLeft--){
-            //invincibility method or health is reset to initial amount at activation
-            //speedboost method
-        //}
-        // Player Health is constantly reset to initial health at activation if disabling damage is not possible
-
+        // ADD YOUR CODE HERE
     }
 
     #region CollisionFunctions
@@ -48,9 +40,7 @@ public class HeavyWeaponHuman : HeavyWeapon {
     new void OnCollisionEnter(Collision other)
     {
         base.OnCollisionEnter(other);
-        // deal damage to enemy the player collides with
-        // if(object is player prefab && timeleft>0)
-            // do damage
+        // ADD YOUR CODE HERE
     }
 
     /// <summary>
