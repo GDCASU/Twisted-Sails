@@ -9,10 +9,13 @@ public class BrambleProjectileBehavior : MonoBehaviour {
 	Vector3 brambleTarget;
 	Vector3 brambleStart;
 	bool goingOut = true;
+	float totalTime;
 
 	// Use this for initialization
 	void Start () {
+		totalTime = travelTime * 2;
 		this.Invoke ("ReturnToShipPos", travelTime);
+		this.Invoke ("KillMyself", totalTime);
 		brambleStart = GameObject.Find("BrambleShipPlayer(Clone)").transform.position;
 		brambleTarget = GameObject.Find("BrambleShipPlayer(Clone)/HWtarget").transform.position;
 	
@@ -27,6 +30,9 @@ public class BrambleProjectileBehavior : MonoBehaviour {
 	}
 	void ReturnToShipPos(){
 		goingOut = false;
+	}
+	void KillMyself(){
+		Destroy (this.gameObject);
 	}
 }
 	
