@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class BrambleProjectileBehavior : MonoBehaviour {
 
-	public float speed = 1f;
-	public float travelTime = 8f;
-	Vector3 brambleTarget;
-	Vector3 brambleStart;
-	bool goingOut = true;
-	float totalTime;
+	public float speed = 1f; 
+	public float travelTime = 8f; //Amount of time it takes for projectile to hit the farthest point
+	Vector3 brambleTarget; //Farthest point
+	Vector3 brambleStart; //Point projectile was shot from
+	bool goingOut = true; //Is projectile going towards target location
+	float totalTime; //Amount of time it takes for projectile to complete journey
 
 	// Use this for initialization
 	void Start () {
@@ -28,6 +28,7 @@ public class BrambleProjectileBehavior : MonoBehaviour {
 		else
 			transform.position = Vector3.MoveTowards (this.transform.position, brambleStart, speed * Time.deltaTime);
 	}
+	//Destroys the projectile
 	void ReturnToShipPos(){
 		goingOut = false;
 	}
