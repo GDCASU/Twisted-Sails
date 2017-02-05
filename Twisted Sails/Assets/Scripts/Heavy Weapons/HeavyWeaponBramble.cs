@@ -107,7 +107,7 @@ public class HeavyWeaponBramble : HeavyWeapon {
     override protected void ActivateWeapon()
 	{
 		weaponStartingPosition = this.transform.position;
-		weaponVelocity = Vector3.up * 1;
+		//weaponVelocity = Vector3.back * 1;
 
         // ADD YOUR CODE HERE
         //  modify spawn position with weaponStartingPosition
