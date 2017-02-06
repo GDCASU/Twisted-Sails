@@ -25,6 +25,21 @@ using System.Collections;
 // Description: Added the speedStat variable to influence boat movement. When the player chooses
 //              to allocate crew members to speed, the speed stat should be updated by the Crew
 //              Management Script.
+
+// Update:      Edward Borroughs
+// Date: January 27, 2016
+// Description: Added swivel gun functionality as a special case of the normal broadside cannons.
+//              Mouse0 (left click) was added to the list of inputs and is used to fire the 
+//              swivel guns. A bool "fireSwivelGun" was added to the BoatInput struct and the bool 
+//              "fire" was changed to "fireCannon". The array of cannons "cannonScripts" was 
+//              increased in size from 8 to 9. Modified FixedUpdate() to rotate the swivel gun to 
+//              the same angle as the boat camera.
+
+// Update:      Edward Borroughs
+// Date: February 1, 2016
+// Description: Refactored the code. Now BroadsideCannonFireNetworked is in charge of instantiating 
+//              fired cannon balls on the server and this code takes that instance and spawns it on
+//              the other clients. 
 */
 
 public class BoatMovementNetworked : NetworkBehaviour
@@ -41,33 +56,29 @@ public class BoatMovementNetworked : NetworkBehaviour
     public float speedStat = 1.0f; // Crew Management - Speed Crew
 
     //Boat Input
-    public KeyCode forwardKey	= KeyCode.A;
-    public KeyCode backwardsKey = KeyCode.S;
-    public KeyCode leftKey		= KeyCode.A;
-    public KeyCode rightKey		= KeyCode.D;
-	public KeyCode fireKey		= KeyCode.Space;
-	private struct BoatInput
+    public KeyCode forwardKey	    = KeyCode.W;
+    public KeyCode backwardsKey     = KeyCode.S;
+    public KeyCode leftKey		    = KeyCode.A;
+    public KeyCode rightKey		    = KeyCode.D;
+	public KeyCode cannonFireKey	= KeyCode.Space;
+    public KeyCode swivelGunFireKey = KeyCode.Mouse0;
+    private struct BoatInput
 	{
-		public bool forward, backwards, left, right, fire;
+		public bool forward, backwards, left, right, fireCannon, fireSwivelGun;
 	}
 	private BoatInput KeysDown;
 
-	//Boat State (Position, Velocity, Quaternion rotation, Angular velocity)
-	private struct BoatState
-	{
-		public float posX, posY, posZ;
-		public float velX, velY, velZ;
-		public float quatW, quatX, quatY, quatZ;
-		public float angX, angY, angZ;
-	}
-	private BoatState MyState;
-
-	//List of cannons - Assume EIGHT cannons
+	//List of cannons - Assume NINE cannons (8 broadside cannons + 1 swivel gun)
 	public GameObject cannonBall;
 	private BroadsideCannonFireNetworked[] cannonScripts 
-		= new BroadsideCannonFireNetworked[8];
+		= new BroadsideCannonFireNetworked[9];
+    private SwivelGun swivelGunScript;
 	//Allocate space for Position, and Velocity for firing cannonballs
 	private static Vector3 cannonPosition, cannonBallVelocity;
+
+    //Boat cameras
+    private BoatCameraNetworked boatCam;
+    private OrbitalCamera orbCam;
 
     // Use this for initialization
     private void Start()
@@ -78,14 +89,15 @@ public class BoatMovementNetworked : NetworkBehaviour
 		boat = this.GetComponent<Rigidbody>();
 		
 		//Make orbital and boat camera follow boat
-		BoatCameraNetworked boatCam = Camera.main.GetComponent<BoatCameraNetworked>();
-        OrbitalCamera orbCam = Camera.main.GetComponent<OrbitalCamera>();
+		boatCam = Camera.main.GetComponent<BoatCameraNetworked>();
+        orbCam = Camera.main.GetComponent<OrbitalCamera>();
         orbCam.target = this.gameObject;
         Camera.main.GetComponent<OrbitalCamera>().enabled = false;
         boatCam.boatToFollow = this.gameObject;
 
-		//Get cannon scripts
-		cannonScripts = this.GetComponentsInChildren<BroadsideCannonFireNetworked>();
+        //Get cannon scripts from all cannons
+        cannonScripts = this.GetComponentsInChildren<BroadsideCannonFireNetworked>();
+        swivelGunScript = this.GetComponentInChildren<SwivelGun>();
     }
 
 	//Get input for player
@@ -93,26 +105,36 @@ public class BoatMovementNetworked : NetworkBehaviour
 	{
 		if (isLocalPlayer)
 		{
-			KeysDown.forward	= Input.GetKey(forwardKey);
-			KeysDown.backwards	= Input.GetKey(backwardsKey);
-			KeysDown.left		= Input.GetKey(leftKey);
-			KeysDown.right		= Input.GetKey(rightKey);
-			KeysDown.fire		= Input.GetKey(fireKey);
+			KeysDown.forward	    = Input.GetKey(forwardKey);
+			KeysDown.backwards	    = Input.GetKey(backwardsKey);
+			KeysDown.left		    = Input.GetKey(leftKey);
+			KeysDown.right		    = Input.GetKey(rightKey);
+			KeysDown.fireCannon	    = Input.GetKey(cannonFireKey);
+            KeysDown.fireSwivelGun  = Input.GetKey(swivelGunFireKey);
 
-			if (KeysDown.fire)
+            if (KeysDown.fireSwivelGun)
+            {
+                foreach (BroadsideCannonFireNetworked cScript in cannonScripts)
+                {
+                    if (cScript.gameObject.tag == "SwivelGun" && cScript.CanFire())
+                    {
+                        //(Scale is static to CannonBallNetworked script)
+                        //Pass information to server and spawn cannonball on all cients
+                        CmdFire(cScript.createCannonBall(cannonBall, this.GetComponent<NetworkIdentity>().netId));
+                    }
+                }
+            }
+
+            if (KeysDown.fireCannon)
 			{
 				foreach (BroadsideCannonFireNetworked cScript in cannonScripts)
 				{
-					if (cScript.CanFire())
+					if (cScript.gameObject.tag != "SwivelGun" && cScript.CanFire())
 					{
-						cScript.ResetFireTimer();
-						//Get spawn Position, Velocity of projectile 
 						//(Scale is static to CannonBallNetworked script)
-						cannonPosition = cScript.transform.position;
-						cannonBallVelocity = cScript.GetCannonBallVelocity();
-						//Pass information to server and spawn cannonball on all cients
-						CmdFire(cannonPosition, cannonBallVelocity, this.GetComponent<NetworkIdentity>().netId);
-					}
+                        //Pass information to server and spawn cannonball on all cients
+                        CmdFire(cScript.createCannonBall(cannonBall, this.GetComponent<NetworkIdentity>().netId));
+                    }
 				}
 			}
 		}
@@ -159,26 +181,16 @@ public class BoatMovementNetworked : NetworkBehaviour
 			boat.AddForceAtPosition(forceDirection * acceleration, transform.position + transform.forward * boatPropulsionPointOffset, ForceMode.Acceleration);
 		}
 
+        //Asks the boat's attached swivel gun (if it exists) to update its position based on the rotation of the boat's camera
+        if(swivelGunScript != null)
+            swivelGunScript.updateRotation(boatCam.transform);
 	}
 
-	//Called by client, runs on server.
-	//Spawns cannonball on server, then on all clients.
-	[Command]
-	private void CmdFire(Vector3 spawnPosition, Vector3 spawnVelocity, NetworkInstanceId shooterID)
-	{ 
-		//Spawn object on server
-		GameObject _cannonBall = GameObject.Instantiate (this.cannonBall);
-		
-		// Set position, velocity
-		_cannonBall.transform.position = spawnPosition;
-		_cannonBall.GetComponent<Rigidbody>().velocity = spawnVelocity;
-		
-		//Ignore collision between cannonball and ship that shot it
-		Physics.IgnoreCollision(_cannonBall.GetComponent<Collider>(), NetworkServer.FindLocalObject(shooterID).GetComponent<Collider>());
-
-        _cannonBall.GetComponent<CannonBallNetworked>().owner = shooterID;
-
-		//Spawn the object across all clients
-		NetworkServer.Spawn(_cannonBall);
-	}
+    //Called by client, runs on server.
+    //Spawns an existing cannonball that is on the server on all clients.
+    [Command]
+    private void CmdFire(GameObject cannonBall)
+    {
+        NetworkServer.Spawn(cannonBall);
+    }
 }

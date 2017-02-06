@@ -1,0 +1,198 @@
+fileFormatVersion: 2
+guid: 84753a3ea6960054dbff6049b8fe6b86
+timeCreated: 1486030435
+licenseType: Free
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: crystal1
+    100002: crystal2
+    100004: crystal3
+    100006: crystal4
+    100008: crystal5
+    100010: crystalMain
+    100012: HigherArch
+    100014: InnerRings
+    100016: Leaf
+    100018: Leaf.001
+    100020: Leaf.002
+    100022: Leaf.003
+    100024: Leaf.004
+    100026: Leaf.005
+    100028: Leaf.006
+    100030: Leaf.007
+    100032: Leaf.008
+    100034: Leaf.009
+    100036: Leaf.010
+    100038: Leaf.011
+    100040: Leaf.012
+    100042: Leaf.013
+    100044: LowerArch
+    100046: Pillar
+    100048: //RootNode
+    100050: Spire3
+    400000: crystal1
+    400002: crystal2
+    400004: crystal3
+    400006: crystal4
+    400008: crystal5
+    400010: crystalMain
+    400012: HigherArch
+    400014: InnerRings
+    400016: Leaf
+    400018: Leaf.001
+    400020: Leaf.002
+    400022: Leaf.003
+    400024: Leaf.004
+    400026: Leaf.005
+    400028: Leaf.006
+    400030: Leaf.007
+    400032: Leaf.008
+    400034: Leaf.009
+    400036: Leaf.010
+    400038: Leaf.011
+    400040: Leaf.012
+    400042: Leaf.013
+    400044: LowerArch
+    400046: Pillar
+    400048: //RootNode
+    400050: Spire3
+    2300000: crystal1
+    2300002: crystal2
+    2300004: crystal3
+    2300006: crystal4
+    2300008: crystal5
+    2300010: crystalMain
+    2300012: HigherArch
+    2300014: InnerRings
+    2300016: Leaf
+    2300018: Leaf.001
+    2300020: Leaf.002
+    2300022: Leaf.003
+    2300024: Leaf.004
+    2300026: Leaf.005
+    2300028: Leaf.006
+    2300030: Leaf.007
+    2300032: Leaf.008
+    2300034: Leaf.009
+    2300036: Leaf.010
+    2300038: Leaf.011
+    2300040: Leaf.012
+    2300042: Leaf.013
+    2300044: LowerArch
+    2300046: Pillar
+    2300048: Spire3
+    3300000: crystal1
+    3300002: crystal2
+    3300004: crystal3
+    3300006: crystal4
+    3300008: crystal5
+    3300010: crystalMain
+    3300012: HigherArch
+    3300014: InnerRings
+    3300016: Leaf
+    3300018: Leaf.001
+    3300020: Leaf.002
+    3300022: Leaf.003
+    3300024: Leaf.004
+    3300026: Leaf.005
+    3300028: Leaf.006
+    3300030: Leaf.007
+    3300032: Leaf.008
+    3300034: Leaf.009
+    3300036: Leaf.010
+    3300038: Leaf.011
+    3300040: Leaf.012
+    3300042: Leaf.013
+    3300044: LowerArch
+    3300046: Pillar
+    3300048: Spire3
+    4300000: crystal3
+    4300002: crystal4
+    4300004: crystal5
+    4300006: crystal1
+    4300008: crystal2
+    4300010: crystalMain
+    4300012: Pillar
+    4300014: Spire3
+    4300016: Leaf.013
+    4300018: Leaf.012
+    4300020: Leaf.011
+    4300022: Leaf.010
+    4300024: Leaf.009
+    4300026: HigherArch
+    4300028: Leaf.008
+    4300030: Leaf.007
+    4300032: Leaf.006
+    4300034: Leaf.005
+    4300036: Leaf.004
+    4300038: Leaf.003
+    4300040: Leaf.002
+    4300042: Leaf.001
+    4300044: Leaf
+    4300046: InnerRings
+    4300048: LowerArch
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

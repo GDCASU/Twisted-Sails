@@ -18,9 +18,11 @@
 */
 
 using UnityEngine;
+using UnityEngine.Networking;
 using System.Collections;
 
-public class BroadsideCannonFireNetworked : MonoBehaviour {
+public class BroadsideCannonFireNetworked : MonoBehaviour
+{
 	
 	private float reloadTime = 0f;
 	public float fireDelay = 1f;
@@ -60,4 +62,27 @@ public class BroadsideCannonFireNetworked : MonoBehaviour {
 		totalVelocity = inheritedVelocity + this.transform.up * this.projectileSpeed; 
 		return totalVelocity;
 	}
+
+    //Instantiates a cannonball with a velocity on the server and returns a reference to it
+    public GameObject createCannonBall(GameObject cannonBall, NetworkInstanceId shooterID)
+    {
+        //Reset time to fire cannon
+        reloadTime = 0;
+
+        //Spawn object on server
+        GameObject _cannonBall = GameObject.Instantiate(cannonBall);
+
+        // Set position, velocity
+        _cannonBall.transform.position = this.gameObject.transform.position;
+        inheritedVelocity = this.transform.root.GetComponent<Rigidbody>().velocity;
+        totalVelocity = inheritedVelocity + this.transform.up * this.projectileSpeed;
+        _cannonBall.GetComponent<Rigidbody>().velocity = totalVelocity;
+
+        //Ignore collision between cannonball and ship that shot it
+        Physics.IgnoreCollision(_cannonBall.GetComponent<Collider>(), NetworkServer.FindLocalObject(shooterID).GetComponent<Collider>());
+
+        _cannonBall.GetComponent<CannonBallNetworked>().owner = shooterID;
+
+        return _cannonBall;
+    }
 }
