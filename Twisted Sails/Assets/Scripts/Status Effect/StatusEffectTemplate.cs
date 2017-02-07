@@ -1,26 +1,31 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-//  Programmer:     Kyle Chapman
-//  Date:           2-06-17
-//  Description:    
-//		An abstract parent class for status effect classes to derive from for use in the status effects system
-//		managed by an instance of the StatusEffectsManager class on a particular boat.
+/**
+	[Template Class Header]
+	Template Makers:	Kyle Chapman
+	Date:				2/07/2017
 
-public abstract class StatusEffect
+    Duplicate this script and rename the duplicate.
+	Then, place a StatusEffectManager on each boat needing to use the status effect.
+	Then, during gameplay, create an instance of this class and tell the StatusEffectManager
+	about the instance. The manager will control the effect behavior.
+
+	If need help using this template, contact the programmer's above.
+**/
+
+public class StatusEffectTemplate : StatusEffect
 {
-	protected float remainingDuration;
-	protected bool isFinished;
-
 	/// <summary>
 	/// Get the starting duration in seconds that the effect will last on the boat.
 	/// By default the duration is -1. Negative values cause the effect to never expire.
 	/// Should be overridden to any nonzero value.
 	/// </summary>
 	/// <returns>The starting duration in seconds that the effect will last on the boat.</returns>
-	public virtual float GetStartingDuration()
+	override public float GetStartingDuration()
 	{
-		return -1f;
+		// ADD YOUR CODE HERE
+		return base.GetStartingDuration();
 	}
 
 	/// <summary>
@@ -28,9 +33,12 @@ public abstract class StatusEffect
 	/// By default, returns true if the remaining duration went from 0 or above to less than zero.
 	/// </summary>
 	/// <returns>Whether the status effect is expired or not.</returns>
-	public virtual bool GetIsFinished()
+	override public bool GetIsFinished()
 	{
-		return isFinished;
+		// ADD YOUR CODE HERE
+		
+		// REMOVE THIS LINE TO REPLACE DEFAULT BEHAVIOR
+		return base.GetIsFinished();
 	}
 
 	/// <summary>
@@ -38,9 +46,12 @@ public abstract class StatusEffect
 	/// The default value is 1, and it should be overridden to any value 1 or greater.
 	/// </summary>
 	/// <returns>The max number of stacks of this type that are allowed to exist at one time on a boat.</returns>
-	public virtual int GetMaxStacks()
+	override public int GetMaxStacks()
 	{
-		return 1;
+		// ADD YOUR CODE HERE
+
+		// REMOVE THIS LINE TO REPLACE DEFAULT BEHAVIOR
+		return base.GetMaxStacks();
 	}
 
 	/// <summary>
@@ -50,39 +61,39 @@ public abstract class StatusEffect
 	/// Returns false by default.
 	/// </summary>
 	/// <returns></returns>
-	public virtual bool DoesOverrideExisting()
+	override public bool DoesOverrideExisting()
 	{
-		return false;
+		// ADD YOUR CODE HERE
+
+		// REMOVE THIS LINE TO REPLACE DEFAULT BEHAVIOR
+		return base.DoesOverrideExisting();
 	}
 
 	/// <summary>
 	/// Tells the status effect to begin its effect on the boat.
 	/// This is where the code that begins the effect is put, with reversing code on the end effect method.
-	/// Also by default starts the duration timer.
+	/// By default, starts the duration timer.
 	/// </summary>
 	/// <param name="playerBoat">The instance of the boat onto which this effect is being applied.</param>
-	public virtual void StartEffect(GameObject playerBoat)
+	override public void StartEffect(GameObject playerBoat)
 	{
-		remainingDuration = GetStartingDuration();
-		isFinished = false;
-    }
+		// REMOVE THIS LINE TO REPLACE DEFAULT BEHAVIOR
+		base.StartEffect(playerBoat);
+
+		// ADD YOUR CODE HERE
+	}
 
 	/// <summary>
 	/// Updates the effect.
 	/// By default, updates the duration timer and determins if the effect has expired.
 	/// </summary>
 	/// <param name="playerBoat">The instance of the boat onto which this effect is being applied.</param>
-	public virtual void UpdateEffect(GameObject playerBoat)
+	override public void UpdateEffect(GameObject playerBoat)
 	{
-		if (remainingDuration >= 0)
-		{
-			remainingDuration -= Time.deltaTime;
-			if (remainingDuration <= 0)
-			{
-				isFinished = true;
-			}
-		}
-		
+		// REMOVE THIS LINE TO REPLACE DEFAULT BEHAVIOR
+		base.UpdateEffect(playerBoat);
+
+		// ADD YOUR CODE HERE
 	}
 
 	/// <summary>
@@ -91,8 +102,11 @@ public abstract class StatusEffect
 	/// By default, does nothing.
 	/// </summary>
 	/// <param name="playerBoat">The instance of the boat onto which this effect is being applied.</param>
-	public virtual void EndEffect(GameObject playerBoat)
+	override public void EndEffect(GameObject playerBoat)
 	{
-		
+		// REMOVE THIS LINE TO REPLACE DEFAULT BEHAVIOR
+		base.EndEffect(playerBoat);
+
+		// ADD YOUR CODE HERE
 	}
 }
