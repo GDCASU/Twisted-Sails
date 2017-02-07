@@ -135,6 +135,16 @@ Prefab:
       propertyPath: brambleTarget
       value: 
       objectReference: {fileID: 1472304091}
+    - target: {fileID: 135185241832317088, guid: 861ddc325093cfc489fd016c61d671f6,
+        type: 2}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 135185241832317088, guid: 861ddc325093cfc489fd016c61d671f6,
+        type: 2}
+      propertyPath: m_Radius
+      value: 0.6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 861ddc325093cfc489fd016c61d671f6, type: 2}
   m_IsPrefabParent: 0
@@ -239,6 +249,11 @@ Prefab:
     - target: {fileID: 4000012373711734, guid: a35872d6be62b8c4ebd864b495a4048a, type: 2}
       propertyPath: m_RootOrder
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 136000013548959800, guid: a35872d6be62b8c4ebd864b495a4048a,
+        type: 2}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: a35872d6be62b8c4ebd864b495a4048a, type: 2}

@@ -35,5 +35,16 @@ public class BrambleProjectileBehavior : MonoBehaviour {
 	void KillMyself(){
 		Destroy (this.gameObject);
 	}
+
+	//Destroys the projectile on collision with a player
+	void OnCollisionEnter(Collision col) {
+		Debug.Log ("Collide");
+		if (col.gameObject.layer == 5) 
+			{
+				Debug.Log ("Correct Layer Found");
+				Destroy (this);
+			}
+
+	}
 }
 	
