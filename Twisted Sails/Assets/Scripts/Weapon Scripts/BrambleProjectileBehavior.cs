@@ -13,6 +13,7 @@ public class BrambleProjectileBehavior : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		//Debug.Log ("Print Test");
 		totalTime = travelTime * 2;
 		this.Invoke ("ReturnToShipPos", travelTime);
 		this.Invoke ("KillMyself", totalTime);
@@ -37,14 +38,13 @@ public class BrambleProjectileBehavior : MonoBehaviour {
 	}
 
 	//Destroys the projectile on collision with a player
-	void OnCollisionEnter(Collision col) {
-		Debug.Log ("Collide");
-		if (col.gameObject.layer == 5) 
-			{
-				Debug.Log ("Correct Layer Found");
-				Destroy (this);
-			}
+	void OnTriggerEnter (Collider other) {
+		Debug.Log ("Bramble Projectile: Collide");
+		//Debug Code - Debug.Log(other.gameObject.layer);
 
+		if (other.gameObject.layer == 8) 
+			Debug.Log ("Bramble Projectile: I Hit a player (Layer8)");
+				// Debug Code - Destroy (this.gameObject);
 	}
 }
 	
