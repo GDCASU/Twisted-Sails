@@ -16,19 +16,24 @@ using System.Collections;
 	If need help using this template, contact the programmer's above.
 **/
 
-public class HeavyWeaponTemplate : HeavyWeapon {
+public class HeavyWeaponSunShip : HeavyWeapon {
 
-	// Use this for initialization
-	new void Start () {
+    Vector3 target;
+    Vector3 start;
+    public float damage= 10f;
+    public float projectileSpeed = 1f;
+
+    // Use this for initialization
+    new void Start () {
         base.Start();
-        // ADD YOUR CODE HERE
+        
 	}
 	
 	// Update is called once per frame
 	new void Update()
     {
         base.Update();
-        // ADD YOUR CODE HERE
+        /// checks position, if at max range explodes
     }
 
     #region CollisionFunctions
@@ -40,7 +45,7 @@ public class HeavyWeaponTemplate : HeavyWeapon {
     new void OnCollisionEnter(Collision other)
     {
         base.OnCollisionEnter(other);
-        // ADD YOUR CODE HERE
+        /// object explodes
     }
 
     /// <summary>
@@ -106,7 +111,7 @@ public class HeavyWeaponTemplate : HeavyWeapon {
     /// </summary>
     override protected void ActivateWeapon()
 	{
-        // ADD YOUR CODE HERE
+        /// calculate end position from max range and position at activation
         //  modify spawn position with weaponStartingPosition
         //  modify velocity with weaponVelocity
         base.ActivateWeapon();
