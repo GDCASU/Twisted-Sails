@@ -4,12 +4,13 @@ using UnityEngine;
 
 public class BrambleProjectileBehavior : MonoBehaviour {
 
-	public float speed = 1f; 
+	float speed = 1f; 
 	public float travelTime = 8f; //Amount of time it takes for projectile to hit the farthest point
 	Vector3 brambleTarget; //Farthest point
 	Vector3 brambleStart; //Point projectile was shot from
 	bool goingOut = true; //Is projectile going towards target location
 	float totalTime; //Amount of time it takes for projectile to complete journey
+	float distanceToTarget;
 
 	// Use this for initialization
 	void Start () {
@@ -19,6 +20,9 @@ public class BrambleProjectileBehavior : MonoBehaviour {
 		this.Invoke ("KillMyself", totalTime);
 		brambleStart = GameObject.Find("BrambleShipPlayer(Clone)").transform.position;
 		brambleTarget = GameObject.Find("BrambleShipPlayer(Clone)/HWtarget").transform.position;
+		distanceToTarget = Mathf.Abs(Vector3.Distance(brambleStart, brambleTarget));
+		speed = distanceToTarget / travelTime;
+		//Debug.Log(distanceToTarget);
 	
 	}
 
