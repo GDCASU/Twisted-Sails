@@ -30,6 +30,7 @@ public class StatusEffectsManager : MonoBehaviour
 			activeEffects[i].UpdateEffect(playerBoat);
 			if (activeEffects[i].GetIsFinished())
 			{
+				Debug.Log("Ending an effect.");
 				activeEffects[i].EndEffect(playerBoat);
 				activeEffects.RemoveAt(i);
 				i--;
@@ -51,37 +52,22 @@ public class StatusEffectsManager : MonoBehaviour
 		//or if the effect has less than its maximum allowed amount of stacks in the list
 		//or if the new effect always overrides existing effects no matter what
 		//add the effect to the list
-		if (!IsEffectTypeInList<StatusEffect>(out currentStacksActive) || currentStacksActive < effect.GetMaxStacks() || effect.DoesOverrideExisting())
+		if (!IsSameTypeEffectInList(effect, out currentStacksActive) || currentStacksActive < effect.GetMaxStacks() || effect.DoesOverrideExisting())
 		{
 			if (effect.DoesOverrideExisting())
 			{
-                RemoveSameTypeEffectsFromList(effect);
-            }
+				Debug.Log("Overrideing existing status effects of type " + effect.GetType());
+				RemoveSameTypeEffectsFromList(effect);
+			}
+			Debug.Log("Adding new status effect of type " + effect.GetType());
 			effect.StartEffect(playerBoat);
 			activeEffects.Add(effect);
-        }
-    }
-
-	/// <summary>
-	/// Determines if an effect of the given genericized type is in the list.
-	/// If it is, it returns true and assigns the out parameter amount to the
-	/// number of effects from of that type that are in the list.
-	/// </summary>
-	/// <typeparam name="T">The type of the status effect subclass to look for the in the list.</typeparam>
-	/// <param name="amount">The out parameter to assign the number of objects found of the desired type.</param>
-	/// <returns>True if at least one matching object was found, false otherwise.</returns>
-	public bool IsEffectTypeInList<T>(out int amount) where T : StatusEffect
-	{
-		amount = 0;
-        foreach (StatusEffect e in activeEffects)
-		{
-			if (e is T)
-			{
-				amount++;
-            }
 		}
-		return amount > 0;
-	}
+		else
+		{
+			Debug.Log("Could not add new status effect of type " + effect.GetType() + " since too many stacks already active");
+		}
+    }
 
 	/// <summary>
 	/// Determines if an effect that has the same type as the given object is in the list.
@@ -106,22 +92,6 @@ public class StatusEffectsManager : MonoBehaviour
 	}
 
 	/// <summary>
-	/// Removes all status effect objects from the list that match the given genericed type
-	/// which is a subclass type of Status Effect.
-	/// </summary>
-	/// <typeparam name="T">The type of the status effect subclass whose objects are to be removed from the list.</typeparam>
-	public void RemoveEffectOfTypeFromList<T>() where T : StatusEffect
-	{
-		for (int i = 0; i < activeEffects.Count;i++)
-		{
-			if (activeEffects[i] is T)
-			{
-				activeEffects.RemoveAt(i);
-			}
-		}
-	}
-
-	/// <summary>
 	/// Removes all status effect objects from the list whose type is the
 	/// same as the type of the given status effect object.
 	/// </summary>
@@ -129,10 +99,12 @@ public class StatusEffectsManager : MonoBehaviour
 	public void RemoveSameTypeEffectsFromList(StatusEffect effect)
 	{
 		Type effectsType = effect.GetType();
+		Debug.Log("Removing type " + effectsType + " from list while this many effects in list: " + activeEffects.Count);
 		for (int i = 0; i < activeEffects.Count; i++)
 		{
-			if (activeEffects[i].GetType() == effectsType.GetType())
+			if (activeEffects[i].GetType() == effectsType)
 			{
+				Debug.Log("Removing item from list of type " + activeEffects[i].GetType());
 				activeEffects[i].EndEffect(playerBoat);
 				activeEffects.RemoveAt(i);
 				i--;
