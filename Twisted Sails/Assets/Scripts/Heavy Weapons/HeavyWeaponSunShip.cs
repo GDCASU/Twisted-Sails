@@ -112,7 +112,8 @@ public class HeavyWeaponSunShip : HeavyWeapon {
     override protected void ActivateWeapon()
 	{
         /// calculate end position from max range and position at activation
-        //  modify spawn position with weaponStartingPosition
+		weaponStartingPosition = this.transform.position;
+		weaponVelocity = transform.forward * projectileSpeed;
         //  modify velocity with weaponVelocity
         base.ActivateWeapon();
 	}
