@@ -2127,7 +2127,7 @@ MonoBehaviour:
   collectPacksWhileAtMaxAmmo: 1
   addAmmoKey: 117
   damage: 10
-  projectileSpeed: 5
+  projectileSpeed: 7
 --- !u!122 &122000012998973456
 Halo:
   m_ObjectHideFlags: 1
