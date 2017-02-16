@@ -4,10 +4,12 @@ using UnityEngine;
 
 public class SunshipHeavyProjectileBeahvior : MonoBehaviour {
 
-	Vector3 startingLocation;
-	Vector3 currentLocation;
-	float distanceFromOrigin;
-	public float maxDistance =1f;
+	Vector3 startingLocation; //Location fired from
+	Vector3 currentLocation; //Location current at
+	float distanceFromOrigin; //Distance from starting to current (Always take ABS)
+	public float maxDistance =1f; //Maximum distance until projectile explodes
+	public float explosionCircum = 1f; //Distance check from explosion point
+	GameObject[] explosionTargets; //List of players currently in the level, checks them later to be in the area of the explosion
 
 
 	// Use this for initialization
@@ -19,15 +21,35 @@ public class SunshipHeavyProjectileBeahvior : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		currentLocation = this.transform.position;
+		//Updating the current location every frame
+
 		//Debug.Log ("current location is" + currentLocation);
+
 		distanceFromOrigin = Mathf.Abs(Vector3.Distance(currentLocation, startingLocation));
-		Debug.Log (distanceFromOrigin);
+		//Calculating the distance from when fired to current location
+
+		//Debug.Log (distanceFromOrigin);
+
+
+		// Checks for the position to be at the terminal point, once reached it "explodes" checking for any players within the explosionCircum variable distance
 		if (distanceFromOrigin >= maxDistance) {
+			explosionTargets = GameObject.FindGameObjectsWithTag ("Player");
+
+			foreach (GameObject target in explosionTargets) 
+			{
+				if (Vector3.Distance(this.transform.position, target.transform.position) < explosionCircum) {
+					Debug.Log ("Sunship Projectile - TERMINAL EXPLOSION: Hit" + target);
+					//Destroy(target); 
+				
+				}
+			}
+
 			Debug.Log ("I have hit my terminal location, please blow me up");
 			Destroy (this.gameObject); 
 		}
 
 		
 	}
+		
 		
 }
