@@ -172,6 +172,12 @@ public class Health : NetworkBehaviour
     //Whenever ship collides with an interactable object
     void OnCollisionEnter(Collision collision)
     {
+		//only evaluate collisions client side
+		if (isServer)
+		{
+			return;
+		}
+
 		InteractiveObject interaction = collision.transform.GetComponent<InteractiveObject>();
 
 		if (interaction == null)

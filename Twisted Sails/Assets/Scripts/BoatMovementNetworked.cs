@@ -200,6 +200,6 @@ public class BoatMovementNetworked : NetworkBehaviour
 
 		firedBall.GetComponent<CannonBallNetworked>().owner = GetComponent<NetworkIdentity>().netId;
 
-		NetworkServer.Spawn(cannonBall);
+		NetworkServer.Spawn(firedBall);
     }
 }
