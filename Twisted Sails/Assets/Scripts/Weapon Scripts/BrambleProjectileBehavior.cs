@@ -48,7 +48,7 @@ public class BrambleProjectileBehavior : MonoBehaviour {
 		Debug.Log ("Bramble Projectile: Collide");
 		//Debug Code - Debug.Log(other.gameObject.layer);
 
-		if (other.gameObject.layer == 8)
+		if (other.gameObject.tag == "Player")
 			Debug.Log ("Bramble Projectile: I Hit a player (Layer8)");
 		else
 			goingOut = false;
