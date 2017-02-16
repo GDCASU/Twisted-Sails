@@ -78,10 +78,7 @@ public class BroadsideCannonFireNetworked : MonoBehaviour
         totalVelocity = inheritedVelocity + this.transform.up * this.projectileSpeed;
         _cannonBall.GetComponent<Rigidbody>().velocity = totalVelocity;
 
-        //Ignore collision between cannonball and ship that shot it
-        Physics.IgnoreCollision(_cannonBall.GetComponent<Collider>(), NetworkServer.FindLocalObject(shooterID).GetComponent<Collider>());
-
-        _cannonBall.GetComponent<CannonBallNetworked>().owner = shooterID;
+		_cannonBall.GetComponent<CannonBallNetworked>().owner = shooterID;
 
         return _cannonBall;
     }

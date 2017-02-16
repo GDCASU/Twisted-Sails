@@ -53,6 +53,10 @@ using UnityEngine.Networking;
 // Description: Adapted to use new Team system
 //              Added code to trigger appropriate Player events
 
+// Developer:   Kyle Chapman
+// Date:        2/14/2017
+// Description: Refactored for interaction with the InteractiveObjects system.
+
 public class Health : NetworkBehaviour
 {
     [Header("Health")]
@@ -60,7 +64,6 @@ public class Health : NetworkBehaviour
     public float health;
     public Text healthText;
     public Slider healthSlider;
-    public float healthPackAmount = 25.0f;
 
     [Header("Sinking")]
     public float sinkSpeed;
@@ -77,7 +80,7 @@ public class Health : NetworkBehaviour
     [Header("Misc")]
     public KeyCode hurtSelfButton;
     public GameObject activeCamera;
-    public GameObject explosion;
+    
     public Vector3 spawnPoint; // NK 10/20 added original spawnpoint
     public float defenseStat; // Crew Management - Defense Crew
 
@@ -166,41 +169,45 @@ public class Health : NetworkBehaviour
         }
     }
 
-    //Whenever ship collides with something else
-    void OnCollisionEnter(Collision c)
+    //Whenever ship collides with an interactable object
+    void OnCollisionEnter(Collision collision)
     {
-        //Cannonball collision
-        if (c.transform.gameObject.tag.Equals("Cannonball") && c.gameObject.GetComponent<CannonBallNetworked>().owner != GetComponent<NetworkIdentity>().netId)
-        {
-            NetworkInstanceId cannonballOwner = c.gameObject.GetComponent<CannonBallNetworked>().owner;
-            short cannonballTeam = ClientScene.FindLocalObject(cannonballOwner).GetComponent<Health>().team;
-            if (cannonballTeam != team)
-            {
-                int damage = -35;
-                Player.SendPlayerDamaged(MultiplayerManager.FindPlayer(GetComponent<NetworkIdentity>().netId), MultiplayerManager.FindPlayer(cannonballOwner), ref damage);
-                if (isLocalPlayer)
-                {
-                    CmdChangeHealth(damage, c.transform.gameObject.GetComponent<CannonBallNetworked>().owner);
-                }
-                GameObject explode = (GameObject)Instantiate(explosion, c.contacts[0].point, Quaternion.identity);
-                explode.GetComponent<ParticleSystem>().Emit(100);
-            }
-            if (isServer)
-            {
-                Destroy(c.gameObject);
-            }
-        }
+		InteractiveObject interaction = collision.transform.GetComponent<InteractiveObject>();
+
+		if (interaction == null)
+			return;
+
+		//allow the interaction only if the object isn't owned by player it is touching
+        if (interaction.owner != GetComponent<NetworkIdentity>().netId)
+		{
+			GameObject otherPlayerBoat = ClientScene.FindLocalObject(interaction.owner);
+
+			StatusEffectsManager ourEffectsManager = GetComponent<StatusEffectsManager>();
+
+            int teamOfObject = otherPlayerBoat == null ? -1 : otherPlayerBoat.GetComponent<Health>().team;
+
+			//allow the interaction only if the object touching us is owned by an enemy and the object is allowed to interact with enemies
+			//or if the object touching us is owned by a teammate and the object is allowed to interact with teammates
+			//or if the interaction object isn't owned by any particular player
+			if (teamOfObject == -1 || (teamOfObject == team && interaction.DoesEffectTeammates()) || (teamOfObject != team && interaction.DoesEffectEnemies()))
+			{
+				//tell the interactive object about the interaction
+				//giving them this health, the boat this health is attached to, this boats status effect manager, and the collision that caused the interaction
+				interaction.OnInteractWithPlayer(this, gameObject, ourEffectsManager, collision);
+
+				//if we are the server, destroy the interactive object after the interaction
+				//if it says it is destroy after interactions
+				if (interaction.DoesDestroyInInteract())
+				{
+					Destroy(collision.gameObject);
+				}
+			}
+		}
 
         //Health Pickup collision
-        if (c.transform.gameObject.tag.Equals("HealthPickUp"))
+        if (collision.transform.gameObject.tag.Equals("HealthPickUp"))
         {
-            Player.SendPlayerPickup(MultiplayerManager.FindPlayer(GetComponent<NetworkIdentity>().netId), true);
-            if (isLocalPlayer)
-            {
-                CmdChangeHealth(healthPackAmount, NetworkInstanceId.Invalid);
-            }
-            if (isServer)
-                Destroy(c.gameObject);
+            
         }
     }
 

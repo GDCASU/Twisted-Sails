@@ -1,44 +1,54 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.Networking;
 
-public class HealthPack : MonoBehaviour {
+// Developer:   Kyle Chapman
+// Date:        2/14/2017
+// Description: Completely refactored for use with the InteractiveObject system. On interaction with a player, gives them health and notifies the events system of being picked up.
 
-	public bool healing = true;
-	public static float healAmount = 50f;
-	Rigidbody healthBody;
-	MeshRenderer packMesh;
-	CapsuleCollider packCollider;
-	// Use this for initialization
-	void Start () {
-		//healthBody = this.gameObject.GetComponent<Rigidbody> ();
-		//this.gameObject.GetComponent<MeshRenderer> ().enabled = false;
-		//this.gameObject.GetComponent<CapsuleCollider> ().enabled = false;
+public class HealthPack : InteractiveObject
+{
+	public float healAmount = 50f;
+	public float packRespawnTime = 10f;
+	public MeshRenderer packMesh;
+	public Collider packCollider;
+
+	private void Start()
+	{
+		if (packMesh == null)
+		{
+			packMesh = GetComponent<MeshRenderer>();
+			packCollider = GetComponent<Collider>();
+        }
 	}
 
-	// Update is called once per frame
-	void Update () {
-		if (healing == false) {
-			//Debug.Log ("Healing is false");
-			this.gameObject.GetComponent<MeshRenderer> ().enabled = false;
-			this.gameObject.GetComponent<CapsuleCollider> ().enabled = false;
-			//Debug.Log ("Right before coroutine");
-			healing = true;
-			StartCoroutine( MyCoroutine ());
+	IEnumerator MyCoroutine()
+	{
+		yield return new WaitForSeconds (packRespawnTime);
+		packMesh.enabled = true;
+		packCollider.enabled = true;
+	}
+
+	public override void OnInteractWithPlayer(Health playerHealth, GameObject playerBoat, StatusEffectsManager manager, Collision collision)
+	{
+		//notifies the player events system that the player who interacted with this object picked up a health pack (this object)
+		//also sets isHealthPack to true, since this is a health pack
+		Player.ActivateEventPlayerPickup(MultiplayerManager.FindPlayer(playerBoat.GetComponent<NetworkIdentity>().netId), true);
+
+		//send out the command to change the players health
+		//setting the source of the healthpack to nothing, since no player is responsible
+		if (isServer)
+		{
+			playerHealth.CmdChangeHealth(healAmount, NetworkInstanceId.Invalid);
 		}
-		//healthBody.MovePosition(healthBody.position + this.transform.forward * Time.deltaTime * 4);
+
+		packMesh.enabled = false;
+		packCollider.enabled = false;
+		StartCoroutine(MyCoroutine());
 	}
 
-	IEnumerator MyCoroutine(){
-		//Debug.Log ("Coroutine Started");
-		yield return new WaitForSeconds (3f);
-		this.gameObject.GetComponent<MeshRenderer> ().enabled = true;
-		this.gameObject.GetComponent<CapsuleCollider> ().enabled = true;
+	public override bool DoesDestroyInInteract()
+	{
+		return false;
 	}
-
-	/*void OnTriggerEnter(Collider other) {
-
-		healing = true;
-		blueScript = other.gameObject.GetComponent<BlueEnemy> ();
-		redScript = other.gameObject.GetComponent<RedEnemy> ();
-	}*/
 }
