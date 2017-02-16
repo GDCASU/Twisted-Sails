@@ -39,7 +39,7 @@ public class HealthPack : InteractiveObject
 		//setting the source of the healthpack to nothing, since no player is responsible
 		if (isServer)
 		{
-			playerHealth.CmdChangeHealth(healAmount, NetworkInstanceId.Invalid);
+			playerHealth.ChangeHealth(healAmount, NetworkInstanceId.Invalid);
 		}
 
 		packMesh.enabled = false;

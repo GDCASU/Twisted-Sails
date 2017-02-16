@@ -201,7 +201,7 @@ public class Player
 
     //Player Damaged event - happens when a player takes damage from an attacker
     //Damage can only be changed clientside for now until I get a chance to rewrite damage handling
-    public delegate void PlayerDamagedEvent(Player victim, Player attacker, ref int damage);
+    public delegate void PlayerDamagedEvent(Player victim, Player attacker, ref float damage);
     public static event PlayerDamagedEvent PlayerDamaged = delegate { };
 
     //Player Pickup event - happens when a player gets a pickup
@@ -214,7 +214,7 @@ public class Player
     {
         PlayerKilled(victim, killer);
     }
-    public static void ActivateEventPlayerDamaged(Player victim, Player attacker, ref int damage)
+    public static void ActivateEventPlayerDamaged(Player victim, Player attacker, ref float damage)
     {
         PlayerDamaged(victim, attacker, ref damage);
     }

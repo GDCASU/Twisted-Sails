@@ -71,22 +71,13 @@ public class CannonBallNetworked : InteractiveObject {
 	{
 		int healthChange = -damageDealt;
 
-		//tell the player events system to send out an event about the player being damaged
-		//the victim is the player who we interacted with
-		//the attacker is the owner of this cannonball
-
-		Player.ActivateEventPlayerDamaged(MultiplayerManager.FindPlayer(GetComponent<NetworkIdentity>().netId), MultiplayerManager.FindPlayer(owner), ref healthChange);
-
 		//if this object is on the side of the player who owns this object
 		//send out the command to change the players health
 		//setting the source of the health change to be the owner of this cannonball
-		if (playerHealth.isLocalPlayer)
-		{
-			playerHealth.CmdChangeHealth(healthChange, owner);
-		}
+        playerHealth.ChangeHealth(healthChange, owner);
 
-		//locally instantiates an explosion prefab at the site of the interaction for graphics
-		GameObject explode = (GameObject)Instantiate(explosion, collision.contacts[0].point, Quaternion.identity);
+        //locally instantiates an explosion prefab at the site of the interaction for graphics
+        GameObject explode = (GameObject)Instantiate(explosion, collision.contacts[0].point, Quaternion.identity);
 		explode.GetComponent<ParticleSystem>().Emit(100);
 	}
 

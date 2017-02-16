@@ -164,7 +164,7 @@ public class Health : NetworkBehaviour
         //Hurt self functionality
         if (isLocalPlayer && Input.GetKeyDown(hurtSelfButton))
         {
-            CmdChangeHealth(-5, NetworkInstanceId.Invalid);
+            CmdHurtSelf(-5);
             return;
         }
     }
@@ -172,12 +172,6 @@ public class Health : NetworkBehaviour
     //Whenever ship collides with an interactable object
     void OnCollisionEnter(Collision collision)
     {
-		//only evaluate collisions client side
-		if (isServer)
-		{
-			return;
-		}
-
 		InteractiveObject interaction = collision.transform.GetComponent<InteractiveObject>();
 
 		if (interaction == null)
@@ -239,28 +233,13 @@ public class Health : NetworkBehaviour
     {
         MultiplayerManager.FindPlayer(connectionId).objectId = GetComponent<NetworkIdentity>().netId;
     }
-
-    /// <summary>
-    /// This method should be used for all changes to a ship's health.
-    /// It should only be called on clients (as it is a command).
-    /// Use NetworkInstanceId.Invalid if there is no damage source.
-    /// </summary>
-    /// <param name="amount">Amount to change health by</param>
-    /// <param name="source">ID of the damage/heal source. Can be NetworkInstanceId.Invalid</param>
-    [Command]
-    public void CmdChangeHealth(float amount, NetworkInstanceId source)
-    {
-        if (health == 0 && amount < 0) return; //don't register damage taken after death
-
-        amount *= defenseStat; // Multiplier effect for defense stat
-
-        //By setting this variable in a serverside context, the OnChangeHealth hook is called on all clients
-        health = Mathf.Clamp(health + amount, 0, 100);
-        if (health == 0) //Tell the server about this kill
-            MultiplayerManager.GetInstance().PlayerKill(MultiplayerManager.FindPlayer(GetComponent<NetworkIdentity>().netId), source);
-    }
     #endregion
 
+    [Command]
+    public void CmdHurtSelf(float dmg)
+    {
+        ChangeHealth(dmg, NetworkInstanceId.Invalid);
+    }
     //ClientRpc methods are called on the server to send information to the client
     #region ClientRpcs
     /// <summary>
@@ -315,6 +294,28 @@ public class Health : NetworkBehaviour
 
     #region Other
     /// <summary>
+    /// This method should be used for all changes to a ship's health.
+    /// It should only be called on the server.
+    /// Use NetworkInstanceId.Invalid if there is no damage source.
+    /// </summary>
+    /// <param name="amount">Amount to change health by</param>
+    /// <param name="source">ID of the damage/heal source. Can be NetworkInstanceId.Invalid</param>
+    public void ChangeHealth(float amount, NetworkInstanceId source)
+    {
+        if (health == 0 && amount < 0) return; //don't register damage taken after death
+
+        //Todo: add back in this functionality in the Stat System using an event hook for PlayerDamaged
+        //amount *= defenseStat; // Multiplier effect for defense stat
+
+        Player.ActivateEventPlayerDamaged(MultiplayerManager.FindPlayer(GetComponent<NetworkIdentity>().netId), MultiplayerManager.FindPlayer(source), ref amount);
+        
+        //By setting this variable in a serverside context, the OnChangeHealth hook is called on all clients
+        health = Mathf.Clamp(health + amount, 0, 100);
+        if (health == 0) //Tell the server about this kill
+            MultiplayerManager.GetInstance().PlayerKill(MultiplayerManager.FindPlayer(GetComponent<NetworkIdentity>().netId), source);
+    }
+
+    /// <summary>
     /// Use this method to tell the ship it's dead.
     /// All input is disabled and the ship's owner experiences a little death cinematic.
     /// </summary>
@@ -349,8 +350,8 @@ public class Health : NetworkBehaviour
         {
             activeCamera.GetComponent<BoatCameraNetworked>().enabled = true;
             activeCamera.GetComponent<OrbitalCamera>().enabled = false;
-            CmdChangeHealth(100, NetworkInstanceId.Invalid);
         }
+        ChangeHealth(100, NetworkInstanceId.Invalid);
         GetComponent<BoatMovementNetworked>().enabled = true;
         GetComponent<Buoyancy>().enabled = true;
         GetComponent<Rigidbody>().useGravity = true;
