@@ -11,6 +11,7 @@ public class BrambleProjectileBehavior : MonoBehaviour {
 	bool goingOut = true; //Is projectile going towards target location
 	float totalTime; //Amount of time it takes for projectile to complete journey
 	float distanceToTarget;
+	float newTime;
 
 	// Use this for initialization
 	void Start () {
@@ -41,13 +42,17 @@ public class BrambleProjectileBehavior : MonoBehaviour {
 		Destroy (this.gameObject);
 	}
 
-	//Destroys the projectile on collision with a player
+	//Detects collison with a player
+	//Causes the projectile to go back to position if collide with non-player gameobject
 	void OnTriggerEnter (Collider other) {
 		Debug.Log ("Bramble Projectile: Collide");
 		//Debug Code - Debug.Log(other.gameObject.layer);
 
-		if (other.gameObject.layer == 8) 
+		if (other.gameObject.layer == 8)
 			Debug.Log ("Bramble Projectile: I Hit a player (Layer8)");
+		else
+			goingOut = false;
+			this.Invoke ("KillMyself", Mathf.Abs (Vector3.Distance (brambleStart, brambleTarget)) / (travelTime * speed));
 				// Debug Code - Destroy (this.gameObject);
 	}
 }

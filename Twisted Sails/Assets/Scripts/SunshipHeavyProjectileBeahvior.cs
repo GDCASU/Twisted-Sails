@@ -10,6 +10,7 @@ public class SunshipHeavyProjectileBeahvior : MonoBehaviour {
 	public float maxDistance =1f; //Maximum distance until projectile explodes
 	public float explosionCircum = 1f; //Distance check from explosion point
 	GameObject[] explosionTargets; //List of players currently in the level, checks them later to be in the area of the explosion
+	public GameObject firingPlayer;
 
 
 	// Use this for initialization
@@ -20,6 +21,9 @@ public class SunshipHeavyProjectileBeahvior : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+
+		Debug.Log (firingPlayer);
+
 		currentLocation = this.transform.position;
 		//Updating the current location every frame
 
@@ -37,7 +41,7 @@ public class SunshipHeavyProjectileBeahvior : MonoBehaviour {
 
 			foreach (GameObject target in explosionTargets) 
 			{
-				if (Vector3.Distance(this.transform.position, target.transform.position) < explosionCircum) {
+				if (target != firingPlayer && Vector3.Distance(this.transform.position, target.transform.position) < explosionCircum) {
 					Debug.Log ("Sunship Projectile - TERMINAL EXPLOSION: Hit" + target);
 					//Destroy(target); 
 				

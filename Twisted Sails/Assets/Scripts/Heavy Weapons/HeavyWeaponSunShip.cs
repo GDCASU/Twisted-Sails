@@ -22,6 +22,7 @@ public class HeavyWeaponSunShip : HeavyWeapon {
     Vector3 start;
     public float damage= 10f;
     public float projectileSpeed = 1f;
+	SunshipHeavyProjectileBeahvior projectileScript;
 
     // Use this for initialization
     new void Start () {
@@ -114,6 +115,7 @@ public class HeavyWeaponSunShip : HeavyWeapon {
         /// calculate end position from max range and position at activation
 		weaponStartingPosition = this.transform.position;
 		weaponVelocity = transform.forward * projectileSpeed;
+
         //  modify velocity with weaponVelocity
         base.ActivateWeapon();
 	}
