@@ -203,12 +203,6 @@ public class Health : NetworkBehaviour
 				}
 			}
 		}
-
-        //Health Pickup collision
-        if (collision.transform.gameObject.tag.Equals("HealthPickUp"))
-        {
-            
-        }
     }
 
     //This method should not be called to change health, use CmdChangeHealth for that.

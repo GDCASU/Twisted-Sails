@@ -54,32 +54,15 @@ public class BroadsideCannonFireNetworked : MonoBehaviour
 	}
 
 	//Calculate and return the velocity of a fired cannon ball
-	private static Vector3 inheritedVelocity, totalVelocity;
 	public Vector3 GetCannonBallVelocity()
 	{
 		//Sets the initial velocity of the cannonBall to projectileSpeed units/second in the direction of the cannon barrel
-		inheritedVelocity = this.transform.root.GetComponent<Rigidbody>().velocity; 
-		totalVelocity = inheritedVelocity + this.transform.up * this.projectileSpeed; 
-		return totalVelocity;
+		Vector3 inheritedVelocity = this.transform.root.GetComponent<Rigidbody>().velocity; 
+		return inheritedVelocity + this.transform.up * this.projectileSpeed; 
 	}
 
-    //Instantiates a cannonball with a velocity on the server and returns a reference to it
-    public GameObject createCannonBall(GameObject cannonBall, NetworkInstanceId shooterID)
-    {
-        //Reset time to fire cannon
-        reloadTime = 0;
-
-        //Spawn object on server
-        GameObject _cannonBall = GameObject.Instantiate(cannonBall);
-
-        // Set position, velocity
-        _cannonBall.transform.position = this.gameObject.transform.position;
-        inheritedVelocity = this.transform.root.GetComponent<Rigidbody>().velocity;
-        totalVelocity = inheritedVelocity + this.transform.up * this.projectileSpeed;
-        _cannonBall.GetComponent<Rigidbody>().velocity = totalVelocity;
-
-		_cannonBall.GetComponent<CannonBallNetworked>().owner = shooterID;
-
-        return _cannonBall;
+	public Vector3 GetCannonBallPosition()
+	{
+		return gameObject.transform.position;
     }
 }
