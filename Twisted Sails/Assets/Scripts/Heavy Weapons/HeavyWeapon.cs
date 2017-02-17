@@ -79,7 +79,7 @@ public class HeavyWeapon : NetworkBehaviour
             if (Input.GetKeyDown(weaponUseKey))
             {
                 //if enough ammo to use weapon, check for cooldown
-                if (ammoCount > ammoUsePerActivation)
+                if (ammoCount >= ammoUsePerActivation)
                 {
                     //if weapon not on cooldown, activate it and do cleanup
                     if (coolDownTimer <= 0)
