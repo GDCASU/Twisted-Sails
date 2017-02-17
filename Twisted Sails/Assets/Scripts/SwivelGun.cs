@@ -7,7 +7,12 @@ using System.Collections;
 // Edward Borroughs 
 // Version 2/1/2016
 
-public class SwivelGun : MonoBehaviour {
+// Update:      Edward Borroughs
+// Date:        February 16, 2016
+// Description: The SwivelGun class now extends BroadsideCannonFireNetworked and can be treated as
+//              a broadside cannon with more functionality.
+
+public class SwivelGun : BroadsideCannonFireNetworked {
 
     public void updateRotation(Transform objTransform)
     {
