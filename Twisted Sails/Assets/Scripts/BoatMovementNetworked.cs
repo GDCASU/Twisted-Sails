@@ -55,6 +55,8 @@ public class BoatMovementNetworked : NetworkBehaviour
 	public float boatPropulsionPointOffset = -1f;
     public float speedStat = 1.0f; // Crew Management - Speed Crew
 
+    public float boatCameraDistance = 15; //sets starting camer distance from ship
+
     //Boat Input
     public KeyCode forwardKey	    = KeyCode.W;
     public KeyCode backwardsKey     = KeyCode.S;
@@ -87,8 +89,9 @@ public class BoatMovementNetworked : NetworkBehaviour
 		if (!isLocalPlayer) { return; }
 
 		boat = this.GetComponent<Rigidbody>();
-		
-		//Make orbital and boat camera follow boat
+
+        //Make orbital and boat camera follow boat
+        //cameraOffSet.Set(10, cameraOffset.y, cameraOffset.z);
 		boatCam = Camera.main.GetComponent<BoatCameraNetworked>();
         orbCam = Camera.main.GetComponent<OrbitalCamera>();
         orbCam.target = this.gameObject;

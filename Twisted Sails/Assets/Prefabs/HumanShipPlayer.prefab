@@ -1849,6 +1849,7 @@ MonoBehaviour:
   speedBoost: 0
   boatPropulsionPointOffset: -1
   speedStat: 1
+  boatCameraDistance: 15
   forwardKey: 119
   backwardsKey: 115
   leftKey: 97
