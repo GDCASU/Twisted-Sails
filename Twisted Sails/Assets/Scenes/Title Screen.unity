@@ -3361,6 +3361,7 @@ MonoBehaviour:
   - {fileID: 1000013458966376, guid: a35872d6be62b8c4ebd864b495a4048a, type: 2}
   - {fileID: 1000013458966376, guid: e0e164241721d3143a13bc6ff7b6d9b5, type: 2}
   - {fileID: 1000013458966376, guid: 93df41ee14972a04bbb4fd2e59b8f2ee, type: 2}
+  - {fileID: 1000013620427708, guid: 57b1caa6be83756479442bec5e2fd579, type: 2}
   m_CustomConfig: 0
   m_MaxConnections: 4
   m_ConnectionConfig:
@@ -3410,7 +3411,7 @@ MonoBehaviour:
   teamScores: 
   lobbyPrefab: {fileID: 1000012157780100, guid: 89d5d58f166bbd14eb4daf206f37a9fe,
     type: 2}
-  inGameScene: Milestone 2_Lobby
+  inGameScene: MainLevel
   playableShips:
   - {fileID: 1000013458966376, guid: 93df41ee14972a04bbb4fd2e59b8f2ee, type: 2}
   - {fileID: 1000013458966376, guid: e0e164241721d3143a13bc6ff7b6d9b5, type: 2}
