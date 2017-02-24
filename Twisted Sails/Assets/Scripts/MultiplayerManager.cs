@@ -49,6 +49,13 @@ using System;
 //              Added code to trigger Player's events at appropriate times
 //              Fixed a bug preventing player ship choice from being sent to the server
 
+// Developer:   Diego Wilde
+// Date:        2/19/2017
+// Description: Player data persistence functionality added. Player statistics are currently saved clientside 
+//              using binary incription to the PlayerData.gd file. Save is called whenever the game scene 
+//              changes clientside, and loading is performed once during OnClientConnect().
+//              - Added method to get the local player
+
 public class MultiplayerManager : NetworkManager
 {
     public Gamemode currentGamemode;
@@ -291,7 +298,7 @@ public class MultiplayerManager : NetworkManager
         }
         else Debug.Log("Player " + victim.name + " suicided!");
 
-        Player.SendPlayerKilled(victim, killer);
+        Player.ActivateEventPlayerKilled(victim, killer);
         SendGameState();
         CheckEndGame();
     }
@@ -457,8 +464,10 @@ public class MultiplayerManager : NetworkManager
     //Methods only for use clientside
     #region Client
     //Overridden to register handlers and prevent spawning at this stage
+    //DW: Added a call to load save data, if it exists
     public override void OnClientConnect(NetworkConnection conn)
     {
+        SaveLoad.Load();
         client.RegisterHandler(ExtMsgType.State, OnStateUpdate);
         if (!ClientScene.ready) ClientScene.Ready(client.connection);
     }
@@ -473,6 +482,7 @@ public class MultiplayerManager : NetworkManager
     //Hook to receive & update game state
     public void OnStateUpdate(NetworkMessage netMsg)
     {
+        SaveLoad.SaveGame();
         GameStateMessage msg = netMsg.ReadMessage<GameStateMessage>();
         playerList = msg.playerList;
         teamScores = msg.teamScores;
@@ -614,6 +624,15 @@ public class MultiplayerManager : NetworkManager
     public class ReadyMessage : MessageBase
     {
         public bool ready;
+    }
+    #endregion
+
+    //Useful methods for interacting with the multiplayer manager
+    #region Misc
+    //DW: Call this method to get the local player object
+    public Player getLocalPlayer()
+    {
+        return MultiplayerManager.FindPlayer(MultiplayerManager.GetLocalClient().connection.connectionId);
     }
     #endregion
 }
