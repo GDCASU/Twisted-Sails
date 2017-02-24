@@ -120,7 +120,7 @@ public class BoatMovementNetworked : NetworkBehaviour
                     if (sScript.CanFire())
                     {
                         //Pass information to server and spawn cannonball on all cients
-                        CmdFire(sScript.createCannonBall(cannonBall, this.GetComponent<NetworkIdentity>().netId));
+                        CmdFire(sScript.GetCannonBallPosition(), sScript.GetCannonBallVelocity());
                     }
                 }
             }
