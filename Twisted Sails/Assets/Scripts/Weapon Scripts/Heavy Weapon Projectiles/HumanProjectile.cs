@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DragonProjectileBehavior : MonoBehaviour {
-    
+public class HumanProjectile : MonoBehaviour {
+
     /// <summary>
     /// Collision for the projectile is handled here in a seperate script which is attactched to the 
     /// projectile itself. Checks to see if collision is with an enemy, which it will then deal damage to.
@@ -15,8 +15,8 @@ public class DragonProjectileBehavior : MonoBehaviour {
         Debug.Log("Dragon Projectile: Collide");
 
         if (other.gameObject.tag == "Player")
-            Debug.Log("Bramble Projectile: I Hit a player");
+            Debug.Log("Human Projectile: I Hit a player");
 
-        Destroy (this.gameObject);
+        Destroy(this.gameObject);
     }
 }
