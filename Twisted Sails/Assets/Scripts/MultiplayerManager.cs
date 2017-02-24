@@ -298,7 +298,7 @@ public class MultiplayerManager : NetworkManager
         }
         else Debug.Log("Player " + victim.name + " suicided!");
 
-        Player.SendPlayerKilled(victim, killer);
+        Player.ActivateEventPlayerKilled(victim, killer);
         SendGameState();
         CheckEndGame();
     }
