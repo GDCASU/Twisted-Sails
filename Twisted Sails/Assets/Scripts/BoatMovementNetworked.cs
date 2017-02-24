@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Networking;
-using System.Collections;
+using System.Linq;
+using System.Collections.Generic;
 
 /************************** BOAT MOVEMENT SCRIPT *******************************
  * This script controls the movement of the boat, now with key bindings and 
@@ -68,11 +69,10 @@ public class BoatMovementNetworked : NetworkBehaviour
 	}
 	private BoatInput KeysDown;
 
-	//List of cannons - Assume NINE cannons (8 broadside cannons + 1 swivel gun)
 	public GameObject cannonBall;
-	private BroadsideCannonFireNetworked[] cannonScripts 
-		= new BroadsideCannonFireNetworked[9];
-    private SwivelGun swivelGunScript;
+    //List of cannons
+    public List<BroadsideCannonFireNetworked> cannonScripts;
+    public List<SwivelGun> swivelGunScripts;
 	//Allocate space for Position, and Velocity for firing cannonballs
 	private static Vector3 cannonPosition, cannonBallVelocity;
 
@@ -96,8 +96,8 @@ public class BoatMovementNetworked : NetworkBehaviour
         boatCam.boatToFollow = this.gameObject;
 
         //Get cannon scripts from all cannons
-        cannonScripts = this.GetComponentsInChildren<BroadsideCannonFireNetworked>();
-        swivelGunScript = this.GetComponentInChildren<SwivelGun>();
+        cannonScripts = new List<BroadsideCannonFireNetworked>(this.GetComponentsInChildren<BroadsideCannonFireNetworked>().Where(t => t.GetType() != typeof(SwivelGun)));
+        swivelGunScripts = new List<SwivelGun>(this.GetComponentsInChildren<SwivelGun>());
     }
 
 	//Get input for player
@@ -114,14 +114,14 @@ public class BoatMovementNetworked : NetworkBehaviour
 
             if (KeysDown.fireSwivelGun)
             {
-                foreach (BroadsideCannonFireNetworked cannonScript in cannonScripts)
+
+                foreach (SwivelGun sScript in swivelGunScripts)
                 {
-                    if (cannonScript.gameObject.tag == "SwivelGun" && cannonScript.CanFire())
+                    if (sScript.CanFire())
                     {
                         //Pass information to server and spawn cannonball on all cients
-                        CmdFire(cannonScript.GetCannonBallPosition(), cannonScript.GetCannonBallVelocity());
-						cannonScript.ResetFireTimer();
-					}
+                        CmdFire(sScript.createCannonBall(cannonBall, this.GetComponent<NetworkIdentity>().netId));
+                    }
                 }
             }
 
@@ -129,7 +129,7 @@ public class BoatMovementNetworked : NetworkBehaviour
 			{
 				foreach (BroadsideCannonFireNetworked cScript in cannonScripts)
 				{
-					if (cScript.gameObject.tag != "SwivelGun" && cScript.CanFire())
+					if (cScript.CanFire())
 					{
 						//Pass information to server and spawn cannonball on all cients
 						CmdFire(cScript.GetCannonBallPosition(), cScript.GetCannonBallVelocity());
@@ -181,9 +181,14 @@ public class BoatMovementNetworked : NetworkBehaviour
 			boat.AddForceAtPosition(forceDirection * acceleration, transform.position + transform.forward * boatPropulsionPointOffset, ForceMode.Acceleration);
 		}
 
-        //Asks the boat's attached swivel gun (if it exists) to update its position based on the rotation of the boat's camera
-        if(swivelGunScript != null)
-            swivelGunScript.updateRotation(boatCam.transform);
+        //Asks the boat's attached swivel guns (if they exist) to update their rotations based on the rotation of the boat's camera
+        if(swivelGunScripts.Count != 0)
+        {
+            foreach(SwivelGun sScript in swivelGunScripts)
+            {
+                sScript.updateRotation(boatCam.transform);
+            }
+        }
 	}
 
     //Called by client, runs on server.
