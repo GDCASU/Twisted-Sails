@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class DragonProjectileBehavior : MonoBehaviour {
-
-
-	// Use this for initialization
-	void Start () {
-		
-	}
-
-    void OnTriggerEnter(Collider other)
+    
+    /// <summary>
+    /// Collision for the projectile is handled here in a seperate script which is attactched to the 
+    /// projectile itself. Checks to see if collision is with an enemy, which it will then deal damage to.
+    /// Destroys itself after.
+    /// </summary>
+    /// <param name="other"></param>
+    private void OnTriggerEnter(Collider other)
     {
         Debug.Log("Dragon Projectile: Collide");
 

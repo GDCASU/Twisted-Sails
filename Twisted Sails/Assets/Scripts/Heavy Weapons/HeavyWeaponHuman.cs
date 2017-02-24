@@ -16,18 +16,17 @@ using System.Collections;
 	If need help using this template, contact the programmer's above.
 **/
 
-public class HeavyWeaponDragon: HeavyWeapon {
+public class HeavyWeaponHuman : HeavyWeapon
+{
+    public Vector3 weaponStartingPositionOffset;
+    public Vector3 basicWeaponVelocity;
+    public float weaponSpreadAngle;
 
-    // Use this for initialization
-    private int projectileSpeed = 50;
-    private int projectileOffset = 5;
-
-	new void Start () {
+    new void Start ()
+    {
         base.Start();
-        ammoUsePerActivation = 1;
-    }
+	}
 	
-	// Update is called once per frame
 	new void Update()
     {
         base.Update();
@@ -42,14 +41,7 @@ public class HeavyWeaponDragon: HeavyWeapon {
     new void OnCollisionEnter(Collision other)
     {
         base.OnCollisionEnter(other);
-        /*
-        if(other.gameObject.tag == "Player")
-        {
-            dealDamage();  
-            Destroy(firedProjectile);
-        }
-        */
-
+        // ADD YOUR CODE HERE
     }
 
     /// <summary>
@@ -92,6 +84,7 @@ public class HeavyWeaponDragon: HeavyWeapon {
     new void OnTriggerExit(Collider other)
     {
         base.OnTriggerExit(other);
+        // ADD YOUR CODE HERE
     }
 
     /// <summary>
@@ -114,11 +107,19 @@ public class HeavyWeaponDragon: HeavyWeapon {
     /// </summary>
     override protected void ActivateWeapon()
 	{
-        weaponStartingPosition = transform.position + (transform.forward * projectileOffset);
-        weaponVelocity = transform.forward * projectileSpeed;
-        weaponPrefab.GetComponent<Rigidbody>().AddForce(weaponVelocity);
-        //modify spawn position with weaponStartingPosition
-        //modify velocity with weaponVelocity
+        Quaternion left = Quaternion.AngleAxis(-weaponSpreadAngle, Vector3.up);
+        Quaternion right = Quaternion.AngleAxis(weaponSpreadAngle, Vector3.up);
+
+        weaponStartingPosition = transform.position + transform.rotation * weaponStartingPositionOffset;
+        weaponVelocity = transform.rotation * basicWeaponVelocity;
+        base.ActivateWeapon();
+
+        weaponStartingPosition = transform.position + left * transform.rotation * weaponStartingPositionOffset;
+        weaponVelocity = transform.rotation * left *  basicWeaponVelocity;
+        base.ActivateWeapon();
+
+        weaponStartingPosition = transform.position + right * transform.rotation * weaponStartingPositionOffset;
+        weaponVelocity = transform.rotation * right * basicWeaponVelocity;
         base.ActivateWeapon();
 	}
 
@@ -136,7 +137,7 @@ public class HeavyWeaponDragon: HeavyWeapon {
     /// </summary>
     override protected void AmmoMaxedOut()
 	{
-        //Displays to player they have no ammo
+        // ADD YOUR CODE
 	}
 
     /// <summary>
@@ -144,7 +145,8 @@ public class HeavyWeaponDragon: HeavyWeapon {
     /// </summary>
     override protected void CollectedAmmoPack()
 	{
-    }
+        // ADD YOUR CODE
+	}
 
     /// <summary>
     /// This function is called when the player tries to activate their weapon, but does not have enough ammo.

@@ -2,30 +2,27 @@
 using System.Collections;
 
 /**
-	[Template Class Header]
-	Template Makers:	Nizar Kury and Kyle Chapman
-	Date:				11/30/2016
+	[Heavy Weapon: Dragon]
+	Creator:            Sean McGonegle
+	Date:				2/24/2017
 
-    Duplicate this script and rename the duplicate
-	to place on a boat prefab game object.
-    Each boat type should have a different heavy weapon script
-    associated with it. For instance, a trireme would have a 
-    TriremeHeavyWeapon script while the dragon boat would have
-    a DragonBoatHeavyWeapon script attached to it.
+    The Activate method of this script sets the spawn position of the dragon projectile to the player's ship, with a 
+    small offset in front of the ship, and sets the projectile's speed.
 
-	If need help using this template, contact the programmer's above.
+    Collision is handled in a seperate script hat is attatched to the projectile itself. This was done because the
+    current system does not have a way to access the unique prefab that is created when the projectile is instantiated,
+    which makes handeling collision and the destruction of said projectile difficult.
+
 **/
 
 public class HeavyWeaponDragon: HeavyWeapon {
 
     // Use this for initialization
-    public int projectileSpeed;
-    public int projectileOffset;
-    public GameObject firedProjectile;
+    private int projectileSpeed = 50;
+    private int projectileOffset = 5;
 
 	new void Start () {
         base.Start();
-        ammoUsePerActivation = 1;
     }
 	
 	// Update is called once per frame
@@ -43,14 +40,6 @@ public class HeavyWeaponDragon: HeavyWeapon {
     new void OnCollisionEnter(Collision other)
     {
         base.OnCollisionEnter(other);
-        /*
-        if(other.gameObject.tag == "Player")
-        {
-            dealDamage();  
-            Destroy(firedProjectile);
-        }
-        */
-
     }
 
     /// <summary>
@@ -118,8 +107,7 @@ public class HeavyWeaponDragon: HeavyWeapon {
         weaponStartingPosition = transform.position + (transform.forward * projectileOffset);
         weaponVelocity = transform.forward * projectileSpeed;
         weaponPrefab.GetComponent<Rigidbody>().AddForce(weaponVelocity);
-        //modify spawn position with weaponStartingPosition
-        //modify velocity with weaponVelocity
+
         base.ActivateWeapon();
 	}
 
