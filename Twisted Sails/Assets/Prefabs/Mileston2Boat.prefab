@@ -315,7 +315,7 @@ GameObject:
   - 136: {fileID: 136000011209803362}
   - 23: {fileID: 23000012529586806}
   - 114: {fileID: 114000013702980854}
-  - 114: {fileID: 114000010498800408}
+  - 114: {fileID: 114000011926137916}
   m_Layer: 8
   m_Name: Cannon
   m_TagString: Untagged
@@ -1492,7 +1492,6 @@ GameObject:
   - 23: {fileID: 23000010017654580}
   - 114: {fileID: 114000013310386108}
   - 114: {fileID: 114000012589808420}
-  - 114: {fileID: 114000011472782010}
   m_Layer: 8
   m_Name: Cannon (8)
   m_TagString: SwivelGun
@@ -5455,20 +5454,6 @@ MonoBehaviour:
   fireDelay: 1
   projectileSpeed: 20
   attackStat: 1
---- !u!114 &114000010498800408
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000010875970672}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9bd3a1816f244654ba7d67a6e9ae0c3d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  fireDelay: 1
-  projectileSpeed: 20
-  attackStat: 1
 --- !u!114 &114000010556032994
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5494,6 +5479,17 @@ MonoBehaviour:
   cannonFireKey: 32
   swivelGunFireKey: 323
   cannonBall: {fileID: 1000013620427708, guid: 999d70260556d6a4d99c8c6ca2089051, type: 2}
+  cannonScripts:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  swivelGunScripts: []
 --- !u!114 &114000010825273558
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5585,20 +5581,6 @@ MonoBehaviour:
   shipCamera: {fileID: 0}
   projectileSpeed: 10
   scaleFactor: 0.25
---- !u!114 &114000011472782010
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000014178595284}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9bd3a1816f244654ba7d67a6e9ae0c3d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  fireDelay: 1
-  projectileSpeed: 20
-  attackStat: 1
 --- !u!114 &114000011590326226
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5624,6 +5606,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5917c00c96fc8a744ac7625256ac3f38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &114000011926137916
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000010875970672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9bd3a1816f244654ba7d67a6e9ae0c3d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fireDelay: 1
+  projectileSpeed: 20
+  attackStat: 1
 --- !u!114 &114000011938982268
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5793,6 +5789,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a405163aa8d259448aba12f3179ebe3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fireDelay: 1
+  projectileSpeed: 20
+  attackStat: 1
 --- !u!114 &114000012915758064
 MonoBehaviour:
   m_ObjectHideFlags: 1
