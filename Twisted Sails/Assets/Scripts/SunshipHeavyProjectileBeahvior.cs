@@ -9,7 +9,6 @@ public class SunshipHeavyProjectileBeahvior : MonoBehaviour {
 	float distanceFromOrigin;
 	public float maxDistance =1f;
 
-
 	// Use this for initialization
 	void Start () {
 		startingLocation = this.transform.position; 
@@ -29,5 +28,4 @@ public class SunshipHeavyProjectileBeahvior : MonoBehaviour {
 
 		
 	}
-		
 }
