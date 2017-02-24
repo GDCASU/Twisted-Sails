@@ -25,7 +25,7 @@ public class HumanHeavyWeapon : HeavyWeapon
 
     new void Start ()
     {
-
+        base.Start();
 	}
 	
 	new void Update()
@@ -111,15 +111,15 @@ public class HumanHeavyWeapon : HeavyWeapon
         Quaternion left = Quaternion.AngleAxis(-weaponSpreadAngle, Vector3.up);
         Quaternion right = Quaternion.AngleAxis(weaponSpreadAngle, Vector3.up);
         //Instantiate(weaponPrefab, weaponStartingPosition + weaponStartingPositionOffset, transform.rotation);
-        weaponStartingPosition = transform.position + weaponStartingPositionOffset;
+        weaponStartingPosition = transform.position + transform.rotation * weaponStartingPositionOffset;
         weaponVelocity = transform.rotation * basicWeaponVelocity;
         base.ActivateWeapon();
         //Instantiate(weaponPrefab, weaponStartingPosition + left * weaponStartingPositionOffset, transform.rotation * left);
-        weaponStartingPosition = transform.position + left * weaponStartingPositionOffset;
+        weaponStartingPosition = transform.position + left * transform.rotation * weaponStartingPositionOffset;
         weaponVelocity = transform.rotation * left *  basicWeaponVelocity;
         base.ActivateWeapon();
         //Instantiate(weaponPrefab, weaponStartingPosition + right * weaponStartingPositionOffset, transform.rotation * right);
-        weaponStartingPosition = transform.position + right * weaponStartingPositionOffset;
+        weaponStartingPosition = transform.position + right * transform.rotation * weaponStartingPositionOffset;
         weaponVelocity = transform.rotation * right * basicWeaponVelocity;
         base.ActivateWeapon();
 	}
