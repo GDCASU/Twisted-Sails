@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Networking;
 using System.Collections;
+using UnityEngine.UI;
 
 //  Programmer:     Nizar Kury
 //  Date:           11/30/2016
@@ -46,6 +47,8 @@ public class HeavyWeapon : NetworkBehaviour
 	public bool collectPacksWhileAtMaxAmmo = true;
 	private int ammoCount;
 
+	private Text ammoCounter;
+
 	//public readonly interface for ammoCount
 	public int AmmoCount
 	{
@@ -61,12 +64,14 @@ public class HeavyWeapon : NetworkBehaviour
 	public virtual void Start ()
 	{
         if(!isLocalPlayer) { return; }
+
 		ammoCount = startingAmmoAmount;
+
+		ammoCounter = GameObject.Find("HeavyAmmoCounter").GetComponent<Text>();
 	}
 	
     public virtual void Update ()
 	{
-        
         if (isLocalPlayer)
         {
             if (coolDownTimer >= 0)
@@ -223,24 +228,22 @@ public class HeavyWeapon : NetworkBehaviour
 
     //Called by client, runs on server.
     //Spawns heavy weapon on server, then on all clients.
-    // (Borrowed from BoatMovementNetworked)
     [Command]
     private void CmdFire(Vector3 spawnPosition, Vector3 spawnVelocity, NetworkInstanceId shooterID)
     {
         //Spawn object on server
-        GameObject _heavyWeapon = GameObject.Instantiate(weaponPrefab);
+        GameObject instantiatedProjectile = GameObject.Instantiate(weaponPrefab);
 
         // Set position, velocity
-        _heavyWeapon.transform.position = spawnPosition;
-        _heavyWeapon.GetComponent<Rigidbody>().velocity = spawnVelocity;
+        instantiatedProjectile.transform.position = spawnPosition;
+        instantiatedProjectile.GetComponent<Rigidbody>().velocity = spawnVelocity;
 
-        //Ignore collision between cannonball and ship that shot it
-        Physics.IgnoreCollision(_heavyWeapon.GetComponent<Collider>(), NetworkServer.FindLocalObject(shooterID).GetComponent<Collider>());
-
-        _heavyWeapon.GetComponent<CannonBallNetworked>().owner = shooterID;
+		InteractiveObject interactiveObject = instantiatedProjectile.GetComponent<InteractiveObject>();
+        if (interactiveObject != null)
+			interactiveObject.owner = shooterID;
 
         //Spawn the object across all clients
-        NetworkServer.Spawn(_heavyWeapon);
+        NetworkServer.Spawn(instantiatedProjectile);
     }
 
     #endregion

@@ -21,19 +21,49 @@ using UnityEngine.UI;
 // Date:        2/1/2017
 // Description: Adapted to work with new team system
 
-public class LobbyManager : MonoBehaviour
-{
-    public RectTransform[] teams;
-    public GameObject readyButton;
+// Developer:   Kyle Aycock
+// Date:        2/24/2017
+// Description: Revamped this system to manage the flow of the lobby, separating
+//              it into phases as prescribed by the associated design doc.
 
-    // index corresponds to ship type. In this case,
-    // 0 = trireme
-    // 1 = human
-    // 2 = living wood
+public class LobbyManager : NetworkBehaviour
+{
+    [Header("Team Select")]
+    public GameObject teamSelectContainer;
+    public GameObject startButton;
+    public Text lobbyText;
+    public Transform redTeam;
+    public Transform blueTeam;
+
+    [Header("Ship Select")]
+    public GameObject shipSelectContainer;
+    public GameObject[] ShipSelectNameContainers;
+    public GameObject lockButton;
+    public Text shipTimer;
+    public Text infoText;
+
+    [Header("Preparing")]
+    public GameObject preparingContainer;
+    public Text preparingTimer;
+    public GameObject[] redIcons;
+    public GameObject[] blueIcons;
+
+    [SyncVar(hook = "OnHostNameChange")]
+    public string hostName;
     public Sprite[] shipIcons;
 
     private MultiplayerManager manager;
     private bool allReady;
+    private float timer;
+
+    //Simple enum to track lobby state
+    public enum LobbyState
+    {
+        TeamSelect,
+        ShipSelect,
+        Preparing
+    }
+    public LobbyState currentState;
 
     // Use this for initialization
     void Start()
@@ -41,14 +71,48 @@ public class LobbyManager : MonoBehaviour
         //Variable initialization
         manager = MultiplayerManager.GetInstance();
         allReady = false;
+        currentState = LobbyState.TeamSelect;
 
         //This if statement statement checks if it's running on the host
-        if (NetworkServer.active)
+        if (!MultiplayerManager.IsHost())
         {
-            readyButton.transform.GetChild(0).GetComponent<Text>().text = "Start";
-            readyButton.GetComponent<Button>().interactable = false;
-            SetAllReady(true);
+            startButton.SetActive(false);
+        } else
+        {
+            CmdSetHostName(MultiplayerManager.GetLocalPlayer().name);
         }
+
+        OnHostNameChange(hostName);
+    }
+
+    void Update()
+    {
+        if(timer > 0)
+        {
+            timer -= Time.deltaTime;
+            string timeString = "" + (timer <= 9 ? "0" : "") + Mathf.CeilToInt(timer);
+            shipTimer.text = "Time Remaining: " + timeString;
+            preparingTimer.text = timeString;
+            if(timer <= 0 && isClient && hasAuthority)
+            {
+                if(currentState == LobbyState.ShipSelect)
+                {
+                    CmdLockShips();
+                } else
+                {
+                    CmdEnterGame();
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// Returns true if a new player can join the lobby
+    /// </summary>
+    /// <returns></returns>
+    public bool IsJoinable()
+    {
+        return currentState == LobbyState.TeamSelect;
     }
 
     /// <summary>
@@ -59,16 +123,7 @@ public class LobbyManager : MonoBehaviour
     public void SetAllReady(bool ready)
     {
         allReady = ready;
-        readyButton.GetComponent<Button>().interactable = allReady;
-    }
-
-    /// <summary>
-    /// Called when a player clicks the ready/start button
-    /// </summary>
-    public void Ready()
-    {
-        PlayerIconController controller = GetLocalPlayer().GetComponent<PlayerIconController>();
-        controller.CmdReady(!controller.ready);
+        //readyButton.GetComponent<Button>().interactable = allReady;
     }
 
     /// <summary>
@@ -78,7 +133,7 @@ public class LobbyManager : MonoBehaviour
     public void SwitchTeam(int team)
     {
         manager.localPlayerTeam = (short)team;
-        GetLocalPlayer().GetComponent<PlayerIconController>().CmdMoveReq((short)team, teams[team].gameObject.name, new Vector2(Random.Range(-75, 75), Random.Range(-75, 75)));
+        GetLocalPlayer().GetComponent<PlayerIconController>().CmdChangeTeam((short)team);
     }
 
     // NK
@@ -93,10 +148,137 @@ public class LobbyManager : MonoBehaviour
     }
 
     /// <summary>
+    /// Locks in the player's choice of ship, moving the lobby to the next phase if all players have locked in
+    /// </summary>
+    public void LockIn()
+    {
+        lockButton.GetComponent<Button>().interactable = false;
+        GetLocalPlayer().GetComponent<PlayerIconController>().CmdLockIn();
+    }
+
+    /// <summary>
     /// Convenience method to fetch local player object (only works clientside)
     /// </summary>
     private GameObject GetLocalPlayer()
     {
         return manager.client.connection.playerControllers[0].gameObject;
+    }
+
+    /// <summary>
+    /// Exists only to bounce messages to the client
+    /// Sets the host's name for display in the lobby
+    /// </summary>
+    /// <param name="name"></param>
+    [Command]
+    public void CmdSetHostName(string name)
+    {
+        hostName = name;
+    }
+
+    //Hooked onto SyncVar hostName
+    public void OnHostNameChange(string newName)
+    {
+        hostName = newName;
+        lobbyText.text = newName + "'s Twisted Sails Lobby";
+    }
+
+    /// <summary>
+    /// Notifies server that lobby is moving to ship select
+    /// </summary>
+    [Command]
+    public void CmdLockTeams()
+    {
+        LockTeams();
+        RpcLockTeams();
+    }
+
+    /// <summary>
+    /// Notifies clients that lobby is moving to ship select, performing necessary actions
+    /// </summary>
+    [ClientRpc]
+    public void RpcLockTeams()
+    {
+        LockTeams();
+        List<Player> list = MultiplayerManager.GetInstance().playerList;
+        Player localPlayer = MultiplayerManager.FindPlayer(GetLocalPlayer().GetComponent<NetworkIdentity>().netId);
+        string info = "You are on the " + (localPlayer.team == 0 ? "Red" : "Blue") + " team ";
+        List<Player> teammates = list.FindAll(p => p.team == localPlayer.team && !p.Equals(localPlayer));
+        if (teammates.Count > 0)
+        {
+            info += "(Teammates: ";
+            for (int i = 0; i < teammates.Count - 1; i++)
+                info += teammates[i].name + ", ";
+            info += teammates[teammates.Count - 1].name + ")";
+        }
+        infoText.text = info;
+    }
+
+    /// <summary>
+    /// Performs some common operations when moving to ship select phase
+    /// </summary>
+    public void LockTeams()
+    {
+        currentState = LobbyState.ShipSelect;
+        teamSelectContainer.SetActive(false);
+        shipSelectContainer.SetActive(true);
+        timer = 60;
+    }
+
+    /// <summary>
+    /// Notifies server that lobby is moving to preparing phase
+    /// </summary>
+    [Command]
+    public void CmdLockShips()
+    {
+        LockShips();
+        RpcLockShips();
+    }
+
+    /// <summary>
+    /// Notifies clients that lobby is moving to preparing phase
+    /// </summary>
+    [ClientRpc]
+    public void RpcLockShips()
+    {
+        LockShips();
+    }
+
+    /// <summary>
+    /// Performs common operations when moving to preparing phase
+    /// </summary>
+    public void LockShips()
+    {
+        currentState = LobbyState.Preparing;
+        shipSelectContainer.SetActive(false);
+        preparingContainer.SetActive(true);
+        timer = 10;
+
+        List<Player> playerList = manager.playerList;
+        int redIndex = 0;
+        int blueIndex = 0;
+        for (int i = 0; i < playerList.Count; i++)
+        {
+            Player player = playerList[i];
+            if (player.team == 0)
+            {
+                redIcons[redIndex].transform.FindChild("Image").GetComponent<Image>().sprite = shipIcons[(short)player.ship];
+                redIcons[redIndex].transform.FindChild("Text").GetComponent<Text>().text = player.name;
+                redIndex++;
+            } else
+            {
+                blueIcons[blueIndex].transform.FindChild("Image").GetComponent<Image>().sprite = shipIcons[(short)player.ship];
+                blueIcons[blueIndex].transform.FindChild("Text").GetComponent<Text>().text = player.name;
+                blueIndex++;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Tells server to start the game
+    /// </summary>
+    [Command]
+    public void CmdEnterGame()
+    {
+        MultiplayerManager.GetInstance().EnterGame();
     }
 }

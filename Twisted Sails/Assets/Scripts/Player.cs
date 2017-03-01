@@ -201,7 +201,7 @@ public class Player
 
     //Player Damaged event - happens when a player takes damage from an attacker
     //Damage can only be changed clientside for now until I get a chance to rewrite damage handling
-    public delegate void PlayerDamagedEvent(Player victim, Player attacker, ref int damage);
+    public delegate void PlayerDamagedEvent(Player victim, Player attacker, ref float damage);
     public static event PlayerDamagedEvent PlayerDamaged = delegate { };
 
     //Player Pickup event - happens when a player gets a pickup
@@ -210,15 +210,15 @@ public class Player
 
     //These methods allow classes other than the Player to trigger the events, as this is not normally possible
     //It was either this or put the events in the Health script instead, which didn't make sense
-    public static void SendPlayerKilled(Player victim, Player killer)
+    public static void ActivateEventPlayerKilled(Player victim, Player killer)
     {
         PlayerKilled(victim, killer);
     }
-    public static void SendPlayerDamaged(Player victim, Player attacker, ref int damage)
+    public static void ActivateEventPlayerDamaged(Player victim, Player attacker, ref float damage)
     {
         PlayerDamaged(victim, attacker, ref damage);
     }
-    public static void SendPlayerPickup(Player player, bool isHealthPack)
+    public static void ActivateEventPlayerPickup(Player player, bool isHealthPack)
     {
         PlayerGotPickup(player, isHealthPack);
     }

@@ -22,6 +22,7 @@ class TeamDeathmatch : Gamemode
         this.teams = teams;
         this.pointsToWin = pointsToWin;
         timeRemaining = matchTime;
+        teamSize = 4;
     }
 
     //Called every update frame as usual, so Time.deltaTime still valid
@@ -55,6 +56,7 @@ class TeamDeathmatch : Gamemode
                     winningTeam = -2;
                 }
             }
+
         }
         return -1;
     }
@@ -63,12 +65,12 @@ class TeamDeathmatch : Gamemode
     public override short AutoAssignTeam(List<Player> playerList)
     {
         short playerTeam;
-        int team1Count = playerList.FindAll(p => p.team == 1).Count;
-        int team2Count = playerList.FindAll(p => p.team == 2).Count;
-        if (team1Count > team2Count)
-            playerTeam = 1;
+        int team1Count = playerList.FindAll(p => p.team == 0).Count;
+        int team2Count = playerList.FindAll(p => p.team == 1).Count;
+        if (team1Count <= team2Count)
+            playerTeam = 0;
         else
-            playerTeam = 2;
+            playerTeam = 1;
         return playerTeam;
     }
 }
