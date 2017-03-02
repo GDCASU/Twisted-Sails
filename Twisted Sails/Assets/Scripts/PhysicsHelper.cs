@@ -21,6 +21,7 @@ public static class PhysicsHelper
 
 	/// <summary>
 	/// Calculates the horizontal range (distance traveled) of a launched projectile freefalling with gravity.
+	/// This assumes that the object does not rotate and is frictionless.
 	/// </summary>
 	/// <param name="launchSpeed">The initial speed of the projectile as it is launched.</param>
 	/// <param name="altitudeAngle">The upwards angle in degrees of the launch. Zero is horizontal.</param>
@@ -52,4 +53,16 @@ public static class PhysicsHelper
 		//return the total horizontal distance traveled
 		return totalAirTime * initialHorizontalSpeed;
     }
+
+	/// <summary>
+	/// Calculates the 3D cartesian (rectangular) coordinate in world space for a point offfset forwards from a central object
+	/// such that the point is placed a certain distance in front of that object (front is the positive Z axis of that object).
+	/// </summary>
+	/// <param name="distanceAway">The distance in front of the object to set the new coordinate.</param>
+	/// <param name="centralObject">The object from which to calculate the new coordinate in front of.</param>
+	/// <returns></returns>
+	public static Vector3 CalculateProjectilePlacementPosition(float distanceAway, GameObject centralObject)
+	{
+		return centralObject.transform.position + centralObject.transform.forward * distanceAway;
+	}
 }

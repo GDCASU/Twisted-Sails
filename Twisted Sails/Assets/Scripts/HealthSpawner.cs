@@ -7,7 +7,6 @@ using UnityEngine.Networking;
 
 public class HealthSpawner : NetworkBehaviour
 {
-
     public GameObject healthPackPrefab;
     public float respawnTime = 30.0f;
 
@@ -16,9 +15,9 @@ public class HealthSpawner : NetworkBehaviour
         InvokeRepeating("SpawnHealthPack", respawnTime, respawnTime);
     }
 
-    void SpawnHealthPack()
+    private void SpawnHealthPack()
     {
-        var healthPack = (GameObject)Instantiate(healthPackPrefab, transform.position, Quaternion.Euler(-90, 0, 0));
+        GameObject healthPack = (GameObject)Instantiate(healthPackPrefab, transform.position, Quaternion.Euler(-90, 0, 0));
         NetworkServer.Spawn(healthPack);
     }
 }

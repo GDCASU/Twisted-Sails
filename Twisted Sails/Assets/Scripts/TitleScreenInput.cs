@@ -11,8 +11,19 @@ using System.Collections;
 // Description: Fixed strange behavior when joining/hosting a server for the second time in the same session
 //              Added more documentation
 
+// Developer:   Diego Wilde
+// Date:        2/19/2017
+// Description: Added Awake override to load game data, if it exists
+
 public class TitleScreenInput : MonoBehaviour
 {
+
+    //DW
+    //
+    void Awake()
+    {
+        SaveLoad.Load();
+    }
 
     // Allows quitting by pressing ESC.
     void Update()
@@ -43,6 +54,8 @@ public class TitleScreenInput : MonoBehaviour
     public void SetIP(string ip)
     {
         MultiplayerManager.GetInstance().networkAddress = ip;
+        Game.current.IPaddress = ip;
+        SaveLoad.SaveGame();
     }
 
     //Called when the name field is changed
