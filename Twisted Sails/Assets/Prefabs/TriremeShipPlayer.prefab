@@ -372,6 +372,7 @@ GameObject:
   - component: {fileID: 114000010202202694}
   - component: {fileID: 114000010222649082}
   - component: {fileID: 114649559050139546}
+  - component: {fileID: 114651732949681556}
   m_Layer: 8
   m_Name: TriremeShipPlayer
   m_TagString: Player
@@ -1518,6 +1519,8 @@ MonoBehaviour:
   cannonFireKey: 32
   swivelGunFireKey: 323
   cannonBall: {fileID: 1000013620427708, guid: 999d70260556d6a4d99c8c6ca2089051, type: 2}
+  cannonScripts: []
+  swivelGunScripts: []
 --- !u!114 &114000010202202694
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1739,7 +1742,6 @@ MonoBehaviour:
   health: 100
   healthText: {fileID: 0}
   healthSlider: {fileID: 0}
-  healthPackAmount: 25
   sinkSpeed: 1
   sinkAngle: 40
   secondsToRespawn: 8
@@ -1748,7 +1750,6 @@ MonoBehaviour:
   dead: 0
   hurtSelfButton: 107
   activeCamera: {fileID: 0}
-  explosion: {fileID: 1000011769946516, guid: 8af0c4ff01de10c4a9980db85d6bf910, type: 2}
   spawnPoint: {x: 0, y: 0, z: 0}
   defenseStat: 0
 --- !u!114 &114000011472782010
@@ -2128,6 +2129,21 @@ MonoBehaviour:
   addAmmoKey: 117
   damage: 10
   projectileSpeed: 7
+--- !u!114 &114651732949681556
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000013458966376}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3269170a6dbbbd94999fd1d6ffd5f7de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ammoCountValueText: {fileID: 0}
+  ammoMaxValueText: {fileID: 0}
+  coolDownTimerText: {fileID: 0}
+  playerHeavyWeapon: {fileID: 0}
 --- !u!122 &122000012998973456
 Halo:
   m_ObjectHideFlags: 1
