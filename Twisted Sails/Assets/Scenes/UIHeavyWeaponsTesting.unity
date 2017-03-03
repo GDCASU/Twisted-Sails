@@ -244,7 +244,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 12
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &187499151
 GameObject:
@@ -257,8 +257,8 @@ GameObject:
   - component: {fileID: 187499154}
   - component: {fileID: 187499153}
   m_Layer: 5
-  m_Name: Max Ammo Text
-  m_TagString: Untagged
+  m_Name: MaxAmmoText
+  m_TagString: MaxAmmoUI
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -279,7 +279,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 35.2, y: 0}
   m_SizeDelta: {x: 100, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &187499153
@@ -314,7 +314,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Max Ammo:'
+  m_Text: 'Value
+
+'
 --- !u!222 &187499154
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -332,7 +334,7 @@ GameObject:
   - component: {fileID: 188119266}
   - component: {fileID: 188119265}
   m_Layer: 0
-  m_Name: Ammo Count
+  m_Name: Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -353,8 +355,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 12.5, y: -0.7}
-  m_SizeDelta: {x: 20, y: 20}
+  m_AnchoredPosition: {x: -89.4, y: -0.7}
+  m_SizeDelta: {x: 45, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &188119265
 MonoBehaviour:
@@ -388,7 +390,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 51
+  m_Text: 'Ammo:'
 --- !u!222 &188119266
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -403,7 +405,6 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 240899828}
-  - component: {fileID: 240899829}
   m_Layer: 5
   m_Name: HeavyWeaponUI
   m_TagString: Untagged
@@ -431,21 +432,6 @@ RectTransform:
   m_AnchoredPosition: {x: 407, y: -61}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &240899829
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 240899827}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3269170a6dbbbd94999fd1d6ffd5f7de, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ammoCountValueText: {fileID: 188119265}
-  ammoMaxValueText: {fileID: 735941285}
-  coolDownTimerText: {fileID: 933833826}
-  playerHeavyWeapon: {fileID: 1509823491}
 --- !u!1 &245915955
 GameObject:
   m_ObjectHideFlags: 0
@@ -455,7 +441,7 @@ GameObject:
   m_Component:
   - component: {fileID: 245915956}
   m_Layer: 5
-  m_Name: Max Ammo
+  m_Name: MaxAmmo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -546,7 +532,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 11
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &735941283
 GameObject:
@@ -559,7 +545,7 @@ GameObject:
   - component: {fileID: 735941286}
   - component: {fileID: 735941285}
   m_Layer: 5
-  m_Name: MaxAmmoCount
+  m_Name: Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -580,8 +566,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 76.1, y: -10.000002}
-  m_SizeDelta: {x: 20, y: 20}
+  m_AnchoredPosition: {x: -83.4, y: -10.000002}
+  m_SizeDelta: {x: 100, y: 20}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &735941285
 MonoBehaviour:
@@ -615,7 +601,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 10
+  m_Text: 'Max Ammo:
+
+'
 --- !u!222 &735941286
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -973,7 +961,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &933833824
 GameObject:
@@ -986,7 +974,7 @@ GameObject:
   - component: {fileID: 933833827}
   - component: {fileID: 933833826}
   m_Layer: 5
-  m_Name: Cooldown Count
+  m_Name: Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1007,7 +995,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 186.8, y: 0}
+  m_AnchoredPosition: {x: 37.4, y: 0}
   m_SizeDelta: {x: 160, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &933833826
@@ -1042,7 +1030,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: hi
+  m_Text: 'Cooldown:
+
+'
 --- !u!222 &933833827
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1094,7 +1084,7 @@ Prefab:
     - target: {fileID: 224000013668773754, guid: d5a7615a31cde7d4c9dab5c7b4234ff6,
         type: 2}
       propertyPath: m_RootOrder
-      value: 5
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 224000013668773754, guid: d5a7615a31cde7d4c9dab5c7b4234ff6,
         type: 2}
@@ -1272,8 +1262,8 @@ GameObject:
   - component: {fileID: 1221325204}
   - component: {fileID: 1221325203}
   m_Layer: 0
-  m_Name: Ammo Text
-  m_TagString: Untagged
+  m_Name: AmmoText
+  m_TagString: CurrentAmmoUI
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1294,7 +1284,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -10}
+  m_AnchoredPosition: {x: 21.6, y: -10}
   m_SizeDelta: {x: 45, y: 20}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &1221325203
@@ -1329,7 +1319,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Ammo:'
+  m_Text: 'Value
+
+'
 --- !u!222 &1221325204
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1439,7 +1431,7 @@ Transform:
   m_LocalScale: {x: 50, y: 1, z: 50}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 13
+  m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1365818684
 GameObject:
@@ -1501,7 +1493,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1456028356
 Prefab:
@@ -1549,91 +1541,6 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d4aeeedf0a66f3d4c9da1d4a0e24898f, type: 2}
   m_IsPrefabParent: 0
---- !u!1 &1509823490
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 1509823493}
-  - component: {fileID: 1509823492}
-  - component: {fileID: 1509823491}
-  m_Layer: 0
-  m_Name: DumbHeavyWeapon
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1509823491
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1509823490}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e98cf62e7c8bd0f4bafea673e85e2036, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  weaponPrefab: {fileID: 0}
-  weaponStartingPosition: {x: 0, y: 0, z: 0}
-  weaponVelocity: {x: 0, y: 0, z: 0}
-  weaponUseKey: 32
-  coolDownTotalSeconds: 5
-  startingAmmoAmount: 1
-  ammoCapacity: 20
-  ammoPerPack: 1
-  ammoUsePerActivation: 1
-  ammoPackTag: AmmoPack
-  collectPacksWhileAtMaxAmmo: 1
-  addAmmoKey: 117
---- !u!114 &1509823492
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1509823490}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SceneId:
-    m_Value: 0
-  m_AssetId:
-    i0: 0
-    i1: 0
-    i2: 0
-    i3: 0
-    i4: 0
-    i5: 0
-    i6: 0
-    i7: 0
-    i8: 0
-    i9: 0
-    i10: 0
-    i11: 0
-    i12: 0
-    i13: 0
-    i14: 0
-    i15: 0
-  m_ServerOnly: 0
-  m_LocalPlayerAuthority: 0
---- !u!4 &1509823493
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1509823490}
-  m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0.1, y: -1.4, z: -9}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1567563876
 GameObject:
   m_ObjectHideFlags: 0
@@ -1643,7 +1550,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1567563877}
   m_Layer: 0
-  m_Name: Current Ammo
+  m_Name: CurrentAmmo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1705,7 +1612,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4000011280475424, guid: a4be78f671260ee40b2e958e6489f1c8, type: 2}
       propertyPath: m_RootOrder
-      value: 6
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4000011280475424, guid: a4be78f671260ee40b2e958e6489f1c8, type: 2}
       propertyPath: m_LocalEulerAnglesHint.y
@@ -1752,7 +1659,7 @@ Transform:
   - {fileID: 2118741327}
   - {fileID: 790130454}
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1694402882
 GameObject:
@@ -1780,7 +1687,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: -4.497, y: 0, z: 0}
 --- !u!1 &1819371261
 GameObject:
@@ -1792,7 +1699,7 @@ GameObject:
   - component: {fileID: 1819371262}
   m_Layer: 5
   m_Name: Cooldown Info
-  m_TagString: Untagged
+  m_TagString: CooldownUI
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1814,7 +1721,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -83.4, y: 0}
+  m_AnchoredPosition: {x: -56.2, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1896251223
@@ -1849,7 +1756,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 118.7, y: 0}
+  m_AnchoredPosition: {x: 112, y: 0}
   m_SizeDelta: {x: 160, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1896251225
@@ -1884,9 +1791,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Cooldown:
-
-'
+  m_Text: Time
 --- !u!222 &1896251226
 CanvasRenderer:
   m_ObjectHideFlags: 0
