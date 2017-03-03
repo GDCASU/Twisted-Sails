@@ -78,6 +78,7 @@ MonoBehaviour:
   ready: 0
   playerName: 
   host: 0
+  effectivePosition: {x: 0, y: 0}
   defaultColor: {r: 1, g: 1, b: 1, a: 0.559}
   readyColor: {r: 0.41787413, g: 0.9632353, b: 0.44420198, a: 0.5764706}
 --- !u!114 &114000011052543696

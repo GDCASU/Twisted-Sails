@@ -114,6 +114,7 @@ public class HeavyWeaponSunShip : HeavyWeapon {
         /// calculate end position from max range and position at activation
 		weaponStartingPosition = this.transform.position;
 		weaponVelocity = transform.forward * projectileSpeed;
+
         //  modify velocity with weaponVelocity
         base.ActivateWeapon();
 	}

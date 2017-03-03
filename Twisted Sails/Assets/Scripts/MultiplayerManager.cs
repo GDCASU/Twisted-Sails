@@ -49,6 +49,17 @@ using System;
 //              Added code to trigger Player's events at appropriate times
 //              Fixed a bug preventing player ship choice from being sent to the server
 
+// Developer:   Diego Wilde
+// Date:        2/19/2017
+// Description: Player data persistence functionality added. Player statistics are currently saved clientside 
+//              using binary incription to the PlayerData.gd file. Save is called whenever the game scene 
+//              changes clientside, and loading is performed once during OnClientConnect().
+//              - Added method to get the local player
+
+// Developer:   Kyle Aycock
+// Date:        2/24/2017
+// Description: Minor changes to work with new lobby.
+
 public class MultiplayerManager : NetworkManager
 {
     public Gamemode currentGamemode;
@@ -152,6 +163,17 @@ public class MultiplayerManager : NetworkManager
         return singleton.client;
     }
 
+    //DW: Call this method to get the local player object
+    /// <summary>
+    /// Returns the Player object of the local client player.
+    /// Can only be used on client.
+    /// </summary>
+    /// <returns>The local Player object.</returns>
+    public static Player GetLocalPlayer()
+    {
+        return FindPlayer(GetLocalClient().connection.connectionId);
+    }
+
     /// <summary>
     /// Returns the combined score of all players on a given team.
     /// Can be used on client and server.
@@ -228,6 +250,12 @@ public class MultiplayerManager : NetworkManager
         return GetInstance().currentGamemode.teams[number];
     }
 
+    public static bool IsGameJoinable()
+    {
+        LobbyManager lobby = GameObject.Find("Canvas").GetComponent<LobbyManager>();
+        return (IsLobby() && lobby != null && lobby.IsJoinable() && GetInstance().playerList.Count < 8);
+    }
+
     /// <summary>
     /// Only use this if you need access to something within the MultiplayerManager not given by other methods.
     /// </summary>
@@ -291,7 +319,7 @@ public class MultiplayerManager : NetworkManager
         }
         else Debug.Log("Player " + victim.name + " suicided!");
 
-        Player.SendPlayerKilled(victim, killer);
+        Player.ActivateEventPlayerKilled(victim, killer);
         SendGameState();
         CheckEndGame();
     }
@@ -350,33 +378,25 @@ public class MultiplayerManager : NetworkManager
         Transform startPos = GetStartPosition();
         if (IsLobby())
         {
-            //We are spawning a lobby icon representation of the player
+            //We are spawning a lobby representation of the player
+            playerTeam = currentGamemode.AutoAssignTeam(playerList);
+            playerShip = 0;
             Player player = new Player(playerName, playerTeam, NetworkInstanceId.Invalid, conn.connectionId);
             playerList.Add(player);
-            if (startPos != null)
-            {
-                RectTransform rectTransform = (RectTransform)startPos;
-                playerObj = (GameObject)Instantiate(lobbyPrefab, Vector3.zero, startPos.rotation);
-                playerObj.transform.SetParent(rectTransform.parent, false);
-                ((RectTransform)playerObj.transform).anchoredPosition = rectTransform.anchoredPosition;
-                playerObj.GetComponent<PlayerIconController>().effectivePosition = rectTransform.anchoredPosition;
-            }
-            else
-            {
-                //shouldn't happen - needs failsafe
-                playerObj = (GameObject)Instantiate(lobbyPrefab, Vector3.zero, Quaternion.identity);
-            }
+            playerObj = Instantiate(lobbyPrefab, Vector3.zero, Quaternion.identity);
             playerObj.GetComponent<PlayerIconController>().playerName = playerName;
+            playerObj.GetComponent<PlayerIconController>().playerTeam = playerTeam;
+            playerObj.GetComponent<PlayerIconController>().playerShip = playerShip;
         }
         else {
             //We are spawning a ship in game
             if (startPos != null)
             {
-                playerObj = (GameObject)Instantiate(playableShips[playerShip], startPos.position, startPos.rotation);
+                playerObj = Instantiate(playableShips[playerShip], startPos.position, startPos.rotation);
             }
             else
             {
-                playerObj = (GameObject)Instantiate(playableShips[playerShip], Vector3.zero, Quaternion.identity);
+                playerObj = Instantiate(playableShips[playerShip], Vector3.zero, Quaternion.identity);
             }
 
             //Player team not chosen - ask gamemode to autoassign
@@ -390,6 +410,13 @@ public class MultiplayerManager : NetworkManager
 
         PlayerConnected(FindPlayer(conn.connectionId));
         NetworkServer.AddPlayerForConnection(conn, playerObj, playerControllerId);
+    }
+
+    public override void OnServerConnect(NetworkConnection conn)
+    {
+        if(!IsGameJoinable())
+            conn.Disconnect();
+        base.OnServerConnect(conn);
     }
 
     //Overridden for purposes of maintaining playerlist
@@ -430,21 +457,10 @@ public class MultiplayerManager : NetworkManager
         base.OnServerSceneChanged(sceneName);
     }
 
-    //Called when a player clicks 'ready' in the lobby
-    public void SetPlayerReady(NetworkInstanceId source, bool ready)
+    //Called when the lobby transitions to the game
+    public void EnterGame()
     {
-        playerList.Find(p => p.objectId == source).ready = ready;
-        if (IsLobby())
-        {
-            LobbyManager manager = GameObject.Find("Canvas").GetComponent<LobbyManager>();
-            int readyCount = playerList.FindAll(p => p.ready).Count;
-            if (readyCount == playerList.Count - 1)
-                manager.SetAllReady(true);
-            else if (readyCount == playerList.Count)
-                ServerChangeScene(inGameScene);
-            else
-                manager.SetAllReady(false);
-        }
+        ServerChangeScene(inGameScene);
     }
 
     //Convenience method for sending the current game state to all clients
@@ -457,8 +473,10 @@ public class MultiplayerManager : NetworkManager
     //Methods only for use clientside
     #region Client
     //Overridden to register handlers and prevent spawning at this stage
+    //DW: Added a call to load save data, if it exists
     public override void OnClientConnect(NetworkConnection conn)
     {
+        SaveLoad.Load();
         client.RegisterHandler(ExtMsgType.State, OnStateUpdate);
         if (!ClientScene.ready) ClientScene.Ready(client.connection);
     }
@@ -476,6 +494,7 @@ public class MultiplayerManager : NetworkManager
         GameStateMessage msg = netMsg.ReadMessage<GameStateMessage>();
         playerList = msg.playerList;
         teamScores = msg.teamScores;
+        SaveLoad.SaveGame();
     }
 
     //Tells the network client to tell the server to spawn a player
@@ -621,7 +640,7 @@ public class MultiplayerManager : NetworkManager
 // NK: Enums for type of ship
 public enum Ship
 {
-    Trireme,
     Human,
+    Trireme,
     Bramble
 }
