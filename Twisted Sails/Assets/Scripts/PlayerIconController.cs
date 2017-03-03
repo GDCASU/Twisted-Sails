@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine.Networking;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 // Developer:   Kyle Aycock
 // Date:        11/10/2016
@@ -27,94 +28,81 @@ using UnityEngine.UI;
 // Date:        2/1/2017
 // Description: Adapted to use new team system
 
-//This is the input/player controller for a player's lobby icon
-//Input is given to this script from LobbyManager.cs currently
+// Developer:   Kyle Aycock
+// Date:        2/24/2017
+// Description: Revamped lobby flow and usage of this script
+
+//This is the input/player controller for a player's lobby representation
+//Input is given to this script from LobbyManager.cs
 public class PlayerIconController : NetworkBehaviour
 {
-    [SyncVar(hook = "OnReadyStateChange")]
-    public bool ready;
     [SyncVar(hook = "OnNameChange")]
     public string playerName;
+    [SyncVar(hook = "OnTeamChange")]
+    public short playerTeam;
+    [SyncVar(hook = "OnShipChange")]
+    public short playerShip;
     [SyncVar]
     public bool host;
-    [SyncVar]
-    public Vector2 effectivePosition;
-    public Color defaultColor;
-    public Color readyColor;
 
-    private Sprite[] shipIcons; // list of ship icons taken from LobbyManager for RPC use
     private Text nameText;
-    private Vector2 startPos;
-    private Vector2 targetPos;
-    private float progress;
     private RectTransform rectTransform;
     private GameObject canvas;
 
-    #region Hooks
     // Use this for initialization
     void Start()
     {
-        ready = false;
         canvas = GameObject.Find("Canvas");
-        transform.SetParent(canvas.transform.Find("TeamSelect"), false);
-        nameText = transform.Find("PlayerName").GetComponent<Text>();
+        nameText = GetComponent<Text>();
         rectTransform = GetComponent<RectTransform>();
-        rectTransform.anchoredPosition = effectivePosition;
-        targetPos = effectivePosition;
-
-        shipIcons = canvas.GetComponent<LobbyManager>().shipIcons;
-
-        if (host)
-            MarkHost();
-        else if (MultiplayerManager.IsHost() && isLocalPlayer) //temporary solution
-            CmdMarkHost();
 
         if (isLocalPlayer)
-        {
-            defaultColor.a = 255;
-            readyColor.a = 255;
             CmdPlayerInit(MultiplayerManager.GetLocalClient().connection.connectionId);
-            CmdReady(ready);
-        }
-        OnReadyStateChange(ready);
+
+        OnTeamChange(playerTeam);
         OnNameChange(playerName);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        //Smooth movement
-        if (rectTransform.anchoredPosition != targetPos)
-        {
-            progress += Time.deltaTime * 2;
-            Vector2 newPos = Vector2.Lerp(startPos, targetPos, progress);
-            rectTransform.anchoredPosition = newPos;
-            effectivePosition = newPos;
-        }
+        OnShipChange(playerShip);
     }
 
     /// <summary>
-    /// Automatically called when this icon is readied or unreadied
-    /// </summary>
-    /// <param name="newState"></param>
-    public void OnReadyStateChange(bool newState)
-    {
-        ready = newState;
-        GetComponent<Image>().color = (ready ? readyColor : defaultColor);
-    }
-
-    /// <summary>
-    /// Automatically called when playerName is changed on this icon serverside
+    /// Automatically called when playerName is changed on this script serverside
     /// </summary>
     /// <param name="newName"></param>
     public void OnNameChange(string newName)
     {
         playerName = newName;
-        transform.Find("PlayerName").GetComponent<Text>().text = newName;
+        GetComponent<Text>().text = newName;
     }
-    #endregion
 
-    #region Commands
+    /// <summary>
+    /// Automatically called when playerTeam is changed on this script serverside
+    /// </summary>
+    /// <param name="newTeam"></param>
+    public void OnTeamChange(short newTeam)
+    {
+        playerTeam = newTeam;
+        if(isLocalPlayer) MultiplayerManager.GetInstance().localPlayerTeam = newTeam;
+        LobbyManager lobby = GameObject.Find("Canvas").GetComponent<LobbyManager>();
+        if (lobby.currentState != LobbyManager.LobbyState.TeamSelect) return;
+        if (playerTeam == 0)
+            transform.SetParent(lobby.redTeam, false);
+        else
+            transform.SetParent(lobby.blueTeam, false);
+    }
+
+    /// <summary>
+    /// Automatically called when playerShip is changed on this script serverside
+    /// </summary>
+    /// <param name="newShip"></param>
+    public void OnShipChange(short newShip)
+    {
+        playerShip = newShip;
+        LobbyManager lobby = GameObject.Find("Canvas").GetComponent<LobbyManager>();
+        if (lobby.currentState != LobbyManager.LobbyState.ShipSelect) return;
+        transform.SetParent(lobby.ShipSelectNameContainers[newShip].transform, false);
+    }
+
+
     /// <summary>
     /// To be called to hook this object to the player controlling it
     /// </summary>
@@ -123,97 +111,50 @@ public class PlayerIconController : NetworkBehaviour
     public void CmdPlayerInit(int connId)
     {
         MultiplayerManager.FindPlayer(connId).objectId = GetComponent<NetworkIdentity>().netId;
+        MultiplayerManager.GetInstance().SendGameState();
     }
 
     /// <summary>
-    /// Called by the client to send a request to switch teams
+    /// Called by LobbyManager to notify this player of a change in team
     /// </summary>
-    /// <param name="team">Team to switch to</param>
-    /// <param name="parentName">Name of the container for the team</param>
-    /// <param name="localTarget">Position within the container to move to</param>
+    /// <param name="team"></param>
     [Command]
-    public void CmdMoveReq(short team, string parentName, Vector2 localTarget)
+    public void CmdChangeTeam(short team)
     {
         MultiplayerManager.FindPlayer(GetComponent<NetworkIdentity>().netId).team = team;
-        RpcDoMove(team, parentName, localTarget);
+        playerTeam = team;
     }
 
+    /// <summary>
+    /// Called by LobbyManager to notify this player of a change in ship
+    /// </summary>
+    /// <param name="ship"></param>
     [Command]
     public void CmdChangeShip(Ship ship)
     {
         MultiplayerManager.FindPlayer(GetComponent<NetworkIdentity>().netId).ship = ship;
-        RpcShipSelect(ship);
+        playerShip = (short)ship;
     }
-
-    [Command]
-    public void CmdMarkHost()
-    {
-        host = true;
-        RpcMarkHost();
-    }
-
+    
     /// <summary>
-    /// Toggles readiness for match to start
+    /// Called by LobbyManager to bounce a Lock In request to the server
     /// </summary>
     [Command]
-    public void CmdReady(bool ready)
+    public void CmdLockIn()
     {
-        MultiplayerManager.GetInstance().SetPlayerReady(GetComponent<NetworkIdentity>().netId, ready);
-        this.ready = ready;
-    }
-    #endregion
-
-    #region ClientRpc
-    /// <summary>
-    /// Called by server to mark this icon as belonging to the host player
-    /// </summary>
-    [ClientRpc]
-    public void RpcMarkHost()
-    {
-        host = true;
-        MarkHost();
+        MultiplayerManager.FindPlayer(GetComponent<NetworkIdentity>().netId).ready = true;
+        List<Player> playerList = MultiplayerManager.GetInstance().playerList;
+        if (playerList.FindAll(p => p.ready).Count == playerList.Count)
+        {
+            LobbyManager lobby = canvas.GetComponent<LobbyManager>();
+            lobby.LockShips();
+            lobby.RpcLockShips();
+        }
     }
 
-    /// <summary>
-    /// Called by server to perform a team switch on this icon
-    /// </summary>
-    /// <param name="team">Team to switch to</param>
-    /// <param name="parentName">Name of the container for the team</param>
-    /// <param name="localTarget">Position within the container to move to</param>
-    [ClientRpc]
-    public void RpcDoMove(short team, string parentName, Vector2 localTarget)
-    {
-        transform.SetParent(canvas.transform.Find("TeamSelect").Find(parentName));
-        startPos = rectTransform.anchoredPosition;
-        targetPos = localTarget;
-        progress = 0;
-    }
-
-    // NK
-    /// <summary>
-    /// Called by server to perform a ship switch for the player
-    /// </summary>
-    /// <param name="ship">Ship to switch to</param>
-    [ClientRpc]
-    public void RpcShipSelect(Ship ship)
-    {
-        transform.Find("ShipIcon").GetComponent<Image>().sprite = shipIcons[(int)ship];
-    }
-
-    #region Misc
     //Changes the name displayed on this icon
     public void SetName(string name)
     {
         nameText.text = name;
     }
-    #endregion
-
-    //This icon is the host's icon
-    public void MarkHost()
-    {
-        defaultColor.b = 0;
-        readyColor.r = 255;
-        OnReadyStateChange(ready);
-    }
-    #endregion
 }
