@@ -1,4 +1,4 @@
-﻿xusing UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 
 /**
@@ -16,19 +16,20 @@ using System.Collections;
 	If need help using this template, contact the programmer's above.
 **/
 
-public class HeavyWeaponBramble : HeavyWeapon {
+public class HeavyWeaponHuman : HeavyWeapon
+{
+    public Vector3 weaponStartingPositionOffset;
+    public Vector3 basicWeaponVelocity;
+    public float weaponSpreadAngle;
 
-	// Use this for initialization
-	new void Start () {
+    new void Start ()
+    {
         base.Start();
-        // ADD YOUR CODE HERE
 	}
 	
-	// Update is called once per frame
 	new void Update()
     {
         base.Update();
-        // ADD YOUR CODE HERE
     }
 
     #region CollisionFunctions
@@ -106,12 +107,19 @@ public class HeavyWeaponBramble : HeavyWeapon {
     /// </summary>
     override protected void ActivateWeapon()
 	{
-		weaponStartingPosition = this.transform.position;
-		//weaponVelocity = Vector3.back * 1;
+        Quaternion left = Quaternion.AngleAxis(-weaponSpreadAngle, Vector3.up);
+        Quaternion right = Quaternion.AngleAxis(weaponSpreadAngle, Vector3.up);
 
-        // ADD YOUR CODE HERE
-        //  modify spawn position with weaponStartingPosition
-        //  modify velocity with weaponVelocity
+        weaponStartingPosition = transform.position + transform.rotation * weaponStartingPositionOffset;
+        weaponVelocity = transform.rotation * basicWeaponVelocity;
+        base.ActivateWeapon();
+
+        weaponStartingPosition = transform.position + left * transform.rotation * weaponStartingPositionOffset;
+        weaponVelocity = transform.rotation * left *  basicWeaponVelocity;
+        base.ActivateWeapon();
+
+        weaponStartingPosition = transform.position + right * transform.rotation * weaponStartingPositionOffset;
+        weaponVelocity = transform.rotation * right * basicWeaponVelocity;
         base.ActivateWeapon();
 	}
 
