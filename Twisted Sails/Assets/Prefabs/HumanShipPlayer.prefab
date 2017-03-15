@@ -2441,13 +2441,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab883ffe2982dd44b85eae0ed0f90d76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weaponPrefab: {fileID: 0}
+  weaponPrefab: {fileID: 1798957808378302, guid: 9b1555f27bd22cf4f9e804a0e860915f,
+    type: 2}
   weaponStartingPosition: {x: 0, y: 0, z: 0}
   weaponVelocity: {x: 0, y: 0, z: 0}
-  weaponUseKey: 0
+  weaponUseKey: 102
   coolDownTotalSeconds: 0
   startingAmmoAmount: 0
-  ammoCapacity: 0
+  ammoCapacity: 3
   ammoPerPack: 1
   ammoUsePerActivation: 1
   ammoPackTag: AmmoPack

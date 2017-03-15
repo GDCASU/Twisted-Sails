@@ -18,8 +18,8 @@ using System.Collections;
 
 public class HeavyWeaponHuman : HeavyWeapon
 {
-    public Vector3 weaponStartingPositionOffset;
-    public Vector3 basicWeaponVelocity;
+    private int projectileSpeed = 50;
+    private int projectileOffset = 3;
     public float weaponSpreadAngle;
 
     new void Start ()
@@ -41,7 +41,7 @@ public class HeavyWeaponHuman : HeavyWeapon
     new void OnCollisionEnter(Collision other)
     {
         base.OnCollisionEnter(other);
-        // ADD YOUR CODE HERE
+
     }
 
     /// <summary>
@@ -107,21 +107,21 @@ public class HeavyWeaponHuman : HeavyWeapon
     /// </summary>
     override protected void ActivateWeapon()
 	{
-        Quaternion left = Quaternion.AngleAxis(-weaponSpreadAngle, Vector3.up);
-        Quaternion right = Quaternion.AngleAxis(weaponSpreadAngle, Vector3.up);
-
-        weaponStartingPosition = transform.position + transform.rotation * weaponStartingPositionOffset;
-        weaponVelocity = transform.rotation * basicWeaponVelocity;
+        weaponStartingPosition = transform.position + (transform.forward * projectileOffset) + transform.up;
+        weaponVelocity = transform.forward * projectileSpeed;
+        weaponPrefab.GetComponent<Rigidbody>().AddForce(weaponVelocity);
         base.ActivateWeapon();
 
-        weaponStartingPosition = transform.position + left * transform.rotation * weaponStartingPositionOffset;
-        weaponVelocity = transform.rotation * left *  basicWeaponVelocity;
+        weaponStartingPosition = transform.position + (transform.forward - transform.right * projectileOffset) + transform.up;
+        weaponVelocity = transform.forward * projectileSpeed;
+        weaponPrefab.GetComponent<Rigidbody>().AddForce(weaponVelocity);
         base.ActivateWeapon();
 
-        weaponStartingPosition = transform.position + right * transform.rotation * weaponStartingPositionOffset;
-        weaponVelocity = transform.rotation * right * basicWeaponVelocity;
+        weaponStartingPosition = transform.position + (transform.forward + transform.right * projectileOffset) + transform.up;
+        weaponVelocity = transform.forward * projectileSpeed;
+        weaponPrefab.GetComponent<Rigidbody>().AddForce(weaponVelocity);
         base.ActivateWeapon();
-	}
+    }
 
     /// <summary>
     /// This function is called when the player has 0 ammo left after activating their weapon.

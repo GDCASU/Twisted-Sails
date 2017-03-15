@@ -1,4 +1,4 @@
-﻿xusing UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 
 /**
@@ -106,7 +106,7 @@ public class HeavyWeaponBramble : HeavyWeapon {
     /// </summary>
     override protected void ActivateWeapon()
 	{
-		weaponStartingPosition = this.transform.position;
+		weaponStartingPosition = transform.position + transform.forward * 5;
 		//weaponVelocity = Vector3.back * 1;
 
         // ADD YOUR CODE HERE
