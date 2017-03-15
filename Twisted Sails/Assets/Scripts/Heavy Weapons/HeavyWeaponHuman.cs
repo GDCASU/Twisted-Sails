@@ -16,19 +16,20 @@ using System.Collections;
 	If need help using this template, contact the programmer's above.
 **/
 
-public class HeavyWeaponBramble : HeavyWeapon {
+public class HeavyWeaponHuman : HeavyWeapon
+{
+    private int projectileSpeed = 50;
+    private int projectileOffset = 3;
+    public float weaponSpreadAngle;
 
-	// Use this for initialization
-	new void Start () {
+    new void Start ()
+    {
         base.Start();
-        // ADD YOUR CODE HERE
 	}
 	
-	// Update is called once per frame
 	new void Update()
     {
         base.Update();
-        // ADD YOUR CODE HERE
     }
 
     #region CollisionFunctions
@@ -40,7 +41,7 @@ public class HeavyWeaponBramble : HeavyWeapon {
     new void OnCollisionEnter(Collision other)
     {
         base.OnCollisionEnter(other);
-        // ADD YOUR CODE HERE
+
     }
 
     /// <summary>
@@ -106,14 +107,21 @@ public class HeavyWeaponBramble : HeavyWeapon {
     /// </summary>
     override protected void ActivateWeapon()
 	{
-		weaponStartingPosition = transform.position + transform.forward * 5;
-		//weaponVelocity = Vector3.back * 1;
-
-        // ADD YOUR CODE HERE
-        //  modify spawn position with weaponStartingPosition
-        //  modify velocity with weaponVelocity
+        weaponStartingPosition = transform.position + (transform.forward * projectileOffset) + transform.up;
+        weaponVelocity = transform.forward * projectileSpeed;
+        weaponPrefab.GetComponent<Rigidbody>().AddForce(weaponVelocity);
         base.ActivateWeapon();
-	}
+
+        weaponStartingPosition = transform.position + (transform.forward - transform.right * projectileOffset) + transform.up;
+        weaponVelocity = transform.forward * projectileSpeed;
+        weaponPrefab.GetComponent<Rigidbody>().AddForce(weaponVelocity);
+        base.ActivateWeapon();
+
+        weaponStartingPosition = transform.position + (transform.forward + transform.right * projectileOffset) + transform.up;
+        weaponVelocity = transform.forward * projectileSpeed;
+        weaponPrefab.GetComponent<Rigidbody>().AddForce(weaponVelocity);
+        base.ActivateWeapon();
+    }
 
     /// <summary>
     /// This function is called when the player has 0 ammo left after activating their weapon.
