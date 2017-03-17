@@ -2,33 +2,33 @@
 using System.Collections;
 
 /**
-	[Template Class Header]
-	Template Makers:	Nizar Kury and Kyle Chapman
-	Date:				11/30/2016
+	[Heavy Weapon: Dragon]
+	Creator:            Sean McGonegle
+	Date:				2/24/2017
 
-    Duplicate this script and rename the duplicate
-	to place on a boat prefab game object.
-    Each boat type should have a different heavy weapon script
-    associated with it. For instance, a trireme would have a 
-    TriremeHeavyWeapon script while the dragon boat would have
-    a DragonBoatHeavyWeapon script attached to it.
+    The Activate method of this script sets the spawn position of the dragon projectile to the player's ship, with a 
+    small offset in front of the ship, and sets the projectile's speed.
 
-	If need help using this template, contact the programmer's above.
+    Collision is handled in a seperate script hat is attatched to the projectile itself. This was done because the
+    current system does not have a way to access the unique prefab that is created when the projectile is instantiated,
+    which makes handeling collision and the destruction of said projectile difficult.
+
 **/
 
-public class HeavyWeaponBramble : HeavyWeapon {
+public class HeavyWeaponDragon: HeavyWeapon {
 
-	// Use this for initialization
+    // Use this for initialization
+    private int projectileSpeed = 50;
+    private int projectileOffset = 5;
+
 	new void Start () {
         base.Start();
-        // ADD YOUR CODE HERE
-	}
+    }
 	
 	// Update is called once per frame
 	new void Update()
     {
         base.Update();
-        // ADD YOUR CODE HERE
     }
 
     #region CollisionFunctions
@@ -40,7 +40,6 @@ public class HeavyWeaponBramble : HeavyWeapon {
     new void OnCollisionEnter(Collision other)
     {
         base.OnCollisionEnter(other);
-        // ADD YOUR CODE HERE
     }
 
     /// <summary>
@@ -83,7 +82,6 @@ public class HeavyWeaponBramble : HeavyWeapon {
     new void OnTriggerExit(Collider other)
     {
         base.OnTriggerExit(other);
-        // ADD YOUR CODE HERE
     }
 
     /// <summary>
@@ -106,12 +104,10 @@ public class HeavyWeaponBramble : HeavyWeapon {
     /// </summary>
     override protected void ActivateWeapon()
 	{
-		weaponStartingPosition = transform.position + transform.forward * 5;
-		//weaponVelocity = Vector3.back * 1;
+        weaponStartingPosition = transform.position + (transform.forward * projectileOffset);
+        weaponVelocity = transform.forward * projectileSpeed;
+        weaponPrefab.GetComponent<Rigidbody>().AddForce(weaponVelocity);
 
-        // ADD YOUR CODE HERE
-        //  modify spawn position with weaponStartingPosition
-        //  modify velocity with weaponVelocity
         base.ActivateWeapon();
 	}
 
@@ -129,7 +125,7 @@ public class HeavyWeaponBramble : HeavyWeapon {
     /// </summary>
     override protected void AmmoMaxedOut()
 	{
-        // ADD YOUR CODE
+        //Displays to player they have no ammo
 	}
 
     /// <summary>
@@ -137,8 +133,7 @@ public class HeavyWeaponBramble : HeavyWeapon {
     /// </summary>
     override protected void CollectedAmmoPack()
 	{
-        // ADD YOUR CODE
-	}
+    }
 
     /// <summary>
     /// This function is called when the player tries to activate their weapon, but does not have enough ammo.
