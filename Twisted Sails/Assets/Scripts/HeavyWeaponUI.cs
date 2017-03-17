@@ -82,13 +82,29 @@ public class HeavyWeaponUI : NetworkBehaviour
 	//function to set cool down timer count to cool down timer value from playreHeavyWeapon
 	void SetCoolDownTimerText()
 	{
-		//if cooldown timer value is less than or equal to zero, make text display zero
-		if(playerHeavyWeapon.CoolDownTimer < 0){coolDownTimerText.text = "0";}
+		//if cooldown timer value is less than or equal to 0.09, make text display zero
+		if(playerHeavyWeapon.CoolDownTimer < 0.09){coolDownTimerText.text = "0";}
 		//else display cool down timer value
 		else
 		{
 			//assign playerHeavyWeapon cooldown timer value to cooldown timer text item
-			coolDownTimerText.text = playerHeavyWeapon.CoolDownTimer.ToString();
+			string displayCooldownTimeString = playerHeavyWeapon.CoolDownTimer.ToString();
+			
+			//if cooldowntimer is more than 1 second 
+			if(playerHeavyWeapon.CoolDownTimer >= 1)
+			{
+				//remove last 5 characters from displayCooldownTimeString
+				displayCooldownTimeString = displayCooldownTimeString.Remove(displayCooldownTimeString.Length - 5);
+			}
+			//else if cooldowntimer is less than 1 second
+			else
+			{
+				//remove last 6 characters from displayCooldownTimeString
+				displayCooldownTimeString = displayCooldownTimeString.Remove(displayCooldownTimeString.Length - 6);
+			}
+			
+			//assign displayCooldownTimeString to coolDownTimerText to display cooldown time
+			coolDownTimerText.text = displayCooldownTimeString;
 		}
 	}
 }
