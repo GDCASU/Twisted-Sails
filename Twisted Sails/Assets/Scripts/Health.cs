@@ -53,6 +53,10 @@ using UnityEngine.Networking;
 // Description: Adapted to use new Team system
 //              Added code to trigger appropriate Player events
 
+// Developer:   Kyle Chapman
+// Date:        2/14/2017
+// Description: Refactored for interaction with the InteractiveObjects system.
+
 public class Health : NetworkBehaviour
 {
     [Header("Health")]
@@ -60,7 +64,6 @@ public class Health : NetworkBehaviour
     public float health;
     public Text healthText;
     public Slider healthSlider;
-    public float healthPackAmount = 25.0f;
 
     [Header("Sinking")]
     public float sinkSpeed;
@@ -77,7 +80,7 @@ public class Health : NetworkBehaviour
     [Header("Misc")]
     public KeyCode hurtSelfButton;
     public GameObject activeCamera;
-    public GameObject explosion;
+    
     public Vector3 spawnPoint; // NK 10/20 added original spawnpoint
     public float defenseStat; // Crew Management - Defense Crew
 
@@ -161,47 +164,45 @@ public class Health : NetworkBehaviour
         //Hurt self functionality
         if (isLocalPlayer && Input.GetKeyDown(hurtSelfButton))
         {
-            CmdChangeHealth(-5, NetworkInstanceId.Invalid);
+            CmdHurtSelf(-5);
             return;
         }
     }
 
-    //Whenever ship collides with something else
-    void OnCollisionEnter(Collision c)
+    //Whenever ship collides with an interactable object
+    void OnCollisionEnter(Collision collision)
     {
-        //Cannonball collision
-        if (c.transform.gameObject.tag.Equals("Cannonball") && c.gameObject.GetComponent<CannonBallNetworked>().owner != GetComponent<NetworkIdentity>().netId)
-        {
-            NetworkInstanceId cannonballOwner = c.gameObject.GetComponent<CannonBallNetworked>().owner;
-            short cannonballTeam = ClientScene.FindLocalObject(cannonballOwner).GetComponent<Health>().team;
-            if (cannonballTeam != team)
-            {
-                int damage = -35;
-                Player.SendPlayerDamaged(MultiplayerManager.FindPlayer(GetComponent<NetworkIdentity>().netId), MultiplayerManager.FindPlayer(cannonballOwner), ref damage);
-                if (isLocalPlayer)
-                {
-                    CmdChangeHealth(damage, c.transform.gameObject.GetComponent<CannonBallNetworked>().owner);
-                }
-                GameObject explode = (GameObject)Instantiate(explosion, c.contacts[0].point, Quaternion.identity);
-                explode.GetComponent<ParticleSystem>().Emit(100);
-            }
-            if (isServer)
-            {
-                Destroy(c.gameObject);
-            }
-        }
+		InteractiveObject interaction = collision.transform.GetComponent<InteractiveObject>();
 
-        //Health Pickup collision
-        if (c.transform.gameObject.tag.Equals("HealthPickUp"))
-        {
-            Player.SendPlayerPickup(MultiplayerManager.FindPlayer(GetComponent<NetworkIdentity>().netId), true);
-            if (isLocalPlayer)
-            {
-                CmdChangeHealth(healthPackAmount, NetworkInstanceId.Invalid);
-            }
-            if (isServer)
-                Destroy(c.gameObject);
-        }
+		if (interaction == null)
+			return;
+
+		//allow the interaction only if the object isn't owned by player it is touching
+        if (interaction.owner != GetComponent<NetworkIdentity>().netId)
+		{
+			GameObject otherPlayerBoat = ClientScene.FindLocalObject(interaction.owner);
+
+			StatusEffectsManager ourEffectsManager = GetComponent<StatusEffectsManager>();
+
+            int teamOfObject = otherPlayerBoat == null ? -1 : otherPlayerBoat.GetComponent<Health>().team;
+
+			//allow the interaction only if the object touching us is owned by an enemy and the object is allowed to interact with enemies
+			//or if the object touching us is owned by a teammate and the object is allowed to interact with teammates
+			//or if the interaction object isn't owned by any particular player
+			if (teamOfObject == -1 || (teamOfObject == team && interaction.DoesEffectTeammates()) || (teamOfObject != team && interaction.DoesEffectEnemies()))
+			{
+				//tell the interactive object about the interaction
+				//giving them this health, the boat this health is attached to, this boats status effect manager, and the collision that caused the interaction
+				interaction.OnInteractWithPlayer(this, gameObject, ourEffectsManager, collision);
+
+				//if we are the server, destroy the interactive object after the interaction
+				//if it says it is destroy after interactions
+				if (interaction.DoesDestroyInInteract())
+				{
+					Destroy(collision.gameObject);
+				}
+			}
+		}
     }
 
     //This method should not be called to change health, use CmdChangeHealth for that.
@@ -232,28 +233,13 @@ public class Health : NetworkBehaviour
     {
         MultiplayerManager.FindPlayer(connectionId).objectId = GetComponent<NetworkIdentity>().netId;
     }
-
-    /// <summary>
-    /// This method should be used for all changes to a ship's health.
-    /// It should only be called on clients (as it is a command).
-    /// Use NetworkInstanceId.Invalid if there is no damage source.
-    /// </summary>
-    /// <param name="amount">Amount to change health by</param>
-    /// <param name="source">ID of the damage/heal source. Can be NetworkInstanceId.Invalid</param>
-    [Command]
-    public void CmdChangeHealth(float amount, NetworkInstanceId source)
-    {
-        if (health == 0 && amount < 0) return; //don't register damage taken after death
-
-        amount *= defenseStat; // Multiplier effect for defense stat
-
-        //By setting this variable in a serverside context, the OnChangeHealth hook is called on all clients
-        health = Mathf.Clamp(health + amount, 0, 100);
-        if (health == 0) //Tell the server about this kill
-            MultiplayerManager.GetInstance().PlayerKill(MultiplayerManager.FindPlayer(GetComponent<NetworkIdentity>().netId), source);
-    }
     #endregion
 
+    [Command]
+    public void CmdHurtSelf(float dmg)
+    {
+        ChangeHealth(dmg, NetworkInstanceId.Invalid);
+    }
     //ClientRpc methods are called on the server to send information to the client
     #region ClientRpcs
     /// <summary>
@@ -308,6 +294,28 @@ public class Health : NetworkBehaviour
 
     #region Other
     /// <summary>
+    /// This method should be used for all changes to a ship's health.
+    /// It should only be called on the server.
+    /// Use NetworkInstanceId.Invalid if there is no damage source.
+    /// </summary>
+    /// <param name="amount">Amount to change health by</param>
+    /// <param name="source">ID of the damage/heal source. Can be NetworkInstanceId.Invalid</param>
+    public void ChangeHealth(float amount, NetworkInstanceId source)
+    {
+        if (health == 0 && amount < 0) return; //don't register damage taken after death
+
+        //Todo: add back in this functionality in the Stat System using an event hook for PlayerDamaged
+        //amount *= defenseStat; // Multiplier effect for defense stat
+
+        Player.ActivateEventPlayerDamaged(MultiplayerManager.FindPlayer(GetComponent<NetworkIdentity>().netId), MultiplayerManager.FindPlayer(source), ref amount);
+        
+        //By setting this variable in a serverside context, the OnChangeHealth hook is called on all clients
+        health = Mathf.Clamp(health + amount, 0, 100);
+        if (health == 0) //Tell the server about this kill
+            MultiplayerManager.GetInstance().PlayerKill(MultiplayerManager.FindPlayer(GetComponent<NetworkIdentity>().netId), source);
+    }
+
+    /// <summary>
     /// Use this method to tell the ship it's dead.
     /// All input is disabled and the ship's owner experiences a little death cinematic.
     /// </summary>
@@ -342,8 +350,8 @@ public class Health : NetworkBehaviour
         {
             activeCamera.GetComponent<BoatCameraNetworked>().enabled = true;
             activeCamera.GetComponent<OrbitalCamera>().enabled = false;
-            CmdChangeHealth(100, NetworkInstanceId.Invalid);
         }
+        ChangeHealth(100, NetworkInstanceId.Invalid);
         GetComponent<BoatMovementNetworked>().enabled = true;
         GetComponent<Buoyancy>().enabled = true;
         GetComponent<Rigidbody>().useGravity = true;

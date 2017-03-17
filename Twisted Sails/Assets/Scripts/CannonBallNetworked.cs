@@ -16,20 +16,24 @@
 //	- Variables added to ensure only one splash is created
 //	- Changes to movement upon entering water (higher drag)
 
+// Developer: Kyle Chapman
+// Date: 2/15/2017
+// Description: Refacted to work within the InteractiveObject system.
+
 using UnityEngine;
 using System.Collections;
 using UnityEngine.Networking;
 
-public class CannonBallNetworked : NetworkBehaviour {
+public class CannonBallNetworked : InteractiveObject {
 
+	public int damageDealt;
 	public float despawnDepth = -3f;
 	public float scaleFactor = 0.1f;
     public GameObject splashPrefab;
 	private static Vector3 initScale = Vector3.zero;
     private bool splashed;
 
-    [SyncVar]
-    public NetworkInstanceId owner;
+	public GameObject explosion;
 
 	//Set size of cannonball
 	void Start()
@@ -61,5 +65,29 @@ public class CannonBallNetworked : NetworkBehaviour {
 		{
 			Object.Destroy(this.gameObject);
 		}
+	}
+
+	public override void OnInteractWithPlayer(Health playerHealth, GameObject playerBoat, StatusEffectsManager manager, Collision collision)
+	{
+		int healthChange = -damageDealt;
+
+		//if this object is on the side of the player who owns this object
+		//send out the command to change the players health
+		//setting the source of the health change to be the owner of this cannonball
+        playerHealth.ChangeHealth(healthChange, owner);
+
+        //locally instantiates an explosion prefab at the site of the interaction for graphics
+        GameObject explode = (GameObject)Instantiate(explosion, collision.contacts[0].point, Quaternion.identity);
+		explode.GetComponent<ParticleSystem>().Emit(100);
+	}
+
+	public override bool DoesEffectTeammates()
+	{
+		return false;
+	}
+
+	public override bool DoesEffectEnemies()
+	{
+		return true;
 	}
 }

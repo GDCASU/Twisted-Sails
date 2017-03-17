@@ -12,6 +12,7 @@ public class Gamemode
 {
     public string name;
     public Team[] teams;
+    public int teamSize;
 
     /// <summary>
     /// Use this for whenever any form of timekeeping might be needed   
