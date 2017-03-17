@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BrambleProjectileBehavior : MonoBehaviour {
+public class BrambleProjectileBehavior : InteractiveObject
+{
 
 	float speed = 1f; 
 	public float travelTime = 8f; //Amount of time it takes for projectile to hit the farthest point
@@ -17,8 +18,8 @@ public class BrambleProjectileBehavior : MonoBehaviour {
 	void Start () {
 		//Debug.Log ("Print Test");
 		totalTime = travelTime * 2;
-		this.Invoke ("ReturnToShipPos", travelTime);
-		this.Invoke ("KillMyself", totalTime);
+		Invoke ("ReturnToShipPos", travelTime);
+		Invoke ("KillMyself", totalTime);
 		brambleStart = GameObject.Find("BrambleShipPlayer(Clone)").transform.position;
 		brambleTarget = GameObject.Find("BrambleShipPlayer(Clone)/HWtarget").transform.position;
 		distanceToTarget = Mathf.Abs(Vector3.Distance(brambleStart, brambleTarget));
@@ -39,7 +40,7 @@ public class BrambleProjectileBehavior : MonoBehaviour {
 		goingOut = false;
 	}
 	void KillMyself(){
-		Destroy (this.gameObject);
+		Destroy (gameObject);
 	}
 
 	//Detects collison with a player
@@ -52,7 +53,8 @@ public class BrambleProjectileBehavior : MonoBehaviour {
 			Debug.Log ("Bramble Projectile: I Hit a player (Layer8)");
 		else
 			goingOut = false;
-			this.Invoke ("KillMyself", Mathf.Abs (Vector3.Distance (brambleStart, brambleTarget)) / (travelTime * speed));
+
+        Invoke ("KillMyself", Mathf.Abs (Vector3.Distance (brambleStart, brambleTarget)) / (travelTime * speed));
 				// Debug Code - Destroy (this.gameObject);
 	}
 }
