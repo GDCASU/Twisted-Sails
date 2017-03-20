@@ -3412,7 +3412,7 @@ MonoBehaviour:
   teamScores: 
   lobbyPrefab: {fileID: 1024232112829116, guid: a40aeac91e14e7c45a756cc922550a6a,
     type: 2}
-  inGameScene: Milestone 2_Lobby
+  inGameScene: MainLevel
   playableShips:
   - {fileID: 1000013458966376, guid: 93df41ee14972a04bbb4fd2e59b8f2ee, type: 2}
   - {fileID: 1000013458966376, guid: e0e164241721d3143a13bc6ff7b6d9b5, type: 2}
