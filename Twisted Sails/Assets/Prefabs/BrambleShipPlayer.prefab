@@ -1426,6 +1426,8 @@ MonoBehaviour:
   cannonFireKey: 32
   swivelGunFireKey: 323
   cannonBall: {fileID: 1000013620427708, guid: 999d70260556d6a4d99c8c6ca2089051, type: 2}
+  cannonScripts: []
+  swivelGunScripts: []
 --- !u!114 &114000010202202694
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1647,7 +1649,6 @@ MonoBehaviour:
   health: 100
   healthText: {fileID: 0}
   healthSlider: {fileID: 0}
-  healthPackAmount: 25
   sinkSpeed: 1
   sinkAngle: 40
   secondsToRespawn: 8
@@ -1656,7 +1657,6 @@ MonoBehaviour:
   dead: 0
   hurtSelfButton: 107
   activeCamera: {fileID: 0}
-  explosion: {fileID: 1000011769946516, guid: 8af0c4ff01de10c4a9980db85d6bf910, type: 2}
   spawnPoint: {x: 0, y: 0, z: 0}
   defenseStat: 0
 --- !u!114 &114000011472782010
@@ -2016,8 +2016,8 @@ MonoBehaviour:
   weaponVelocity: {x: 0, y: 0, z: 0}
   weaponUseKey: 102
   coolDownTotalSeconds: 0
-  startingAmmoAmount: 4
-  ammoCapacity: 0
+  startingAmmoAmount: 0
+  ammoCapacity: 3
   ammoPerPack: 1
   ammoUsePerActivation: 1
   ammoPackTag: AmmoPack

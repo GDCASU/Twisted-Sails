@@ -10,12 +10,21 @@ public class HumanProjectile : InteractiveObject {
     /// Destroys itself after.
     /// </summary>
     /// <param name="other"></param>
+
+    StatusEffectsManager manager;
+    public int damageDealt;
+
+
+    public override void OnInteractWithPlayer(Health playerHealth, GameObject playerBoat, StatusEffectsManager manager, Collision collision)
+    {
+        base.OnInteractWithPlayer(playerHealth, playerBoat, manager, collision);
+        playerHealth.health -= damageDealt;
+    }
+
     private void OnCollisionEnter(Collision other)
     {
-        Debug.Log("Dragon Projectile: Collide");
-
         if (other.gameObject.tag == "Player")
-            Debug.Log("Human Projectile: I Hit a player");
+            OnInteractWithPlayer(other.gameObject.GetComponent<Health>(), other.gameObject, manager, other);
 
         Destroy(gameObject);
     }

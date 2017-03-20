@@ -14,8 +14,18 @@ public class BrambleProjectileBehavior : InteractiveObject
 	float distanceToTarget;
 	float newTime;
 
-	// Use this for initialization
-	void Start () {
+    StatusEffectsManager manager;
+    public int damageDealt;
+
+    public override void OnInteractWithPlayer(Health playerHealth, GameObject playerBoat, StatusEffectsManager manager, Collision collision)
+    {
+        base.OnInteractWithPlayer(playerHealth, playerBoat, manager, collision);
+        playerHealth.health -= damageDealt;
+
+    }
+
+    // Use this for initialization
+    void Start () {
 		//Debug.Log ("Print Test");
 		totalTime = travelTime * 2;
 		Invoke ("ReturnToShipPos", travelTime);
@@ -45,14 +55,14 @@ public class BrambleProjectileBehavior : InteractiveObject
 
 	//Detects collison with a player
 	//Causes the projectile to go back to position if collide with non-player gameobject
-	void OnTriggerEnter (Collider other) {
+	void OnCollisionEnter (Collision other) {
 		Debug.Log ("Bramble Projectile: Collide");
 		//Debug Code - Debug.Log(other.gameObject.layer);
 
 		if (other.gameObject.tag == "Player")
-			Debug.Log ("Bramble Projectile: I Hit a player (Layer8)");
-		else
-			goingOut = false;
+            OnInteractWithPlayer(other.gameObject.GetComponent<Health>(), other.gameObject, manager, other);
+        else
+            goingOut = false;
 
         Invoke ("KillMyself", Mathf.Abs (Vector3.Distance (brambleStart, brambleTarget)) / (travelTime * speed));
 				// Debug Code - Destroy (this.gameObject);

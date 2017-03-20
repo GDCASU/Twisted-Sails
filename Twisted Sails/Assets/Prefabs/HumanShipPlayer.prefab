@@ -2448,14 +2448,12 @@ MonoBehaviour:
   weaponUseKey: 102
   coolDownTotalSeconds: 0
   startingAmmoAmount: 0
-  ammoCapacity: 3
+  ammoCapacity: 6
   ammoPerPack: 1
   ammoUsePerActivation: 1
   ammoPackTag: AmmoPack
   collectPacksWhileAtMaxAmmo: 1
   addAmmoKey: 117
-  weaponStartingPositionOffset: {x: 0, y: 0, z: 0}
-  basicWeaponVelocity: {x: 0, y: 0, z: 0}
   weaponSpreadAngle: 0
 --- !u!136 &136000010038954510
 CapsuleCollider:
