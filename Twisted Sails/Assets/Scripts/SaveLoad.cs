@@ -26,14 +26,21 @@ public class Game
 public static class SaveLoad
 {
     public static List<Game> savedGames = new List<Game>();
+
     public static void SaveGame()
     {
-        Game.current = new Game();
+		int playerID = MultiplayerManager.GetLocalClient().connection.connectionId;
+		Player player = MultiplayerManager.FindPlayer(playerID);
+
+		if (player == null)
+			return;
+
+		Game.current = new Game();
         savedGames.Insert(0, Game.current);
 
-        Game.current.name = MultiplayerManager.FindPlayer(MultiplayerManager.GetLocalClient().connection.connectionId).name;
-        Game.current.kills = MultiplayerManager.FindPlayer(MultiplayerManager.GetLocalClient().connection.connectionId).kills;
-        Game.current.deaths = MultiplayerManager.FindPlayer(MultiplayerManager.GetLocalClient().connection.connectionId).deaths;
+		Game.current.name = player.name;
+        Game.current.kills = player.kills;
+        Game.current.deaths = player.deaths;
 
         BinaryFormatter bFormat = new BinaryFormatter();
         FileStream file = File.Create(Application.persistentDataPath + "/PlayerData.gd");
@@ -41,6 +48,7 @@ public static class SaveLoad
         bFormat.Serialize(file, Game.current);
         file.Close();
     }
+
     public static void Load()
     {
         if (File.Exists(Application.persistentDataPath + "/PlayerData.gd"))

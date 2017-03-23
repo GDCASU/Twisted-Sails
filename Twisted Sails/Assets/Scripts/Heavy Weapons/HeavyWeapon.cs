@@ -120,8 +120,6 @@ public class HeavyWeapon : NetworkBehaviour
             {
                 AddAmmo(1);
             }
-
-			ammoCounter.text = ammoCount.ToString() + "/" + ammoCapacity.ToString();
         }
 	}
 

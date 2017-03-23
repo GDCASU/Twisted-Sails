@@ -8,8 +8,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Title Screen.unity
   - enabled: 1
-    path: Assets/Scenes/Lobby.unity
+    path: Assets/Scenes/Lobby_Revamp.unity
   - enabled: 1
-    path: Assets/Scenes/Milestone 2_Lobby.unity
-  - enabled: 1
-    path: Assets/Scenes/Lobby with Ship Select.unity
+    path: Assets/Scenes/MainLevel.unity
