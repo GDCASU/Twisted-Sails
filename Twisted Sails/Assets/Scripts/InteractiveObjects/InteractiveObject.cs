@@ -28,8 +28,8 @@ public class InteractiveObject : NetworkBehaviour
 		return true;
 	}
 
-	public virtual void OnInteractWithPlayer(Health playerHealth, GameObject playerBoat, StatusEffectsManager manager, Collision collision)
-	{
+	public virtual void OnInteractWithPlayer(GameObject playerBoat, StatusEffectsManager manager, Collision collision, Health playerHealth)
+    {
 		return;
 	}
 }
