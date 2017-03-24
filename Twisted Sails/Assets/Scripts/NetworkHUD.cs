@@ -16,6 +16,12 @@ using UnityEngine.Networking;
 // Date:        2/1/2017
 // Description: Adapted to new team system
 
+// Developer:   Kyle Aycock
+// Date:        3/23/2017
+// Description: Allow TAB playerlist only in game
+//              Disabled unnecessary debug function
+//              Hide redundant info display in top left
+
 [RequireComponent(typeof(NetworkManager))]
 public class NetworkHUD : MonoBehaviour
 {
@@ -60,7 +66,7 @@ public class NetworkHUD : MonoBehaviour
                 else
                     manager.StopClient();
             }
-            if (Input.GetKey(KeyCode.Tab))
+            if (Input.GetKey(KeyCode.Tab) && !MultiplayerManager.IsLobby())
                 showScoreboard = true;
             else
                 showScoreboard = false;
@@ -77,10 +83,10 @@ public class NetworkHUD : MonoBehaviour
                     messageTimer = 0;
             }
         }
-        if (Input.GetKey(KeyCode.P))
+        /*if (Input.GetKey(KeyCode.P))
         {
             showDebug = true;
-        }
+        }*/
     }
 
     public void OnKill(NetworkMessage netMsg)
@@ -127,7 +133,10 @@ public class NetworkHUD : MonoBehaviour
         }
         else
         {*/
-        if (NetworkServer.active)
+
+
+        //Uncomment this code to display the server address and port in the top left
+        /*if (NetworkServer.active)
         {
             GUI.Label(new Rect(xpos, ypos, 300, 20), "Server: port=" + manager.networkPort);
             ypos += spacing;
@@ -136,7 +145,7 @@ public class NetworkHUD : MonoBehaviour
         {
             GUI.Label(new Rect(xpos, ypos, 300, 20), "Client: address=" + manager.networkAddress + " port=" + manager.networkPort);
             ypos += spacing;
-        }
+        }*/
         //}
 
         //This disabled code was where the player specified name/team in the HUD
@@ -158,7 +167,8 @@ public class NetworkHUD : MonoBehaviour
         }*/
 
 
-        if (NetworkServer.active || manager.IsClientConnected())
+        //Uncomment this code to show basic player info and stop button in top left
+        /*if (NetworkServer.active || manager.IsClientConnected())
         {
             if (ClientScene.ready)
             {
@@ -172,8 +182,7 @@ public class NetworkHUD : MonoBehaviour
                 manager.StopHost();
             }
             ypos += spacing;
-
-        }
+        }*/
 
         if (showDebug)
         {

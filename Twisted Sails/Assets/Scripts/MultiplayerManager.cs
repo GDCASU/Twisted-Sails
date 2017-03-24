@@ -60,6 +60,11 @@ using System;
 // Date:        2/24/2017
 // Description: Minor changes to work with new lobby.
 
+// Developer:   Kyle Aycock
+// Date:        3/23/2017
+// Description: Fixed bug having to do with Unity networking keeping separate
+//              connectionIds on client and server.
+
 public class MultiplayerManager : NetworkManager
 {
     public Gamemode currentGamemode;
@@ -71,6 +76,7 @@ public class MultiplayerManager : NetworkManager
     public int[] teamScores;
     public GameObject lobbyPrefab;
     public string inGameScene;
+    public int localConnectionId;
 
     public GameObject[] playableShips;
 
@@ -387,6 +393,7 @@ public class MultiplayerManager : NetworkManager
             playerObj.GetComponent<PlayerIconController>().playerName = playerName;
             playerObj.GetComponent<PlayerIconController>().playerTeam = playerTeam;
             playerObj.GetComponent<PlayerIconController>().playerShip = playerShip;
+            playerObj.GetComponent<PlayerIconController>().connectionId = conn.connectionId;
         }
         else {
             //We are spawning a ship in game
