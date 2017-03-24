@@ -67,8 +67,8 @@ public class CannonBallNetworked : InteractiveObject {
 		}
 	}
 
-	public override void OnInteractWithPlayer(GameObject playerBoat, StatusEffectsManager manager, Collision collision, Health playerHealth)
-    {
+	public override void OnInteractWithPlayer(Health playerHealth, GameObject playerBoat, StatusEffectsManager manager, Collision collision)
+	{
 		int healthChange = -damageDealt;
 
 		//if this object is on the side of the player who owns this object
