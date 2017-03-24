@@ -22,6 +22,10 @@ using UnityEngine.Networking;
 //              Disabled unnecessary debug function
 //              Hide redundant info display in top left
 
+// Developer:   Kyle Aycock
+// Date:        3/24/2017
+// Description: Removed some unnecessary code
+
 [RequireComponent(typeof(NetworkManager))]
 public class NetworkHUD : MonoBehaviour
 {
@@ -37,8 +41,6 @@ public class NetworkHUD : MonoBehaviour
     private MultiplayerManager manager;
     private GUIStyle scoreboardStyle;
     private GUIStyle scoreFeedStyle;
-    private Color redColor;
-    private Color blueColor;
     private Color defaultColor;
 
     private bool showDebug;
@@ -49,8 +51,6 @@ public class NetworkHUD : MonoBehaviour
         showScoreboard = false;
         showDebug = false;
         messageStack = new List<string>();
-        redColor = new Color(100, 0, 0, 0.4f);
-        blueColor = new Color(0, 0, 100, 0.4f);
     }
 
     void Update()
@@ -236,7 +236,8 @@ public class NetworkHUD : MonoBehaviour
             for (short i = 0; i < MultiplayerManager.GetCurrentGamemode().NumTeams(); i++)
             {
                 Team currentTeam = MultiplayerManager.GetTeam(i);
-                GUI.backgroundColor = currentTeam.teamColor;
+                Color teamColor = currentTeam.teamColor;
+                GUI.backgroundColor = teamColor;
                 DrawScoreboardRow(xpos, ypos, cellWidth, cellHeight, "Team " + currentTeam.teamName, "Kills/Deaths/TopBounty", manager.teamScores[i].ToString());
                 ypos += cellHeight + 1;
                 foreach (Player player in manager.playerList)

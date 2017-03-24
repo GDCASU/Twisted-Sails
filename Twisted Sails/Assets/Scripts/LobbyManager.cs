@@ -26,6 +26,10 @@ using UnityEngine.UI;
 // Description: Revamped this system to manage the flow of the lobby, separating
 //              it into phases as prescribed by the associated design doc.
 
+// Developer:   Kyle Aycock
+// Date:        3/24/2017
+// Description: Removed some unneeded code
+
 public class LobbyManager : NetworkBehaviour
 {
     [Header("Team Select")]
@@ -53,7 +57,6 @@ public class LobbyManager : NetworkBehaviour
     public Sprite[] shipIcons;
 
     private MultiplayerManager manager;
-    private bool allReady;
     private float timer;
 
     //Simple enum to track lobby state
@@ -70,7 +73,6 @@ public class LobbyManager : NetworkBehaviour
     {
         //Variable initialization
         manager = MultiplayerManager.GetInstance();
-        allReady = false;
         currentState = LobbyState.TeamSelect;
 
         //This if statement statement checks if it's running on the host
@@ -113,17 +115,6 @@ public class LobbyManager : NetworkBehaviour
     public bool IsJoinable()
     {
         return currentState == LobbyState.TeamSelect;
-    }
-
-    /// <summary>
-    /// Called by server when all players except host have readied up, or when
-    /// a new player joins
-    /// </summary>
-    /// <param name="ready">Are all players except the host ready?</param>
-    public void SetAllReady(bool ready)
-    {
-        allReady = ready;
-        //readyButton.GetComponent<Button>().interactable = allReady;
     }
 
     /// <summary>
@@ -211,6 +202,14 @@ public class LobbyManager : NetworkBehaviour
             info += teammates[teammates.Count - 1].name + ")";
         }
         infoText.text = info;
+        //Disable other team's player names
+        foreach(Player p in list)
+        {
+            if(p.team != localPlayer.team)
+            {
+                ClientScene.FindLocalObject(p.objectId).SetActive(false);
+            }
+        }
     }
 
     /// <summary>
