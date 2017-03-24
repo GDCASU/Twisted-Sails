@@ -29,8 +29,8 @@ public class HealthPack : InteractiveObject
 		packCollider.enabled = true;
 	}
 
-	public override void OnInteractWithPlayer(Health playerHealth, GameObject playerBoat, StatusEffectsManager manager, Collision collision)
-	{
+	public override void OnInteractWithPlayer(GameObject playerBoat, StatusEffectsManager manager, Collision collision, Health playerHealth)
+    {
 		//notifies the player events system that the player who interacted with this object picked up a health pack (this object)
 		//also sets isHealthPack to true, since this is a health pack
 		Player.ActivateEventPlayerPickup(MultiplayerManager.FindPlayer(playerBoat.GetComponent<NetworkIdentity>().netId), true);

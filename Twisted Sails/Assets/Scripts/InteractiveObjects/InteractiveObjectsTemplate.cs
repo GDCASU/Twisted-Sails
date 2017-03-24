@@ -56,12 +56,12 @@ public class InteractiveObjectsTemplate : InteractiveObject
 	/// Called when this object successfully interacts (collides) with an appropriate enemy or teammate of the player who owns this object.
 	/// Or any boat if the object is owned by no-one.
 	/// </summary>
-	/// <param name="playerHealth">The health script of the player collided with.</param>
 	/// <param name="playerBoat">The GameObject boat of the player collided with.</param>
 	/// <param name="manager">The player boat's status effect manager.</param>
 	/// <param name="collision">Information about the collision that caused the interaction.</param>
-	public override void OnInteractWithPlayer(Health playerHealth, GameObject playerBoat, StatusEffectsManager manager, Collision collision)
-	{
+	/// <param name="playerHealth">The health script of the player collided with.</param>
+	public override void OnInteractWithPlayer(GameObject playerBoat, StatusEffectsManager manager, Collision collision, Health playerHealth)
+    {
 		return;
 	}
 }
