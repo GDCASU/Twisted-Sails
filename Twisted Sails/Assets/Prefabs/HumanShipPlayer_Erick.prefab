@@ -448,7 +448,6 @@ GameObject:
   - component: {fileID: 4000012373711734}
   - component: {fileID: 54000013705223800}
   - component: {fileID: 114000012413589446}
-  - component: {fileID: 114000012203035594}
   - component: {fileID: 136000013548959800}
   - component: {fileID: 114000010219481882}
   - component: {fileID: 114000010556032994}
@@ -457,8 +456,9 @@ GameObject:
   - component: {fileID: 114000010202202694}
   - component: {fileID: 114000010222649082}
   - component: {fileID: 114948550004518550}
+  - component: {fileID: 114292699504556634}
   m_Layer: 8
-  m_Name: HumanShipPlayer
+  m_Name: HumanShipPlayer_Erick
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1884,22 +1884,22 @@ MonoBehaviour:
   m_SceneId:
     m_Value: 0
   m_AssetId:
-    i0: 224
-    i1: 225
-    i2: 100
-    i3: 36
-    i4: 23
-    i5: 33
-    i6: 211
-    i7: 20
-    i8: 58
-    i9: 19
-    i10: 188
-    i11: 111
-    i12: 247
-    i13: 182
-    i14: 217
-    i15: 181
+    i0: 151
+    i1: 146
+    i2: 174
+    i3: 219
+    i4: 215
+    i5: 13
+    i6: 8
+    i7: 212
+    i8: 202
+    i9: 76
+    i10: 229
+    i11: 212
+    i12: 144
+    i13: 247
+    i14: 31
+    i15: 75
   m_ServerOnly: 0
   m_LocalPlayerAuthority: 1
 --- !u!114 &114000010222649082
@@ -2160,26 +2160,6 @@ MonoBehaviour:
   fireDelay: 1
   projectileSpeed: 20
   attackStat: 1
---- !u!114 &114000012203035594
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013458966376}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3f995605d3062064b98d8e45139f8c2e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  currentSpeed: 0
-  currentFireRate: 0
-  currentDefense: 0
-  currentSpeedStage: 0
-  currentFireRateStage: 0
-  currentDefenseStage: 0
-  attackButton: Attack Crew
-  defenseButton: Defense Crew
-  speedButton: Speed Crew
 --- !u!114 &114000012413589446
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2430,6 +2410,23 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: ???
+--- !u!114 &114292699504556634
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000013458966376}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d80cea8be5c26d48b86dcd4bc5e4d0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attackBar: {fileID: 0}
+  defenseBar: {fileID: 0}
+  speedBar: {fileID: 0}
+  attackText: {fileID: 0}
+  defenseText: {fileID: 0}
+  speedText: {fileID: 0}
 --- !u!114 &114948550004518550
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2454,8 +2451,6 @@ MonoBehaviour:
   ammoPackTag: AmmoPack
   collectPacksWhileAtMaxAmmo: 1
   addAmmoKey: 117
-  weaponStartingPositionOffset: {x: 0, y: 0, z: 0}
-  basicWeaponVelocity: {x: 0, y: 0, z: 0}
   weaponSpreadAngle: 0
 --- !u!136 &136000010038954510
 CapsuleCollider:

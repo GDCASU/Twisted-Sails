@@ -194,7 +194,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!1 &32664090 stripped
 GameObject:
@@ -1405,8 +1405,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 1470.8127, y: -200.00005}
-  m_SizeDelta: {x: 428.3251, y: 350.0001}
+  m_AnchoredPosition: {x: 1978.0562, y: -200.00005}
+  m_SizeDelta: {x: 631.2225, y: 350.0001}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &308036423
 GameObject:
@@ -1688,7 +1688,7 @@ Transform:
   m_LocalScale: {x: 50, y: 1, z: 50}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &420141835
 GameObject:
@@ -2297,8 +2297,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 414.16254, y: -200.00005}
-  m_SizeDelta: {x: 428.3251, y: 350.0001}
+  m_AnchoredPosition: {x: 515.6112, y: -200.00005}
+  m_SizeDelta: {x: 631.2225, y: 350.0001}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1001 &666694705
 Prefab:
@@ -2337,7 +2337,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4000010139170760, guid: df671511a240eca4984cac551c3479d6, type: 2}
       propertyPath: m_RootOrder
-      value: 1
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 4000010139170760, guid: df671511a240eca4984cac551c3479d6, type: 2}
       propertyPath: m_LocalScale.x
@@ -2499,8 +2499,12 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Ship description for Bramble Ship goes here. Font size etc. may be adjusted
-    as desired.
+  m_Text: 'Livingwood Bramble Ship
+
+    Heavy Weapon: Boomerang Shot (Deals heavy damage to all targets in a line, then
+    gets ''em again on the way back)
+
+    It''ll grow on you!'
 --- !u!222 &716012978
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2598,7 +2602,7 @@ RectTransform:
   - {fileID: 2095590380}
   - {fileID: 1578878286}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -4045,8 +4049,11 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Ship description for Human Ship goes here. Font size etc. may be adjusted
-    as desired.
+  m_Text: 'Human Pirate Ship
+
+    Heavy Weapon: Spread Shot (Three projectile spread of destruction)
+
+    Great for Swashbuckling!'
 --- !u!222 &1294587281
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4289,8 +4296,12 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Ship description for Dragon Ship goes here. Font size etc. may be adjusted
-    as desired.
+  m_Text: 'Powerful Dragon Junker
+
+    Heavy Weapon: Power Shot (Massive Damage to a single enemy. Fires in a straight
+    line)
+
+    Explosive and Devastating!'
 --- !u!222 &1380042509
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4498,7 +4509,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1461543248
 GameObject:
@@ -4879,7 +4890,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 423450, guid: 0507185137d0e9e44b05975da874de07, type: 2}
       propertyPath: m_RootOrder
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 423450, guid: 0507185137d0e9e44b05975da874de07, type: 2}
       propertyPath: m_LocalScale.x
@@ -5510,8 +5521,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 942.4876, y: -200.00005}
-  m_SizeDelta: {x: 428.3251, y: 350.0001}
+  m_AnchoredPosition: {x: 1246.8337, y: -200.00005}
+  m_SizeDelta: {x: 631.2225, y: 350.0001}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1985004277
 GameObject:
@@ -5580,8 +5591,13 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Ship description for Trireme goes here. Font size etc. may be adjusted as
-    desired.
+  m_Text: 'Mystical Trireme of the sun
+
+    Heavy Weapon: Sun Bomb (Launch a powerful explosion at your foes)
+
+    Mysterious and Powerful!
+
+'
 --- !u!222 &1985004280
 CanvasRenderer:
   m_ObjectHideFlags: 0
