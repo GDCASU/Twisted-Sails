@@ -10,6 +10,10 @@ using System.Collections;
 //                  where the other controller left off and cause the camera to smoothly
 //                  move into orbit.
 
+// Developer:   Kyle Aycock
+// Date:        3/24/2017
+// Description: Changed camera functionality so it stays above water at all times
+
 public class OrbitalCamera : MonoBehaviour
 {
 
@@ -21,6 +25,7 @@ public class OrbitalCamera : MonoBehaviour
 
     private float lerpProgress; //used to smoothly transition from current cam position to target
     private float startAngle; //camera will start rotating from its current angle rather than 0
+    private float startYPos;
 
     void OnEnable()
     {
@@ -30,6 +35,7 @@ public class OrbitalCamera : MonoBehaviour
             lerpProgress = 0f;
             Vector3 relativePos = transform.position - target.transform.position;
             startAngle = Mathf.Atan2(relativePos.z, relativePos.x);
+            startYPos = transform.position.y;
         }
     }
 
@@ -39,6 +45,7 @@ public class OrbitalCamera : MonoBehaviour
         if (target)
         {
             Vector3 targetPos = target.transform.position + new Vector3(Mathf.Cos(lerpProgress * rotationSpeed + startAngle) * orbitRadius, orbitHeight, Mathf.Sin(lerpProgress * rotationSpeed + startAngle) * orbitRadius);
+            targetPos.y = startYPos;
             transform.position = Vector3.Slerp(transform.position, targetPos, lerpProgress);
             transform.LookAt(target.transform);
             lerpProgress += updateSpeed * Time.deltaTime;
