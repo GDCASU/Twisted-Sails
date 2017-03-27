@@ -44,9 +44,6 @@ public class SunshipHeavyProjectileBeahvior : InteractiveObject {
     {
         if (!isExploding)
             ExplodeObject();
-        else
-            if (other.gameObject.tag == "Player")
-                OnInteractWithPlayer(other.gameObject.GetComponent<Health>(), other.gameObject, manager, other);
     }
 
     public override void OnInteractWithPlayer(Health playerHealth, GameObject playerBoat, StatusEffectsManager manager, Collision collision)

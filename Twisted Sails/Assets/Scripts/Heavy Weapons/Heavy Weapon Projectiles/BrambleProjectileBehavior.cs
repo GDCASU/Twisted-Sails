@@ -59,13 +59,10 @@ public class BrambleProjectileBehavior : InteractiveObject
 		Debug.Log ("Bramble Projectile: Collide");
 		//Debug Code - Debug.Log(other.gameObject.layer);
 
-		if (other.gameObject.tag == "Player")
-            OnInteractWithPlayer(other.gameObject.GetComponent<Health>(), other.gameObject, manager, other);
-        else
+		if (other.gameObject.tag != "Player")
             goingOut = false;
 
         Invoke ("KillMyself", Mathf.Abs (Vector3.Distance (brambleStart, brambleTarget)) / (travelTime * speed));
-				// Debug Code - Destroy (this.gameObject);
 	}
 }
 	

@@ -17,14 +17,13 @@ public class DragonProjectileBehavior : InteractiveObject {
     public override void OnInteractWithPlayer(Health playerHealth, GameObject playerBoat, StatusEffectsManager manager, Collision collision)
     {
         base.OnInteractWithPlayer(playerHealth, playerBoat, manager, collision);
-        playerHealth.health -= damageDealt;
-    }
 
-    private void OnCollisionEnter(Collision other)
-    {
-        if (other.gameObject.tag == "Player")
-            OnInteractWithPlayer(other.gameObject.GetComponent<Health>(), other.gameObject, manager, other);
+        int healthChange = -damageDealt;
 
-        Destroy(gameObject);
+        //if this object is on the side of the player who owns this object
+        //send out the command to change the players health
+        //setting the source of the health change to be the owner of this cannonball
+        playerHealth.ChangeHealth(healthChange, owner);
+
     }
 }
