@@ -2428,13 +2428,12 @@ MonoBehaviour:
   weaponUseKey: 102
   coolDownTotalSeconds: 0
   startingAmmoAmount: 0
-  ammoCapacity: 6
+  ammoCapacity: 3
   ammoPerPack: 1
   ammoUsePerActivation: 1
   ammoPackTag: AmmoPack
   collectPacksWhileAtMaxAmmo: 1
   addAmmoKey: 117
-  weaponSpreadAngle: 0
 --- !u!114 &114999154602282896
 MonoBehaviour:
   m_ObjectHideFlags: 1
