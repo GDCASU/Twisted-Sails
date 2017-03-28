@@ -13,7 +13,7 @@ public class SunshipHeavyProjectileBeahvior : InteractiveObject {
 
     StatusEffectsManager manager;
     public int damageDealt;
-    public float explodingScale;
+    private float explodingScale;
 
     // Use this for initialization
     void Start () {
@@ -49,7 +49,13 @@ public class SunshipHeavyProjectileBeahvior : InteractiveObject {
     public override void OnInteractWithPlayer(Health playerHealth, GameObject playerBoat, StatusEffectsManager manager, Collision collision)
     {
         base.OnInteractWithPlayer(playerHealth, playerBoat, manager, collision);
-        playerHealth.health -= damageDealt;
+
+        int healthChange = -damageDealt;
+
+        //if this object is on the side of the player who owns this object
+        //send out the command to change the players health
+        //setting the source of the health change to be the owner of this cannonball
+        playerHealth.ChangeHealth(healthChange, owner);
     }
 
     private void ExplodeObject()

@@ -24,6 +24,11 @@ public class DragonProjectileBehavior : InteractiveObject {
         //send out the command to change the players health
         //setting the source of the health change to be the owner of this cannonball
         playerHealth.ChangeHealth(healthChange, owner);
+    }
 
+    private void OnCollisionEnter(Collision other)
+    {
+        if (other.gameObject.tag != "Player")
+            Destroy(gameObject);
     }
 }

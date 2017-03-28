@@ -5,27 +5,22 @@ using UnityEngine;
 public class BrambleProjectileBehavior : InteractiveObject
 {
 
-	float speed = 1f; 
-	public float travelTime = 8f; //Amount of time it takes for projectile to hit the farthest point
-	Vector3 brambleTarget; //Farthest point
-	Vector3 brambleStart; //Point projectile was shot from
-	bool goingOut = true; //Is projectile going towards target location
-	float totalTime; //Amount of time it takes for projectile to complete journey
-	float distanceToTarget;
-	float newTime;
-
-    StatusEffectsManager manager;
+    //Variables to edit
+    public float travelTime = 8f; //Amount of time it takes for projectile to hit the farthest point
+    public float speed = 1f;
     public int damageDealt;
 
-    public override void OnInteractWithPlayer(Health playerHealth, GameObject playerBoat, StatusEffectsManager manager, Collision collision)
-    {
-        base.OnInteractWithPlayer(playerHealth, playerBoat, manager, collision);
-        playerHealth.health -= damageDealt;
+    private Vector3 brambleTarget; //Farthest point
+    private Vector3 brambleStart; //Point projectile was shot from
+    private bool goingOut = true; //Is projectile going towards target location
+    private float totalTime; //Amount of time it takes for projectile to complete journey
+    private float distanceToTarget;
+    private float newTime;
 
-    }
+    StatusEffectsManager manager;
 
     // Use this for initialization
-    void Start () {
+    private void Start () {
 		//Debug.Log ("Print Test");
 		totalTime = travelTime * 2;
 		Invoke ("ReturnToShipPos", travelTime);
@@ -38,24 +33,24 @@ public class BrambleProjectileBehavior : InteractiveObject
 	
 	}
 
-	// Update is called once per frame
-	void Update () {
+    // Update is called once per frame
+    private void Update () {
 		if(goingOut) 
 			transform.position = Vector3.MoveTowards (this.transform.position, brambleTarget, speed * Time.deltaTime);
 		else
 			transform.position = Vector3.MoveTowards (this.transform.position, brambleStart, speed * Time.deltaTime);
 	}
-	//Destroys the projectile
-	void ReturnToShipPos(){
+    //Destroys the projectile
+    private void ReturnToShipPos(){
 		goingOut = false;
 	}
-	void KillMyself(){
+    private void KillMyself(){
 		Destroy (gameObject);
 	}
 
-	//Detects collison with a player
-	//Causes the projectile to go back to position if collide with non-player gameobject
-	void OnCollisionEnter (Collision other) {
+    //Detects collison with a player
+    //Causes the projectile to go back to position if collide with non-player gameobject
+    private void OnCollisionEnter (Collision other) {
 		Debug.Log ("Bramble Projectile: Collide");
 		//Debug Code - Debug.Log(other.gameObject.layer);
 
@@ -64,5 +59,17 @@ public class BrambleProjectileBehavior : InteractiveObject
 
         Invoke ("KillMyself", Mathf.Abs (Vector3.Distance (brambleStart, brambleTarget)) / (travelTime * speed));
 	}
+
+    public override void OnInteractWithPlayer(Health playerHealth, GameObject playerBoat, StatusEffectsManager manager, Collision collision)
+    {
+        base.OnInteractWithPlayer(playerHealth, playerBoat, manager, collision);
+
+        int healthChange = -damageDealt;
+        //if this object is on the side of the player who owns this object
+        //send out the command to change the players health
+        //setting the source of the health change to be the owner of this cannonball
+        playerHealth.ChangeHealth(healthChange, owner);
+        Destroy(gameObject);
+    }
+
 }
-	
