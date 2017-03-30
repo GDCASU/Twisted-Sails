@@ -50,6 +50,7 @@ public class ChatUI : MonoBehaviour
 
     private Rect displayBounds;
     private string[] chatMessages;
+    private int currentFontSize;
 
     private void Start()
     {
@@ -76,11 +77,14 @@ public class ChatUI : MonoBehaviour
         //    textSlots[i] = chatSlot.GetComponent<Text>();
         //}
 
+        //this assumes the window won't be resized
+        //calculate font size
+        currentFontSize = (int)(chatEnterField.GetComponent<RectTransform>().rect.height * 0.5f - 1);
+        chatEnterField.transform.FindChild("Text").GetComponent<Text>().fontSize = currentFontSize;
         //fetch displaybounds
         RectTransform rt = chatRecord.GetComponent<RectTransform>();
         //rt.position is actual position of rt.rect, rt.rect.position is offset... unity why
         displayBounds = new Rect(new Vector2(rt.position.x, rt.position.y) + rt.rect.position, rt.rect.size);
-        chatEnterField.transform.FindChild("Text").GetComponent<Text>().fontSize = (int)(canvas.pixelRect.height / 30);
     }
 
     private void Update()
@@ -184,6 +188,7 @@ public class ChatUI : MonoBehaviour
     public void OnGUI()
     {
         float pixelsRemaining = displayBounds.height;
+        GUI.skin.label.fontSize = currentFontSize;
         for (int i = chatQueue.Count - 1; i >= 0; i--)
         {
             GUIContent content = new GUIContent(chatMessages[i]);
