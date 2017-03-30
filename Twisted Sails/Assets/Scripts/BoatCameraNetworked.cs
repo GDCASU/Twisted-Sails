@@ -21,6 +21,11 @@
    Added a simple system for adding an offset to where the camera is looking near the boat.
 */
 
+// Developer:   Kyle Aycock
+// Date:        3/30/2017
+// Description: Repaired incorrect interpolation code for quick turn
+//              quickTurnTime is the amount of time it takes to finish a quick turn, in seconds
+
 using UnityEngine;
 using System.Collections;
 
@@ -55,11 +60,14 @@ public class BoatCameraNetworked : MonoBehaviour
 	private float currentVerticalRotation = 0.0f;
 
 	[Header("Quick Turn Settings")]
-	public string quickTurnAxis; //the input axis for detecing quickturn button inputs
-	public float quickTurnSpeed = 1f;
+	public KeyCode quickTurnLeft;
+    public KeyCode quickTurnRight;
+	public float quickTurnTime = 1f;
 
 	private bool quickTurning = false;
-	private float quickTurnTargetHorizontalRotation;
+    private float quickTurnStartingRotation;
+	private float quickTurnTargetRotation;
+    private float quickTurnProgress;
 
 	private Camera cam;
 	private Transform camTransform;
@@ -98,23 +106,29 @@ public class BoatCameraNetworked : MonoBehaviour
 			//since not turning, detect if should do a quickturn
 
 			//quickturning to face the left was pressed
-			if (Input.GetAxisRaw(quickTurnAxis) > 0)
+			if (InputWrapper.GetKeyDown(quickTurnLeft))
 			{
-				quickTurnTargetHorizontalRotation = currentHorizontalRotation + 90f;
+                
+				quickTurnTargetRotation = currentHorizontalRotation - 90f;
+                quickTurnStartingRotation = currentHorizontalRotation;
 				quickTurning = true;
+                quickTurnProgress = 0;
 			}
 			//quickturning to face the right was pressed
-			else if (Input.GetAxisRaw(quickTurnAxis) < 0)
+			else if (InputWrapper.GetKeyDown(quickTurnRight))
 			{
-				quickTurnTargetHorizontalRotation = currentHorizontalRotation - 90f;
+				quickTurnTargetRotation = currentHorizontalRotation + 90f;
+                quickTurnStartingRotation = currentHorizontalRotation;
 				quickTurning = true;
-			}
+                quickTurnProgress = 0;
+            }
 		}
 		//rotate toward the quickturn point
 		else
 		{
-			currentHorizontalRotation = Mathf.Lerp(currentHorizontalRotation, quickTurnTargetHorizontalRotation, quickTurnSpeed);
-			if (Mathf.Abs(currentHorizontalRotation - quickTurnTargetHorizontalRotation) < .1f)
+            quickTurnProgress += Time.deltaTime / quickTurnTime;
+			currentHorizontalRotation = Mathf.SmoothStep(quickTurnStartingRotation, quickTurnTargetRotation, quickTurnProgress);
+			if (quickTurnProgress >= 1)
 			{
 				quickTurning = false;
 			}
