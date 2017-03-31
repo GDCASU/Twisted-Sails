@@ -60,6 +60,15 @@ using System;
 // Date:        2/24/2017
 // Description: Minor changes to work with new lobby.
 
+// Developer:   Kyle Aycock
+// Date:        3/23/2017
+// Description: Fixed bug having to do with Unity networking keeping separate
+//              connectionIds on client and server.
+
+// Developer:   Kyle Aycock
+// Date:        3/24/2017
+// Description: Added functionality for team-based spawn points
+
 public class MultiplayerManager : NetworkManager
 {
     public Gamemode currentGamemode;
@@ -71,10 +80,14 @@ public class MultiplayerManager : NetworkManager
     public int[] teamScores;
     public GameObject lobbyPrefab;
     public string inGameScene;
+    public int localConnectionId;
 
     public GameObject[] playableShips;
 
     private float gameRestartTimer;
+
+    private int[] startPositionIndices;
+    private static Dictionary<int, List<Transform>> teamStartPositions;
 
     //Initialization of variables
     void Start()
@@ -89,6 +102,9 @@ public class MultiplayerManager : NetworkManager
         teams[0] = new Team("Red", Color.red, 0);
         teams[1] = new Team("Blue", Color.blue, 1);
         currentGamemode = new TeamDeathmatch(teams, 30, 300);
+
+        startPositionIndices = new int[currentGamemode.NumTeams()];
+        teamStartPositions = new Dictionary<int, List<Transform>>();
 
         teamScores = new int[currentGamemode.NumTeams()];
         for (int i = 0; i < currentGamemode.NumTeams(); i++)
@@ -157,7 +173,7 @@ public class MultiplayerManager : NetworkManager
     {
         if (!NetworkClient.active)
         {
-            Debug.LogError("Error: GetLocalClient called on server!");
+            Debug.LogError("Error: GetLocalClient called with no active client!");
             return null;
         }
         return singleton.client;
@@ -375,7 +391,7 @@ public class MultiplayerManager : NetworkManager
         }
 
         GameObject playerObj;
-        Transform startPos = GetStartPosition();
+        
         if (IsLobby())
         {
             //We are spawning a lobby representation of the player
@@ -387,9 +403,11 @@ public class MultiplayerManager : NetworkManager
             playerObj.GetComponent<PlayerIconController>().playerName = playerName;
             playerObj.GetComponent<PlayerIconController>().playerTeam = playerTeam;
             playerObj.GetComponent<PlayerIconController>().playerShip = playerShip;
+            playerObj.GetComponent<PlayerIconController>().connectionId = conn.connectionId;
         }
         else {
             //We are spawning a ship in game
+            Transform startPos = GetSpawnPoint(playerTeam);
             if (startPos != null)
             {
                 playerObj = Instantiate(playableShips[playerShip], startPos.position, startPos.rotation);
@@ -399,17 +417,28 @@ public class MultiplayerManager : NetworkManager
                 playerObj = Instantiate(playableShips[playerShip], Vector3.zero, Quaternion.identity);
             }
 
-            //Player team not chosen - ask gamemode to autoassign
-            if (playerTeam == -1)
-            {
-                playerTeam = currentGamemode.AutoAssignTeam(playerList);
-            }
             playerObj.GetComponent<Health>().team = playerTeam;
             playerObj.GetComponent<Health>().playerName = playerName;
         }
 
         PlayerConnected(FindPlayer(conn.connectionId));
         NetworkServer.AddPlayerForConnection(conn, playerObj, playerControllerId);
+    }
+
+    public static void RegisterTeamStartPosition(Transform pos, int team)
+    {
+        if(!teamStartPositions.ContainsKey(team))
+        {
+            teamStartPositions.Add(team, new List<Transform>());
+        }
+        teamStartPositions[team].Add(pos);
+    }
+
+    public Transform GetSpawnPoint(int team)
+    {
+        //get the list of start positions corresponding to the given team,
+        //and get from that list the next unused start position, incrementing afterwards
+        return teamStartPositions[team][startPositionIndices[team]++];
     }
 
     public override void OnServerConnect(NetworkConnection conn)
@@ -460,6 +489,7 @@ public class MultiplayerManager : NetworkManager
     //Called when the lobby transitions to the game
     public void EnterGame()
     {
+        teamStartPositions.Clear(); //in case leftover data from last game
         ServerChangeScene(inGameScene);
     }
 

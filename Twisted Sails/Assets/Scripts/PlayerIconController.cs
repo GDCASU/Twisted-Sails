@@ -32,6 +32,10 @@ using System.Collections.Generic;
 // Date:        2/24/2017
 // Description: Revamped lobby flow and usage of this script
 
+// Developer:   Kyle Aycock
+// Date:        3/23/2017
+// Description: Fixed bug having to do with Unity keeping separate connectionIds on client and server
+
 //This is the input/player controller for a player's lobby representation
 //Input is given to this script from LobbyManager.cs
 public class PlayerIconController : NetworkBehaviour
@@ -44,6 +48,8 @@ public class PlayerIconController : NetworkBehaviour
     public short playerShip;
     [SyncVar]
     public bool host;
+    [SyncVar]
+    public int connectionId;
 
     private Text nameText;
     private RectTransform rectTransform;
@@ -57,7 +63,9 @@ public class PlayerIconController : NetworkBehaviour
         rectTransform = GetComponent<RectTransform>();
 
         if (isLocalPlayer)
-            CmdPlayerInit(MultiplayerManager.GetLocalClient().connection.connectionId);
+        {
+            CmdPlayerInit(connectionId);
+        }
 
         OnTeamChange(playerTeam);
         OnNameChange(playerName);

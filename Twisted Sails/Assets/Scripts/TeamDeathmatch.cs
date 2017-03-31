@@ -10,6 +10,10 @@ using UnityEngine;
 // Description: Initial code. This class serves as both the default gamemode
 //              and a template for any future gamemodes.
 
+// Developer:   Kyle Aycock
+// Date:        3/24/2017
+// Description: Minor fix to determination of the winning team
+
 class TeamDeathmatch : Gamemode
 {
     public int pointsToWin;
@@ -42,7 +46,7 @@ class TeamDeathmatch : Gamemode
             }
         if (timeRemaining <= 0)
         {
-            int winningTeam = -2;
+            short winningTeam = -2;
             int winningTeamPoints = 0;
             for (short i = 0; i < teams.Length; i++)
             {
@@ -56,7 +60,7 @@ class TeamDeathmatch : Gamemode
                     winningTeam = -2;
                 }
             }
-
+            return winningTeam;
         }
         return -1;
     }
