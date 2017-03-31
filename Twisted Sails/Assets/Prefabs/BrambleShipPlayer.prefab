@@ -359,7 +359,6 @@ GameObject:
   - component: {fileID: 4000012373711734}
   - component: {fileID: 54000013705223800}
   - component: {fileID: 114000012413589446}
-  - component: {fileID: 114000012203035594}
   - component: {fileID: 136000013548959800}
   - component: {fileID: 114000010219481882}
   - component: {fileID: 114000010556032994}
@@ -368,6 +367,7 @@ GameObject:
   - component: {fileID: 114000010202202694}
   - component: {fileID: 114000010222649082}
   - component: {fileID: 114924105366331334}
+  - component: {fileID: 114120595288857960}
   m_Layer: 8
   m_Name: BrambleShipPlayer
   m_TagString: Player
@@ -1426,6 +1426,8 @@ MonoBehaviour:
   cannonFireKey: 32
   swivelGunFireKey: 323
   cannonBall: {fileID: 1000013620427708, guid: 999d70260556d6a4d99c8c6ca2089051, type: 2}
+  cannonScripts: []
+  swivelGunScripts: []
 --- !u!114 &114000010202202694
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1647,7 +1649,6 @@ MonoBehaviour:
   health: 100
   healthText: {fileID: 0}
   healthSlider: {fileID: 0}
-  healthPackAmount: 25
   sinkSpeed: 1
   sinkAngle: 40
   secondsToRespawn: 8
@@ -1656,7 +1657,6 @@ MonoBehaviour:
   dead: 0
   hurtSelfButton: 107
   activeCamera: {fileID: 0}
-  explosion: {fileID: 1000011769946516, guid: 8af0c4ff01de10c4a9980db85d6bf910, type: 2}
   spawnPoint: {x: 0, y: 0, z: 0}
   defenseStat: 0
 --- !u!114 &114000011472782010
@@ -1729,26 +1729,6 @@ MonoBehaviour:
   fireDelay: 1
   projectileSpeed: 20
   attackStat: 1
---- !u!114 &114000012203035594
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1000013458966376}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3f995605d3062064b98d8e45139f8c2e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  currentSpeed: 0
-  currentFireRate: 0
-  currentDefense: 0
-  currentSpeedStage: 0
-  currentFireRateStage: 0
-  currentDefenseStage: 0
-  attackButton: Attack Crew
-  defenseButton: Defense Crew
-  speedButton: Speed Crew
 --- !u!114 &114000012413589446
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1999,6 +1979,23 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: ???
+--- !u!114 &114120595288857960
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000013458966376}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d80cea8be5c26d48b86dcd4bc5e4d0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attackBar: {fileID: 0}
+  defenseBar: {fileID: 0}
+  speedBar: {fileID: 0}
+  attackText: {fileID: 0}
+  defenseText: {fileID: 0}
+  speedText: {fileID: 0}
 --- !u!114 &114924105366331334
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2016,8 +2013,8 @@ MonoBehaviour:
   weaponVelocity: {x: 0, y: 0, z: 0}
   weaponUseKey: 102
   coolDownTotalSeconds: 0
-  startingAmmoAmount: 4
-  ammoCapacity: 0
+  startingAmmoAmount: 0
+  ammoCapacity: 3
   ammoPerPack: 1
   ammoUsePerActivation: 1
   ammoPackTag: AmmoPack
