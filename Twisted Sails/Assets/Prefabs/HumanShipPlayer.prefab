@@ -2428,7 +2428,7 @@ MonoBehaviour:
   weaponUseKey: 102
   coolDownTotalSeconds: 0
   startingAmmoAmount: 0
-  ammoCapacity: 3
+  ammoCapacity: 6
   ammoPerPack: 1
   ammoUsePerActivation: 1
   ammoPackTag: AmmoPack
