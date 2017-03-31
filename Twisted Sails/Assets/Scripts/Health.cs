@@ -162,7 +162,7 @@ public class Health : NetworkBehaviour
         }
 
         //Hurt self functionality
-        if (isLocalPlayer && Input.GetKeyDown(hurtSelfButton))
+        if (isLocalPlayer && InputWrapper.GetKeyDown(hurtSelfButton))
         {
             CmdHurtSelf(-5);
             return;

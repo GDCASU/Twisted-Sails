@@ -75,19 +75,19 @@ public class CrewUserInterface : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
     {
-        if (Input.GetButtonDown(attackButton))
+        if (InputWrapper.GetButtonDown(attackButton))
         {
             //crewManagement.AttackCrew();
             DisplayUpdate();
         }
 
-        else if (Input.GetButtonDown(defenseButton))
+        else if (InputWrapper.GetButtonDown(defenseButton))
         {
             //crewManagement.DefenseCrew();
             DisplayUpdate();
         }
 
-        else if (Input.GetButtonDown(speedButton))
+        else if (InputWrapper.GetButtonDown(speedButton))
         {
             //crewManagement.SpeedCrew();
             DisplayUpdate();

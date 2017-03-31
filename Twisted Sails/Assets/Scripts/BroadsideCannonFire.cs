@@ -21,7 +21,7 @@ public class BroadsideCannonFire : MonoBehaviour {
 	private void Update () {
 		reloadTime += Time.deltaTime;
 		if (reloadTime >= fireDelay) {
-			if (Input.GetKeyDown (KeyCode.Space)) {
+			if (InputWrapper.GetKeyDown (KeyCode.Space)) {
                 StartCoroutine(delay());
 				reloadTime = 0;
 			}
