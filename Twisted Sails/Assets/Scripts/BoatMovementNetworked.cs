@@ -116,12 +116,12 @@ public class BoatMovementNetworked : NetworkBehaviour
 	{
 		if (isLocalPlayer)
 		{
-			KeysDown.forward	    = Input.GetKey(forwardKey);
-			KeysDown.backwards	    = Input.GetKey(backwardsKey);
-			KeysDown.left		    = Input.GetKey(leftKey);
-			KeysDown.right		    = Input.GetKey(rightKey);
-			KeysDown.fireCannon	    = Input.GetKey(cannonFireKey);
-            KeysDown.fireSwivelGun  = Input.GetKey(swivelGunFireKey);
+			KeysDown.forward	    = InputWrapper.GetKey(forwardKey);
+			KeysDown.backwards	    = InputWrapper.GetKey(backwardsKey);
+			KeysDown.left		    = InputWrapper.GetKey(leftKey);
+			KeysDown.right		    = InputWrapper.GetKey(rightKey);
+			KeysDown.fireCannon	    = InputWrapper.GetKey(cannonFireKey);
+            KeysDown.fireSwivelGun  = InputWrapper.GetKey(swivelGunFireKey);
 
             if (KeysDown.fireSwivelGun)
             {
