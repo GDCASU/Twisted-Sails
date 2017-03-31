@@ -157,19 +157,19 @@ public class CrewManagement : NetworkBehaviour
         if (cooldownTimer < cooldown)
         { cooldownTimer += Time.deltaTime; }
 
-        if (Input.GetButtonDown(attackButton))
+        if (InputWrapper.GetButtonDown(attackButton))
         {
             AttackCrew();
             DisplayUpdate();
         }
 
-        else if (Input.GetButtonDown(defenseButton))
+        else if (InputWrapper.GetButtonDown(defenseButton))
         {
             DefenseCrew();
             DisplayUpdate();
         }
 
-        else if (Input.GetButtonDown(speedButton))
+        else if (InputWrapper.GetButtonDown(speedButton))
         {
             SpeedCrew();
             DisplayUpdate();
