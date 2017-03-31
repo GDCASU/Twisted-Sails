@@ -368,6 +368,7 @@ GameObject:
   - component: {fileID: 114000010222649082}
   - component: {fileID: 114924105366331334}
   - component: {fileID: 114120595288857960}
+  - component: {fileID: 114483731371371506}
   m_Layer: 8
   m_Name: BrambleShipPlayer
   m_TagString: Player
@@ -1996,6 +1997,21 @@ MonoBehaviour:
   attackText: {fileID: 0}
   defenseText: {fileID: 0}
   speedText: {fileID: 0}
+--- !u!114 &114483731371371506
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000013458966376}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 77dbc50e9ad80bf419655da598727bf8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ammoCountValueText: {fileID: 0}
+  ammoMaxValueText: {fileID: 0}
+  coolDownTimerText: {fileID: 0}
+  playerHeavyWeapon: {fileID: 0}
 --- !u!114 &114924105366331334
 MonoBehaviour:
   m_ObjectHideFlags: 1
