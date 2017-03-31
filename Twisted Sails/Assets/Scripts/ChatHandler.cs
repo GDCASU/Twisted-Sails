@@ -50,7 +50,7 @@ public class ChatHandler : NetworkBehaviour
 	//convert a chat message struct to string
 	public static string ChatMessageToString(ChatMessage message)
 	{
-		return "(" + message.hour + ":" + message.minute + ") " + message.playerName + ": " + message.message;
+		return "(" + (message.hour < 10 ? "0" : "") + message.hour + ":" + (message.minute < 10 ? "0" : "") + message.minute + ") " + message.playerName + ": " + message.message;
 	}
 
 }

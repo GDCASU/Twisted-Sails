@@ -59,14 +59,14 @@ public class NetworkHUD : MonoBehaviour
             return;
         if (NetworkServer.active || manager.IsClientConnected())
         {
-            if (Input.GetKeyDown(KeyCode.X))
+            if (InputWrapper.GetKeyDown(KeyCode.X))
             {
                 if (NetworkServer.active)
                     manager.StopHost();
                 else
                     manager.StopClient();
             }
-            if (Input.GetKey(KeyCode.Tab) && !MultiplayerManager.IsLobby())
+            if (InputWrapper.GetKey(KeyCode.Tab) && !MultiplayerManager.IsLobby())
                 showScoreboard = true;
             else
                 showScoreboard = false;
@@ -83,7 +83,7 @@ public class NetworkHUD : MonoBehaviour
                     messageTimer = 0;
             }
         }
-        /*if (Input.GetKey(KeyCode.P))
+        /*if (InputWrapper.GetKey(KeyCode.P))
         {
             showDebug = true;
         }*/

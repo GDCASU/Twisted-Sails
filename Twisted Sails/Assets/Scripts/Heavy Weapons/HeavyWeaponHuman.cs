@@ -19,8 +19,7 @@ using System.Collections;
 public class HeavyWeaponHuman : HeavyWeapon
 {
     private int projectileSpeed = 50;
-    private int projectileOffset = 3;
-    public float weaponSpreadAngle;
+    private Vector3 projectileOffsetVector;
 
     new void Start ()
     {
@@ -41,7 +40,6 @@ public class HeavyWeaponHuman : HeavyWeapon
     new void OnCollisionEnter(Collision other)
     {
         base.OnCollisionEnter(other);
-
     }
 
     /// <summary>
@@ -107,20 +105,23 @@ public class HeavyWeaponHuman : HeavyWeapon
     /// </summary>
     override protected void ActivateWeapon()
 	{
-        weaponStartingPosition = transform.position + (transform.forward * projectileOffset) + transform.up;
+        projectileOffsetVector = transform.forward * 3 + transform.up;
+
+        weaponStartingPosition = transform.position + projectileOffsetVector + transform.up;
         weaponVelocity = transform.forward * projectileSpeed;
         weaponPrefab.GetComponent<Rigidbody>().AddForce(weaponVelocity);
         base.ActivateWeapon();
 
-        weaponStartingPosition = transform.position + (transform.forward - transform.right * projectileOffset) + transform.up;
-        weaponVelocity = transform.forward * projectileSpeed;
+        weaponStartingPosition = transform.position + projectileOffsetVector - transform.right;
+        weaponVelocity = transform.forward * projectileSpeed - transform.right * projectileSpeed/3;
         weaponPrefab.GetComponent<Rigidbody>().AddForce(weaponVelocity);
         base.ActivateWeapon();
 
-        weaponStartingPosition = transform.position + (transform.forward + transform.right * projectileOffset) + transform.up;
-        weaponVelocity = transform.forward * projectileSpeed;
+        weaponStartingPosition = transform.position + projectileOffsetVector + transform.right;
+        weaponVelocity = transform.forward * projectileSpeed + transform.right * projectileSpeed/3;
         weaponPrefab.GetComponent<Rigidbody>().AddForce(weaponVelocity);
         base.ActivateWeapon();
+
     }
 
     /// <summary>
