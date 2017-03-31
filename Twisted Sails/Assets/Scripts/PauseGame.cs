@@ -58,7 +58,7 @@ public class PauseGame : MonoBehaviour
 		{
 			//if p button is pressed down
 			if(Input.GetKeyDown(KeyCode.P))
-			{
+			{	
 				//if canvas is not active, make it active
 				if(pauseMenuCanvas.gameObject.activeInHierarchy == false)
 				{
@@ -116,9 +116,16 @@ public class PauseGame : MonoBehaviour
 					if(rootGameObjectsOfMainLevelScene[i].tag == "PauseMenuCanvas")
 					{
 						//assign pauseMenuCanvas to canvas component of this root game object
-						pauseMenuCanvas = rootGameObjectsOfMainLevelScene[i].GetComponent<Canvas>(); 
-						break; //stop loop
-					} 
+						pauseMenuCanvas = rootGameObjectsOfMainLevelScene[i].GetComponent<Canvas>();
+						
+						//assign reference to this pause game script to PauseMenuScript
+						PauseMenuScript thisPauseMenuScript = pauseMenuCanvas.GetComponentInChildren<PauseMenuScript>(); 
+						thisPauseMenuScript.pauseGameScriptRef = transform.root.GetComponentInChildren<PauseGame>();
+						//assign reference to pause menu script
+						pauseMenuScriptRef = thisPauseMenuScript;
+						
+						if(pauseMenuCanvas != null){break;}//stop loop
+					}
 				}
 			}
 		}

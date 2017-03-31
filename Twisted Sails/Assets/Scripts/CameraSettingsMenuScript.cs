@@ -10,9 +10,8 @@ public class CameraSettingsMenuScript : MonoBehaviour {
 	
 	public int cameraSettingsMenuCurrentState = 4;
 	public const int EDITING_CAMERA_SETTINGS = 0;
-	public const int CANCEL_BUTTON_CLICKED = 1;
-	public const int OK_BUTTON_CLICKED = 2;
 	public const int CAMERA_MENU_HIDDEN = 4;
+	//no states for button clicked because it proved too slow in practice
 	
 	//references to buttons in canvas of camera settings menu
 	public Button okButton;
@@ -30,8 +29,6 @@ public class CameraSettingsMenuScript : MonoBehaviour {
 	private bool tempInvertHorizontal = false;
 	private bool tempInvertVertical = false;
 	
-	//reference to boatMovementNetworked component of player which allows camera settings to be changed
-	//private BoatMovementNetworked playerBoatMovementComponent;
 	
 	private BoatCameraNetworked playerBoatCamera;
 	
@@ -45,11 +42,13 @@ public class CameraSettingsMenuScript : MonoBehaviour {
 		//initialize slider values to values of boat camera
 		
 		
-		//Debug.Log("Player boat camera is " + playerBoatCamera);
 		//set callback functions for sliders and buttons and toggles
 		verticalSensitivitySlider.onValueChanged.AddListener(delegate {VerticalSensitivityChangedProcess ();});
 		horizontalSensitivitySlider.onValueChanged.AddListener(delegate {HorizontalSensitivityChangedProcess ();});
 		scrollSensitivitySlider.onValueChanged.AddListener(delegate {ScrollSensitivityChangedProcess ();});
+		
+		invertVerticalToggle.onValueChanged.AddListener(delegate {InvertVerticalToggleChangedProcess ();});
+		invertHorizontalToggle.onValueChanged.AddListener(delegate {InvertHorizontalToggleChangedProcess ();});
 		
 		okButton.onClick.AddListener(OKButtonClickProcess);
 		cancelButton.onClick.AddListener(CancelButtonClickProcess);
@@ -61,24 +60,10 @@ public class CameraSettingsMenuScript : MonoBehaviour {
 		switch(cameraSettingsMenuCurrentState)
 		{
 			case EDITING_CAMERA_SETTINGS:{break;}
-			case OK_BUTTON_CLICKED:
-			{
-				//assign temp values to boat camera values
-				playerBoatCamera.verticalSensitivity = tempVerticalSensitivity;
-				playerBoatCamera.horizontalSensitivity = tempHorizontalSensitivity;
-				playerBoatCamera.scrollSensitivity = tempScrollSensitivity;
-				cameraSettingsMenuCurrentState = CAMERA_MENU_HIDDEN;
-				break;
-			}
-			case CANCEL_BUTTON_CLICKED:
-			{
-				cameraSettingsMenuCurrentState = CAMERA_MENU_HIDDEN;
-				
-				break;
-			}
+			
 			case CAMERA_MENU_HIDDEN:
 			{
-				DeActivateCameraMenuCanvas();
+				//DeActivateCameraMenuCanvas();
 				break;
 			}
 		}
@@ -111,14 +96,37 @@ public class CameraSettingsMenuScript : MonoBehaviour {
 		tempScrollSensitivity = scrollSensitivitySlider.value; //assign slider value to temp scroll sensitivity
 	}
 	
+	void InvertVerticalToggleChangedProcess()
+	{
+		tempInvertVertical = invertVerticalToggle.isOn; //assign invert vertical toggle value to temp invert vertical 
+	}
+	
+	void InvertHorizontalToggleChangedProcess()
+	{
+		tempInvertHorizontal = invertHorizontalToggle.isOn; //assign invert horizontal toggle value to temp invert horizontal
+	}
+	
 	void OKButtonClickProcess()
 	{
-		cameraSettingsMenuCurrentState = OK_BUTTON_CLICKED;
+		//assign temp values to boat camera values
+		playerBoatCamera.verticalSensitivity = tempVerticalSensitivity;
+		playerBoatCamera.horizontalSensitivity = tempHorizontalSensitivity;
+		playerBoatCamera.scrollSensitivity = tempScrollSensitivity;
+		playerBoatCamera.invertVertical = tempInvertVertical;
+		playerBoatCamera.invertHorizontal = tempInvertHorizontal;
+		//deactivate camera menu
+		DeActivateCameraMenuCanvas();
+		//set state to camera menu hidden
+		cameraSettingsMenuCurrentState = CAMERA_MENU_HIDDEN;
 	}
 	
 	void CancelButtonClickProcess()
 	{
-		cameraSettingsMenuCurrentState = CANCEL_BUTTON_CLICKED;
+		//deactivate camera menu
+		DeActivateCameraMenuCanvas();
+		//set state to camera menu hidden
+		cameraSettingsMenuCurrentState = CAMERA_MENU_HIDDEN;
 	}
+	
 	
 }

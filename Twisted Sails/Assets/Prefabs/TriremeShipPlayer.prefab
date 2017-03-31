@@ -372,6 +372,7 @@ GameObject:
   - component: {fileID: 114000010222649082}
   - component: {fileID: 114649559050139546}
   - component: {fileID: 114123397760901494}
+  - component: {fileID: 114645187142023936}
   m_Layer: 8
   m_Name: TriremeShipPlayer
   m_TagString: Player
@@ -1520,6 +1521,7 @@ MonoBehaviour:
   cannonBall: {fileID: 1000013620427708, guid: 999d70260556d6a4d99c8c6ca2089051, type: 2}
   cannonScripts: []
   swivelGunScripts: []
+  gameIsPaused: 0
 --- !u!114 &114000010202202694
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2099,6 +2101,21 @@ MonoBehaviour:
   attackText: {fileID: 0}
   defenseText: {fileID: 0}
   speedText: {fileID: 0}
+--- !u!114 &114645187142023936
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000013458966376}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1fd7c164187ca664083d48c6f78f2bef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ammoCountValueText: {fileID: 0}
+  ammoMaxValueText: {fileID: 0}
+  coolDownTimerText: {fileID: 0}
+  playerHeavyWeapon: {fileID: 0}
 --- !u!114 &114649559050139546
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement; //for using SceneManager
 
 //Programmer:Pablo Camacho
 //Date: 03/29/17
@@ -43,6 +44,8 @@ public class PauseMenuScript : MonoBehaviour {
 		resumeButton.onClick.AddListener(ResumeButtonClickProcess);
 		//set camera settings button on click to run CameraButtonClickProcess function when clicked
 		cameraSettingsButton.onClick.AddListener(CameraButtonClickProcess);
+		//set exit to main menu button on click to run ExitToMainMenuButtonClickProcess when clicked
+		exitToMainMenuButton.onClick.AddListener(ExitToMainMenButtonClickProcess);
 	}
 	
 	// Update is called once per frame
@@ -93,10 +96,24 @@ public class PauseMenuScript : MonoBehaviour {
 		pauseMenuCurrentState = RESUME_GAME;
 	}
 	
+	//function to run when camera settings button clicked
 	void CameraButtonClickProcess()
 	{
 		//set current state to camera editing settings
 		pauseMenuCurrentState = CAMERA_SETTINGS_EDITING;
 		camSettingsMenuScriptRef.ActivateCameraMenuCanvas();
+	}
+	
+	//function to run when exit to main menu button clicked
+	void ExitToMainMenButtonClickProcess()
+	{
+		//set current state to quit game
+		pauseMenuCurrentState = QUIT_GAME;
+		
+		//disconnect from network
+		Network.Disconnect();
+		//go to Title Screen
+		int nextSceneIndex = 0;
+		SceneManager.LoadScene(nextSceneIndex);
 	}
 }

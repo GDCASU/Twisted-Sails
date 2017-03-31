@@ -3416,6 +3416,7 @@ GameObject:
   - component: {fileID: 1764216002}
   - component: {fileID: 1764216001}
   - component: {fileID: 1764216000}
+  - component: {fileID: 1764216003}
   m_Layer: 0
   m_Name: Network Manager
   m_TagString: Untagged
@@ -3521,7 +3522,7 @@ MonoBehaviour:
   teamScores: 
   lobbyPrefab: {fileID: 1024232112829116, guid: a40aeac91e14e7c45a756cc922550a6a,
     type: 2}
-  inGameScene: MainLevel
+  inGameScene: MainLevel_PabloCamacho
   localConnectionId: 0
   playableShips:
   - {fileID: 1000013458966376, guid: e0e164241721d3143a13bc6ff7b6d9b5, type: 2}
@@ -3541,6 +3542,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1764216003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1764215999}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2beae34b99069e40892a1771a8afb38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pauseMenuCanvas: {fileID: 0}
+  gamePaused: 0
+  playerBoatMovementComponent: {fileID: 0}
 --- !u!1 &1771699331
 GameObject:
   m_ObjectHideFlags: 0
