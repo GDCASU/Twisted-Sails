@@ -22,6 +22,11 @@ public class CameraSettingsMenuScript : MonoBehaviour {
 	public Toggle invertVerticalToggle;
 	public Toggle invertHorizontalToggle;
 	
+	//reference to text
+	public Text verticalSensitivitySliderText;
+	public Text horizontalSensitivitySliderText;
+	public Text scrollSensitivitySliderText;
+	
 	//temporary values of camera settings
 	private float tempHorizontalSensitivity = 4.0f;
     private float tempVerticalSensitivity = 1.0f;
@@ -52,6 +57,10 @@ public class CameraSettingsMenuScript : MonoBehaviour {
 		
 		okButton.onClick.AddListener(OKButtonClickProcess);
 		cancelButton.onClick.AddListener(CancelButtonClickProcess);
+		
+		verticalSensitivitySliderText.text = tempVerticalSensitivity.ToString("0.0");
+		horizontalSensitivitySliderText.text = tempHorizontalSensitivity.ToString("0.0");
+		scrollSensitivitySliderText.text = tempScrollSensitivity.ToString("0.0");
 	}
 	
 	// Update is called once per frame
@@ -84,16 +93,19 @@ public class CameraSettingsMenuScript : MonoBehaviour {
 	void VerticalSensitivityChangedProcess()
 	{
 		tempVerticalSensitivity = verticalSensitivitySlider.value; //assign slider value to temp vertical sensitivity
+		verticalSensitivitySliderText.text = verticalSensitivitySlider.value.ToString("0.0");
 	}
 	
 	void HorizontalSensitivityChangedProcess()
 	{
 		tempHorizontalSensitivity = horizontalSensitivitySlider.value; //assign slider value to temp horizontal sensitivity
+		horizontalSensitivitySliderText.text = horizontalSensitivitySlider.value.ToString("0.0");
 	}
 	
 	void ScrollSensitivityChangedProcess()
 	{
 		tempScrollSensitivity = scrollSensitivitySlider.value; //assign slider value to temp scroll sensitivity
+		scrollSensitivitySliderText.text = scrollSensitivitySlider.value.ToString("0.0");
 	}
 	
 	void InvertVerticalToggleChangedProcess()
