@@ -19,7 +19,14 @@
 /* *
    November 9th, 2016: Kyle Chapman
    Added a simple system for adding an offset to where the camera is looking near the boat.
+   * 
 */
+
+/*
+   March 29, 2017: Pablo Camacho
+   Added a reference to bool variable in pause game script to let camera know to 
+   let cursor be visible when pause menu is on.
+ */
 
 using UnityEngine;
 using System.Collections;
@@ -64,6 +71,8 @@ public class BoatCameraNetworked : MonoBehaviour
 	private Camera cam;
 	private Transform camTransform;
 
+	public bool gameIsPaused = false;
+	
 	// Use this for initialization
 	private void Start()
     {
@@ -80,9 +89,20 @@ public class BoatCameraNetworked : MonoBehaviour
 			Cursor.lockState = CursorLockMode.Confined;
 			return;
 		}
-		Cursor.visible = false;
-		Cursor.lockState = CursorLockMode.Locked;
-
+		
+		//if game is not paused, don't show cursor and lock it to center
+		if( !gameIsPaused)
+		{
+			Cursor.visible = false;
+			Cursor.lockState = CursorLockMode.Locked;
+		}
+		else
+		{
+			//else show cursor and unlck it
+			Cursor.visible = true;
+			Cursor.lockState = CursorLockMode.None;
+		}
+		
 		//if not doing a quickturn, do normal mouse based camera movement input
 		if (!quickTurning)
 		{
