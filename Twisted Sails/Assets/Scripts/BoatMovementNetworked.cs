@@ -41,6 +41,11 @@ using System.Collections.Generic;
 // Description: Refactored the code. Now BroadsideCannonFireNetworked is in charge of instantiating 
 //              fired cannon balls on the server and this code takes that instance and spawns it on
 //              the other clients. 
+
+// Update:      Edward Borroughs
+// Date: March 23, 2016
+// Description: Minor fixes to cannonball spawning code to prevent them from colliding with the ship
+//              that spawns them.
 */
 
 public class BoatMovementNetworked : NetworkBehaviour
@@ -198,10 +203,15 @@ public class BoatMovementNetworked : NetworkBehaviour
     {
 		//Spawn object on server
 		GameObject firedBall = Instantiate(cannonBall);
+        Collider firedBallCollider = firedBall.GetComponent<Collider>();
 
 		// Set position, velocity
 		firedBall.transform.position = position;
 		firedBall.GetComponent<Rigidbody>().velocity = velocity;
+        foreach (Collider collider in this.GetComponentsInChildren<Collider>())
+        {
+            Physics.IgnoreCollision(firedBallCollider, collider);
+        }
 
 		firedBall.GetComponent<CannonBallNetworked>().owner = GetComponent<NetworkIdentity>().netId;
 
