@@ -12,6 +12,10 @@ using System.IO;
 //              called when a player disconnects in order to get the player  
 //              disconnecting and save its local stats, then restore it on reconnect. 
 
+// Developer:   Kyle Aycock
+// Date:        3/24/2017
+// Description: Worked with Diego to fix some of the saving and loading functionality
+
 [System.Serializable]
 public class Game
 {
@@ -29,18 +33,18 @@ public static class SaveLoad
 
     public static void SaveGame()
     {
-		int playerID = MultiplayerManager.GetLocalClient().connection.connectionId;
-		Player player = MultiplayerManager.FindPlayer(playerID);
+        //int playerID = MultiplayerManager.GetLocalClient().connection.connectionId;
+        //Player player = MultiplayerManager.FindPlayer(playerID);
 
-		if (player == null)
+        /*if (player == null)
 			return;
 
-		Game.current = new Game();
-        savedGames.Insert(0, Game.current);
+        
 
 		Game.current.name = player.name;
         Game.current.kills = player.kills;
-        Game.current.deaths = player.deaths;
+        Game.current.deaths = player.deaths;*/
+        savedGames.Insert(0, Game.current);
 
         BinaryFormatter bFormat = new BinaryFormatter();
         FileStream file = File.Create(Application.persistentDataPath + "/PlayerData.gd");
@@ -57,6 +61,7 @@ public static class SaveLoad
             BinaryFormatter bFormat = new BinaryFormatter();
             FileStream file = File.Open(Application.persistentDataPath + "/PlayerData.gd", FileMode.Open);
             Game data = (Game)bFormat.Deserialize(file);
+            Game.current = data;
             file.Close();
         }
     }
