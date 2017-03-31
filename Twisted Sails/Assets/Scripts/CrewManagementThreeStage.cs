@@ -105,7 +105,7 @@ public class CrewManagementThreeStage : NetworkBehaviour
 
             else
             {
-                if (Input.GetButtonDown(attackButton))
+                if (InputWrapper.GetButtonDown(attackButton))
                 {
                     statChange = StatUpdate(ref attackStage);
 
@@ -116,7 +116,7 @@ public class CrewManagementThreeStage : NetworkBehaviour
                     }
                 }
 
-                else if (Input.GetButtonDown(defenseButton))
+                else if (InputWrapper.GetButtonDown(defenseButton))
                 {
                     statChange = StatUpdate(ref defenseStage);
 
@@ -127,7 +127,7 @@ public class CrewManagementThreeStage : NetworkBehaviour
                     }
                 }
 
-                else if (Input.GetButtonDown(speedButton))
+                else if (InputWrapper.GetButtonDown(speedButton))
                 {
                     statChange = StatUpdate(ref speedStage);
 
@@ -138,7 +138,7 @@ public class CrewManagementThreeStage : NetworkBehaviour
                     }
                 }
 
-                else if (Input.GetButtonDown(resetButton))
+                else if (InputWrapper.GetButtonDown(resetButton))
                 { ResetStages(); }
             }
         }
