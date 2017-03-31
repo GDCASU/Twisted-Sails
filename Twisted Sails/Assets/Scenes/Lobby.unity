@@ -2621,7 +2621,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   teamSelectContainer: {fileID: 1006314681}
-  startButton: {fileID: 0}
+  startButton: {fileID: 1545385530}
   lobbyText: {fileID: 1060778211}
   redTeam: {fileID: 1262680548}
   blueTeam: {fileID: 1894394928}

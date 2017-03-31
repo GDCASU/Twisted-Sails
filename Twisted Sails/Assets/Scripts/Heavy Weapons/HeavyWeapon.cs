@@ -67,7 +67,7 @@ public class HeavyWeapon : NetworkBehaviour
 
 		ammoCount = startingAmmoAmount;
 
-		ammoCounter = GameObject.Find("HeavyAmmoCounter").GetComponent<Text>();
+		//ammoCounter = GameObject.Find("HeavyAmmoCounter").GetComponent<Text>();
 	}
 	
     public virtual void Update ()

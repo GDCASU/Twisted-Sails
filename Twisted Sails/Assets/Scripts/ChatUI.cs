@@ -107,7 +107,7 @@ public class ChatUI : MonoBehaviour
 
                     //find the chathandler attached to the player
                     //and tell it to send the message to the other clients
-                    ChatHandler chatHandler = GameObject.FindObjectOfType<ChatHandler>();
+                    ChatHandler chatHandler = MultiplayerManager.GetLocalPlayer().GetPlayerObject().GetComponent<ChatHandler>();
                     chatHandler.SendOutMessage(newMessage);
 
                     inputField.text = String.Empty;
