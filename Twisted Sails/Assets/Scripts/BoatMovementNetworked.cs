@@ -114,13 +114,13 @@ public class BoatMovementNetworked : NetworkBehaviour
 
             if (KeysDown.fireSwivelGun)
             {
+
                 foreach (SwivelGun sScript in swivelGunScripts)
                 {
                     if (sScript.CanFire())
                     {
-                        //(Scale is static to CannonBallNetworked script)
                         //Pass information to server and spawn cannonball on all cients
-                        CmdFire(sScript.createCannonBall(cannonBall, this.GetComponent<NetworkIdentity>().netId));
+                        CmdFire(sScript.GetCannonBallPosition(), sScript.GetCannonBallVelocity());
                     }
                 }
             }
@@ -131,10 +131,10 @@ public class BoatMovementNetworked : NetworkBehaviour
 				{
 					if (cScript.CanFire())
 					{
-						//(Scale is static to CannonBallNetworked script)
-                        //Pass information to server and spawn cannonball on all cients
-                        CmdFire(cScript.createCannonBall(cannonBall, this.GetComponent<NetworkIdentity>().netId));
-                    }
+						//Pass information to server and spawn cannonball on all cients
+						CmdFire(cScript.GetCannonBallPosition(), cScript.GetCannonBallVelocity());
+						cScript.ResetFireTimer();
+					}
 				}
 			}
 		}
@@ -194,8 +194,17 @@ public class BoatMovementNetworked : NetworkBehaviour
     //Called by client, runs on server.
     //Spawns an existing cannonball that is on the server on all clients.
     [Command]
-    private void CmdFire(GameObject cannonBall)
+    private void CmdFire(Vector3 position, Vector3 velocity)
     {
-        NetworkServer.Spawn(cannonBall);
+		//Spawn object on server
+		GameObject firedBall = Instantiate(cannonBall);
+
+		// Set position, velocity
+		firedBall.transform.position = position;
+		firedBall.GetComponent<Rigidbody>().velocity = velocity;
+
+		firedBall.GetComponent<CannonBallNetworked>().owner = GetComponent<NetworkIdentity>().netId;
+
+		NetworkServer.Spawn(firedBall);
     }
 }

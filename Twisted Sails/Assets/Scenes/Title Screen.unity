@@ -3349,12 +3349,12 @@ MonoBehaviour:
   m_ScriptCRCCheck: 1
   m_MaxDelay: 0.01
   m_LogLevel: 2
-  m_PlayerPrefab: {fileID: 1000011404560512, guid: 6d531ecf61d10f845b8c4b8c40a3fbe7,
+  m_PlayerPrefab: {fileID: 1000013458966376, guid: a35872d6be62b8c4ebd864b495a4048a,
     type: 2}
   m_AutoCreatePlayer: 0
   m_PlayerSpawnMethod: 1
   m_OfflineScene: Title Screen
-  m_OnlineScene: Lobby with Ship Select
+  m_OnlineScene: Lobby_Revamp
   m_SpawnPrefabs:
   - {fileID: 1000013620427708, guid: 999d70260556d6a4d99c8c6ca2089051, type: 2}
   - {fileID: 1000012157780100, guid: 89d5d58f166bbd14eb4daf206f37a9fe, type: 2}
@@ -3362,6 +3362,7 @@ MonoBehaviour:
   - {fileID: 1000013458966376, guid: e0e164241721d3143a13bc6ff7b6d9b5, type: 2}
   - {fileID: 1000013458966376, guid: 93df41ee14972a04bbb4fd2e59b8f2ee, type: 2}
   - {fileID: 1708626477856930, guid: 861ddc325093cfc489fd016c61d671f6, type: 2}
+  - {fileID: 1024232112829116, guid: a40aeac91e14e7c45a756cc922550a6a, type: 2}
   m_CustomConfig: 0
   m_MaxConnections: 4
   m_ConnectionConfig:
@@ -3409,7 +3410,7 @@ MonoBehaviour:
   localShipType: 0
   pointsToWin: 10
   teamScores: 
-  lobbyPrefab: {fileID: 1000012157780100, guid: 89d5d58f166bbd14eb4daf206f37a9fe,
+  lobbyPrefab: {fileID: 1024232112829116, guid: a40aeac91e14e7c45a756cc922550a6a,
     type: 2}
   inGameScene: Milestone 2_Lobby
   playableShips:

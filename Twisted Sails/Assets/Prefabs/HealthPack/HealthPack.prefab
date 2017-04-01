@@ -16,11 +16,11 @@ GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000014013425638}
-  - 33: {fileID: 33000010762938222}
-  - 23: {fileID: 23000011362716836}
+  - component: {fileID: 4000014013425638}
+  - component: {fileID: 33000010762938222}
+  - component: {fileID: 23000011362716836}
   m_Layer: 0
   m_Name: Plane
   m_TagString: Untagged
@@ -33,14 +33,14 @@ GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000013649584482}
-  - 111: {fileID: 111000010646645146}
-  - 114: {fileID: 114000012147794260}
-  - 114: {fileID: 114000014244360240}
-  - 114: {fileID: 114000011118432948}
-  - 65: {fileID: 65000013540187572}
+  - component: {fileID: 4000013649584482}
+  - component: {fileID: 111000010646645146}
+  - component: {fileID: 114000012147794260}
+  - component: {fileID: 114000014244360240}
+  - component: {fileID: 114000011118432948}
+  - component: {fileID: 65000013540187572}
   m_Layer: 0
   m_Name: HealthPack
   m_TagString: HealthPickUp
@@ -57,11 +57,11 @@ Transform:
   m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 100, y: 100, z: 100}
-  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
   m_Children:
   - {fileID: 4000014013425638}
   m_Father: {fileID: 0}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
 --- !u!4 &4000014013425638
 Transform:
   m_ObjectHideFlags: 1
@@ -71,10 +71,10 @@ Transform:
   m_LocalRotation: {x: 0.38268346, y: -0, z: -0, w: 0.9238795}
   m_LocalPosition: {x: -0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 4000013649584482}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &23000011362716836
 MeshRenderer:
   m_ObjectHideFlags: 1
@@ -90,7 +90,9 @@ MeshRenderer:
   m_Materials:
   - {fileID: 2100000, guid: 6e1a8dd8b3528474db5d110ab56355d9, type: 2}
   - {fileID: 2100000, guid: f69ee347bdcf4f4429b365027df862ce, type: 2}
-  m_SubsetIndices: 
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
@@ -98,7 +100,7 @@ MeshRenderer:
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
-  m_SelectedWireframeHidden: 0
+  m_SelectedEditorRenderState: 3
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
@@ -183,6 +185,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   healing: 1
+  healAmount: 50
+  packMesh: {fileID: 23000011362716836}
+  packCollider: {fileID: 65000013540187572}
 --- !u!114 &114000014244360240
 MonoBehaviour:
   m_ObjectHideFlags: 1
