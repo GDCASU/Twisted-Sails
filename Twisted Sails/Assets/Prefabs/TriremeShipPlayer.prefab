@@ -372,7 +372,11 @@ GameObject:
   - component: {fileID: 114000010222649082}
   - component: {fileID: 114649559050139546}
   - component: {fileID: 114123397760901494}
+<<<<<<< HEAD
   - component: {fileID: 114645187142023936}
+=======
+  - component: {fileID: 114771248019337726}
+>>>>>>> 53fe1b604a20129730f868d42158a9fcdc7f6ac5
   m_Layer: 8
   m_Name: TriremeShipPlayer
   m_TagString: Player
@@ -2142,6 +2146,21 @@ MonoBehaviour:
   addAmmoKey: 117
   damage: 10
   projectileSpeed: 7
+--- !u!114 &114771248019337726
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000013458966376}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 77dbc50e9ad80bf419655da598727bf8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ammoCountValueText: {fileID: 0}
+  ammoMaxValueText: {fileID: 0}
+  coolDownTimerText: {fileID: 0}
+  playerHeavyWeapon: {fileID: 0}
 --- !u!122 &122000012998973456
 Halo:
   m_ObjectHideFlags: 1
