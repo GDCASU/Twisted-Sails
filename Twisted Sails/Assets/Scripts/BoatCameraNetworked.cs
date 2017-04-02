@@ -26,6 +26,10 @@
 // Description: Repaired incorrect interpolation code for quick turn
 //              quickTurnTime is the amount of time it takes to finish a quick turn, in seconds
 
+//Update: 	Pablo Camacho
+//Date: March 29, 2017
+//Description: Added bool to let boat networked camera stop hiding cursor if game is paused.
+
 using UnityEngine;
 using System.Collections;
 

@@ -49,7 +49,7 @@ using System.Collections.Generic;
 * 
 //Update: 	Pablo Camacho
 //Date: March 29, 2017
-//Description: Added bool to let boat networked camera to stop hiding cursor if game is paused.
+//Description: Added bool to let boat networked camera stop hiding cursor if game is paused.
 */
 
 public class BoatMovementNetworked : NetworkBehaviour

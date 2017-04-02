@@ -29,17 +29,18 @@ public class PauseMenuScript : MonoBehaviour {
 	public int pauseMenuCurrentState;
 	
 	//states of pause menu
-	public const int PAUSE_MENU_HIDDEN=0;
-	public const int IN_PAUSE_MENU_START=1; 
-	public const int RESUME_GAME= 2; 
-	public const int CAMERA_SETTINGS_EDITING = 3;
-	public const int QUIT_GAME = 4;
+	public const int NULL = 0; //for start of game
+	public const int PAUSE_MENU_HIDDEN = 1;
+	public const int IN_PAUSE_MENU_START = 2; 
+	public const int RESUME_GAME = 3; 
+	public const int CAMERA_SETTINGS_EDITING = 4;
+	public const int QUIT_GAME = 5;
 	
 	// Use this for initialization
 	void Start () 
 	{
 		//initialize current state to pause menu hidden state
-		pauseMenuCurrentState = PAUSE_MENU_HIDDEN;
+		pauseMenuCurrentState = NULL;
 		//set resume button on click to run ResumeButtonClickProcess function when clicked
 		resumeButton.onClick.AddListener(ResumeButtonClickProcess);
 		//set camera settings button on click to run CameraButtonClickProcess function when clicked
@@ -53,6 +54,10 @@ public class PauseMenuScript : MonoBehaviour {
 	{
 		switch(pauseMenuCurrentState)
 		{
+			case NULL:
+			{
+				break;
+			}
 			case PAUSE_MENU_HIDDEN:
 			{
 				//make pause menu inactive

@@ -3228,7 +3228,7 @@ MonoBehaviour:
   - {fileID: 1000012157780100, guid: 89d5d58f166bbd14eb4daf206f37a9fe, type: 2}
   - {fileID: 1000013458966376, guid: a35872d6be62b8c4ebd864b495a4048a, type: 2}
   - {fileID: 1000013458966376, guid: e0e164241721d3143a13bc6ff7b6d9b5, type: 2}
-  - {fileID: 1000013458966376, guid: 93df41ee14972a04bbb4fd2e59b8f2ee, type: 2}
+  - {fileID: 0}
   - {fileID: 1708626477856930, guid: 861ddc325093cfc489fd016c61d671f6, type: 2}
   - {fileID: 1024232112829116, guid: a40aeac91e14e7c45a756cc922550a6a, type: 2}
   m_CustomConfig: 0
@@ -3284,7 +3284,7 @@ MonoBehaviour:
   localConnectionId: 0
   playableShips:
   - {fileID: 1000013458966376, guid: e0e164241721d3143a13bc6ff7b6d9b5, type: 2}
-  - {fileID: 1000013458966376, guid: 93df41ee14972a04bbb4fd2e59b8f2ee, type: 2}
+  - {fileID: 0}
   - {fileID: 1000013458966376, guid: a35872d6be62b8c4ebd864b495a4048a, type: 2}
   - {fileID: 0}
 --- !u!4 &1764216002
@@ -3300,7 +3300,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-<<<<<<< HEAD
 --- !u!114 &1764216003
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3315,10 +3314,7 @@ MonoBehaviour:
   pauseMenuCanvas: {fileID: 0}
   gamePaused: 0
   playerBoatMovementComponent: {fileID: 0}
---- !u!1 &1771699331
-=======
 --- !u!1 &1768124195
->>>>>>> 53fe1b604a20129730f868d42158a9fcdc7f6ac5
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}

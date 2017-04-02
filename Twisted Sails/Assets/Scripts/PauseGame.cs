@@ -34,7 +34,8 @@ public class PauseGame : MonoBehaviour
 	{
 		if(playerBoatMovementComponent == null){InitPlayerCameraPauseBool();}
 		//run process for pause menu
-		PauseMenuProcess();
+		if(pauseMenuCanvas != null){PauseMenuProcess();}
+		else if(pauseMenuCanvas == null){InitPauseMenu();}
 		
 	}
 	
@@ -44,6 +45,7 @@ public class PauseGame : MonoBehaviour
 		if(Application.loadedLevelName == "MainLevel_PabloCamacho" ||
 			Application.loadedLevelName == "MainLevel")
 		{
+			
 			//get reference to player component BoatMovementNetworked
 			Player thisPlayer = MultiplayerManager.GetLocalPlayer();
 			GameObject thisPlayerGameObject = thisPlayer.GetPlayerObject();
@@ -51,30 +53,51 @@ public class PauseGame : MonoBehaviour
 		}
 	}
 	
-	void PauseMenuProcess()
+	private void PauseMenuProcess()
 	{
-		//if pauseMenuCanvas is not null
-		if(pauseMenuCanvas != null)
-		{
-			//if p button is pressed down
-			if(Input.GetKeyDown(KeyCode.P))
-			{	
-				//if canvas is not active, make it active
-				if(pauseMenuCanvas.gameObject.activeInHierarchy == false)
-				{
-					Pause();
-				}
-				//else if canvas is active, make it inactive
-				else
-				{
-					UnPause();
-				}
+		
+		//if p button is pressed down
+		if(Input.GetKeyDown(KeyCode.P))
+		{	
+			//if canvas is not active, make it active
+			if(pauseMenuCanvas.gameObject.activeInHierarchy == false)
+			{
+				Pause();
+			}
+			//else if canvas is active, make it inactive
+			else
+			{
+				UnPause();
 			}
 		}
-		//else if pauseMenuCanvas is null
-		else if(pauseMenuCanvas == null)
-		{
-			//If current scene is in MainLevel_PabloCamacho
+		
+	}
+	
+	public void Pause()
+	{
+		pauseMenuCanvas.gameObject.SetActive(true);
+		pauseMenuScriptRef.pauseMenuCurrentState = PauseMenuScript.IN_PAUSE_MENU_START;
+		gamePaused = true;
+		
+		//assign game pause bool to game is paused bool of player boat movement component
+		playerBoatMovementComponent.gameIsPaused = true;
+		
+	}
+	
+	public void UnPause()
+	{
+		pauseMenuCanvas.gameObject.SetActive(false);
+		pauseMenuScriptRef.pauseMenuCurrentState = PauseMenuScript.PAUSE_MENU_HIDDEN;
+		gamePaused = false;
+		
+		//assign game pause bool to game is paused bool of player boat movement component
+		playerBoatMovementComponent.gameIsPaused = false;
+		
+	}
+	
+	private void InitPauseMenu()
+	{
+		//If current scene is in MainLevel_PabloCamacho
 			if(Application.loadedLevelName == "MainLevel_PabloCamacho")
 			{
 				//get array of root game objects in Scene MainLevel_PabloCamacho
@@ -128,26 +151,5 @@ public class PauseGame : MonoBehaviour
 					}
 				}
 			}
-		}
-	}
-	
-	public void Pause()
-	{
-		pauseMenuCanvas.gameObject.SetActive(true);
-		pauseMenuScriptRef.pauseMenuCurrentState = PauseMenuScript.IN_PAUSE_MENU_START;
-		gamePaused = true;
-		
-		//assign game pause bool to game is paused bool of player boat movement component
-		playerBoatMovementComponent.gameIsPaused = gamePaused;
-	}
-	
-	public void UnPause()
-	{
-		pauseMenuCanvas.gameObject.SetActive(false);
-		pauseMenuScriptRef.pauseMenuCurrentState = PauseMenuScript.PAUSE_MENU_HIDDEN;
-		gamePaused = false;
-		
-		//assign game pause bool to game is paused bool of player boat movement component
-		playerBoatMovementComponent.gameIsPaused = gamePaused;
 	}
 }

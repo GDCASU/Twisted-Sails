@@ -45,7 +45,12 @@ public class CameraSettingsMenuScript : MonoBehaviour {
 		playerBoatCamera = Camera.main.GetComponent<BoatCameraNetworked>();
 		
 		//initialize slider values to values of boat camera
+		verticalSensitivitySlider.value = tempVerticalSensitivity;
+		horizontalSensitivitySlider.value = tempHorizontalSensitivity;
+		scrollSensitivitySlider.value = tempScrollSensitivity;
 		
+		invertVerticalToggle.isOn = tempInvertVertical;
+		invertHorizontalToggle.isOn = tempInvertHorizontal;
 		
 		//set callback functions for sliders and buttons and toggles
 		verticalSensitivitySlider.onValueChanged.AddListener(delegate {VerticalSensitivityChangedProcess ();});
@@ -72,7 +77,6 @@ public class CameraSettingsMenuScript : MonoBehaviour {
 			
 			case CAMERA_MENU_HIDDEN:
 			{
-				//DeActivateCameraMenuCanvas();
 				break;
 			}
 		}
