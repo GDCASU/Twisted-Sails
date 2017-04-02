@@ -46,6 +46,10 @@ using System.Collections.Generic;
 // Date: March 23, 2016
 // Description: Minor fixes to cannonball spawning code to prevent them from colliding with the ship
 //              that spawns them.
+* 
+//Update: 	Pablo Camacho
+//Date: March 29, 2017
+//Description: Added bool to let boat networked camera stop hiding cursor if game is paused.
 */
 
 public class BoatMovementNetworked : NetworkBehaviour
@@ -84,7 +88,9 @@ public class BoatMovementNetworked : NetworkBehaviour
     //Boat cameras
     private BoatCameraNetworked boatCam;
     private OrbitalCamera orbCam;
-
+    
+	public bool gameIsPaused = false;
+	
     // Use this for initialization
     private void Start()
     {
@@ -142,6 +148,8 @@ public class BoatMovementNetworked : NetworkBehaviour
 					}
 				}
 			}
+			
+			boatCam.gameIsPaused = gameIsPaused; //assign game is paused value to boat cam
 		}
 	}
 
