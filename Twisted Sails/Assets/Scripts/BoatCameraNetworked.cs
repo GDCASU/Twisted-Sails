@@ -1,4 +1,4 @@
-﻿//Oct 9th 16 Scotty Molt: 
+//Oct 9th 16 Scotty Molt: 
 //	- boatToFollow can now be null, set on BoatMovementNetworked::Start()
 //	- Updated default values to Inspector values
 /* *
@@ -25,6 +25,10 @@
 // Date:        3/30/2017
 // Description: Repaired incorrect interpolation code for quick turn
 //              quickTurnTime is the amount of time it takes to finish a quick turn, in seconds
+
+//Update: 	Pablo Camacho
+//Date: March 29, 2017
+//Description: Added bool to let boat networked camera stop hiding cursor if game is paused.
 
 using UnityEngine;
 using System.Collections;
@@ -71,6 +75,8 @@ public class BoatCameraNetworked : MonoBehaviour
 
 	private Camera cam;
 	private Transform camTransform;
+	
+	public bool gameIsPaused;
 
 	// Use this for initialization
 	private void Start()
@@ -88,8 +94,18 @@ public class BoatCameraNetworked : MonoBehaviour
 			Cursor.lockState = CursorLockMode.Confined;
 			return;
 		}
-		Cursor.visible = false;
-		Cursor.lockState = CursorLockMode.Locked;
+		//if game is not paused, don't show cursor and lock it to center
+		if( !gameIsPaused)
+		{
+			Cursor.visible = false;
+			Cursor.lockState = CursorLockMode.Locked;
+		}
+		else
+		{
+			//else show cursor and unlck it
+			Cursor.visible = true;
+			Cursor.lockState = CursorLockMode.None;
+		}
 
 		//if not doing a quickturn, do normal mouse based camera movement input
 		if (!quickTurning)
