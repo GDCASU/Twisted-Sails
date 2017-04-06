@@ -500,12 +500,6 @@ public class MultiplayerManager : NetworkManager
         base.OnServerSceneChanged(sceneName);
     }
 
-    public override void OnServerReady(NetworkConnection conn)
-    {
-        Debug.Log("OnServerReady");
-        base.OnServerReady(conn);
-    }
-
     //Called when the lobby transitions to the game
     public void EnterGame()
     {

@@ -42,9 +42,9 @@ public class PlayerIconController : NetworkBehaviour
 {
     [SyncVar(hook = "OnNameChange")]
     public string playerName;
-    [SyncVar(hook = "OnTeamChange")]
+    [SyncVar]
     public short playerTeam;
-    [SyncVar(hook = "OnShipChange")]
+    [SyncVar]
     public short playerShip;
     [SyncVar]
     public bool host;
@@ -66,10 +66,9 @@ public class PlayerIconController : NetworkBehaviour
         {
             CmdPlayerInit(connectionId);
         }
-
-        OnTeamChange(playerTeam);
+        DoChangeShip((Ship)playerShip);
+        DoChangeTeam(playerTeam);
         OnNameChange(playerName);
-        OnShipChange(playerShip);
     }
 
     /// <summary>
@@ -81,35 +80,6 @@ public class PlayerIconController : NetworkBehaviour
         playerName = newName;
         GetComponent<Text>().text = newName;
     }
-
-    /// <summary>
-    /// Automatically called when playerTeam is changed on this script serverside
-    /// </summary>
-    /// <param name="newTeam"></param>
-    public void OnTeamChange(short newTeam)
-    {
-        playerTeam = newTeam;
-        if(isLocalPlayer) MultiplayerManager.GetInstance().localPlayerTeam = newTeam;
-        LobbyManager lobby = GameObject.Find("Canvas").GetComponent<LobbyManager>();
-        if (lobby.currentState != LobbyManager.LobbyState.TeamSelect) return;
-        if (playerTeam == 0)
-            transform.SetParent(lobby.redTeam, false);
-        else
-            transform.SetParent(lobby.blueTeam, false);
-    }
-
-    /// <summary>
-    /// Automatically called when playerShip is changed on this script serverside
-    /// </summary>
-    /// <param name="newShip"></param>
-    public void OnShipChange(short newShip)
-    {
-        playerShip = newShip;
-        LobbyManager lobby = GameObject.Find("Canvas").GetComponent<LobbyManager>();
-        if (lobby.currentState != LobbyManager.LobbyState.ShipSelect) return;
-        transform.SetParent(lobby.ShipSelectNameContainers[newShip].transform, false);
-    }
-
 
     /// <summary>
     /// To be called to hook this object to the player controlling it
@@ -128,11 +98,32 @@ public class PlayerIconController : NetworkBehaviour
     [Command]
     public void CmdChangeTeam(short team)
     {
-        if (MultiplayerManager.GetInstance().playerList.FindAll(p => p.team == team).Count >= 4)
+        LobbyManager lobby = GameObject.Find("Canvas").GetComponent<LobbyManager>();
+        if (lobby.currentState != LobbyManager.LobbyState.TeamSelect || MultiplayerManager.GetInstance().playerList.FindAll(p => p.team == team).Count >= 4)
             return; //team to switch to already has 4 players, abort
-        MultiplayerManager.GetInstance().localPlayerTeam = team;
         MultiplayerManager.FindPlayer(GetComponent<NetworkIdentity>().netId).team = team;
         playerTeam = team;
+        RpcChangeTeam(team);
+    }
+
+    /// <summary>
+    /// Called by server to notify clients of team change
+    /// </summary>
+    /// <param name="team"></param>
+    [ClientRpc]
+    public void RpcChangeTeam(short team)
+    {
+        DoChangeTeam(team);
+    }
+
+    public void DoChangeTeam(short team)
+    {
+        if (isLocalPlayer) MultiplayerManager.GetInstance().localPlayerTeam = team;
+        LobbyManager lobby = GameObject.Find("Canvas").GetComponent<LobbyManager>();
+        if (team == 0)
+            transform.SetParent(lobby.redTeam, false);
+        else
+            transform.SetParent(lobby.blueTeam, false);
     }
 
     /// <summary>
@@ -144,6 +135,25 @@ public class PlayerIconController : NetworkBehaviour
     {
         MultiplayerManager.FindPlayer(GetComponent<NetworkIdentity>().netId).ship = ship;
         playerShip = (short)ship;
+        RpcChangeShip(ship);
+    }
+
+    /// <summary>
+    /// Called by server to notify clients of ship change
+    /// </summary>
+    /// <param name="ship"></param>
+    [ClientRpc]
+    public void RpcChangeShip(Ship ship)
+    {
+        DoChangeShip(ship);
+    }
+
+    public void DoChangeShip(Ship ship)
+    {
+        if(isLocalPlayer) MultiplayerManager.GetInstance().localShipType = ship;
+        LobbyManager lobby = GameObject.Find("Canvas").GetComponent<LobbyManager>();
+        if (lobby.currentState != LobbyManager.LobbyState.ShipSelect) return;
+        transform.SetParent(lobby.ShipSelectNameContainers[(short)ship].transform, false);
     }
     
     /// <summary>

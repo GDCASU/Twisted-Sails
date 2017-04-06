@@ -29,20 +29,21 @@ public class TitleScreenInput : MonoBehaviour
 
     //DW
     //
-    void Awake()
+    void Start()
     {
         MultiplayerManager mm = MultiplayerManager.GetInstance();
+        SaveLoad.Load();
+        if (Game.current != null)
+        {
+            mm.localPlayerName = Game.current.name;
+            mm.networkAddress = Game.current.IPaddress;
+        }
         if (mm != null)
         {
             HostNameField.text = mm.localPlayerName;
             JoinNameField.text = mm.localPlayerName;
             IPField.text = mm.networkAddress;
         }
-        Game.current = new Game();
-        SaveLoad.Load();
-        IPField.text = Game.current.IPaddress;
-        JoinNameField.text = Game.current.name;
-        HostNameField.text = Game.current.name;
     }
 
     // Allows quitting by pressing ESC.
