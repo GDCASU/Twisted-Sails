@@ -372,6 +372,7 @@ public class MultiplayerManager : NetworkManager
     //This method performs the actual spawning of a player
     void ServerAddPlayer(NetworkConnection conn, short playerControllerId, string playerName, short playerTeam, short playerShip)
     {
+        Debug.Log(string.Format("Performing spawn of player {0} (controllerId: {1}, conn: {2}) in {3}", playerName, playerControllerId, conn.ToString(), IsLobby() ? "lobby" : ("game (team: " + playerTeam + " ship: " + playerShip + ")")));
         if (playerPrefab == null)
         {
             if (LogFilter.logError) { Debug.LogError("The PlayerPrefab is empty on the NetworkManager. Please setup a PlayerPrefab object."); }
@@ -386,8 +387,10 @@ public class MultiplayerManager : NetworkManager
 
         if (playerControllerId < conn.playerControllers.Count && conn.playerControllers[playerControllerId].IsValid && conn.playerControllers[playerControllerId].gameObject != null)
         {
-            if (LogFilter.logError) { Debug.LogError("There is already a player at that playerControllerId for this connections."); }
-            return;
+            //This sometimes happens when moving from lobby to game - just destroy the lobby object
+            Destroy(conn.playerControllers[playerControllerId].gameObject);
+            //if (LogFilter.logError) { Debug.LogError("There is already a player at that playerControllerId for this connections."); }
+            //return;
         }
 
         GameObject playerObj;
@@ -414,7 +417,10 @@ public class MultiplayerManager : NetworkManager
             }
             else
             {
-                playerObj = Instantiate(playableShips[playerShip], Vector3.zero, Quaternion.identity);
+                //Try again - most likely scenario is that the player requested a spawn before the server found the spawn points
+                Debug.Log("Spawn point not found - reattempting.");
+                StartCoroutine(RetryAddPlayer(conn, playerControllerId, playerName, playerTeam, playerShip));
+                return;
             }
 
             playerObj.GetComponent<Health>().team = playerTeam;
@@ -423,6 +429,12 @@ public class MultiplayerManager : NetworkManager
 
         PlayerConnected(FindPlayer(conn.connectionId));
         NetworkServer.AddPlayerForConnection(conn, playerObj, playerControllerId);
+    }
+
+    IEnumerator RetryAddPlayer(NetworkConnection conn, short playerControllerId, string playerName, short playerTeam, short playerShip)
+    {
+        yield return new WaitForSeconds(0.5f);
+        ServerAddPlayer(conn, playerControllerId, playerName, playerTeam, playerShip);
     }
 
     public static void RegisterTeamStartPosition(Transform pos, int team)
@@ -438,6 +450,7 @@ public class MultiplayerManager : NetworkManager
     {
         //get the list of start positions corresponding to the given team,
         //and get from that list the next unused start position, incrementing afterwards
+        if (!teamStartPositions.ContainsKey(team)) return null;
         return teamStartPositions[team][startPositionIndices[team]++];
     }
 
@@ -484,6 +497,12 @@ public class MultiplayerManager : NetworkManager
         if (sceneName == inGameScene)
             GameStart();
         base.OnServerSceneChanged(sceneName);
+    }
+
+    public override void OnServerReady(NetworkConnection conn)
+    {
+        Debug.Log("OnServerReady");
+        base.OnServerReady(conn);
     }
 
     //Called when the lobby transitions to the game

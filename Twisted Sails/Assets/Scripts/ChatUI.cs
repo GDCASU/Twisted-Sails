@@ -181,7 +181,6 @@ public class ChatUI : MonoBehaviour
         for (int i = 0; i < chatQueue.Count; i++)
         {
             chatMessages[i] = ChatHandler.ChatMessageToString((ChatMessage)msgs[i]);
-            print(chatMessages[i]);
         }
     }
 

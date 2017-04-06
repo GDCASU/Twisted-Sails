@@ -129,6 +129,9 @@ public class PlayerIconController : NetworkBehaviour
     [Command]
     public void CmdChangeTeam(short team)
     {
+        if (MultiplayerManager.GetInstance().playerList.FindAll(p => p.team == team).Count >= 4)
+            return; //team to switch to already has 4 players, abort
+        MultiplayerManager.GetInstance().localPlayerTeam = team;
         MultiplayerManager.FindPlayer(GetComponent<NetworkIdentity>().netId).team = team;
         playerTeam = team;
     }

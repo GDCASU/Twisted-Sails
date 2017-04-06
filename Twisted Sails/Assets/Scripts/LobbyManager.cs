@@ -123,7 +123,6 @@ public class LobbyManager : NetworkBehaviour
     /// <param name="team">Index in array of teams to switch to</param>
     public void SwitchTeam(int team)
     {
-        manager.localPlayerTeam = (short)team;
         GetLocalPlayer().GetComponent<PlayerIconController>().CmdChangeTeam((short)team);
     }
 
