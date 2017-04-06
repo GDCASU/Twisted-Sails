@@ -75,6 +75,8 @@ public class Health : NetworkBehaviour
     public string playerName;
     [SyncVar]
     public short team;
+    [SyncVar]
+    public int connectionId;
     public bool dead;
 
     [Header("Misc")]
@@ -113,7 +115,7 @@ public class Health : NetworkBehaviour
             GameObject UI = GameObject.FindGameObjectWithTag("HealthUI");
             healthSlider = UI.GetComponent<Slider>(); // NK 10/20: locates the health UI in the scene
             healthText = UI.GetComponentInChildren<Text>(); // NK 10/20 locates the health text in the scene
-            CmdPlayerInit(MultiplayerManager.GetLocalClient().connection.connectionId);
+            CmdPlayerInit(connectionId);
         }
         else //This is a ship belonging to another player -- use the ship's healthbar & nametag
         {

@@ -119,7 +119,6 @@ public class PlayerIconController : NetworkBehaviour
     public void CmdPlayerInit(int connId)
     {
         MultiplayerManager.FindPlayer(connId).objectId = GetComponent<NetworkIdentity>().netId;
-        MultiplayerManager.GetInstance().SendGameState();
     }
 
     /// <summary>

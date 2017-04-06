@@ -425,6 +425,7 @@ public class MultiplayerManager : NetworkManager
 
             playerObj.GetComponent<Health>().team = playerTeam;
             playerObj.GetComponent<Health>().playerName = playerName;
+            playerObj.GetComponent<Health>().connectionId = conn.connectionId;
         }
 
         PlayerConnected(FindPlayer(conn.connectionId));
