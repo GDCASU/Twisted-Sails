@@ -12,11 +12,11 @@ public class SwivelLeftRight : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		//Debug.Log (rotationSpeed);
-		if (Input.GetKey(KeyCode.Q)){
+		if (InputWrapper.GetKey(KeyCode.Q)){
 			//rotationSpeed += Time.deltaTime * 20;
 			this.transform.Rotate (0, 0, -rotationSpeed);
 		}
-		else if(Input.GetKey(KeyCode.E)){
+		else if(InputWrapper.GetKey(KeyCode.E)){
 			//rotationSpeed -= Time.deltaTime * 20;
 			this.transform.Rotate (0, 0, rotationSpeed);
 		}

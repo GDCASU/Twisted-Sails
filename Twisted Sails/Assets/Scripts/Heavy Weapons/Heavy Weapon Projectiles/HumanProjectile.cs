@@ -10,13 +10,27 @@ public class HumanProjectile : InteractiveObject {
     /// Destroys itself after.
     /// </summary>
     /// <param name="other"></param>
+
+    StatusEffectsManager manager;
+    public int damageDealt;
+
+
+    public override void OnInteractWithPlayer(Health playerHealth, GameObject playerBoat, StatusEffectsManager manager, Collision collision)
+    {
+        base.OnInteractWithPlayer(playerHealth, playerBoat, manager, collision);
+
+        int healthChange = -damageDealt;
+
+        //if this object is on the side of the player who owns this object
+        //send out the command to change the players health
+        //setting the source of the health change to be the owner of this cannonball
+        playerHealth.ChangeHealth(healthChange, owner);
+        Destroy(gameObject);
+    }
+
     private void OnCollisionEnter(Collision other)
     {
-        Debug.Log("Dragon Projectile: Collide");
-
-        if (other.gameObject.tag == "Player")
-            Debug.Log("Human Projectile: I Hit a player");
-
-        Destroy(gameObject);
+        if(other.gameObject.tag != "Player")
+            Destroy(gameObject);
     }
 }

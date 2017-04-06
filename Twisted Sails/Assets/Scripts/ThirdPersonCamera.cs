@@ -56,7 +56,7 @@ public class ThirdPersonCamera : MonoBehaviour {
 		}
 	
 		//Tab Key allows to switch between first person and third person view
-		if (Input.GetKeyDown(KeyCode.Tab)) 
+		if (InputWrapper.GetKeyDown(KeyCode.Tab)) 
 		{
 			if (fps == false) {
 				
