@@ -330,7 +330,7 @@ public class MultiplayerManager : NetworkManager
             msg.bountyGained = victim.GetBounty();
             NetworkServer.SendToClient(killer.connectionId, ExtMsgType.Kill, msg);
             victim.killstreak = 0;
-            killer.killstreak++;
+            killer.AddKill();
             Debug.Log("Player " + killer.name + " killed player " + victim.name + "!");
         }
         else Debug.Log("Player " + victim.name + " suicided!");
