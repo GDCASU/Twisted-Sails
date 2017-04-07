@@ -9,6 +9,7 @@ public class SpawnScript : MonoBehaviour {
 	Health[] arrayOfScripts = new Health[LENGTH_OF_ARRAYS];
 	public Transform[] arrayOfTransforms = new Transform[LENGTH_OF_ARRAYS];
 	public bool CR_Running;
+    public float spawnTime = 6f;
 
 	void Start () {
 		SpawnCharacters ();
@@ -37,7 +38,7 @@ public class SpawnScript : MonoBehaviour {
 
 	IEnumerator MyCoroutine() {
 		//Debug.Log ("Coroutine started");
-		yield return new WaitForSeconds (8f);
+		yield return new WaitForSeconds (spawnTime);
 		CR_Running = true;
 		//Debug.Log ("Coroutine finished");
 		//print ("It Works!");
