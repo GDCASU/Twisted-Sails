@@ -1,0 +1,187 @@
+fileFormatVersion: 2
+guid: 9cdd8c3a428c0ce41b4fb5ef2682a504
+timeCreated: 1491430647
+licenseType: Free
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: Cannon01
+    100002: Cannon02
+    100004: Cannon03
+    100006: Cannon04
+    100008: Cannon05
+    100010: Cannon06
+    100012: Cannon07
+    100014: Cannon08
+    100016: Cannon09
+    100018: Cannon10
+    100020: Cannon11
+    100022: Cannon12
+    100024: Dragon Cannon
+    100026: Dragon Head
+    100028: //RootNode
+    100030: Flag Back
+    100032: Flag Front
+    100034: Flag Mid
+    100036: Pillars
+    100038: Sail Back
+    100040: Sail Front
+    100042: Sail Mid
+    100044: Ship Frame
+    400000: Cannon01
+    400002: Cannon02
+    400004: Cannon03
+    400006: Cannon04
+    400008: Cannon05
+    400010: Cannon06
+    400012: Cannon07
+    400014: Cannon08
+    400016: Cannon09
+    400018: Cannon10
+    400020: Cannon11
+    400022: Cannon12
+    400024: Dragon Cannon
+    400026: Dragon Head
+    400028: //RootNode
+    400030: Flag Back
+    400032: Flag Front
+    400034: Flag Mid
+    400036: Pillars
+    400038: Sail Back
+    400040: Sail Front
+    400042: Sail Mid
+    400044: Ship Frame
+    2300000: Cannon01
+    2300002: Cannon02
+    2300004: Cannon03
+    2300006: Cannon04
+    2300008: Cannon05
+    2300010: Cannon06
+    2300012: Cannon07
+    2300014: Cannon08
+    2300016: Cannon09
+    2300018: Cannon10
+    2300020: Cannon11
+    2300022: Cannon12
+    2300024: Dragon Cannon
+    2300026: Dragon Head
+    2300028: Flag Back
+    2300030: Flag Front
+    2300032: Flag Mid
+    2300034: Pillars
+    2300036: Sail Back
+    2300038: Sail Front
+    2300040: Sail Mid
+    2300042: Ship Frame
+    3300000: Cannon01
+    3300002: Cannon02
+    3300004: Cannon03
+    3300006: Cannon04
+    3300008: Cannon05
+    3300010: Cannon06
+    3300012: Cannon07
+    3300014: Cannon08
+    3300016: Cannon09
+    3300018: Cannon10
+    3300020: Cannon11
+    3300022: Cannon12
+    3300024: Dragon Cannon
+    3300026: Dragon Head
+    3300028: Flag Back
+    3300030: Flag Front
+    3300032: Flag Mid
+    3300034: Pillars
+    3300036: Sail Back
+    3300038: Sail Front
+    3300040: Sail Mid
+    3300042: Ship Frame
+    4300000: Flag Front
+    4300002: Sail Mid
+    4300004: Sail Front
+    4300006: Dragon Cannon
+    4300008: Pillars
+    4300010: Ship Frame
+    4300012: Dragon Head
+    4300014: Cannon07
+    4300016: Cannon01
+    4300018: Sail Back
+    4300020: Cannon08
+    4300022: Cannon02
+    4300024: Cannon09
+    4300026: Cannon03
+    4300028: Cannon10
+    4300030: Cannon04
+    4300032: Cannon11
+    4300034: Cannon05
+    4300036: Cannon12
+    4300038: Cannon06
+    4300040: Flag Mid
+    4300042: Flag Back
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

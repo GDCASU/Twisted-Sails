@@ -57,6 +57,10 @@ using UnityEngine.Networking;
 // Date:        2/14/2017
 // Description: Refactored for interaction with the InteractiveObjects system.
 
+// Developer:   Kyle Aycock
+// Date:        4/6/2017
+// Description: Fixed connectionId bug on this script
+
 public class Health : NetworkBehaviour
 {
     [Header("Health")]
@@ -75,6 +79,8 @@ public class Health : NetworkBehaviour
     public string playerName;
     [SyncVar]
     public short team;
+    [SyncVar]
+    public int connectionId;
     public bool dead;
 
     [Header("Misc")]
@@ -113,7 +119,7 @@ public class Health : NetworkBehaviour
             GameObject UI = GameObject.FindGameObjectWithTag("HealthUI");
             healthSlider = UI.GetComponent<Slider>(); // NK 10/20: locates the health UI in the scene
             healthText = UI.GetComponentInChildren<Text>(); // NK 10/20 locates the health text in the scene
-            CmdPlayerInit(MultiplayerManager.GetLocalClient().connection.connectionId);
+            CmdPlayerInit(connectionId);
         }
         else //This is a ship belonging to another player -- use the ship's healthbar & nametag
         {
