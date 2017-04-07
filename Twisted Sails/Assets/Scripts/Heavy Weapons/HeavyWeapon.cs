@@ -67,7 +67,8 @@ public class HeavyWeapon : NetworkBehaviour
 
 		ammoCount = startingAmmoAmount;
 
-		ammoCounter = GameObject.Find("HeavyAmmoCounter").GetComponent<Text>();
+        //Kyle Aycock 4/6/2017 - dead code, was just causing an error
+		//ammoCounter = GameObject.Find("HeavyAmmoCounter").GetComponent<Text>();
 	}
 	
     public virtual void Update ()
@@ -81,7 +82,7 @@ public class HeavyWeapon : NetworkBehaviour
 
             //the player has pressed the button identified by the weaponUseKey field
             //and the weapon is not on cooldown
-            if (Input.GetKeyDown(weaponUseKey))
+            if (InputWrapper.GetKeyDown(weaponUseKey))
             {
                 //if enough ammo to use weapon, check for cooldown
                 if (ammoCount >= ammoUsePerActivation)
@@ -116,7 +117,7 @@ public class HeavyWeapon : NetworkBehaviour
                 }
             }
 
-            if (Input.GetKeyDown(addAmmoKey))
+            if (InputWrapper.GetKeyDown(addAmmoKey))
             {
                 AddAmmo(1);
             }

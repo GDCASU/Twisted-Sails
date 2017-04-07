@@ -24,6 +24,8 @@ GameObject:
   - component: {fileID: 23000011364512200}
   - component: {fileID: 54239805893036796}
   - component: {fileID: 114236845918354788}
+  - component: {fileID: 114422097134588044}
+  - component: {fileID: 114402099528195446}
   m_Layer: 0
   m_Name: SunshipHeavyProjectile
   m_TagString: Untagged
@@ -39,7 +41,7 @@ Transform:
   m_GameObject: {fileID: 1000012799411242}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -29.273619, y: 108.66, z: -121.77306}
-  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -109,6 +111,60 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxDistance: 20
+  damageDealt: 50
+  explodingScale: 0.9
+--- !u!114 &114402099528195446
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000012799411242}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1768714887, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_TransformSyncMode: 3
+  m_SendInterval: 0.1
+  m_SyncRotationAxis: 7
+  m_RotationSyncCompression: 0
+  m_SyncSpin: 0
+  m_MovementTheshold: 0.001
+  m_SnapThreshold: 5
+  m_InterpolateRotation: 1
+  m_InterpolateMovement: 1
+--- !u!114 &114422097134588044
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000012799411242}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 112
+    i1: 61
+    i2: 32
+    i3: 94
+    i4: 161
+    i5: 192
+    i6: 222
+    i7: 36
+    i8: 170
+    i9: 165
+    i10: 216
+    i11: 246
+    i12: 170
+    i13: 76
+    i14: 87
+    i15: 70
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 1
 --- !u!135 &135000013069186890
 SphereCollider:
   m_ObjectHideFlags: 1

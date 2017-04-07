@@ -12,16 +12,16 @@ public class SimplestMovement : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-			if (Input.GetKey(KeyCode.W))
+			if (InputWrapper.GetKey(KeyCode.W))
 				playerBody.MovePosition(playerBody.position + Vector3.forward * speed * Time.deltaTime);
 
-			if (Input.GetKey(KeyCode.S))
+			if (InputWrapper.GetKey(KeyCode.S))
 				playerBody.MovePosition(playerBody.position - Vector3.forward * speed * Time.deltaTime);
 
-			if (Input.GetKey(KeyCode.D))
+			if (InputWrapper.GetKey(KeyCode.D))
 				playerBody.MovePosition(playerBody.position + Vector3.right * speed * Time.deltaTime);
 
-			if (Input.GetKey(KeyCode.A))
+			if (InputWrapper.GetKey(KeyCode.A))
 				playerBody.MovePosition(playerBody.position - Vector3.right * speed * Time.deltaTime);
 
 	}

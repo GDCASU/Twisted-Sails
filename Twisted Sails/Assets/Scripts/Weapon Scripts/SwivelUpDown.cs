@@ -10,7 +10,7 @@ public class SwivelUpDown : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		if(Input.GetKey(KeyCode.LeftShift)){
+		if(InputWrapper.GetKey(KeyCode.LeftShift)){
 			//Debug.Log (this.transform.localEulerAngles.x);
 			this.transform.Rotate (Input.GetAxis ("Mouse Y") * 2,0,0);
 		}

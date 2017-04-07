@@ -21,6 +21,10 @@ using UnityEngine.EventSystems;
 // Date:        3/24/2017
 // Description: Some fixes to saving and loading and filling contents of text fields with loaded data
 
+// Developer:   Kyle Aycock
+// Date:        4/6/2017
+// Description: Made loaded data fill in to variables in addition to input fields
+
 public class TitleScreenInput : MonoBehaviour
 {
     public InputField HostNameField;
@@ -29,31 +33,32 @@ public class TitleScreenInput : MonoBehaviour
 
     //DW
     //
-    void Awake()
+    void Start()
     {
         MultiplayerManager mm = MultiplayerManager.GetInstance();
+        SaveLoad.Load();
+        if (Game.current != null)
+        {
+            mm.localPlayerName = Game.current.name;
+            mm.networkAddress = Game.current.IPaddress;
+        }
         if (mm != null)
         {
             HostNameField.text = mm.localPlayerName;
             JoinNameField.text = mm.localPlayerName;
             IPField.text = mm.networkAddress;
         }
-        Game.current = new Game();
-        SaveLoad.Load();
-        IPField.text = Game.current.IPaddress;
-        JoinNameField.text = Game.current.name;
-        HostNameField.text = Game.current.name;
     }
 
     // Allows quitting by pressing ESC.
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (InputWrapper.GetKeyDown(KeyCode.Escape))
             QuitGame();
 
         //The following code was taken from http://answers.unity3d.com/questions/784526/46-ugui-select-next-inputfield-with-entertab.html
         //and exists solely to allow tabbing between input fields on the title screen. Whew!
-        if (Input.GetKeyDown(KeyCode.Tab))
+        if (InputWrapper.GetKeyDown(KeyCode.Tab))
         {
             Selectable next = null;
             Selectable current = null;
@@ -72,7 +77,7 @@ public class TitleScreenInput : MonoBehaviour
             if (current != null)
             {
                 // When SHIFT is held along with tab, go backwards instead of forwards
-                if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
+                if (InputWrapper.GetKey(KeyCode.LeftShift) || InputWrapper.GetKey(KeyCode.RightShift))
                 {
                     next = current.FindSelectableOnLeft();
                     if (next == null)
