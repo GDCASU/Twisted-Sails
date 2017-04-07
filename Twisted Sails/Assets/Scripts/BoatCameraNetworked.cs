@@ -154,6 +154,8 @@ public class BoatCameraNetworked : MonoBehaviour
         Vector3 dir = new Vector3(0, 0, -distance);
 
         camTransform.position = followingPosition + rotation * dir;
+        if (camTransform.position.y < 0.1f)
+            camTransform.position = new Vector3(camTransform.position.x, 0.1f, camTransform.position.z);
         camTransform.LookAt(followingPosition);
     }
 
