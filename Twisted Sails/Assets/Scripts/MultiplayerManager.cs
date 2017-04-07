@@ -69,6 +69,12 @@ using System;
 // Date:        3/24/2017
 // Description: Added functionality for team-based spawn points
 
+// Developer:   Kyle Aycock
+// Date:        4/6/2017
+// Description: Fixed bug where a player sometimes wouldn't be spawned in because the server still detected their lobby object
+//              Fixed bug where players would sometimes send spawn messages before the server collected spawn points, causing players to not spawn in
+//              Fixed connectionId bug on ships, fix was only applied to lobby objects previously
+
 public class MultiplayerManager : NetworkManager
 {
     public Gamemode currentGamemode;

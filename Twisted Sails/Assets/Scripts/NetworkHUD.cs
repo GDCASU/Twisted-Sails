@@ -26,6 +26,11 @@ using UnityEngine.Networking;
 // Date:        3/24/2017
 // Description: Removed some unnecessary code
 
+// Developer:   Kyle Aycock
+// Date:        4/6/2017
+// Description: Display player bounty in scoreboard properly
+//              Also made score text white instead of black so it's actually visible
+
 [RequireComponent(typeof(NetworkManager))]
 public class NetworkHUD : MonoBehaviour
 {

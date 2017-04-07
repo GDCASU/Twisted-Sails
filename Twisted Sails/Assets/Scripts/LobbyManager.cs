@@ -95,6 +95,7 @@ public class LobbyManager : NetworkBehaviour
             string timeString = "" + (timer <= 9 ? "0" : "") + Mathf.CeilToInt(timer);
             shipTimer.text = "Time Remaining: " + timeString;
             preparingTimer.text = timeString;
+            if (timer <= 0) preparingTimer.text = "Loading, please wait...";
             if(timer <= 0 && isClient && hasAuthority)
             {
                 if(currentState == LobbyState.ShipSelect)

@@ -67,6 +67,7 @@ public class HeavyWeapon : NetworkBehaviour
 
 		ammoCount = startingAmmoAmount;
 
+        //Kyle Aycock 4/6/2017 - dead code, was just causing an error
 		//ammoCounter = GameObject.Find("HeavyAmmoCounter").GetComponent<Text>();
 	}
 	

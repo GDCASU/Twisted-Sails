@@ -57,6 +57,10 @@ using UnityEngine.Networking;
 // Date:        2/14/2017
 // Description: Refactored for interaction with the InteractiveObjects system.
 
+// Developer:   Kyle Aycock
+// Date:        4/6/2017
+// Description: Fixed connectionId bug on this script
+
 public class Health : NetworkBehaviour
 {
     [Header("Health")]

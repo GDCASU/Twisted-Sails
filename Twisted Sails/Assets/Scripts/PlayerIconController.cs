@@ -36,6 +36,11 @@ using System.Collections.Generic;
 // Date:        3/23/2017
 // Description: Fixed bug having to do with Unity keeping separate connectionIds on client and server
 
+// Developer:   Kyle Aycock
+// Date:        4/6/2017
+// Description: Fixed players being able to join already-full teams
+//              Fixed player names sometimes not showing up when picking a ship
+
 //This is the input/player controller for a player's lobby representation
 //Input is given to this script from LobbyManager.cs
 public class PlayerIconController : NetworkBehaviour

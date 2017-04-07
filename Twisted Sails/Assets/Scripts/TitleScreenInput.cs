@@ -21,6 +21,10 @@ using UnityEngine.EventSystems;
 // Date:        3/24/2017
 // Description: Some fixes to saving and loading and filling contents of text fields with loaded data
 
+// Developer:   Kyle Aycock
+// Date:        4/6/2017
+// Description: Made loaded data fill in to variables in addition to input fields
+
 public class TitleScreenInput : MonoBehaviour
 {
     public InputField HostNameField;

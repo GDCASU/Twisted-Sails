@@ -48,6 +48,12 @@ using System.Collections.Generic;
 //              that spawns them.
 */
 
+// Developer:   Kyle Aycock
+// Date:        4/6/2017
+// Description: Networked player input changes so that boat movement will be approximated by clients
+//              based on input in addition to being snapped into position by NetworkTransform - should
+//              smooth out boat movement for other clients
+
 public class BoatMovementNetworked : NetworkBehaviour
 {
 	//Movement values

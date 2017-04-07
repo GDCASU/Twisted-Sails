@@ -18,6 +18,10 @@ using System.Text.RegularExpressions;
 //              Now takes exclusive control of the keyboard when chat window is open
 //              Also allows user to cancel typing with escape instead of having to send or erase
 
+// Developer:   Kyle Aycock
+// Date:        4/6/2017
+// Description: Fixed code to find the local player's ChatHandler instead of the first ChatHandler in the scene
+
 public class ChatUI : MonoBehaviour
 {
 
