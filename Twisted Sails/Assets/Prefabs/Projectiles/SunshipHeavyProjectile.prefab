@@ -111,8 +111,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxDistance: 20
-  damageDealt: 50
-  explodingScale: 0.9
+  damageDealt: 14
 --- !u!114 &114402099528195446
 MonoBehaviour:
   m_ObjectHideFlags: 1

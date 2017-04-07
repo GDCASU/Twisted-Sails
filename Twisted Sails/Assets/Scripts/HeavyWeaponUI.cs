@@ -59,6 +59,9 @@ public class HeavyWeaponUI : NetworkBehaviour
 	// Update is called once per frame
 	void Update () 
 	{
+        //Kyle Aycock 4/6/2017 - prevent this code from being run on other clients
+        if (!isLocalPlayer) return;
+
 		//Update ammo count text item with ammo count value in playerHeavyWeapon 
 		SetAmmoCountValueText();
 		//Update ammo max value text item with max ammo count value in playerHeavyWeapon 
