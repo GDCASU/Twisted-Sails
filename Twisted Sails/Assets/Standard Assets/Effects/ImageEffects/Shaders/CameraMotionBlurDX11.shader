@@ -1,5 +1,3 @@
-// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
-
  /*
  	NOTES: see CameraMotionBlur.shader
  */
@@ -54,7 +52,7 @@
 	v2f vert(appdata_img v) 
 	{
 		v2f o;
-		o.pos = UnityObjectToClipPos (v.vertex);
+		o.pos = mul (UNITY_MATRIX_MVP, v.vertex);
 		o.uv = UnityStereoScreenSpaceUVAdjust(v.texcoord.xy, _MainTex_ST);
 		return o;
 	}

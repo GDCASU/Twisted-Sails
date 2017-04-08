@@ -7,25 +7,13 @@ EditorBuildSettings:
   m_Scenes:
   - enabled: 1
     path: Assets/Scenes/Title Screen.unity
-    guid: 769b742c3ae1e124a9d092f5499f031b
   - enabled: 1
     path: Assets/Scenes/Lobby.unity
-    guid: 7f209abf4011c0e43bc1031495148427
   - enabled: 0
     path: Assets/Scenes/Milestone 2_Lobby.unity
-    guid: 00000000000000000000000000000000
   - enabled: 0
     path: Assets/Scenes/Lobby with Ship Select.unity
-    guid: 00000000000000000000000000000000
   - enabled: 0
     path: Assets/Scenes/Lobby_Revamp.unity
-    guid: 00000000000000000000000000000000
   - enabled: 1
     path: Assets/Scenes/MainLevel.unity
-    guid: 3efc179729c1cee4aad8761a879a0d7c
-  - enabled: 1
-    path: Assets/Scenes/Title Screen_PabloCamacho.unity
-    guid: fba1556e638d2334980a1848bd40ffc4
-  - enabled: 1
-    path: Assets/Scenes/MainLevel_PabloCamacho.unity
-    guid: 62ef8a7c49539ab4f8415f4d1fd13862

@@ -1,5 +1,3 @@
-// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
-
 // Upgrade NOTE: replaced '_Object2World' with 'unity_ObjectToWorld'
 
 // Upgrade NOTE: replaced '_Object2World' with 'unity_ObjectToWorld'
@@ -154,7 +152,7 @@ CGINCLUDE
 
 		o.viewInterpolator.xyz = worldSpaceVertex - _WorldSpaceCameraPos;
 
-		o.pos = UnityObjectToClipPos(v.vertex);
+		o.pos = mul(UNITY_MATRIX_MVP, v.vertex);
 
 		ComputeScreenAndGrabPassPos(o.pos, o.screenPos, o.grabPassPos);
 		
@@ -252,7 +250,7 @@ CGINCLUDE
 
 		o.viewInterpolator.xyz = worldSpaceVertex - _WorldSpaceCameraPos;
 
-		o.pos = UnityObjectToClipPos(v.vertex);
+		o.pos = mul(UNITY_MATRIX_MVP, v.vertex);
 
 		o.screenPos = ComputeScreenPos(o.pos);
 		
@@ -321,7 +319,7 @@ CGINCLUDE
 
 		o.viewInterpolator.xyz = worldSpaceVertex-_WorldSpaceCameraPos;
 		
-		o.pos = UnityObjectToClipPos(v.vertex);
+		o.pos = mul(UNITY_MATRIX_MVP,  v.vertex);
 		
 		UNITY_TRANSFER_FOG(o,o.pos);
 		return o;
