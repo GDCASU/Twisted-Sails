@@ -163,6 +163,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   travelTime: 2
+  speed: 1
+  damageDealt: 14
 --- !u!135 &135185241832317088
 SphereCollider:
   m_ObjectHideFlags: 1
