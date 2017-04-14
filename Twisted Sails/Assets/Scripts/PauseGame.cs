@@ -49,6 +49,7 @@ public class PauseGame : MonoBehaviour
 			//get reference to player component BoatMovementNetworked
 			Player thisPlayer = MultiplayerManager.GetLocalPlayer();
 			GameObject thisPlayerGameObject = thisPlayer.GetPlayerObject();
+            if (thisPlayerGameObject == null) return;
 			playerBoatMovementComponent = thisPlayerGameObject.GetComponentInChildren<BoatMovementNetworked>();
 		}
 	}

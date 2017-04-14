@@ -458,6 +458,7 @@ public class MultiplayerManager : NetworkManager
         //get the list of start positions corresponding to the given team,
         //and get from that list the next unused start position, incrementing afterwards
         if (!teamStartPositions.ContainsKey(team)) return null;
+        if (startPositionIndices[team] >= teamStartPositions[team].Count) return null;
         return teamStartPositions[team][startPositionIndices[team]++];
     }
 
