@@ -8,6 +8,8 @@ using UnityEngine.Networking;
 //Date: 03/29/17
 //Description: Pauses game
 
+//Add this script to Network Manager
+
 public class PauseGame : MonoBehaviour 
 {
 	//reference to pause menu canvas
@@ -127,7 +129,7 @@ public class PauseGame : MonoBehaviour
 			//else if current scene is in MainLevel 
 			else if(Application.loadedLevelName == "MainLevel")
 			{
-				//get array of root game objects in Scene MainLevel_PabloCamacho
+				//get array of root game objects in Scene MainLevel
 				GameObject[] rootGameObjectsOfMainLevelScene = SceneManager.GetSceneByName("MainLevel").GetRootGameObjects();
 				
 				//Go through all elements in root game objects array
