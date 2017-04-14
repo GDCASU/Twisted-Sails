@@ -42,7 +42,7 @@ GameObject:
   - component: {fileID: 114000011118432948}
   - component: {fileID: 65000013540187572}
   m_Layer: 0
-  m_Name: HealthPack
+  m_Name: HealthPackFix
   m_TagString: HealthPickUp
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -155,22 +155,22 @@ MonoBehaviour:
   m_SceneId:
     m_Value: 0
   m_AssetId:
-    i0: 166
-    i1: 227
-    i2: 238
-    i3: 142
-    i4: 99
-    i5: 208
-    i6: 159
-    i7: 132
-    i8: 234
-    i9: 199
-    i10: 84
-    i11: 29
-    i12: 166
-    i13: 49
-    i14: 126
-    i15: 162
+    i0: 231
+    i1: 103
+    i2: 209
+    i3: 213
+    i4: 122
+    i5: 116
+    i6: 154
+    i7: 84
+    i8: 104
+    i9: 133
+    i10: 26
+    i11: 50
+    i12: 42
+    i13: 70
+    i14: 53
+    i15: 45
   m_ServerOnly: 0
   m_LocalPlayerAuthority: 0
 --- !u!114 &114000012147794260
@@ -184,8 +184,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ef340b79d3174085a3f7acf91c0a3c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  healing: 1
   healAmount: 50
+  packRespawnTime: 10
   packMesh: {fileID: 23000011362716836}
   packCollider: {fileID: 65000013540187572}
 --- !u!114 &114000014244360240
