@@ -26,6 +26,11 @@
 // Description: Repaired incorrect interpolation code for quick turn
 //              quickTurnTime is the amount of time it takes to finish a quick turn, in seconds
 
+/*
+ Pablo Camacho
+ 04/08/17
+ Added bool to let camera know that game is paused and it should stop hiding the cursor. 
+*/
 using UnityEngine;
 using System.Collections;
 
@@ -71,7 +76,8 @@ public class BoatCameraNetworked : MonoBehaviour
 
 	private Camera cam;
 	private Transform camTransform;
-
+	public bool gameIsPaused;
+	
 	// Use this for initialization
 	private void Start()
     {
@@ -88,8 +94,17 @@ public class BoatCameraNetworked : MonoBehaviour
 			Cursor.lockState = CursorLockMode.Confined;
 			return;
 		}
-		Cursor.visible = false;
-		Cursor.lockState = CursorLockMode.Locked;
+		if( !gameIsPaused)
+		{
+			Cursor.visible = false;
+			Cursor.lockState = CursorLockMode.Locked;
+		}
+		else
+		{
+			//else show cursor and unlck it
+			Cursor.visible = true;
+			Cursor.lockState = CursorLockMode.None;
+		}
 
 		//if not doing a quickturn, do normal mouse based camera movement input
 		if (!quickTurning)
