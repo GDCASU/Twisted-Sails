@@ -69,6 +69,12 @@ using System;
 // Date:        3/24/2017
 // Description: Added functionality for team-based spawn points
 
+// Developer:   Kyle Aycock
+// Date:        4/6/2017
+// Description: Fixed bug where a player sometimes wouldn't be spawned in because the server still detected their lobby object
+//              Fixed bug where players would sometimes send spawn messages before the server collected spawn points, causing players to not spawn in
+//              Fixed connectionId bug on ships, fix was only applied to lobby objects previously
+
 public class MultiplayerManager : NetworkManager
 {
     public Gamemode currentGamemode;
@@ -330,7 +336,7 @@ public class MultiplayerManager : NetworkManager
             msg.bountyGained = victim.GetBounty();
             NetworkServer.SendToClient(killer.connectionId, ExtMsgType.Kill, msg);
             victim.killstreak = 0;
-            killer.killstreak++;
+            killer.AddKill();
             Debug.Log("Player " + killer.name + " killed player " + victim.name + "!");
         }
         else Debug.Log("Player " + victim.name + " suicided!");
@@ -372,6 +378,7 @@ public class MultiplayerManager : NetworkManager
     //This method performs the actual spawning of a player
     void ServerAddPlayer(NetworkConnection conn, short playerControllerId, string playerName, short playerTeam, short playerShip)
     {
+        Debug.Log(string.Format("Performing spawn of player {0} (controllerId: {1}, conn: {2}) in {3}", playerName, playerControllerId, conn.ToString(), IsLobby() ? "lobby" : ("game (team: " + playerTeam + " ship: " + playerShip + ")")));
         if (playerPrefab == null)
         {
             if (LogFilter.logError) { Debug.LogError("The PlayerPrefab is empty on the NetworkManager. Please setup a PlayerPrefab object."); }
@@ -386,8 +393,10 @@ public class MultiplayerManager : NetworkManager
 
         if (playerControllerId < conn.playerControllers.Count && conn.playerControllers[playerControllerId].IsValid && conn.playerControllers[playerControllerId].gameObject != null)
         {
-            if (LogFilter.logError) { Debug.LogError("There is already a player at that playerControllerId for this connections."); }
-            return;
+            //This sometimes happens when moving from lobby to game - just destroy the lobby object
+            Destroy(conn.playerControllers[playerControllerId].gameObject);
+            //if (LogFilter.logError) { Debug.LogError("There is already a player at that playerControllerId for this connections."); }
+            //return;
         }
 
         GameObject playerObj;
@@ -414,15 +423,25 @@ public class MultiplayerManager : NetworkManager
             }
             else
             {
-                playerObj = Instantiate(playableShips[playerShip], Vector3.zero, Quaternion.identity);
+                //Try again - most likely scenario is that the player requested a spawn before the server found the spawn points
+                Debug.Log("Spawn point not found - reattempting.");
+                StartCoroutine(RetryAddPlayer(conn, playerControllerId, playerName, playerTeam, playerShip));
+                return;
             }
 
             playerObj.GetComponent<Health>().team = playerTeam;
             playerObj.GetComponent<Health>().playerName = playerName;
+            playerObj.GetComponent<Health>().connectionId = conn.connectionId;
         }
 
         PlayerConnected(FindPlayer(conn.connectionId));
         NetworkServer.AddPlayerForConnection(conn, playerObj, playerControllerId);
+    }
+
+    IEnumerator RetryAddPlayer(NetworkConnection conn, short playerControllerId, string playerName, short playerTeam, short playerShip)
+    {
+        yield return new WaitForSeconds(0.5f);
+        ServerAddPlayer(conn, playerControllerId, playerName, playerTeam, playerShip);
     }
 
     public static void RegisterTeamStartPosition(Transform pos, int team)
@@ -438,6 +457,8 @@ public class MultiplayerManager : NetworkManager
     {
         //get the list of start positions corresponding to the given team,
         //and get from that list the next unused start position, incrementing afterwards
+        if (!teamStartPositions.ContainsKey(team)) return null;
+        if (startPositionIndices[team] >= teamStartPositions[team].Count) return null;
         return teamStartPositions[team][startPositionIndices[team]++];
     }
 

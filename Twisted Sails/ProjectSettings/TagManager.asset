@@ -9,6 +9,10 @@ TagManager:
   - HealthPickUp
   - CrewManagementUI
   - SwivelGun
+  - CurrentAmmoUI
+  - MaxAmmoUI
+  - CooldownUI
+  - AmmoPickUp
   layers:
   - Default
   - TransparentFX

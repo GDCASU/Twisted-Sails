@@ -21,6 +21,10 @@ using UnityEngine.EventSystems;
 // Date:        3/24/2017
 // Description: Some fixes to saving and loading and filling contents of text fields with loaded data
 
+// Developer:   Kyle Aycock
+// Date:        4/6/2017
+// Description: Made loaded data fill in to variables in addition to input fields
+
 public class TitleScreenInput : MonoBehaviour
 {
     public InputField HostNameField;
@@ -29,20 +33,21 @@ public class TitleScreenInput : MonoBehaviour
 
     //DW
     //
-    void Awake()
+    void Start()
     {
         MultiplayerManager mm = MultiplayerManager.GetInstance();
+        SaveLoad.Load();
+        if (Game.current != null)
+        {
+            mm.localPlayerName = Game.current.name;
+            mm.networkAddress = Game.current.IPaddress;
+        }
         if (mm != null)
         {
             HostNameField.text = mm.localPlayerName;
             JoinNameField.text = mm.localPlayerName;
             IPField.text = mm.networkAddress;
         }
-        Game.current = new Game();
-        SaveLoad.Load();
-        IPField.text = Game.current.IPaddress;
-        JoinNameField.text = Game.current.name;
-        HostNameField.text = Game.current.name;
     }
 
     // Allows quitting by pressing ESC.
