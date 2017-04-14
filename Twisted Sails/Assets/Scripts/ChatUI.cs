@@ -109,9 +109,7 @@ public class ChatUI : MonoBehaviour
                     newMessage.hour = System.DateTime.Now.Hour;
                     newMessage.minute = System.DateTime.Now.Minute;
 
-                    //find the chathandler attached to the player
-                    //and tell it to send the message to the other clients
-                    ChatHandler chatHandler = MultiplayerManager.GetLocalPlayer().GetPlayerObject().GetComponent<ChatHandler>();
+                    //tell the handler to send the message to the other clients
                     chatHandler.SendOutMessage(newMessage);
 
                     inputField.text = String.Empty;
@@ -154,6 +152,11 @@ public class ChatUI : MonoBehaviour
         //        textSlots[i].text = String.Empty;
         //    }
         //}
+    }
+
+    public void LinkChatHandler(ChatHandler handler)
+    {
+        chatHandler = handler;
     }
 
     //update the value of the chat message the player is typing in the chat box
