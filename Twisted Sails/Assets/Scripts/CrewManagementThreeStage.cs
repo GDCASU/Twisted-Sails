@@ -64,6 +64,7 @@ public class CrewManagementThreeStage : NetworkBehaviour
     public string speedButton = "Speed Crew"; // At the moment set to '3'
     public string resetButton = "Reset Crew"; // At the moment set to '4'
     public Text crewText;
+    public Image cooldownImage;
 
     private StatSystem statSystem;
     private bool debugFlag = true;
@@ -75,6 +76,8 @@ public class CrewManagementThreeStage : NetworkBehaviour
         {
             statSystem = GetComponentInChildren<StatSystem>();
             crewText = GameObject.FindGameObjectWithTag("CrewManagementUI").GetComponentInChildren<Text>();
+            cooldownImage = GameObject.FindGameObjectWithTag("CrewManagementUI").GetComponentInChildren<Image>();
+            cooldownImage.fillAmount = 0f;
 
             attackStage = CREW_MIN;
             defenseStage = CREW_MIN;
@@ -101,7 +104,10 @@ public class CrewManagementThreeStage : NetworkBehaviour
         if (isLocalPlayer)
         {
             if (cooldownTimer < COOLDOWN_LIMIT)
-            { cooldownTimer += Time.deltaTime; }
+            {
+                cooldownTimer += Time.deltaTime;
+                cooldownImage.fillAmount = cooldownTimer / COOLDOWN_LIMIT;
+            }
 
             else
             {
