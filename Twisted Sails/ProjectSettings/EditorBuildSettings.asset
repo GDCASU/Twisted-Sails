@@ -17,3 +17,5 @@ EditorBuildSettings:
     path: Assets/Scenes/Lobby_Revamp.unity
   - enabled: 1
     path: Assets/Scenes/MainLevel.unity
+  - enabled: 1
+    path: Assets/Scenes/MainLevelSean.unity
