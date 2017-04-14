@@ -119,6 +119,7 @@ public class Health : NetworkBehaviour
             GameObject UI = GameObject.FindGameObjectWithTag("HealthUI");
             healthSlider = UI.GetComponent<Slider>(); // NK 10/20: locates the health UI in the scene
             healthText = UI.GetComponentInChildren<Text>(); // NK 10/20 locates the health text in the scene
+            GameObject.Find("Chat UI").GetComponent<ChatUI>().LinkChatHandler(GetComponent<ChatHandler>());
             CmdPlayerInit(connectionId);
         }
         else //This is a ship belonging to another player -- use the ship's healthbar & nametag
