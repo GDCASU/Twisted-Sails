@@ -41,7 +41,7 @@ public class SunshipHeavyProjectileBeahviorFix : InteractiveObject {
 
     }
 
-    private void OnTriggerEnter(Collision other)
+    private void OnTriggerEnter(Collider other)
     {
         if(other.gameObject.tag != "Player")
             if (!isExploding)
