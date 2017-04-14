@@ -37,7 +37,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.4465785, g: 0.49641222, b: 0.57481694, a: 1}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -1557,7 +1557,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 313465100}
         m_MethodName: QuitGame
         m_Mode: 1
         m_Arguments:
@@ -2829,7 +2829,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Join Server
+  m_Text: Join
 --- !u!222 &1536970894
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3175,6 +3175,7 @@ GameObject:
   - component: {fileID: 1764216002}
   - component: {fileID: 1764216001}
   - component: {fileID: 1764216000}
+  - component: {fileID: 1764216003}
   m_Layer: 0
   m_Name: Network Manager
   m_TagString: Untagged
@@ -3224,16 +3225,19 @@ MonoBehaviour:
   m_OfflineScene: Title Screen
   m_OnlineScene: Lobby
   m_SpawnPrefabs:
-  - {fileID: 1000013620427708, guid: 999d70260556d6a4d99c8c6ca2089051, type: 2}
-  - {fileID: 1000012157780100, guid: 89d5d58f166bbd14eb4daf206f37a9fe, type: 2}
   - {fileID: 1000013458966376, guid: a35872d6be62b8c4ebd864b495a4048a, type: 2}
   - {fileID: 1000013458966376, guid: e0e164241721d3143a13bc6ff7b6d9b5, type: 2}
   - {fileID: 1000013458966376, guid: 93df41ee14972a04bbb4fd2e59b8f2ee, type: 2}
-  - {fileID: 1708626477856930, guid: 861ddc325093cfc489fd016c61d671f6, type: 2}
+  - {fileID: 1000013458966376, guid: 7e6483311d308e34bb7466aefc034461, type: 2}
+  - {fileID: 1000012157780100, guid: 89d5d58f166bbd14eb4daf206f37a9fe, type: 2}
   - {fileID: 1024232112829116, guid: a40aeac91e14e7c45a756cc922550a6a, type: 2}
+  - {fileID: 1000013620427708, guid: 999d70260556d6a4d99c8c6ca2089051, type: 2}
   - {fileID: 1180034589067176, guid: 2c3e459bdb028964a8aa2ff595202d5b, type: 2}
+  - {fileID: 1708626477856930, guid: 861ddc325093cfc489fd016c61d671f6, type: 2}
   - {fileID: 1798957808378302, guid: 9b1555f27bd22cf4f9e804a0e860915f, type: 2}
   - {fileID: 1000012799411242, guid: 703d205ea1c0de24aaa5d8f6aa4c5746, type: 2}
+  - {fileID: 1000013244966996, guid: e767d1d57a749a5468851a322a46352d, type: 2}
+  - {fileID: 1841741648835464, guid: c57f00819798082449fe1212958d01cd, type: 2}
   m_CustomConfig: 0
   m_MaxConnections: 4
   m_ConnectionConfig:
@@ -3289,7 +3293,7 @@ MonoBehaviour:
   - {fileID: 1000013458966376, guid: e0e164241721d3143a13bc6ff7b6d9b5, type: 2}
   - {fileID: 1000013458966376, guid: 93df41ee14972a04bbb4fd2e59b8f2ee, type: 2}
   - {fileID: 1000013458966376, guid: a35872d6be62b8c4ebd864b495a4048a, type: 2}
-  - {fileID: 0}
+  - {fileID: 1000013458966376, guid: 7e6483311d308e34bb7466aefc034461, type: 2}
 --- !u!4 &1764216002
 Transform:
   m_ObjectHideFlags: 0
@@ -3303,6 +3307,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1764216003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1764215999}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e83b76d14c71ea9469d59e6723e442cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pauseMenuCanvas: {fileID: 0}
+  gamePaused: 0
+  playerBoatMovementComponent: {fileID: 0}
 --- !u!1 &1768124195
 GameObject:
   m_ObjectHideFlags: 0
@@ -3737,7 +3755,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Host Server
+  m_Text: Host
 --- !u!222 &1842105596
 CanvasRenderer:
   m_ObjectHideFlags: 0

@@ -3011,12 +3011,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 541c70b39fb078f458d9fe637e933f90, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weaponPrefab: {fileID: 1180034589067176, guid: 2c3e459bdb028964a8aa2ff595202d5b,
+  weaponPrefab: {fileID: 1180034589067176, guid: d96c2d164f8028f4aa408fa80facf472,
     type: 2}
   weaponStartingPosition: {x: 0, y: 0, z: 0}
   weaponVelocity: {x: 0, y: 0, z: 0}
   weaponUseKey: 102
-  coolDownTotalSeconds: 0
+  coolDownTotalSeconds: 3
   startingAmmoAmount: 0
   ammoCapacity: 3
   ammoPerPack: 1
