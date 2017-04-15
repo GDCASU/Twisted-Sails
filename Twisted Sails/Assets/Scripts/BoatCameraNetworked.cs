@@ -31,6 +31,12 @@
  04/08/17
  Added bool to let camera know that game is paused and it should stop hiding the cursor. 
 */
+
+/*
+ Kyle Chapman
+5/15/17
+ Added code to save camera settings in the playerprefs.
+*/
 using UnityEngine;
 using System.Collections;
 
@@ -51,13 +57,85 @@ public class BoatCameraNetworked : MonoBehaviour
 
 	[Header("Camera Control Settings")]
 
-	public float horizontalSensitivity = 4.0f;
-    public float verticalSensitivity = 1.0f;
-    public float scrollSensitivity = 10.0f; // the speed at which the camera zooms in or out
+	//setting properties that put changes to the settings into the playerprefs
+	private float horizontalSensitivity;
+	private static readonly string horizSensPrefName = "CameraHorizontalSensitivity";
+	public float horizontalSensitivityDefault = 4.0f;
+	public float HorizontalSensitivity
+	{
+		get
+		{
+			return horizontalSensitivity;
+		}
+		set
+		{
+			horizontalSensitivity = value;
+			PlayerPrefs.SetFloat(horizSensPrefName, value);
+		}
+	}
+
+	private float verticalSensitivity;
+	private static readonly string vertSensPrefName = "CameraVerticalSensitivity";
+	public float verticalSensitivityDefault = 1.0f;
+	public float VerticalSensitivity
+	{
+		get
+		{
+			return verticalSensitivity;
+		}
+		set
+		{
+			verticalSensitivity = value;
+			PlayerPrefs.SetFloat(vertSensPrefName, value);
+		}
+	}
+
+	//speed of zooming camera in or out
+	private float scrollSensitivity;
+	private static readonly string scrollSensPrefName = "CameraScrollingSensitivity";
+	public float scrollSensitivityDefault = 10f;
+	public float ScrollSensitivity
+	{
+		get
+		{
+			return scrollSensitivity;
+		}
+		set
+		{
+			scrollSensitivity = value;
+			PlayerPrefs.SetFloat(scrollSensPrefName, value);
+		}
+	}
 
 	//whether to invert the direction the camera moves in each dimmension
-	public bool invertHorizontal = false;
-	public bool invertVertical = false;
+	private bool invertHorizontal = false;
+	private static readonly string invertHorizPrefName = "CameraInvertHorizontal";
+	public bool InvertHorizontal
+	{
+		get
+		{
+			return invertHorizontal;
+		}
+		set
+		{
+			invertHorizontal = value;
+			PlayerPrefs.SetInt(invertHorizPrefName, value ? 1 : 0);
+		}
+	}
+	private bool invertVertical = false;
+	private static readonly string invertVertPrefName = "CameraInvertVertical";
+	public bool InvertVertical
+	{
+		get
+		{
+			return invertVertical;
+		}
+		set
+		{
+			invertVertical = value;
+			PlayerPrefs.SetInt(invertVertPrefName, value ? 1 : 0);
+		}
+	}
 
 	private float targetDistance; //the distance the player wants the camera to be at from the boat
 	private float distance = 15.0f; //the distance it actually has to be at
@@ -79,10 +157,60 @@ public class BoatCameraNetworked : MonoBehaviour
 	public bool gameIsPaused;
 	
 	// Use this for initialization
-	private void Start()
+	private void Awake()
     {
         cam = GetComponent<Camera>();
 		camTransform = this.transform;
+
+		//try loading camera settings player prefs information
+		//if nonexistant, put settings at default values
+		//and store those default values in the player prefs (in the property set methods)
+
+		if (PlayerPrefs.HasKey(horizSensPrefName))
+		{
+			HorizontalSensitivity = PlayerPrefs.GetFloat(horizSensPrefName);
+		}
+		else
+		{
+			HorizontalSensitivity = horizontalSensitivityDefault;
+		}
+
+
+		if (PlayerPrefs.HasKey(vertSensPrefName))
+		{
+			VerticalSensitivity = PlayerPrefs.GetFloat(vertSensPrefName);
+		}
+		else
+		{
+			VerticalSensitivity = verticalSensitivityDefault;
+		}
+
+		if (PlayerPrefs.HasKey(scrollSensPrefName))
+		{
+			ScrollSensitivity = PlayerPrefs.GetFloat(scrollSensPrefName);
+		}
+		else
+		{
+			ScrollSensitivity = scrollSensitivityDefault;
+		}
+
+		if (PlayerPrefs.HasKey(invertHorizPrefName))
+		{
+			InvertHorizontal = PlayerPrefs.GetInt(invertHorizPrefName) > 0 ? true : false;
+		}
+		else
+		{
+			InvertHorizontal = false;
+		}	
+
+		if (PlayerPrefs.HasKey(invertVertPrefName))
+		{
+			InvertVertical = PlayerPrefs.GetInt(invertVertPrefName) > 0 ? true : false;
+		}
+		else
+		{
+			InvertVertical = false;
+		}
 	}
 
 	//used to gather input
