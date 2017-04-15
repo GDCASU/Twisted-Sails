@@ -26,6 +26,11 @@ using UnityEngine.Networking;
 // Date:        3/24/2017
 // Description: Removed some unnecessary code
 
+// Developer:   Kyle Aycock
+// Date:        4/6/2017
+// Description: Display player bounty in scoreboard properly
+//              Also made score text white instead of black so it's actually visible
+
 [RequireComponent(typeof(NetworkManager))]
 public class NetworkHUD : MonoBehaviour
 {
@@ -195,7 +200,7 @@ public class NetworkHUD : MonoBehaviour
         }
 
         //***SCORE FEED***
-        GUI.color = Color.black;
+        GUI.color = Color.white;
         if (messageStack.Count > 0)
         {
             if (scoreFeedStyle == null)
@@ -238,7 +243,7 @@ public class NetworkHUD : MonoBehaviour
                 Team currentTeam = MultiplayerManager.GetTeam(i);
                 Color teamColor = currentTeam.teamColor;
                 GUI.backgroundColor = teamColor;
-                DrawScoreboardRow(xpos, ypos, cellWidth, cellHeight, "Team " + currentTeam.teamName, "Kills/Deaths/TopBounty", manager.teamScores[i].ToString());
+                DrawScoreboardRow(xpos, ypos, cellWidth, cellHeight, "Team " + currentTeam.teamName, "Kills/Deaths/Bounty", manager.teamScores[i].ToString());
                 ypos += cellHeight + 1;
                 foreach (Player player in manager.playerList)
                 {
@@ -248,7 +253,7 @@ public class NetworkHUD : MonoBehaviour
                         {
                             GUI.Box(new Rect(xpos, ypos, cellWidth, cellHeight), GUIContent.none, scoreboardStyle);
                         }
-                        DrawScoreboardRow(xpos, ypos, cellWidth, cellHeight, player.name, player.kills + "/" + player.deaths + "/" + player.maxBounty, player.score.ToString());
+                        DrawScoreboardRow(xpos, ypos, cellWidth, cellHeight, player.name, player.kills + "/" + player.deaths + "/" + player.GetBounty(), player.score.ToString());
                         ypos += cellHeight + 1;
                     }
                 }

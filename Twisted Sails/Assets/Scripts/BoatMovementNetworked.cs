@@ -48,6 +48,16 @@ using System.Collections.Generic;
 //              that spawns them.
 */
 
+// Developer:   Kyle Aycock
+// Date:        4/6/2017
+// Description: Networked player input changes so that boat movement will be approximated by clients
+//              based on input in addition to being snapped into position by NetworkTransform - should
+//              smooth out boat movement for other clients
+
+// Developer: Pablo Camacho
+// Date: 04/08/17
+//Description: Added bool to let boat networked camera know that the game is paused.
+
 public class BoatMovementNetworked : NetworkBehaviour
 {
 	//Movement values
@@ -72,7 +82,9 @@ public class BoatMovementNetworked : NetworkBehaviour
 	{
 		public bool forward, backwards, left, right, fireCannon, fireSwivelGun;
 	}
+
 	private BoatInput KeysDown;
+    private BoatInput oldKeysDown;
 
 	public GameObject cannonBall;
     //List of cannons
@@ -84,14 +96,15 @@ public class BoatMovementNetworked : NetworkBehaviour
     //Boat cameras
     private BoatCameraNetworked boatCam;
     private OrbitalCamera orbCam;
-
+	public bool gameIsPaused = false;
+	
     // Use this for initialization
     private void Start()
     {
-		//Only perform for THIS player's boat
-		if (!isLocalPlayer) { return; }
+        boat = this.GetComponent<Rigidbody>();
 
-		boat = this.GetComponent<Rigidbody>();
+        //Only perform the following for THIS player's boat
+        if (!isLocalPlayer) { return; }
 		
 		//Make orbital and boat camera follow boat
 		boatCam = Camera.main.GetComponent<BoatCameraNetworked>();
@@ -110,12 +123,22 @@ public class BoatMovementNetworked : NetworkBehaviour
 	{
 		if (isLocalPlayer)
 		{
+            oldKeysDown = KeysDown;
 			KeysDown.forward	    = InputWrapper.GetKey(forwardKey);
 			KeysDown.backwards	    = InputWrapper.GetKey(backwardsKey);
 			KeysDown.left		    = InputWrapper.GetKey(leftKey);
 			KeysDown.right		    = InputWrapper.GetKey(rightKey);
 			KeysDown.fireCannon	    = InputWrapper.GetKey(cannonFireKey);
             KeysDown.fireSwivelGun  = InputWrapper.GetKey(swivelGunFireKey);
+
+            //detect meaningful change in input to send to server
+            if(oldKeysDown.forward != KeysDown.forward ||
+                oldKeysDown.backwards != KeysDown.backwards ||
+                oldKeysDown.left != KeysDown.left ||
+                oldKeysDown.right != KeysDown.right)
+            {
+                CmdBounceInput(KeysDown); //just a struct of 6 bools, shouldn't be weighty at all
+            }
 
             if (KeysDown.fireSwivelGun)
             {
@@ -142,16 +165,14 @@ public class BoatMovementNetworked : NetworkBehaviour
 					}
 				}
 			}
+			
+			boatCam.gameIsPaused = gameIsPaused; //assign game is paused value to boat cam
 		}
 	}
 
     private void FixedUpdate()
     {
-		//Only perform input for THIS player
-		if (!isLocalPlayer)
-		{
-			return;
-		}
+        //KeysDown will be networked, ships should process the networked input for more fluid movement
 
 		float horizontalAxis = 0;
 		if (KeysDown.left)
@@ -187,7 +208,7 @@ public class BoatMovementNetworked : NetworkBehaviour
 		}
 
         //Asks the boat's attached swivel guns (if they exist) to update their rotations based on the rotation of the boat's camera
-        if(swivelGunScripts.Count != 0)
+        if(swivelGunScripts.Count != 0 && isLocalPlayer)
         {
             foreach(SwivelGun sScript in swivelGunScripts)
             {
@@ -216,5 +237,18 @@ public class BoatMovementNetworked : NetworkBehaviour
 		firedBall.GetComponent<CannonBallNetworked>().owner = GetComponent<NetworkIdentity>().netId;
 
 		NetworkServer.Spawn(firedBall);
+    }
+
+    [Command]
+    private void CmdBounceInput(BoatInput input)
+    {
+        RpcReceiveInput(input);
+    }
+
+    [ClientRpc]
+    private void RpcReceiveInput(BoatInput input)
+    {
+        if(!isLocalPlayer)
+            KeysDown = input;
     }
 }

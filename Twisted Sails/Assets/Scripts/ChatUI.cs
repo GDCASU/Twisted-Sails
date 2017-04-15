@@ -18,6 +18,10 @@ using System.Text.RegularExpressions;
 //              Now takes exclusive control of the keyboard when chat window is open
 //              Also allows user to cancel typing with escape instead of having to send or erase
 
+// Developer:   Kyle Aycock
+// Date:        4/6/2017
+// Description: Fixed code to find the local player's ChatHandler instead of the first ChatHandler in the scene
+
 public class ChatUI : MonoBehaviour
 {
 
@@ -105,9 +109,7 @@ public class ChatUI : MonoBehaviour
                     newMessage.hour = System.DateTime.Now.Hour;
                     newMessage.minute = System.DateTime.Now.Minute;
 
-                    //find the chathandler attached to the player
-                    //and tell it to send the message to the other clients
-                    ChatHandler chatHandler = GameObject.FindObjectOfType<ChatHandler>();
+                    //tell the handler to send the message to the other clients
                     chatHandler.SendOutMessage(newMessage);
 
                     inputField.text = String.Empty;
@@ -152,6 +154,11 @@ public class ChatUI : MonoBehaviour
         //}
     }
 
+    public void LinkChatHandler(ChatHandler handler)
+    {
+        chatHandler = handler;
+    }
+
     //update the value of the chat message the player is typing in the chat box
     public void UpdateChatEnterValue(string newChatValue)
     {
@@ -181,7 +188,6 @@ public class ChatUI : MonoBehaviour
         for (int i = 0; i < chatQueue.Count; i++)
         {
             chatMessages[i] = ChatHandler.ChatMessageToString((ChatMessage)msgs[i]);
-            print(chatMessages[i]);
         }
     }
 

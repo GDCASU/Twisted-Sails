@@ -1860,6 +1860,7 @@ MonoBehaviour:
   cannonBall: {fileID: 1000013620427708, guid: 999d70260556d6a4d99c8c6ca2089051, type: 2}
   cannonScripts: []
   swivelGunScripts: []
+  gameIsPaused: 0
 --- !u!114 &114000010202202694
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1922,6 +1923,7 @@ MonoBehaviour:
   speedButton: Speed Crew
   resetButton: Reset Crew
   crewText: {fileID: 0}
+  cooldownImage: {fileID: 0}
 --- !u!114 &114000010556032994
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2086,6 +2088,7 @@ MonoBehaviour:
   secondsToRespawn: 8
   playerName: 
   team: 0
+  connectionId: 0
   dead: 0
   hurtSelfButton: 107
   activeCamera: {fileID: 0}
@@ -2437,14 +2440,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab883ffe2982dd44b85eae0ed0f90d76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weaponPrefab: {fileID: 1798957808378302, guid: 9b1555f27bd22cf4f9e804a0e860915f,
+  weaponPrefab: {fileID: 1798957808378302, guid: 57785a904fbc6e647adfcfc03dd2ed86,
     type: 2}
   weaponStartingPosition: {x: 0, y: 0, z: 0}
   weaponVelocity: {x: 0, y: 0, z: 0}
   weaponUseKey: 102
-  coolDownTotalSeconds: 0
+  coolDownTotalSeconds: 3
   startingAmmoAmount: 0
-  ammoCapacity: 6
+  ammoCapacity: 3
   ammoPerPack: 1
   ammoUsePerActivation: 1
   ammoPackTag: AmmoPack
