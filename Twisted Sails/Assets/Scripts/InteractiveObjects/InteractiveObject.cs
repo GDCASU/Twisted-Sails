@@ -32,4 +32,9 @@ public class InteractiveObject : NetworkBehaviour
 	{
 		return;
 	}
+
+	public virtual void OnInteractWithPlayerTrigger(Health playerHealth, GameObject playerBoat, StatusEffectsManager manager, Collider collider)
+	{
+		return;
+	}
 }
