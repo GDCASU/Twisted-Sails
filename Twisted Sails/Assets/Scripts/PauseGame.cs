@@ -29,6 +29,9 @@ public class PauseGame : MonoBehaviour
 	{
 		//initialize gamePaused varaible to false
 		gamePaused = false;
+		
+		//adds fix that lets cursor stay unlocked and visible
+		MultiplayerManager.GameEnd += GameEndCursorFix;
 	}
 	
 	// Update is called once per frame
@@ -39,6 +42,15 @@ public class PauseGame : MonoBehaviour
 		if(pauseMenuCanvas != null){PauseMenuProcess();}
 		else if(pauseMenuCanvas == null){InitPauseMenu();}
 		
+	}
+	
+	//function to keep cursor unlocked at end of game when pause menu is called.
+	void GameEndCursorFix(short winningTeam)
+	{
+		 Debug.Log("Game End Cursor Fix called! \n;");
+		 //show cursor and unlock it
+		 Cursor.visible = true;
+		 Cursor.lockState = CursorLockMode.None;
 	}
 	
 	void InitPlayerCameraPauseBool()
