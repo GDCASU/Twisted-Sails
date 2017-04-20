@@ -21,6 +21,8 @@ GameObject:
   - component: {fileID: 4034510923990260}
   - component: {fileID: 198569925201970652}
   - component: {fileID: 199832564985537450}
+  - component: {fileID: 114214446566187878}
+  - component: {fileID: 114775727186346502}
   m_Layer: 0
   m_Name: Smoke_Toon_Particles
   m_TagString: Untagged
@@ -41,6 +43,58 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114214446566187878
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1784431754405724}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 74
+    i1: 227
+    i2: 40
+    i3: 177
+    i4: 125
+    i5: 92
+    i6: 156
+    i7: 196
+    i8: 72
+    i9: 72
+    i10: 172
+    i11: 86
+    i12: 239
+    i13: 69
+    i14: 251
+    i15: 245
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 0
+--- !u!114 &114775727186346502
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1784431754405724}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1768714887, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_TransformSyncMode: 1
+  m_SendInterval: 0.1
+  m_SyncRotationAxis: 7
+  m_RotationSyncCompression: 0
+  m_SyncSpin: 0
+  m_MovementTheshold: 0.001
+  m_SnapThreshold: 5
+  m_InterpolateRotation: 1
+  m_InterpolateMovement: 1
 --- !u!198 &198569925201970652
 ParticleSystem:
   m_ObjectHideFlags: 1

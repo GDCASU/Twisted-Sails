@@ -38,6 +38,8 @@ GameObject:
   - component: {fileID: 4277992984708728}
   - component: {fileID: 198982155328436216}
   - component: {fileID: 199019187242582766}
+  - component: {fileID: 114534773634431232}
+  - component: {fileID: 114336941787141144}
   m_Layer: 0
   m_Name: Ship Trails
   m_TagString: Untagged
@@ -72,6 +74,58 @@ Transform:
   m_Father: {fileID: 4277992984708728}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114336941787141144
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1663167403007150}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1768714887, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_TransformSyncMode: 1
+  m_SendInterval: 0.1
+  m_SyncRotationAxis: 7
+  m_RotationSyncCompression: 0
+  m_SyncSpin: 0
+  m_MovementTheshold: 0.001
+  m_SnapThreshold: 5
+  m_InterpolateRotation: 1
+  m_InterpolateMovement: 1
+--- !u!114 &114534773634431232
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1663167403007150}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 191
+    i1: 15
+    i2: 37
+    i3: 103
+    i4: 222
+    i5: 125
+    i6: 250
+    i7: 100
+    i8: 27
+    i9: 151
+    i10: 218
+    i11: 159
+    i12: 141
+    i13: 202
+    i14: 172
+    i15: 248
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 0
 --- !u!198 &198982155328436216
 ParticleSystem:
   m_ObjectHideFlags: 1
