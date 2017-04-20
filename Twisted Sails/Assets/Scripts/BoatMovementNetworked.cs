@@ -70,6 +70,7 @@ public class BoatMovementNetworked : NetworkBehaviour
 	public bool speedBoost = false;
 	public float boatPropulsionPointOffset = -1f;
     public float speedStat = 1.0f; // Crew Management - Speed Crew
+    public float speed;
 
     //Boat Input
     public KeyCode forwardKey	    = KeyCode.W;
@@ -168,7 +169,9 @@ public class BoatMovementNetworked : NetworkBehaviour
 			
 			boatCam.gameIsPaused = gameIsPaused; //assign game is paused value to boat cam
 		}
-	}
+        // Boat speed is visible for testing purposes
+        speed = this.GetComponent<Rigidbody>().velocity.magnitude;
+    }
 
     private void FixedUpdate()
     {

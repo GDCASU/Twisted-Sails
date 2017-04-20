@@ -693,5 +693,6 @@ public enum Ship
 {
     Human,
     Trireme,
-    Bramble
+    Bramble,
+    Dragon
 }
