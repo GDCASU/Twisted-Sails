@@ -47,10 +47,14 @@ public class PauseGame : MonoBehaviour
 	//function to keep cursor unlocked at end of game when pause menu is called.
 	void GameEndCursorFix(short winningTeam)
 	{
-		 Debug.Log("Game End Cursor Fix called! \n;");
-		 //show cursor and unlock it
-		 Cursor.visible = true;
-		 Cursor.lockState = CursorLockMode.None;
+		//if game is paused
+		if(gamePaused)
+		{
+			 Debug.Log("Game End Cursor Fix called! \n;");
+			 //show cursor and unlock it
+			 Cursor.visible = true;
+			 Cursor.lockState = CursorLockMode.None;
+		}
 	}
 	
 	void InitPlayerCameraPauseBool()
