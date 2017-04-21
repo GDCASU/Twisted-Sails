@@ -146,6 +146,12 @@ public class CrewManagementThreeStage : NetworkBehaviour
 
                 else if (InputWrapper.GetButtonDown(resetButton))
                 { ResetStages(); }
+
+                //if some action was performed, play the sound
+                if(cooldownTimer == 0)
+                {
+                    transform.Find("ShipSounds").Find("CrewManagement").GetComponent<AudioSource>().Play();
+                }
             }
         }
 	}

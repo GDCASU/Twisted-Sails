@@ -102,12 +102,7 @@ public class MultiplayerManager : NetworkManager
         localPlayerTeam = -1;
         playerList = new List<Player>();
 
-        //Todo: Add UI in lobby to configure chosen gamemode & settings
-        //For now, going with defaults specified by design doc
-        Team[] teams = new Team[2];
-        teams[0] = new Team("Red", Color.red, 0);
-        teams[1] = new Team("Blue", Color.blue, 1);
-        currentGamemode = new TeamDeathmatch(teams, 30, 300);
+        SetupGamemode();
 
         startPositionIndices = new int[currentGamemode.NumTeams()];
         teamStartPositions = new Dictionary<int, List<Transform>>();
@@ -121,14 +116,15 @@ public class MultiplayerManager : NetworkManager
 
     void Update()
     {
-        if (NetworkServer.active)
+        if (networkSceneName.Equals(inGameScene) && NetworkServer.active)
         {
-            CheckRestartGame();
-        }
-        if (networkSceneName.Equals(inGameScene))
-        {
-            currentGamemode.Update();
-            CheckEndGame();
+            if (gameRestartTimer <= 0)
+            {
+                currentGamemode.Update();
+                CheckEndGame();
+            }
+            else
+                CheckRestartGame();
         }
     }
 
@@ -302,6 +298,16 @@ public class MultiplayerManager : NetworkManager
 
     //Methods only for use serverside
     #region Server
+    private void SetupGamemode()
+    {
+        //Todo: Add UI in lobby to configure chosen gamemode & settings
+        //For now, going with defaults specified by design doc
+        Team[] teams = new Team[2];
+        teams[0] = new Team("Red", Color.red, 0);
+        teams[1] = new Team("Blue", Color.blue, 1);
+        currentGamemode = new TeamDeathmatch(teams, 30, 300);
+    }
+
     //Timer to restart game
     private void CheckRestartGame()
     {
@@ -314,8 +320,7 @@ public class MultiplayerManager : NetworkManager
                 {
                     teamScores[i] = 0;
                 }
-                foreach (Player player in playerList)
-                    NetworkServer.FindLocalObject(player.objectId).GetComponent<Health>().RpcRestartGame();
+                StopHost();
             }
         }
     }
@@ -504,6 +509,8 @@ public class MultiplayerManager : NetworkManager
     {
         if (sceneName == inGameScene)
             GameStart();
+        else if (sceneName == offlineScene)
+            SetupGamemode();
         base.OnServerSceneChanged(sceneName);
     }
 
