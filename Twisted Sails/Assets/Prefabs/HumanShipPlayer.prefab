@@ -3803,7 +3803,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab883ffe2982dd44b85eae0ed0f90d76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weaponPrefab: {fileID: 1798957808378302, guid: 57785a904fbc6e647adfcfc03dd2ed86,
+  weaponPrefab: {fileID: 1610549298412344, guid: 0ab9cdd6feb106e47877499cc69a6ceb,
     type: 2}
   weaponStartingPosition: {x: 0, y: 0, z: 0}
   weaponVelocity: {x: 0, y: 0, z: 0}
