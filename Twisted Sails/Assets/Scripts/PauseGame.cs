@@ -8,6 +8,12 @@ using UnityEngine.Networking;
 //Date: 03/29/17
 //Description: Pauses game
 
+//Add this script to Network Manager
+
+//Programmer:Pablo Camacho
+//Date:04/21/17
+//Description: Added change that adds cursor fix to multiplayer manager game end scene. Keeps cursor visible and unlocked.
+
 public class PauseGame : MonoBehaviour 
 {
 	//reference to pause menu canvas
@@ -27,6 +33,9 @@ public class PauseGame : MonoBehaviour
 	{
 		//initialize gamePaused varaible to false
 		gamePaused = false;
+		
+		//adds fix that lets cursor stay unlocked and visible
+		MultiplayerManager.GameEnd += GameEndCursorFix;
 	}
 	
 	// Update is called once per frame
@@ -37,6 +46,19 @@ public class PauseGame : MonoBehaviour
 		if(pauseMenuCanvas != null){PauseMenuProcess();}
 		else if(pauseMenuCanvas == null){InitPauseMenu();}
 		
+	}
+	
+	//function to keep cursor unlocked at end of game when pause menu is called.
+	void GameEndCursorFix(short winningTeam)
+	{
+		//if game is paused
+		if(gamePaused)
+		{
+			 Debug.Log("Game End Cursor Fix called! \n;");
+			 //show cursor and unlock it
+			 Cursor.visible = true;
+			 Cursor.lockState = CursorLockMode.None;
+		}
 	}
 	
 	void InitPlayerCameraPauseBool()
@@ -58,7 +80,7 @@ public class PauseGame : MonoBehaviour
 	{
 		
 		//if p button is pressed down
-		if(Input.GetKeyDown(KeyCode.Escape))
+		if(Input.GetKeyDown(KeyCode.P))
 		{	
 			//if canvas is not active, make it active
 			if(pauseMenuCanvas.gameObject.activeInHierarchy == false)
@@ -82,6 +104,7 @@ public class PauseGame : MonoBehaviour
 		
 		//assign game pause bool to game is paused bool of player boat movement component
 		playerBoatMovementComponent.gameIsPaused = true;
+		
 	}
 	
 	public void UnPause()
@@ -92,7 +115,8 @@ public class PauseGame : MonoBehaviour
 		
 		//assign game pause bool to game is paused bool of player boat movement component
 		playerBoatMovementComponent.gameIsPaused = false;
-    }
+		
+	}
 	
 	private void InitPauseMenu()
 	{
@@ -126,7 +150,7 @@ public class PauseGame : MonoBehaviour
 			//else if current scene is in MainLevel 
 			else if(Application.loadedLevelName == "MainLevel")
 			{
-				//get array of root game objects in Scene MainLevel_PabloCamacho
+				//get array of root game objects in Scene MainLevel
 				GameObject[] rootGameObjectsOfMainLevelScene = SceneManager.GetSceneByName("MainLevel").GetRootGameObjects();
 				
 				//Go through all elements in root game objects array
