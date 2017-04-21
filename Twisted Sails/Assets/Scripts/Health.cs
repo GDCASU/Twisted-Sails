@@ -302,6 +302,7 @@ public class Health : NetworkBehaviour
     public void RpcEndGame(short winner, int[] teamScores)
     {
         if (!isLocalPlayer) return;
+        MultiplayerManager.ClientNotifyGameEnd(winner);
         //Disable active camera controller, enable death camera controller
         activeCamera.GetComponent<BoatCameraNetworked>().enabled = false;
         activeCamera.GetComponent<OrbitalCamera>().enabled = true;

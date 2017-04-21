@@ -68,12 +68,17 @@ public class LobbyManager : NetworkBehaviour
     }
     public LobbyState currentState;
 
+
+    void Awake()
+    {
+        currentState = LobbyState.TeamSelect;
+    }
+
     // Use this for initialization
     void Start()
     {
         //Variable initialization
         manager = MultiplayerManager.GetInstance();
-        currentState = LobbyState.TeamSelect;
 
         //This if statement statement checks if it's running on the host
         if (!MultiplayerManager.IsHost())

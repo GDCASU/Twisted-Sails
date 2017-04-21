@@ -114,11 +114,8 @@ public class PauseMenuScript : MonoBehaviour {
 	{
 		//set current state to quit game
 		pauseMenuCurrentState = QUIT_GAME;
-		
-		//disconnect from network
-		Network.Disconnect();
-		//go to Title Screen
-		int nextSceneIndex = 0;
-		SceneManager.LoadScene(nextSceneIndex);
+
+        //disconnect from network
+        MultiplayerManager.GetInstance().StopHost();
 	}
 }

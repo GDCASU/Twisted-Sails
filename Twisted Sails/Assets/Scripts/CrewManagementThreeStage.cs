@@ -49,7 +49,7 @@ public class CrewManagementThreeStage : NetworkBehaviour
     private int statChange;
     private int crewCount;
 
-    private const float STAGE_MULTIPLIER = 0.5f;
+    private const float STAGE_MULTIPLIER = 0.25f;
     private const int CREW_MIN = 1;
     private const int CREW_MAX = 4;
 

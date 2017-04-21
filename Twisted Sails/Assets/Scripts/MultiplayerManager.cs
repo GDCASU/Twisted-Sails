@@ -590,6 +590,11 @@ public class MultiplayerManager : NetworkManager
     }
     #endregion
 
+    public static void ClientNotifyGameEnd(short team)
+    {
+        GameEnd(team);
+    }
+
     //Custom messages for sending packets of information between client and server
     #region Messages
     //All new message types must be registered here using this format with the exception of SpawnMessage.
