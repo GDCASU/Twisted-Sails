@@ -3,6 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/*
+ Kyle Chapman
+5/15/17
+ Changed initialization code so to work with changes to the camera script for saving camera settings in the playerprefs.
+*/
+
 public class CameraSettingsMenuScript : MonoBehaviour {
 	
 	//public reference to camera menu canvas
@@ -28,29 +34,27 @@ public class CameraSettingsMenuScript : MonoBehaviour {
 	public Text scrollSensitivitySliderText;
 	
 	//temporary values of camera settings
-	private float tempHorizontalSensitivity = 4.0f;
-    private float tempVerticalSensitivity = 1.0f;
-    private float tempScrollSensitivity = 10.0f; // the speed at which the camera zooms in or out
-	private bool tempInvertHorizontal = false;
-	private bool tempInvertVertical = false;
-	
+	private float tempHorizontalSensitivity;
+    private float tempVerticalSensitivity;
+    private float tempScrollSensitivity; // the speed at which the camera zooms in or out
+	private bool tempInvertHorizontal;
+	private bool tempInvertVertical;
 	
 	private BoatCameraNetworked playerBoatCamera;
 	
 	// Use this for initialization
-	void Start () 
+	void Start ()
 	{
-		
 		//get reference to boat camera
 		playerBoatCamera = Camera.main.GetComponent<BoatCameraNetworked>();
+
+		//initialize slider values to values of boat camera (loaded from playerprefs)
+		verticalSensitivitySlider.value = tempVerticalSensitivity = playerBoatCamera.VerticalSensitivity;
+		horizontalSensitivitySlider.value = tempHorizontalSensitivity = playerBoatCamera.HorizontalSensitivity;
+		scrollSensitivitySlider.value = tempScrollSensitivity = playerBoatCamera.ScrollSensitivity;
 		
-		//initialize slider values to values of boat camera
-		verticalSensitivitySlider.value = tempVerticalSensitivity;
-		horizontalSensitivitySlider.value = tempHorizontalSensitivity;
-		scrollSensitivitySlider.value = tempScrollSensitivity;
-		
-		invertVerticalToggle.isOn = tempInvertVertical;
-		invertHorizontalToggle.isOn = tempInvertHorizontal;
+		invertVerticalToggle.isOn = tempInvertHorizontal = playerBoatCamera.InvertHorizontal;
+		invertHorizontalToggle.isOn = tempInvertVertical = playerBoatCamera.InvertVertical;
 		
 		//set callback functions for sliders and buttons and toggles
 		verticalSensitivitySlider.onValueChanged.AddListener(delegate {VerticalSensitivityChangedProcess ();});
@@ -125,11 +129,11 @@ public class CameraSettingsMenuScript : MonoBehaviour {
 	void OKButtonClickProcess()
 	{
 		//assign temp values to boat camera values
-		playerBoatCamera.verticalSensitivity = tempVerticalSensitivity;
-		playerBoatCamera.horizontalSensitivity = tempHorizontalSensitivity;
-		playerBoatCamera.scrollSensitivity = tempScrollSensitivity;
-		playerBoatCamera.invertVertical = tempInvertVertical;
-		playerBoatCamera.invertHorizontal = tempInvertHorizontal;
+		playerBoatCamera.VerticalSensitivity = tempVerticalSensitivity;
+		playerBoatCamera.HorizontalSensitivity = tempHorizontalSensitivity;
+		playerBoatCamera.ScrollSensitivity = tempScrollSensitivity;
+		playerBoatCamera.InvertVertical = tempInvertVertical;
+		playerBoatCamera.InvertHorizontal = tempInvertHorizontal;
 		//deactivate camera menu
 		DeActivateCameraMenuCanvas();
 		//set state to camera menu hidden
