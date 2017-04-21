@@ -40,6 +40,9 @@ public class CannonBallNetworked : InteractiveObject {
 	{
         splashed = false;
 		this.transform.localScale = initScale;
+        AudioSource fireSound = GetComponent<AudioSource>();
+        fireSound.pitch = Random.Range(0.6f, 1.4f);
+        fireSound.Play();
 	}
 
     //Set default scale of all cannonballs

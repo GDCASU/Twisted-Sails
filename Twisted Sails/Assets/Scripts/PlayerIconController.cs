@@ -123,7 +123,12 @@ public class PlayerIconController : NetworkBehaviour
 
     public void DoChangeTeam(short team)
     {
-        if (isLocalPlayer) MultiplayerManager.GetInstance().localPlayerTeam = team;
+        if (isLocalPlayer)
+        {
+            if(MultiplayerManager.GetInstance().localPlayerTeam != team)
+                GameObject.Find("SwitchTeam").GetComponent<AudioSource>().Play(); //only play if actually changing teams
+            MultiplayerManager.GetInstance().localPlayerTeam = team;
+        }
         LobbyManager lobby = GameObject.Find("Canvas").GetComponent<LobbyManager>();
         if (team == 0)
             transform.SetParent(lobby.redTeam, false);
@@ -155,12 +160,12 @@ public class PlayerIconController : NetworkBehaviour
 
     public void DoChangeShip(Ship ship)
     {
-        if(isLocalPlayer) MultiplayerManager.GetInstance().localShipType = ship;
+        if (isLocalPlayer) MultiplayerManager.GetInstance().localShipType = ship;
         LobbyManager lobby = GameObject.Find("Canvas").GetComponent<LobbyManager>();
         if (lobby.currentState != LobbyManager.LobbyState.ShipSelect) return;
         transform.SetParent(lobby.ShipSelectNameContainers[(short)ship].transform, false);
     }
-    
+
     /// <summary>
     /// Called by LobbyManager to bounce a Lock In request to the server
     /// </summary>
