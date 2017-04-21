@@ -253,7 +253,7 @@ public class Health : NetworkBehaviour
 	private void OnChangeHealth(float newHealth)
     {
         //play sound if this health change was negative
-        if (isLocalPlayer && newHealth < health)
+        if (newHealth < health)
         {
             AudioSource damageSound = transform.Find("ShipSounds").Find("TakeDamage").GetComponent<AudioSource>();
             damageSound.pitch = Random.Range(0.5f, 1.5f);

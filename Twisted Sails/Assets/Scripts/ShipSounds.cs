@@ -16,7 +16,6 @@ public class ShipSounds : MonoBehaviour {
     {
         if(IsLocalPlayer())
             transform.Find("Windy").GetComponent<AudioSource>().volume = Mathf.Pow(transform.parent.GetComponent<Rigidbody>().velocity.magnitude,2) / Mathf.Pow(shipMaxSpeed,2);
-        Debug.Log(transform.parent.GetComponent<Rigidbody>().velocity.magnitude);
     }
 
 
