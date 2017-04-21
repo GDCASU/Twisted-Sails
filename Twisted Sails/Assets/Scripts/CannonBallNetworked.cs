@@ -65,6 +65,8 @@ public class CannonBallNetworked : InteractiveObject {
 		{
 			Object.Destroy(this.gameObject);
 		}
+			//destroy cannonball after 5 seconds, to avoid idle objects in game
+			Destroy(this.gameObject, 5);
 	}
 
 	public override void OnInteractWithPlayer(Health playerHealth, GameObject playerBoat, StatusEffectsManager manager, Collision collision)
