@@ -8800,138 +8800,6 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 407376964}
   m_Mesh: {fileID: 4300058, guid: 25e7dc216ee05f04abd4a3556733f983, type: 3}
---- !u!1 &413317745
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 413317752}
-  - component: {fileID: 413317751}
-  - component: {fileID: 413317750}
-  - component: {fileID: 413317749}
-  - component: {fileID: 413317748}
-  - component: {fileID: 413317747}
-  - component: {fileID: 413317746}
-  m_Layer: 0
-  m_Name: Main Camera
-  m_TagString: MainCamera
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &413317746
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 413317745}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 05d6f6863107a93438e953b6d204bfbb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  target: {fileID: 0}
-  rotationSpeed: 5
-  updateSpeed: 0.1
-  orbitRadius: 15
-  orbitHeight: 15
---- !u!114 &413317747
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 413317745}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4c6766194c425b048bf1f0a473139e1c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  boatToFollow: {fileID: 0}
-  cameraOffset: {x: 0, y: 2, z: 0}
-  minimumVerticalRotation: -30
-  maximumVerticalRotation: 50
-  minimumZoomDistance: 5
-  maximumZoomDistance: 25
-  smartCameraLayerMask:
-    serializedVersion: 2
-    m_Bits: 4194304
-  horizontalSensitivityDefault: 4
-  verticalSensitivityDefault: 1
-  scrollSensitivityDefault: 10
-  quickTurnLeft: 113
-  quickTurnRight: 101
-  quickTurnTime: 0.175
-  gameIsPaused: 0
---- !u!81 &413317748
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 413317745}
-  m_Enabled: 1
---- !u!124 &413317749
-Behaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 413317745}
-  m_Enabled: 1
---- !u!92 &413317750
-Behaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 413317745}
-  m_Enabled: 1
---- !u!20 &413317751
-Camera:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 413317745}
-  m_Enabled: 1
-  serializedVersion: 2
-  m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0.019607844}
-  m_NormalizedViewPortRect:
-    serializedVersion: 2
-    x: 0
-    y: 0
-    width: 1
-    height: 1
-  near clip plane: 0.3
-  far clip plane: 1000
-  field of view: 60
-  orthographic: 0
-  orthographic size: 5
-  m_Depth: -1
-  m_CullingMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_RenderingPath: -1
-  m_TargetTexture: {fileID: 0}
-  m_TargetDisplay: 0
-  m_TargetEye: 3
-  m_HDR: 0
-  m_OcclusionCulling: 1
-  m_StereoConvergence: 10
-  m_StereoSeparation: 0.022
-  m_StereoMirrorMode: 0
---- !u!4 &413317752
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 413317745}
-  m_LocalRotation: {x: -0.08139122, y: -0.7218483, z: 0.08616892, w: -0.68182516}
-  m_LocalPosition: {x: -209.63312, y: 14.719208, z: 52.19162}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 8
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &420005637
 GameObject:
   m_ObjectHideFlags: 0
@@ -27072,6 +26940,138 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2031812420}
   m_Mesh: {fileID: 4300012, guid: 25e7dc216ee05f04abd4a3556733f983, type: 3}
+--- !u!1 &2043017357
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 2043017364}
+  - component: {fileID: 2043017363}
+  - component: {fileID: 2043017362}
+  - component: {fileID: 2043017361}
+  - component: {fileID: 2043017360}
+  - component: {fileID: 2043017359}
+  - component: {fileID: 2043017358}
+  m_Layer: 0
+  m_Name: Main Camera
+  m_TagString: MainCamera
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2043017358
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2043017357}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 05d6f6863107a93438e953b6d204bfbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  rotationSpeed: 5
+  updateSpeed: 0.1
+  orbitRadius: 15
+  orbitHeight: 15
+--- !u!114 &2043017359
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2043017357}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c6766194c425b048bf1f0a473139e1c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  boatToFollow: {fileID: 0}
+  cameraOffset: {x: 0, y: 2, z: 0}
+  minimumVerticalRotation: -30
+  maximumVerticalRotation: 50
+  minimumZoomDistance: 5
+  maximumZoomDistance: 25
+  smartCameraLayerMask:
+    serializedVersion: 2
+    m_Bits: 4194304
+  horizontalSensitivityDefault: 4
+  verticalSensitivityDefault: 1
+  scrollSensitivityDefault: 10
+  quickTurnLeft: 113
+  quickTurnRight: 101
+  quickTurnTime: 0.175
+  gameIsPaused: 0
+--- !u!81 &2043017360
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2043017357}
+  m_Enabled: 1
+--- !u!124 &2043017361
+Behaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2043017357}
+  m_Enabled: 1
+--- !u!92 &2043017362
+Behaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2043017357}
+  m_Enabled: 1
+--- !u!20 &2043017363
+Camera:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2043017357}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_ClearFlags: 1
+  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0.019607844}
+  m_NormalizedViewPortRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+  near clip plane: 0.3
+  far clip plane: 1000
+  field of view: 60
+  orthographic: 0
+  orthographic size: 5
+  m_Depth: -1
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RenderingPath: -1
+  m_TargetTexture: {fileID: 0}
+  m_TargetDisplay: 0
+  m_TargetEye: 3
+  m_HDR: 0
+  m_OcclusionCulling: 1
+  m_StereoConvergence: 10
+  m_StereoSeparation: 0.022
+  m_StereoMirrorMode: 0
+--- !u!4 &2043017364
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2043017357}
+  m_LocalRotation: {x: -0.08139122, y: -0.7218483, z: 0.08616892, w: -0.68182516}
+  m_LocalPosition: {x: -209.63312, y: 14.719208, z: 52.19162}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2048194822
 GameObject:
   m_ObjectHideFlags: 0
