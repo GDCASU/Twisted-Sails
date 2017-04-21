@@ -212,9 +212,45 @@ public class Health : NetworkBehaviour
 		}
     }
 
-    //This method should not be called to change health, use CmdChangeHealth for that.
-    //This method is automatically called on each client when the health changes on the server (through CmdChangeHealth)
-    private void OnChangeHealth(float newHealth)
+	//Whenever ship triggers  an interactable object
+	void OnTriggerEnter(Collider collider)
+	{
+		InteractiveObject interaction = collider.transform.GetComponent<InteractiveObject>();
+
+		if (interaction == null)
+			return;
+
+		//allow the interaction only if the object isn't owned by player it is touching
+		if (interaction.owner != GetComponent<NetworkIdentity>().netId)
+		{
+			GameObject otherPlayerBoat = ClientScene.FindLocalObject(interaction.owner);
+
+			StatusEffectsManager ourEffectsManager = GetComponent<StatusEffectsManager>();
+
+			int teamOfObject = otherPlayerBoat == null ? -1 : otherPlayerBoat.GetComponent<Health>().team;
+
+			//allow the interaction only if the object touching us is owned by an enemy and the object is allowed to interact with enemies
+			//or if the object touching us is owned by a teammate and the object is allowed to interact with teammates
+			//or if the interaction object isn't owned by any particular player
+			if (teamOfObject == -1 || (teamOfObject == team && interaction.DoesEffectTeammates()) || (teamOfObject != team && interaction.DoesEffectEnemies()))
+			{
+				//tell the interactive object about the interaction
+				//giving them this health, the boat this health is attached to, this boats status effect manager, and the collision that caused the interaction
+				interaction.OnInteractWithPlayerTrigger(this, gameObject, ourEffectsManager, collider);
+
+				//if we are the server, destroy the interactive object after the interaction
+				//if it says it is destroy after interactions
+				if (interaction.DoesDestroyInInteract())
+				{
+					Destroy(collider);
+				}
+			}
+		}
+	}
+
+	//This method should not be called to change health, use CmdChangeHealth for that.
+	//This method is automatically called on each client when the health changes on the server (through CmdChangeHealth)
+	private void OnChangeHealth(float newHealth)
     {
         health = newHealth;
         if (isClient)
