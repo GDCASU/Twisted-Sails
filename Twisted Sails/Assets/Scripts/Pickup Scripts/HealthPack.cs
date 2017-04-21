@@ -42,7 +42,15 @@ public class HealthPack : InteractiveObject
 			playerHealth.ChangeHealth(healAmount, NetworkInstanceId.Invalid);
 		}
 
-		packMesh.enabled = false;
+        //play sounds
+        if(MultiplayerManager.GetLocalPlayer() != null && MultiplayerManager.GetLocalPlayer().objectId == playerBoat.GetComponent<NetworkIdentity>().netId)
+        {
+            playerBoat.transform.Find("ShipSounds").Find("HealthPickupVO").GetComponent<AudioSource>().Play();
+        }
+
+        playerBoat.transform.Find("ShipSounds").Find("HealthPickup").GetComponent<AudioSource>().Play();
+
+        packMesh.enabled = false;
 		packCollider.enabled = false;
 		StartCoroutine(MyCoroutine());
 	}

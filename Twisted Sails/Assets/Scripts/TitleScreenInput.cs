@@ -48,6 +48,8 @@ public class TitleScreenInput : MonoBehaviour
             JoinNameField.text = mm.localPlayerName;
             IPField.text = mm.networkAddress;
         }
+        //just in case input is locked
+        InputWrapper.ReleaseKeyboard();
     }
 
     // Allows quitting by pressing ESC.

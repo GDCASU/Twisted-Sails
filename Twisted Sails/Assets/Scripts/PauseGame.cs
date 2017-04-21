@@ -58,7 +58,7 @@ public class PauseGame : MonoBehaviour
 	{
 		
 		//if p button is pressed down
-		if(Input.GetKeyDown(KeyCode.P))
+		if(Input.GetKeyDown(KeyCode.Escape))
 		{	
 			//if canvas is not active, make it active
 			if(pauseMenuCanvas.gameObject.activeInHierarchy == false)
@@ -82,7 +82,6 @@ public class PauseGame : MonoBehaviour
 		
 		//assign game pause bool to game is paused bool of player boat movement component
 		playerBoatMovementComponent.gameIsPaused = true;
-		
 	}
 	
 	public void UnPause()
@@ -93,8 +92,7 @@ public class PauseGame : MonoBehaviour
 		
 		//assign game pause bool to game is paused bool of player boat movement component
 		playerBoatMovementComponent.gameIsPaused = false;
-		
-	}
+    }
 	
 	private void InitPauseMenu()
 	{

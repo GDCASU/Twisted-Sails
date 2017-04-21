@@ -252,6 +252,13 @@ public class Health : NetworkBehaviour
 	//This method is automatically called on each client when the health changes on the server (through CmdChangeHealth)
 	private void OnChangeHealth(float newHealth)
     {
+        //play sound if this health change was negative
+        if (isLocalPlayer && newHealth < health)
+        {
+            AudioSource damageSound = transform.Find("ShipSounds").Find("TakeDamage").GetComponent<AudioSource>();
+            damageSound.pitch = Random.Range(0.5f, 1.5f);
+            damageSound.PlayOneShot(damageSound.clip, Random.Range(0.7f, 1f));
+        }
         health = newHealth;
         if (isClient)
         {
@@ -317,6 +324,17 @@ public class Health : NetworkBehaviour
         {
             scoreText.text += MultiplayerManager.GetTeam(i).teamName + ": " + teamScores[i] + "\n";
         }
+        //play sounds
+        if (winner == team)
+        {
+            transform.Find("ShipSounds").Find("MatchWin").GetComponent<AudioSource>().Play();
+        }
+        else
+        {
+            transform.Find("ShipSounds").Find("MatchLose").GetComponent<AudioSource>().Play();
+        }
+        GameObject.Find("InGame").GetComponent<AudioSource>().volume = 0.1f;
+        InputWrapper.CaptureKeyboard();
     }
 
     /// <summary>
@@ -373,6 +391,8 @@ public class Health : NetworkBehaviour
         {
             activeCamera.GetComponent<BoatCameraNetworked>().enabled = false;
             activeCamera.GetComponent<OrbitalCamera>().enabled = true;
+            //play the ship death voice line 1/4 of the time
+            if(Random.Range(0,4) < 1) transform.Find("ShipSounds").Find("PlayerDeath").GetComponent<AudioSource>().Play();
         }
         GetComponent<BoatMovementNetworked>().enabled = false;
         GetComponent<Buoyancy>().enabled = false;

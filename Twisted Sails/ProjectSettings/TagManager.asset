@@ -13,6 +13,7 @@ TagManager:
   - MaxAmmoUI
   - CooldownUI
   - AmmoPickUp
+  - BackgroundMusic
   layers:
   - Default
   - TransparentFX
