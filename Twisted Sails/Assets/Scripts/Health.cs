@@ -89,6 +89,7 @@ public class Health : NetworkBehaviour
     
     public Vector3 spawnPoint; // NK 10/20 added original spawnpoint
     public float defenseStat; // Crew Management - Defense Crew
+    public GameObject deathParticle;
 
 
     private float respawnTimer;
@@ -386,10 +387,10 @@ public class Health : NetworkBehaviour
         dead = true;
         tilting = true;
         respawnTimer = 0;
-
         //Put the ship into death cinematic
         if (isLocalPlayer)
         {
+            Instantiate(deathParticle, this.transform.position, Quaternion.LookRotation(Vector3.up));
             activeCamera.GetComponent<BoatCameraNetworked>().enabled = false;
             activeCamera.GetComponent<OrbitalCamera>().enabled = true;
             //play the ship death voice line 1/4 of the time
