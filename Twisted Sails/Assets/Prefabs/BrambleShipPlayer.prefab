@@ -3014,6 +3014,8 @@ MonoBehaviour:
   activeCamera: {fileID: 0}
   spawnPoint: {x: 0, y: 0, z: 0}
   defenseStat: 0
+  deathParticle: {fileID: 1935981119970370, guid: 5244cd98b9f01cf459b72540264b4bef,
+    type: 2}
 --- !u!114 &114000011472782010
 MonoBehaviour:
   m_ObjectHideFlags: 1
