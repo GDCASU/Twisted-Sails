@@ -125,6 +125,7 @@ public class Health : NetworkBehaviour
             healthText = UI.GetComponentInChildren<Text>(); // NK 10/20 locates the health text in the scene
             GameObject.Find("Chat UI").GetComponent<ChatUI>().LinkChatHandler(GetComponent<ChatHandler>());
             CmdPlayerInit(connectionId);
+            transform.Find("ShipSounds").Find("MatchStart").GetComponent<AudioSource>().Play();
         }
         else //This is a ship belonging to another player -- use the ship's healthbar & nametag
         {

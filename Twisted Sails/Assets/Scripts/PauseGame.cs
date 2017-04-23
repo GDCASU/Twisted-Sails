@@ -58,7 +58,7 @@ public class PauseGame : MonoBehaviour
 		//if game is paused
 		if(gamePaused)
 		{
-			 Debug.Log("Game End Cursor Fix called! \n;");
+			 //Debug.Log("Game End Cursor Fix called! \n;");
 			 //show cursor and unlock it
 			 Cursor.visible = true;
 			 Cursor.lockState = CursorLockMode.None;

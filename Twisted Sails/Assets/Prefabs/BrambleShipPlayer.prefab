@@ -588,7 +588,7 @@ GameObject:
   - component: {fileID: 114590363237142764}
   - component: {fileID: 114586118803488614}
   m_Layer: 8
-  m_Name: EB_BrambleShipPlayer_2
+  m_Name: BrambleShipPlayer
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2445,7 +2445,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: eb31730dea4ab2f489470be0d73c338f, type: 3}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0

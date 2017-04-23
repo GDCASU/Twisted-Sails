@@ -4025,7 +4025,7 @@ MonoBehaviour:
   m_ScriptCRCCheck: 1
   m_MaxDelay: 0.01
   m_LogLevel: 2
-  m_PlayerPrefab: {fileID: 1000013458966376, guid: a35872d6be62b8c4ebd864b495a4048a,
+  m_PlayerPrefab: {fileID: 1024232112829116, guid: a40aeac91e14e7c45a756cc922550a6a,
     type: 2}
   m_AutoCreatePlayer: 0
   m_PlayerSpawnMethod: 1
@@ -4039,10 +4039,10 @@ MonoBehaviour:
   - {fileID: 1000012157780100, guid: 89d5d58f166bbd14eb4daf206f37a9fe, type: 2}
   - {fileID: 1024232112829116, guid: a40aeac91e14e7c45a756cc922550a6a, type: 2}
   - {fileID: 1000013620427708, guid: 999d70260556d6a4d99c8c6ca2089051, type: 2}
-  - {fileID: 1180034589067176, guid: d96c2d164f8028f4aa408fa80facf472, type: 2}
-  - {fileID: 1708626477856930, guid: c126206f33ba242409644f237ec3f29d, type: 2}
-  - {fileID: 1798957808378302, guid: 57785a904fbc6e647adfcfc03dd2ed86, type: 2}
-  - {fileID: 1000012799411242, guid: 74b605ad31ab520428cf7197267c1da6, type: 2}
+  - {fileID: 1528995408850570, guid: b3c99858c62f6f64da35342a395afd1b, type: 2}
+  - {fileID: 1878608399054052, guid: 13c1c1c98f677d947af7db76b69b9c9a, type: 2}
+  - {fileID: 1610549298412344, guid: 0ab9cdd6feb106e47877499cc69a6ceb, type: 2}
+  - {fileID: 1121449243814620, guid: 8ed3c3a440bf20d4ab6e55e93ca6cd18, type: 2}
   - {fileID: 1000013244966996, guid: e767d1d57a749a5468851a322a46352d, type: 2}
   - {fileID: 1841741648835464, guid: c57f00819798082449fe1212958d01cd, type: 2}
   m_CustomConfig: 0
