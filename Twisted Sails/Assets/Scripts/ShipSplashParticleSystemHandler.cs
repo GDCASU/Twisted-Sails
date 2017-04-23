@@ -15,10 +15,8 @@ using UnityEngine;
 
 public class ShipSplashParticleSystemHandler : MonoBehaviour {
 
-    // speedCap is the speed at which the size of the splash particles will no longer increase.
-    // The speed of the Bramble ship asymptotically approaches 3 with no speed boosts.
-    // The speed of the Dragon ship asymptotically approaches 8 with no speed boosts.
-    // All of these speeds were tested on 4/19/17, test them again before updating this value.
+    // speedCap is now the same for all four ships.
+    // As of 4/22 they all cap at 8 unboosted.
 
     public float speedCap;
     private float angle;
@@ -49,7 +47,7 @@ public class ShipSplashParticleSystemHandler : MonoBehaviour {
 		//If ship is dead stop all particle emitters
         if (!IsInvoking("DoEmit"))
         {
-            if (!healthScript.dead)
+            if (!healthScript.dead && transform.position.y < 0.1f && transform.position.y > -0.1f)
             {
                 InvokeRepeating("DoEmit", 0.0f, invokeDelay);
             }
@@ -63,14 +61,22 @@ public class ShipSplashParticleSystemHandler : MonoBehaviour {
     void FixedUpdate() {
         if (!healthScript.dead)
         {
-            velocity = rb.velocity;
-            direction = transform.forward;
-            angle = Vector3.Angle(velocity, direction);
-            angleScale = angle >= 90 ? 0 : (90 - angle) / 90;
-            speed = velocity.magnitude;
-            speedScale = speed >= speedCap ? 1 : speed / speedCap;
-            splashParticleScale = angleScale * speedScale;
-            splash.transform.localScale = new Vector3(splashParticleScale, splashParticleScale, splashParticleScale);
+            if (transform.position.y < 0.1f && transform.position.y > -0.1f)
+            {
+                velocity = rb.velocity;
+                direction = transform.forward;
+                angle = Vector3.Angle(velocity, direction);
+                angleScale = angle >= 90 ? 0 : (90 - angle) / 90;
+                speed = velocity.magnitude;
+                speedScale = speed >= speedCap ? 1 : speed / speedCap;
+                splashParticleScale = angleScale * speedScale;
+                splash.transform.localScale = new Vector3(splashParticleScale, splashParticleScale, splashParticleScale);
+            }
+            else
+            {
+                CancelInvoke();
+                splash.transform.localScale = Vector3.zero;
+            }
         }
     }
 
