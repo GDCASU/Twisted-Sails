@@ -17,7 +17,7 @@ public class AmmoPack : InteractiveObject
         }
     }
 
-    public override void OnInteractWithPlayer(Health playerHealth, GameObject playerBoat, StatusEffectsManager manager, Collision collision)
+    public override void OnInteractWithPlayerTrigger(Health playerHealth, GameObject playerBoat, StatusEffectsManager manager, Collider collider)
     {
         //notifies the player events system that the player who interacted with this object picked up a health pack (this object)
         //also sets isHealthPack to true, since this is a health pack
@@ -28,6 +28,8 @@ public class AmmoPack : InteractiveObject
         {
             playerBoat.transform.Find("ShipSounds").Find("AmmoPickupVO").GetComponent<AudioSource>().Play();
         }
+
+        Instantiate(playerHealth.powerupParticle, playerBoat.transform).transform.localPosition = Vector3.zero;
 
         playerBoat.transform.Find("ShipSounds").Find("AmmoPickup").GetComponent<AudioSource>().Play();
 

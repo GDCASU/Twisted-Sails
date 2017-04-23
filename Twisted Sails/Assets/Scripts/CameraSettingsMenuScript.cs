@@ -9,6 +9,11 @@ using UnityEngine.UI;
  Changed initialization code so to work with changes to the camera script for saving camera settings in the playerprefs.
 */
 
+/*
+ Programmer:Pablo Camacho
+ 04/22/17
+ Fixed error where slider values did not reset after cancel button clicked. 
+*/
 public class CameraSettingsMenuScript : MonoBehaviour {
 	
 	//public reference to camera menu canvas
@@ -142,6 +147,16 @@ public class CameraSettingsMenuScript : MonoBehaviour {
 	
 	void CancelButtonClickProcess()
 	{
+		//reset slider values and toggle values to current boat camera settings
+		verticalSensitivitySlider.value = playerBoatCamera.VerticalSensitivity;
+		verticalSensitivitySliderText.text = verticalSensitivitySlider.value.ToString("0.0");
+		horizontalSensitivitySlider.value = playerBoatCamera.HorizontalSensitivity; 
+		horizontalSensitivitySliderText.text = horizontalSensitivitySlider.value.ToString("0.0");
+		scrollSensitivitySlider.value = playerBoatCamera.ScrollSensitivity; 
+		scrollSensitivitySliderText.text = scrollSensitivitySlider.value.ToString("0.0");
+		invertVerticalToggle.isOn = playerBoatCamera.InvertHorizontal;
+		invertHorizontalToggle.isOn = playerBoatCamera.InvertVertical;
+		
 		//deactivate camera menu
 		DeActivateCameraMenuCanvas();
 		//set state to camera menu hidden

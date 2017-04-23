@@ -107,6 +107,7 @@ public class HeavyWeaponDragon: HeavyWeapon {
         weaponStartingPosition = transform.position + (transform.forward * projectileOffset) + transform.up;
         weaponVelocity = transform.forward * projectileSpeed;
         weaponPrefab.GetComponent<Rigidbody>().AddForce(weaponVelocity);
+        weaponPrefab.transform.localRotation = transform.localRotation;
 
         base.ActivateWeapon();
 	}

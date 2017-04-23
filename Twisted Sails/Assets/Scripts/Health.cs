@@ -90,6 +90,8 @@ public class Health : NetworkBehaviour
     public Vector3 spawnPoint; // NK 10/20 added original spawnpoint
     public float defenseStat; // Crew Management - Defense Crew
     public GameObject deathParticle;
+    public ParticleSystem smokeParticle;
+    public GameObject powerupParticle;
 
 
     private float respawnTimer;
@@ -113,6 +115,7 @@ public class Health : NetworkBehaviour
         //Variable initialization
         activeCamera = Camera.main.gameObject;
         spawnPoint = transform.position;
+        smokeParticle = transform.Find("Smoke").GetComponent<ParticleSystem>();
 
         //Setting up health bars & nametags
         if (isLocalPlayer) //This is the local player's ship -- use the HUD healthbar
@@ -122,6 +125,7 @@ public class Health : NetworkBehaviour
             healthText = UI.GetComponentInChildren<Text>(); // NK 10/20 locates the health text in the scene
             GameObject.Find("Chat UI").GetComponent<ChatUI>().LinkChatHandler(GetComponent<ChatHandler>());
             CmdPlayerInit(connectionId);
+            transform.Find("ShipSounds").Find("MatchStart").GetComponent<AudioSource>().Play();
         }
         else //This is a ship belonging to another player -- use the ship's healthbar & nametag
         {
@@ -265,6 +269,11 @@ public class Health : NetworkBehaviour
         {
             healthSlider.value = health;
             healthText.text = "Health: " + (int)health + "/100";
+
+            if (health <= 25 && smokeParticle.isStopped)
+                smokeParticle.Play();
+            else if (health > 25 && smokeParticle.isPlaying)
+                smokeParticle.Stop(); 
         }
         if (health <= 0 && !dead)
         {
@@ -384,13 +393,14 @@ public class Health : NetworkBehaviour
     /// </summary>
     public void Death()
     {
+        smokeParticle.Stop();
+        Instantiate(deathParticle, this.transform.position, Quaternion.LookRotation(Vector3.up));
         dead = true;
         tilting = true;
         respawnTimer = 0;
         //Put the ship into death cinematic
         if (isLocalPlayer)
         {
-            Instantiate(deathParticle, this.transform.position, Quaternion.LookRotation(Vector3.up));
             activeCamera.GetComponent<BoatCameraNetworked>().enabled = false;
             activeCamera.GetComponent<OrbitalCamera>().enabled = true;
             //play the ship death voice line 1/4 of the time
@@ -400,7 +410,6 @@ public class Health : NetworkBehaviour
         GetComponent<Buoyancy>().enabled = false;
         GetComponent<Rigidbody>().useGravity = false;
         GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
-
     }
 
     /// <summary>

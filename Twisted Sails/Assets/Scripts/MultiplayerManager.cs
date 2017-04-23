@@ -189,7 +189,10 @@ public class MultiplayerManager : NetworkManager
     /// <returns>The local Player object.</returns>
     public static Player GetLocalPlayer()
     {
-        return FindPlayer(GetLocalClient().connection.connectionId);
+        NetworkClient client = GetLocalClient();
+        if(client != null)
+            return FindPlayer(client.connection.connectionId);
+        return null;
     }
 
     /// <summary>

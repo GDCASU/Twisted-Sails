@@ -26,6 +26,7 @@ public class OrbitalCamera : MonoBehaviour
     private float lerpProgress; //used to smoothly transition from current cam position to target
     private float startAngle; //camera will start rotating from its current angle rather than 0
     private float startYPos;
+    private Vector3 targetInitialPos;
 
     void OnEnable()
     {
@@ -36,6 +37,7 @@ public class OrbitalCamera : MonoBehaviour
             Vector3 relativePos = transform.position - target.transform.position;
             startAngle = Mathf.Atan2(relativePos.z, relativePos.x);
             startYPos = transform.position.y;
+            targetInitialPos = target.transform.position;
         }
     }
 
@@ -47,7 +49,7 @@ public class OrbitalCamera : MonoBehaviour
             Vector3 targetPos = target.transform.position + new Vector3(Mathf.Cos(lerpProgress * rotationSpeed + startAngle) * orbitRadius, orbitHeight, Mathf.Sin(lerpProgress * rotationSpeed + startAngle) * orbitRadius);
             targetPos.y = startYPos;
             transform.position = Vector3.Slerp(transform.position, targetPos, lerpProgress);
-            transform.LookAt(target.transform);
+            transform.LookAt(targetInitialPos);
             lerpProgress += updateSpeed * Time.deltaTime;
         }
     }
