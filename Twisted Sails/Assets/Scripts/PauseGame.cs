@@ -13,7 +13,11 @@ using UnityEngine.Networking;
 //Programmer:Pablo Camacho
 //Date:04/21/17
 //Description: Added change that adds cursor fix to multiplayer manager game end scene. Keeps cursor visible and unlocked.
+//Date: 04/22/17
+//Description: Fixed bug that caused game not to start after exiting to main menu. Used SceneManager.getActiveScene.name
+// in place of Application.loadedLevel 
 
+ 
 public class PauseGame : MonoBehaviour 
 {
 	//reference to pause menu canvas
@@ -121,7 +125,7 @@ public class PauseGame : MonoBehaviour
 	private void InitPauseMenu()
 	{
 		//If current scene is in MainLevel_PabloCamacho
-			if(Application.loadedLevelName == "MainLevel_PabloCamacho")
+			if(SceneManager.GetActiveScene().name == "MainLevel_PabloCamacho")
 			{
 				//get array of root game objects in Scene MainLevel_PabloCamacho
 				GameObject[] rootGameObjectsOfMainLevelScene = SceneManager.GetSceneByName("MainLevel_PabloCamacho").GetRootGameObjects();
@@ -148,7 +152,7 @@ public class PauseGame : MonoBehaviour
 				}
 			}
 			//else if current scene is in MainLevel 
-			else if(Application.loadedLevelName == "MainLevel")
+			else if(SceneManager.GetActiveScene().name == "MainLevel")
 			{
 				//get array of root game objects in Scene MainLevel
 				GameObject[] rootGameObjectsOfMainLevelScene = SceneManager.GetSceneByName("MainLevel").GetRootGameObjects();
