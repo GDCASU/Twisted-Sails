@@ -59,11 +59,13 @@ public class PlayerIconController : NetworkBehaviour
     private Text nameText;
     private RectTransform rectTransform;
     private GameObject canvas;
+    private LobbyManager lobby;
 
     // Use this for initialization
     void Start()
     {
         canvas = GameObject.Find("Canvas");
+        lobby = LobbyManager.instance;
         nameText = GetComponent<Text>();
         rectTransform = GetComponent<RectTransform>();
 
@@ -103,7 +105,6 @@ public class PlayerIconController : NetworkBehaviour
     [Command]
     public void CmdChangeTeam(short team)
     {
-        LobbyManager lobby = GameObject.Find("Canvas").GetComponent<LobbyManager>();
         if (lobby.currentState != LobbyManager.LobbyState.TeamSelect || MultiplayerManager.GetInstance().playerList.FindAll(p => p.team == team).Count >= 4)
             return; //team to switch to already has 4 players, abort
         MultiplayerManager.FindPlayer(GetComponent<NetworkIdentity>().netId).team = team;
@@ -129,7 +130,7 @@ public class PlayerIconController : NetworkBehaviour
                 GameObject.Find("SwitchTeam").GetComponent<AudioSource>().Play(); //only play if actually changing teams
             MultiplayerManager.GetInstance().localPlayerTeam = team;
         }
-        LobbyManager lobby = GameObject.Find("Canvas").GetComponent<LobbyManager>();
+
         if (team == 0)
             transform.SetParent(lobby.redTeam, false);
         else
@@ -161,7 +162,6 @@ public class PlayerIconController : NetworkBehaviour
     public void DoChangeShip(Ship ship)
     {
         if (isLocalPlayer) MultiplayerManager.GetInstance().localShipType = ship;
-        LobbyManager lobby = GameObject.Find("Canvas").GetComponent<LobbyManager>();
         if (lobby.currentState != LobbyManager.LobbyState.ShipSelect) return;
         transform.SetParent(lobby.ShipSelectNameContainers[(short)ship].transform, false);
     }
@@ -176,7 +176,6 @@ public class PlayerIconController : NetworkBehaviour
         List<Player> playerList = MultiplayerManager.GetInstance().playerList;
         if (playerList.FindAll(p => p.ready).Count == playerList.Count)
         {
-            LobbyManager lobby = canvas.GetComponent<LobbyManager>();
             lobby.LockShips();
             lobby.RpcLockShips();
         }

@@ -68,8 +68,7 @@ public class PauseGame : MonoBehaviour
 	void InitPlayerCameraPauseBool()
 	{
 		//If current scene is in MainLevel_PabloCamacho or MainLevel
-		if(Application.loadedLevelName == "MainLevel_PabloCamacho" ||
-			Application.loadedLevelName == "MainLevel")
+		if(SceneManager.GetActiveScene().name.Contains("MainLevel") && MultiplayerManager.IsClient())
 		{
 			
 			//get reference to player component BoatMovementNetworked
@@ -84,7 +83,7 @@ public class PauseGame : MonoBehaviour
 	{
 		
 		//if p button is pressed down
-		if(Input.GetKeyDown(KeyCode.P))
+		if(Input.GetKeyDown(KeyCode.Escape))
 		{	
 			//if canvas is not active, make it active
 			if(pauseMenuCanvas.gameObject.activeInHierarchy == false)
