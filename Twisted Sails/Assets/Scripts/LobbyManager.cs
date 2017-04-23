@@ -56,6 +56,8 @@ public class LobbyManager : NetworkBehaviour
     public string hostName;
     public Sprite[] shipIcons;
 
+    public static LobbyManager instance;
+
     private MultiplayerManager manager;
     private float timer;
 
@@ -66,17 +68,12 @@ public class LobbyManager : NetworkBehaviour
         ShipSelect,
         Preparing
     }
-    public LobbyState currentState;
-
-
-    void Awake()
-    {
-        currentState = LobbyState.TeamSelect;
-    }
+    public LobbyState currentState = LobbyState.TeamSelect;
 
     // Use this for initialization
     void Start()
     {
+        instance = this;
         //Variable initialization
         manager = MultiplayerManager.GetInstance();
 
