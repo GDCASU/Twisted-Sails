@@ -327,6 +327,7 @@ public class MultiplayerManager : NetworkManager
         teams[0] = new Team("Red", Color.red, 0);
         teams[1] = new Team("Blue", Color.blue, 1);
         currentGamemode = new TeamDeathmatch(teams, 30, 300);
+        startPositionIndices = new int[currentGamemode.NumTeams()];
         for (int i = 0; i < currentGamemode.NumTeams(); i++)
             startPositionIndices[i] = 0;
     }
@@ -530,9 +531,9 @@ public class MultiplayerManager : NetworkManager
 
     public override void OnServerSceneChanged(string sceneName)
     {
-        if (sceneName == inGameScene)
+        if (sceneName.Contains(inGameScene))
             GameStart();
-        else if (sceneName == offlineScene)
+        else if (sceneName.Equals(offlineScene))
             SetupGamemode();
         base.OnServerSceneChanged(sceneName);
     }
