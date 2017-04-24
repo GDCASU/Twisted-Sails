@@ -36,8 +36,8 @@ public class TitleScreenInput : MonoBehaviour
     void Start()
     {
         MultiplayerManager mm = MultiplayerManager.GetInstance();
-        SaveLoad.Load();
-        if (Game.current != null)
+        
+        if (SaveLoad.Load())
         {
             mm.localPlayerName = Game.current.name;
             mm.networkAddress = Game.current.IPaddress;

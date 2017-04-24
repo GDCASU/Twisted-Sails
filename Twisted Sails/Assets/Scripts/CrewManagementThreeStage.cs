@@ -46,12 +46,14 @@ public class CrewManagementThreeStage : NetworkBehaviour
     public int attackStage;
     public int defenseStage;
     public int speedStage;
+    public int startCrew;
+
     private int statChange;
     private int crewCount;
 
     private const float STAGE_MULTIPLIER = 0.25f;
     private const int CREW_MIN = 1;
-    private const int CREW_MAX = 4;
+    private const int CREW_MAX = 6;
 
     // Timer variables
     private float cooldownTimer;
@@ -83,7 +85,7 @@ public class CrewManagementThreeStage : NetworkBehaviour
             defenseStage = CREW_MIN;
             speedStage = CREW_MIN;
 
-            crewCount = CREW_MAX - 1;
+            crewCount = startCrew;
             crewText.text = "Available Crew: " + crewCount;
             cooldownTimer = 0;
         }

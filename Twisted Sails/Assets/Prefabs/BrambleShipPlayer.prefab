@@ -2933,14 +2933,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d96c63565d5fa664fb9ee29cfb3dceb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  forwardsAcceleration: 500
-  backwardsAcceleration: 50
+  forwardsAcceleration: 425
+  backwardsAcceleration: 150
   rotationalControl: 1
   speedBoostValue: 2
   speedBoost: 0
   boatPropulsionPointOffset: -1
   speedStat: 1
   speed: 0
+  cannonBallSpeedScale: 1
   forwardKey: 119
   backwardsKey: 115
   leftKey: 97
@@ -3144,6 +3145,7 @@ MonoBehaviour:
   attackStage: 0
   defenseStage: 0
   speedStage: 0
+  startCrew: 3
   attackButton: Attack Crew
   defenseButton: Defense Crew
   speedButton: Speed Crew

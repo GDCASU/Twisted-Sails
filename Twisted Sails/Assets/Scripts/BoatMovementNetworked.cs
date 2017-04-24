@@ -71,6 +71,7 @@ public class BoatMovementNetworked : NetworkBehaviour
 	public float boatPropulsionPointOffset = -1f;
     public float speedStat = 1.0f; // Crew Management - Speed Crew
     public float speed;
+    public float cannonBallSpeedScale;
 
     //Boat Input
     public KeyCode forwardKey	    = KeyCode.W;
@@ -161,7 +162,7 @@ public class BoatMovementNetworked : NetworkBehaviour
 					if (cScript.CanFire())
 					{
 						//Pass information to server and spawn cannonball on all cients
-						CmdFire(cScript.GetCannonBallPosition(), cScript.GetCannonBallVelocity());
+						CmdFire(cScript.GetCannonBallPosition(), cScript.GetCannonBallVelocity()*cannonBallSpeedScale);
 						cScript.ResetFireTimer();
 					}
 				}
