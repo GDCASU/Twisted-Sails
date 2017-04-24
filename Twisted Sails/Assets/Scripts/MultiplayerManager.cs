@@ -118,11 +118,11 @@ public class MultiplayerManager : NetworkManager
 
     void Update()
     {
+        currentGamemode.Update();
         if (networkSceneName.Equals(inGameScene) && NetworkServer.active)
         {
             if (gameRestartTimer <= 0)
             {
-                currentGamemode.Update();
                 CheckEndGame();
             }
             else
@@ -327,6 +327,8 @@ public class MultiplayerManager : NetworkManager
         teams[0] = new Team("Red", Color.red, 0);
         teams[1] = new Team("Blue", Color.blue, 1);
         currentGamemode = new TeamDeathmatch(teams, 30, 300);
+        for (int i = 0; i < currentGamemode.NumTeams(); i++)
+            startPositionIndices[i] = 0;
     }
 
     //Timer to restart game
@@ -485,7 +487,7 @@ public class MultiplayerManager : NetworkManager
         //and get from that list the next unused start position, incrementing afterwards
         if (!teamStartPositions.ContainsKey(team)) return null;
         if (startPositionIndices[team] >= teamStartPositions[team].Count) return null;
-        return teamStartPositions[team][startPositionIndices[team]++];
+        return teamStartPositions[team][(startPositionIndices[team]++)%4];
     }
 
     public override void OnServerConnect(NetworkConnection conn)

@@ -46,6 +46,7 @@ public class HeavyWeapon : NetworkBehaviour
 	public int ammoUsePerActivation = 1;
 	public string ammoPackTag = "AmmoPack";
 	public bool collectPacksWhileAtMaxAmmo = true;
+    [SyncVar]
 	private int ammoCount;
 
 	private Text ammoCounter;
