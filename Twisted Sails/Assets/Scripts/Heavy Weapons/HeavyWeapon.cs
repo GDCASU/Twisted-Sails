@@ -21,6 +21,7 @@ public class HeavyWeapon : NetworkBehaviour
     public GameObject weaponPrefab;
     public Vector3 weaponStartingPosition;
     public Vector3 weaponVelocity;
+    public Quaternion weaponRotation;
 
 	[Header("Activation")]
 	public KeyCode weaponUseKey;
@@ -82,7 +83,7 @@ public class HeavyWeapon : NetworkBehaviour
 
             //the player has pressed the button identified by the weaponUseKey field
             //and the weapon is not on cooldown
-            if (InputWrapper.GetKeyDown(weaponUseKey))
+            if (InputWrapper.GetKeyDown(weaponUseKey) || Input.GetMouseButtonDown(1))
             {
                 //if enough ammo to use weapon, check for cooldown
                 if (ammoCount >= ammoUsePerActivation)
@@ -180,7 +181,7 @@ public class HeavyWeapon : NetworkBehaviour
 	protected virtual void ActivateWeapon()
 	{
         // networking component for shooting the heavy weapon
-        CmdFire(weaponStartingPosition, weaponVelocity, this.GetComponent<NetworkIdentity>().netId);
+        CmdFire(weaponStartingPosition, weaponVelocity, weaponRotation, this.GetComponent<NetworkIdentity>().netId);
     }
 
 	protected virtual void AmmoDepleted()
@@ -230,7 +231,7 @@ public class HeavyWeapon : NetworkBehaviour
     //Called by client, runs on server.
     //Spawns heavy weapon on server, then on all clients.
     [Command]
-    private void CmdFire(Vector3 spawnPosition, Vector3 spawnVelocity, NetworkInstanceId shooterID)
+    private void CmdFire(Vector3 spawnPosition, Vector3 spawnVelocity, Quaternion spawnRotation, NetworkInstanceId shooterID)
     {
         //Spawn object on server
         GameObject instantiatedProjectile = GameObject.Instantiate(weaponPrefab);
@@ -238,6 +239,7 @@ public class HeavyWeapon : NetworkBehaviour
         // Set position, velocity
         instantiatedProjectile.transform.position = spawnPosition;
         instantiatedProjectile.GetComponent<Rigidbody>().velocity = spawnVelocity;
+        instantiatedProjectile.transform.rotation = spawnRotation;
 
 		InteractiveObject interactiveObject = instantiatedProjectile.GetComponent<InteractiveObject>();
         if (interactiveObject != null)

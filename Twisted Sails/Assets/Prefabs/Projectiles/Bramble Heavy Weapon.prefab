@@ -222,9 +222,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ef834008acd04b47a26dd06d6673fba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  travelTime: 2
+  travelTime: 3
   speed: 1
-  damageDealt: 25
+  damageDealt: 35
 --- !u!114 &114263969213969390
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -520,7 +520,7 @@ ParticleSystem:
       maxColor: {r: 1, g: 1, b: 1, a: 1}
       minMaxState: 0
     startSize:
-      scalar: 10
+      scalar: 7
       maxCurve:
         serializedVersion: 2
         m_Curve:

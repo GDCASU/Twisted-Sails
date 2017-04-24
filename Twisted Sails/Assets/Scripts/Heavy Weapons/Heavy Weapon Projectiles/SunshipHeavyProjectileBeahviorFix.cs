@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SunshipHeavyProjectileBeahviorFix : InteractiveObject {
+public class SunshipHeavyProjectileBeahviorFix : InteractiveObject
+{
 
-	Vector3 startingLocation;
-	Vector3 currentLocation;
-	float distanceFromOrigin;
-	public float maxDistance =1f;
+    Vector3 startingLocation;
+    Vector3 currentLocation;
+    float distanceFromOrigin;
+    public float maxDistance = 1f;
     public float explodingScale; //How fast it explodes
     public int damageDealt;
 
@@ -17,14 +18,16 @@ public class SunshipHeavyProjectileBeahviorFix : InteractiveObject {
     StatusEffectsManager manager;
 
     // Use this for initialization
-    void Start () {
-		startingLocation = this.transform.position;
+    void Start()
+    {
+        startingLocation = this.transform.position;
     }
-	
-	// Update is called once per frame
-	void Update () {
-		currentLocation = transform.position;
-		distanceFromOrigin = Mathf.Abs(Vector3.Distance(currentLocation, startingLocation));
+
+    // Update is called once per frame
+    void Update()
+    {
+        currentLocation = transform.position;
+        distanceFromOrigin = Mathf.Abs(Vector3.Distance(currentLocation, startingLocation));
 
         if (distanceFromOrigin >= maxDistance && isExploding == false)
             ExplodeObject();
@@ -41,11 +44,10 @@ public class SunshipHeavyProjectileBeahviorFix : InteractiveObject {
 
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnCollisionEnter(Collision collision)
     {
-        if(other.gameObject.tag != "Player")
-            if (!isExploding)
-                ExplodeObject();
+        if (!isExploding)
+            ExplodeObject();
     }
 
     public override void OnInteractWithPlayer(Health playerHealth, GameObject playerBoat, StatusEffectsManager manager, Collision collision)
@@ -53,17 +55,29 @@ public class SunshipHeavyProjectileBeahviorFix : InteractiveObject {
         base.OnInteractWithPlayer(playerHealth, playerBoat, manager, collision);
         int healthChange = -damageDealt;
 
-        if (!isExploding)
-            playerHealth.ChangeHealth(healthChange/2, owner);
-        else
-            playerHealth.ChangeHealth(healthChange, owner);
+        playerHealth.ChangeHealth(healthChange, owner);
 
+    }
+
+    public override void OnInteractWithPlayerTrigger(Health playerHealth, GameObject playerBoat, StatusEffectsManager manager, Collider collider)
+    {
+        base.OnInteractWithPlayerTrigger(playerHealth, playerBoat, manager, collider);
+        int healthChange = -damageDealt;
+
+        playerHealth.ChangeHealth(healthChange, owner);
+    }
+
+    public override bool DoesDestroyInInteract()
+    {
+        return false;
     }
 
     private void ExplodeObject()
     {
         isExploding = true;
         explodingTimer = 1;
-        gameObject.GetComponent<Rigidbody>().velocity = new Vector3(0, 0, 0);
+        GetComponent<Rigidbody>().isKinematic = true;
+        GetComponent<Rigidbody>().velocity = Vector3.zero;
+        GetComponent<Collider>().isTrigger = true;
     }
 }

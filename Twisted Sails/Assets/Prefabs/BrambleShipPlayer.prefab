@@ -2995,6 +2995,7 @@ MonoBehaviour:
     type: 2}
   weaponStartingPosition: {x: 0, y: 0, z: 0}
   weaponVelocity: {x: 0, y: 0, z: 0}
+  weaponRotation: {x: 0, y: 0, z: 0, w: 0}
   weaponUseKey: 102
   coolDownTotalSeconds: 3
   startingAmmoAmount: 0
@@ -3003,7 +3004,8 @@ MonoBehaviour:
   ammoUsePerActivation: 1
   ammoPackTag: AmmoPack
   collectPacksWhileAtMaxAmmo: 1
-  addAmmoKey: 117
+  addAmmoKey: 0
+  numProjectiles: 8
 --- !u!114 &114292624532040872
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3395,8 +3397,9 @@ MonoBehaviour:
   team: 0
   connectionId: 0
   dead: 0
-  hurtSelfButton: 107
+  hurtSelfButton: 0
   activeCamera: {fileID: 0}
+  invincibleTime: 5
   spawnPoint: {x: 0, y: 0, z: 0}
   defenseStat: 0
   deathParticle: {fileID: 1935981119970370, guid: 5244cd98b9f01cf459b72540264b4bef,

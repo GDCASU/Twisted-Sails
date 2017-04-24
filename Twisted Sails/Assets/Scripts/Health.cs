@@ -86,7 +86,7 @@ public class Health : NetworkBehaviour
     [Header("Misc")]
     public KeyCode hurtSelfButton;
     public GameObject activeCamera;
-    
+    public float invincibleTime;
     public Vector3 spawnPoint; // NK 10/20 added original spawnpoint
     public float defenseStat; // Crew Management - Defense Crew
     public GameObject deathParticle;
@@ -97,6 +97,7 @@ public class Health : NetworkBehaviour
     private float respawnTimer;
     private bool tilting;
     private bool gameOver;
+    private float currentInvincibleTimer;
 
     //Hooks are called automatically, usually there's no reason to manually call these hooks
     #region Hooks
@@ -116,6 +117,7 @@ public class Health : NetworkBehaviour
         activeCamera = Camera.main.gameObject;
         spawnPoint = transform.position;
         smokeParticle = transform.Find("Smoke").GetComponent<ParticleSystem>();
+        currentInvincibleTimer = 0;
 
         //Setting up health bars & nametags
         if (isLocalPlayer) //This is the local player's ship -- use the HUD healthbar
@@ -149,6 +151,8 @@ public class Health : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (currentInvincibleTimer > 0)
+            currentInvincibleTimer -= Time.deltaTime;
         //Death effects/respawn timer
         if (dead)
         {
@@ -257,6 +261,7 @@ public class Health : NetworkBehaviour
 	//This method is automatically called on each client when the health changes on the server (through CmdChangeHealth)
 	private void OnChangeHealth(float newHealth)
     {
+        if (currentInvincibleTimer > 0) return;
         //play sound if this health change was negative
         if (newHealth < health)
         {
@@ -420,6 +425,7 @@ public class Health : NetworkBehaviour
     {
         //The following code effectively "re-initializes" the boat to its original state
         //Re-enable normal boat scripts, disable death-related scripts, re-initialize positions, rotations, forces
+        currentInvincibleTimer = invincibleTime;
         if (isLocalPlayer)
         {
             activeCamera.GetComponent<BoatCameraNetworked>().enabled = true;

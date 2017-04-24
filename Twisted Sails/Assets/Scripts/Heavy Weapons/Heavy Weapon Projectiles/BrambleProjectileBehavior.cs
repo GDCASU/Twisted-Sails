@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
 public class BrambleProjectileBehavior : InteractiveObject
 {
@@ -17,6 +18,8 @@ public class BrambleProjectileBehavior : InteractiveObject
     private float distanceToTarget;
     private float newTime;
 
+    private GameObject ownerObject;
+
     StatusEffectsManager manager;
 
     // Use this for initialization
@@ -27,19 +30,24 @@ public class BrambleProjectileBehavior : InteractiveObject
 		Invoke ("KillMyself", totalTime);
 		brambleStart = GameObject.Find("BrambleShipPlayer(Clone)").transform.position;
 		brambleTarget = GameObject.Find("BrambleShipPlayer(Clone)/HWtarget").transform.position;
-		distanceToTarget = Mathf.Abs(Vector3.Distance(brambleStart, brambleTarget));
 		speed = distanceToTarget / travelTime;
+
+        if (MultiplayerManager.IsServer())
+            ownerObject = NetworkServer.FindLocalObject(owner);
+        else
+            ownerObject = ClientScene.FindLocalObject(owner);
 		//Debug.Log(distanceToTarget);
 	
 	}
 
     // Update is called once per frame
     private void Update () {
-		if(goingOut) 
-			transform.position = Vector3.MoveTowards (this.transform.position, brambleTarget, speed * Time.deltaTime);
-		else
-			transform.position = Vector3.MoveTowards (this.transform.position, brambleStart, speed * Time.deltaTime);
-	}
+        if (goingOut)
+            newTime += Time.deltaTime;
+        else
+            newTime -= Time.deltaTime;
+        transform.position = ownerObject.transform.position + transform.forward * (1 + 14 * (newTime / travelTime));
+    }
     //Destroys the projectile
     private void ReturnToShipPos(){
 		goingOut = false;
@@ -50,19 +58,17 @@ public class BrambleProjectileBehavior : InteractiveObject
 
     //Detects collison with a player
     //Causes the projectile to go back to position if collide with non-player gameobject
-    private void OnCollisionEnter (Collision other) {
-		Debug.Log ("Bramble Projectile: Collide");
-		//Debug Code - Debug.Log(other.gameObject.layer);
+    private void OnTriggerEnter (Collider other) {
+		//Debug.Log ("Bramble Projectile: Collide");
+        //Debug Code - Debug.Log(other.gameObject.layer);
 
-		if (other.gameObject.tag != "Player")
-            goingOut = false;
-
-        Invoke ("KillMyself", Mathf.Abs (Vector3.Distance (brambleStart, brambleTarget)) / (travelTime * speed));
+        if (other.gameObject.tag != "Player" && other.GetComponent<BrambleProjectileBehavior>() == null)
+            Destroy(gameObject);
 	}
 
-    public override void OnInteractWithPlayer(Health playerHealth, GameObject playerBoat, StatusEffectsManager manager, Collision collision)
+    public override void OnInteractWithPlayerTrigger(Health playerHealth, GameObject playerBoat, StatusEffectsManager manager, Collider collider)
     {
-        base.OnInteractWithPlayer(playerHealth, playerBoat, manager, collision);
+        base.OnInteractWithPlayerTrigger(playerHealth, playerBoat, manager, collider);
 
         int healthChange = -damageDealt;
         //if this object is on the side of the player who owns this object

@@ -108,17 +108,17 @@ public class HeavyWeaponHuman : HeavyWeapon
         projectileOffsetVector = transform.forward * 3 + transform.up;
 
         weaponStartingPosition = transform.position + projectileOffsetVector + transform.up;
-        weaponVelocity = transform.forward * projectileSpeed;
+        weaponVelocity = transform.forward * projectileSpeed + GetComponent<Rigidbody>().velocity;
         weaponPrefab.GetComponent<Rigidbody>().AddForce(weaponVelocity);
         base.ActivateWeapon();
 
         weaponStartingPosition = transform.position + projectileOffsetVector - transform.right;
-        weaponVelocity = transform.forward * projectileSpeed - transform.right * projectileSpeed/3;
+        weaponVelocity = transform.forward * projectileSpeed - transform.right * projectileSpeed/ 3 + GetComponent<Rigidbody>().velocity;
         weaponPrefab.GetComponent<Rigidbody>().AddForce(weaponVelocity);
         base.ActivateWeapon();
 
         weaponStartingPosition = transform.position + projectileOffsetVector + transform.right;
-        weaponVelocity = transform.forward * projectileSpeed + transform.right * projectileSpeed/3;
+        weaponVelocity = transform.forward * projectileSpeed + transform.right * projectileSpeed/ 3 + GetComponent<Rigidbody>().velocity;
         weaponPrefab.GetComponent<Rigidbody>().AddForce(weaponVelocity);
         base.ActivateWeapon();
 

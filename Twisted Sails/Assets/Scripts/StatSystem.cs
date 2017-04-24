@@ -70,8 +70,7 @@ public class StatSystem : NetworkBehaviour
     private BoatMovementNetworked boatScript;
 
     // Set to the number of cannons on the ship (Currently 8)
-    private const int CANNON_COUNT = 8;
-    private BroadsideCannonFireNetworked[] fireScripts = new BroadsideCannonFireNetworked[CANNON_COUNT];
+    private BroadsideCannonFireNetworked[] fireScripts;
 
     private bool debugFlag = true;
 
@@ -107,7 +106,7 @@ public class StatSystem : NetworkBehaviour
             defenseMod = MOD_MIN;
             speedMod = MOD_MIN;
 
-            for (int i = 0; i < CANNON_COUNT; i++)
+            for (int i = 0; i < fireScripts.Length; i++)
             { fireScripts[i].attackStat = currentAttack; }
 
             healthScript.defenseStat = currentDefense;
@@ -150,7 +149,7 @@ public class StatSystem : NetworkBehaviour
         attackMod = Mathf.Clamp(attackMod + newMod, MOD_MIN, MOD_MAX);
         currentAttack = 1 / (BASE_ATTACK + attackMod);
 
-        for (int i = 0; i < CANNON_COUNT; i++)
+        for (int i = 0; i < fireScripts.Length; i++)
         { fireScripts[i].attackStat = currentAttack; }
 
         attackBar.value = 1 / currentAttack;

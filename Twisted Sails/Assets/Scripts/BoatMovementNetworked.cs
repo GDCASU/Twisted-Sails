@@ -155,7 +155,7 @@ public class BoatMovementNetworked : NetworkBehaviour
                 }
             }
 
-            if (KeysDown.fireCannon)
+            if (KeysDown.fireCannon || Input.GetMouseButtonDown(0))
 			{
 				foreach (BroadsideCannonFireNetworked cScript in cannonScripts)
 				{
@@ -206,10 +206,10 @@ public class BoatMovementNetworked : NetworkBehaviour
             if (speedBoost)
 				acceleration *= speedBoostValue;
 
-			Vector3 forceDirection = -transform.forward;
+            Vector3 forceOffset = -transform.right * (horizontalAxis * rotationalControl) + transform.forward * boatPropulsionPointOffset;
 
-			boat.AddForceAtPosition(forceDirection * acceleration, transform.position + transform.forward * boatPropulsionPointOffset, ForceMode.Acceleration);
-		}
+            boat.AddForceAtPosition(-transform.forward * acceleration, transform.position + forceOffset, ForceMode.Acceleration);
+        }
 
         //Asks the boat's attached swivel guns (if they exist) to update their rotations based on the rotation of the boat's camera
         if(swivelGunScripts.Count != 0 && isLocalPlayer)

@@ -3,6 +3,8 @@ using System.Collections;
 using UnityEngine.Networking;
 using System.Collections.Generic;
 using System;
+using System.Net;
+using System.Net.Sockets;
 
 // Developer: Kyle Aycock
 // Date: 11/3/2016
@@ -250,6 +252,22 @@ public class MultiplayerManager : NetworkManager
     public static Player FindPlayer(NetworkInstanceId shipId)
     {
         return GetInstance().playerList.Find(p => p.objectId == shipId);
+    }
+
+    public static string GetLocalIPAddress()
+    {
+        IPHostEntry host;
+        string localIP = "";
+        host = Dns.GetHostEntry(Dns.GetHostName());
+        foreach (IPAddress ip in host.AddressList)
+        {
+            if (ip.AddressFamily == AddressFamily.InterNetwork)
+            {
+                localIP = ip.ToString();
+                break;
+            }
+        }
+        return localIP;
     }
 
     /// <summary>

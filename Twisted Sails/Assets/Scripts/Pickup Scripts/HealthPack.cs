@@ -13,21 +13,11 @@ public class HealthPack : InteractiveObject
 	public MeshRenderer packMesh;
 	public Collider packCollider;
 
-	private void Start()
-	{
-		if (packMesh == null)
-		{
-			packMesh = GetComponent<MeshRenderer>();
-			packCollider = GetComponent<Collider>();
-        }
-	}
-
 	IEnumerator MyCoroutine()
 	{
 		yield return new WaitForSeconds (packRespawnTime);
-        Color color = packMesh.GetComponent<Renderer>().material.color;
-        color.a = 1f;
-        packMesh.GetComponent<Renderer>().material.color = color;
+
+        packMesh.enabled = true;
         packCollider.enabled = true;
 	}
 
@@ -54,9 +44,7 @@ public class HealthPack : InteractiveObject
 
         playerBoat.transform.Find("ShipSounds").Find("HealthPickup").GetComponent<AudioSource>().Play();
 
-        Color color = packMesh.GetComponent<Renderer>().material.color;
-        color.a = 0.2f;
-        packMesh.GetComponent<Renderer>().material.color = color;
+        packMesh.enabled = false;
         packCollider.enabled = false;
 		StartCoroutine(MyCoroutine());
 	}
