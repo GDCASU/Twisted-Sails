@@ -560,7 +560,7 @@ MonoBehaviour:
   m_AutoCreatePlayer: 0
   m_PlayerSpawnMethod: 1
   m_OfflineScene: Title Screen
-  m_OnlineScene: Lobby_ExcelOrtega
+  m_OnlineScene: Lobby
   m_SpawnPrefabs:
   - {fileID: 1799530119112346, guid: 521e9cbcddbac9d43a427e3c98c486d4, type: 2}
   - {fileID: 1878329654681886, guid: 0630915ec55d17149b9cdf74f2268d46, type: 2}
@@ -624,7 +624,7 @@ MonoBehaviour:
   teamScores: 
   lobbyPrefab: {fileID: 1024232112829116, guid: a40aeac91e14e7c45a756cc922550a6a,
     type: 2}
-  inGameScene: MainLevel_ExcelOrtega
+  inGameScene: MainLevel
   localConnectionId: 0
   playableShips:
   - {fileID: 1878329654681886, guid: 0630915ec55d17149b9cdf74f2268d46, type: 2}
