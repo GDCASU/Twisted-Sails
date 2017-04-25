@@ -250,5 +250,12 @@ public class HeavyWeapon : NetworkBehaviour
         NetworkServer.Spawn(instantiatedProjectile);
     }
 
+    //to bounce ammo request to server
+    [Command]
+    public void CmdAddAmmo(int ammo)
+    {
+        AddAmmo(ammo, false);
+    }
+
     #endregion
 }

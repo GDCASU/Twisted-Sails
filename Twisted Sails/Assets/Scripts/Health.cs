@@ -431,8 +431,8 @@ public class Health : NetworkBehaviour
         {
             activeCamera.GetComponent<BoatCameraNetworked>().enabled = true;
             activeCamera.GetComponent<OrbitalCamera>().enabled = false;
+            CmdHurtSelf(100); //the irony
         }
-        CmdHurtSelf(100); //the irony
         GetComponent<BoatMovementNetworked>().enabled = true;
         GetComponent<Buoyancy>().enabled = true;
         GetComponent<Rigidbody>().useGravity = true;

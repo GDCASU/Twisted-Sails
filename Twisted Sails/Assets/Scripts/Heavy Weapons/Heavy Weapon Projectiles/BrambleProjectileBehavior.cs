@@ -20,6 +20,7 @@ public class BrambleProjectileBehavior : InteractiveObject
     private float totalTime; //Amount of time it takes for projectile to complete journey
     private float distanceToTarget;
     private float newTime;
+    private bool isDestroying = false;
 
     private GameObject ownerObject;
 
@@ -52,7 +53,8 @@ public class BrambleProjectileBehavior : InteractiveObject
         else
             transform.position = ownerObject.transform.position + transform.forward * (1 + distFromBoat);
         transform.Rotate(Vector3.up, orbitSpeed * 360 * Time.deltaTime);
-        
+        if (isDestroying)
+            transform.localScale = transform.localScale * Time.deltaTime * 0.9f;
     }
     //Destroys the projectile
     private void ReturnToShipPos(){
@@ -98,6 +100,7 @@ public class BrambleProjectileBehavior : InteractiveObject
         GetComponent<Rigidbody>().velocity = Vector3.zero;
         gameObject.AddComponent<ParticleSystemAutoDestroy>();
         GetComponent<ParticleSystem>().Stop();
+        isDestroying = true;
     }
 
 

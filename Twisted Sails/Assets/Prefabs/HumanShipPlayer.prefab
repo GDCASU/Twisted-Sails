@@ -3565,7 +3565,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c488264ba8bdeb4daa77f82cc068bd3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speedCap: 13
+  speedCap: 10.5
 --- !u!114 &114093385506056574
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3645,7 +3645,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3b04c99c65830146aa3d4dd82a1cf09, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shipMaxSpeed: 13
+  shipMaxSpeed: 10.5
 --- !u!114 &114163866912426248
 MonoBehaviour:
   m_ObjectHideFlags: 1

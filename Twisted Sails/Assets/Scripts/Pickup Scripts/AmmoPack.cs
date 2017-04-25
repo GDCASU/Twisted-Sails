@@ -35,13 +35,12 @@ public class AmmoPack : InteractiveObject
 
         //send out the command to change the players health
         //setting the source of the healthpack to nothing, since no player is responsible
-        if (isServer)
+        if (isLocalPlayer)
         {
-            playerBoat.GetComponent<HeavyWeapon>().AddAmmo(ammoAmmount);
-            Destroy(gameObject);
-
+            playerBoat.GetComponent<HeavyWeapon>().CmdAddAmmo(ammoAmmount);
         }
-        
+
+        Destroy(gameObject);
     }
 
 }

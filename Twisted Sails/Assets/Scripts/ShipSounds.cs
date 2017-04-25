@@ -9,7 +9,8 @@ public class ShipSounds : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        transform.Find("ShipAmbient").GetComponent<AudioSource>().PlayDelayed(3);
+        if (IsLocalPlayer())
+            transform.Find("ShipAmbient").GetComponent<AudioSource>().PlayDelayed(3);
 	}
 
     void Update()
