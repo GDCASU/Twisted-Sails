@@ -4097,7 +4097,7 @@ MonoBehaviour:
   teamScores: 
   lobbyPrefab: {fileID: 1024232112829116, guid: a40aeac91e14e7c45a756cc922550a6a,
     type: 2}
-  inGameScene: MainLevel_Scoreboard
+  inGameScene: MainLevel_ExcelOrtega
   localConnectionId: 0
   playableShips:
   - {fileID: 1878329654681886, guid: 0630915ec55d17149b9cdf74f2268d46, type: 2}
