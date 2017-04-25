@@ -3665,7 +3665,7 @@ MonoBehaviour:
   weaponUseKey: 102
   coolDownTotalSeconds: 3
   startingAmmoAmount: 0
-  ammoCapacity: 3
+  ammoCapacity: 1
   ammoPerPack: 1
   ammoUsePerActivation: 1
   ammoPackTag: AmmoPack
@@ -4153,7 +4153,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   forwardsAcceleration: 350
-  backwardsAcceleration: 150
+  backwardsAcceleration: 250
   rotationalControl: 1
   speedBoostValue: 2
   speedBoost: 0
@@ -4333,6 +4333,8 @@ MonoBehaviour:
     type: 2}
   smokeParticle: {fileID: 0}
   powerupParticle: {fileID: 1148913017478370, guid: 45db977fa6b27d34396489ba94554c34,
+    type: 2}
+  invincibilityParticle: {fileID: 1709325362536704, guid: 4d841018637c07647b5132bc893b2d3b,
     type: 2}
 --- !u!114 &114966459754985838
 MonoBehaviour:

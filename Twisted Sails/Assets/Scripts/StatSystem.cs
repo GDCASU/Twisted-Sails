@@ -54,7 +54,7 @@ public class StatSystem : NetworkBehaviour
     private const float BASE_SPEED = 1.0f;
     
     private const float MOD_MIN = 0.0f;
-    private const float MOD_MAX = 3.0f;
+    private const float MOD_MAX = 1.0f;
 
     [Header("UI Variables")]
     public Slider attackBar;

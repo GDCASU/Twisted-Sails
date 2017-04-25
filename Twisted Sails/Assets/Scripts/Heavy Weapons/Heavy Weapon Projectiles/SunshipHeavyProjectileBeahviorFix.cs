@@ -11,6 +11,7 @@ public class SunshipHeavyProjectileBeahviorFix : InteractiveObject
     public float maxDistance = 1f;
     public float explodingScale; //How fast it explodes
     public int damageDealt;
+    public AudioClip explodeSound;
 
     private bool isExploding;
     private float explodingTimer = 0;
@@ -80,6 +81,7 @@ public class SunshipHeavyProjectileBeahviorFix : InteractiveObject
         GetComponent<Rigidbody>().isKinematic = true;
         GetComponent<Rigidbody>().velocity = Vector3.zero;
         GetComponent<Collider>().isTrigger = true;
+        GetComponent<AudioSource>().PlayOneShot(explodeSound,2);
     }
 
     private void DestroyPreserveParticles()

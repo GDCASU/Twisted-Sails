@@ -64,7 +64,7 @@ public class NetworkHUD : MonoBehaviour
             return;
         if (NetworkServer.active || manager.IsClientConnected())
         {
-            if (InputWrapper.GetKeyDown(KeyCode.X))
+            /*if (InputWrapper.GetKeyDown(KeyCode.X))
             {
                 if (NetworkServer.active)
                     manager.StopHost();

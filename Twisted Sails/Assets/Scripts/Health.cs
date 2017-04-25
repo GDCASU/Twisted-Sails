@@ -93,6 +93,7 @@ public class Health : NetworkBehaviour
     public GameObject deathParticle;
     public ParticleSystem smokeParticle;
     public GameObject powerupParticle;
+    public GameObject invincibilityParticle;
 
 
     private float respawnTimer;
@@ -443,6 +444,7 @@ public class Health : NetworkBehaviour
         GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
         transform.position = spawnPoint;
         transform.rotation = Quaternion.identity;
+        Instantiate(invincibilityParticle, transform.position, invincibilityParticle.transform.rotation, transform).GetComponent<ParticleSystem>();
         dead = false;
     }
 

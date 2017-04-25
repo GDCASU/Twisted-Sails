@@ -256,7 +256,7 @@ public class LobbyManager : NetworkBehaviour
         currentState = LobbyState.Preparing;
         shipSelectContainer.SetActive(false);
         preparingContainer.SetActive(true);
-        timer = 1;
+        timer = 10;
 
         List<Player> playerList = manager.playerList;
         int redIndex = 0;

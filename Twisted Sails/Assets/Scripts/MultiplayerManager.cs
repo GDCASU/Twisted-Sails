@@ -328,7 +328,7 @@ public class MultiplayerManager : NetworkManager
         Team[] teams = new Team[2];
         teams[0] = new Team("Red", Color.red, 0);
         teams[1] = new Team("Blue", Color.blue, 1);
-        currentGamemode = new TeamDeathmatch(teams, 30, 300);
+        currentGamemode = new TeamDeathmatch(teams, 30, 360);
         startPositionIndices = new int[currentGamemode.NumTeams()];
         for (int i = 0; i < currentGamemode.NumTeams(); i++)
             startPositionIndices[i] = 0;
