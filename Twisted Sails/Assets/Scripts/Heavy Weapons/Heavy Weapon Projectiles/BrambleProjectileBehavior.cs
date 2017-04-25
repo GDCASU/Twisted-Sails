@@ -20,6 +20,7 @@ public class BrambleProjectileBehavior : InteractiveObject
     private float totalTime; //Amount of time it takes for projectile to complete journey
     private float distanceToTarget;
     private float newTime;
+    private float currentSize = 1f;
     private bool isDestroying = false;
 
     private GameObject ownerObject;
@@ -40,7 +41,7 @@ public class BrambleProjectileBehavior : InteractiveObject
         else
             ownerObject = ClientScene.FindLocalObject(owner);
         //Debug.Log(distanceToTarget);
-        Invoke("DestroyPreserveParticles", lifeTime);
+        Invoke("KillMyself", lifeTime);
 	}
 
     // Update is called once per frame
@@ -50,18 +51,24 @@ public class BrambleProjectileBehavior : InteractiveObject
             goingOut = false;
         if (goingOut)
             transform.position = ownerObject.transform.position + transform.forward * (1 + distFromBoat * (newTime / travelTime));
-        else
+        else if (isDestroying)
+        {
+            transform.position = ownerObject.transform.position + transform.forward * (1 + distFromBoat * (1 - newTime / travelTime));
+            if (newTime > travelTime)
+                DestroyPreserveParticles();
+
+        } else
             transform.position = ownerObject.transform.position + transform.forward * (1 + distFromBoat);
         transform.Rotate(Vector3.up, orbitSpeed * 360 * Time.deltaTime);
-        if (isDestroying)
-            transform.localScale = transform.localScale * Time.deltaTime * 0.9f;
+        
     }
     //Destroys the projectile
     private void ReturnToShipPos(){
 		goingOut = false;
 	}
     private void KillMyself(){
-        DestroyPreserveParticles();
+        isDestroying = true;
+        newTime = 0;
     }
 
     //Detects collison with a player
@@ -71,7 +78,7 @@ public class BrambleProjectileBehavior : InteractiveObject
         //Debug Code - Debug.Log(other.gameObject.layer);
 
         if (other.gameObject.tag != "Player" && other.GetComponent<BrambleProjectileBehavior>() == null)
-            DestroyPreserveParticles();
+            KillMyself();
     }
 
     public override void OnInteractWithPlayerTrigger(Health playerHealth, GameObject playerBoat, StatusEffectsManager manager, Collider collider)
@@ -83,7 +90,7 @@ public class BrambleProjectileBehavior : InteractiveObject
         //send out the command to change the players health
         //setting the source of the health change to be the owner of this cannonball
         playerHealth.ChangeHealth(healthChange, owner);
-        DestroyPreserveParticles();
+        KillMyself();
     }
 
     public override bool DoesDestroyInInteract()
@@ -100,7 +107,6 @@ public class BrambleProjectileBehavior : InteractiveObject
         GetComponent<Rigidbody>().velocity = Vector3.zero;
         gameObject.AddComponent<ParticleSystemAutoDestroy>();
         GetComponent<ParticleSystem>().Stop();
-        isDestroying = true;
     }
 
 
