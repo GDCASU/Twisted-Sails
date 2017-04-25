@@ -71,10 +71,10 @@ public class NetworkHUD : MonoBehaviour
                 else
                     manager.StopClient();
             }
-            if (InputWrapper.GetKey(KeyCode.Tab) && !MultiplayerManager.IsLobby())
+            /*if (InputWrapper.GetKey(KeyCode.Tab) && !MultiplayerManager.IsLobby())
                 showScoreboard = true;
             else
-                showScoreboard = false;
+                showScoreboard = false;*/
         }
         if (messageTimer > 0)
         {
