@@ -11,6 +11,7 @@ public class BrambleProjectileBehavior : InteractiveObject
     public float distFromBoat = 5f;
     public float orbitSpeed = 0.25f;
     public float speed = 1f;
+    public float lifeTime = 10f;
     public int damageDealt;
 
     private Vector3 brambleTarget; //Farthest point
@@ -37,8 +38,8 @@ public class BrambleProjectileBehavior : InteractiveObject
             ownerObject = NetworkServer.FindLocalObject(owner);
         else
             ownerObject = ClientScene.FindLocalObject(owner);
-		//Debug.Log(distanceToTarget);
-	
+        //Debug.Log(distanceToTarget);
+        Invoke("DestroyPreserveParticles", lifeTime);
 	}
 
     // Update is called once per frame
