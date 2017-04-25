@@ -64,17 +64,17 @@ public class NetworkHUD : MonoBehaviour
             return;
         if (NetworkServer.active || manager.IsClientConnected())
         {
-            if (InputWrapper.GetKeyDown(KeyCode.X))
+            /*if (InputWrapper.GetKeyDown(KeyCode.X))
             {
                 if (NetworkServer.active)
                     manager.StopHost();
                 else
                     manager.StopClient();
             }
-            if (InputWrapper.GetKey(KeyCode.Tab) && !MultiplayerManager.IsLobby())
+            /*if (InputWrapper.GetKey(KeyCode.Tab) && !MultiplayerManager.IsLobby())
                 showScoreboard = true;
             else
-                showScoreboard = false;
+                showScoreboard = false;*/
         }
         if (messageTimer > 0)
         {

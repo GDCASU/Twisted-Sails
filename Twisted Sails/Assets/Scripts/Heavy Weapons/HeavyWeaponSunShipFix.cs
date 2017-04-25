@@ -111,8 +111,8 @@ public class HeavyWeaponSunShipFix : HeavyWeapon {
     override protected void ActivateWeapon()
 	{
         /// calculate end position from max range and position at activation
-		weaponStartingPosition = this.transform.position;
-		weaponVelocity = transform.forward * projectileSpeed;
+		weaponStartingPosition = transform.position + transform.forward * 5;
+        weaponVelocity = transform.forward * projectileSpeed + GetComponent<Rigidbody>().velocity;
 
         //  modify velocity with weaponVelocity
         base.ActivateWeapon();

@@ -13,7 +13,11 @@ using UnityEngine.Networking;
 //Programmer:Pablo Camacho
 //Date:04/21/17
 //Description: Added change that adds cursor fix to multiplayer manager game end scene. Keeps cursor visible and unlocked.
+//Date: 04/22/17
+//Description: Fixed bug that caused game not to start after exiting to main menu. Used SceneManager.getActiveScene.name
+// in place of Application.loadedLevel 
 
+ 
 public class PauseGame : MonoBehaviour 
 {
 	//reference to pause menu canvas
@@ -54,7 +58,7 @@ public class PauseGame : MonoBehaviour
 		//if game is paused
 		if(gamePaused)
 		{
-			 Debug.Log("Game End Cursor Fix called! \n;");
+			 //Debug.Log("Game End Cursor Fix called! \n;");
 			 //show cursor and unlock it
 			 Cursor.visible = true;
 			 Cursor.lockState = CursorLockMode.None;
@@ -64,8 +68,7 @@ public class PauseGame : MonoBehaviour
 	void InitPlayerCameraPauseBool()
 	{
 		//If current scene is in MainLevel_PabloCamacho or MainLevel
-		if(Application.loadedLevelName == "MainLevel_PabloCamacho" ||
-			Application.loadedLevelName == "MainLevel")
+		if(SceneManager.GetActiveScene().name.Contains("MainLevel") && MultiplayerManager.IsClient())
 		{
 			
 			//get reference to player component BoatMovementNetworked
@@ -80,7 +83,7 @@ public class PauseGame : MonoBehaviour
 	{
 		
 		//if p button is pressed down
-		if(Input.GetKeyDown(KeyCode.P))
+		if(Input.GetKeyDown(KeyCode.Escape))
 		{	
 			//if canvas is not active, make it active
 			if(pauseMenuCanvas.gameObject.activeInHierarchy == false)
@@ -121,7 +124,7 @@ public class PauseGame : MonoBehaviour
 	private void InitPauseMenu()
 	{
 		//If current scene is in MainLevel_PabloCamacho
-			if(Application.loadedLevelName == "MainLevel_PabloCamacho")
+			if(SceneManager.GetActiveScene().name == "MainLevel_PabloCamacho")
 			{
 				//get array of root game objects in Scene MainLevel_PabloCamacho
 				GameObject[] rootGameObjectsOfMainLevelScene = SceneManager.GetSceneByName("MainLevel_PabloCamacho").GetRootGameObjects();
@@ -148,7 +151,7 @@ public class PauseGame : MonoBehaviour
 				}
 			}
 			//else if current scene is in MainLevel 
-			else if(Application.loadedLevelName == "MainLevel")
+			else if(SceneManager.GetActiveScene().name == "MainLevel")
 			{
 				//get array of root game objects in Scene MainLevel
 				GameObject[] rootGameObjectsOfMainLevelScene = SceneManager.GetSceneByName("MainLevel").GetRootGameObjects();

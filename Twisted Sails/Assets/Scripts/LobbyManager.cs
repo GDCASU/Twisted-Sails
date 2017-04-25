@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.Networking;
 using UnityEngine.UI;
+using System.Net;
+using System.Net.Sockets;
 
 // Developer:   Kyle Aycock
 // Date:        11/10/2016
@@ -43,6 +45,7 @@ public class LobbyManager : NetworkBehaviour
     public GameObject shipSelectContainer;
     public GameObject[] ShipSelectNameContainers;
     public GameObject lockButton;
+    public Toggle humanToggle;
     public Text shipTimer;
     public Text infoText;
 
@@ -56,6 +59,8 @@ public class LobbyManager : NetworkBehaviour
     public string hostName;
     public Sprite[] shipIcons;
 
+    public static LobbyManager instance;
+
     private MultiplayerManager manager;
     private float timer;
 
@@ -66,17 +71,12 @@ public class LobbyManager : NetworkBehaviour
         ShipSelect,
         Preparing
     }
-    public LobbyState currentState;
-
-
-    void Awake()
-    {
-        currentState = LobbyState.TeamSelect;
-    }
+    public LobbyState currentState = LobbyState.TeamSelect;
 
     // Use this for initialization
     void Start()
     {
+        instance = this;
         //Variable initialization
         manager = MultiplayerManager.GetInstance();
 
@@ -215,6 +215,7 @@ public class LobbyManager : NetworkBehaviour
                 ClientScene.FindLocalObject(p.objectId).SetActive(false);
             }
         }
+        humanToggle.isOn = true;
     }
 
     /// <summary>

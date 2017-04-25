@@ -20,7 +20,7 @@ public class HealthSpawnerFix : NetworkBehaviour
 
     private void SpawnHealthPack()
     {
-        Debug.Log(spawnedPack);
+        //Debug.Log(spawnedPack);
         if (spawnedPack == null)
         {
             spawnedPack = Instantiate(healthPackPrefab, transform.position, Quaternion.Euler(-90, 0, 0));

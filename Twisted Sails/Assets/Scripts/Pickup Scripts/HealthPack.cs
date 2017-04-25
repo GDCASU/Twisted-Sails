@@ -13,23 +13,15 @@ public class HealthPack : InteractiveObject
 	public MeshRenderer packMesh;
 	public Collider packCollider;
 
-	private void Start()
-	{
-		if (packMesh == null)
-		{
-			packMesh = GetComponent<MeshRenderer>();
-			packCollider = GetComponent<Collider>();
-        }
-	}
-
 	IEnumerator MyCoroutine()
 	{
 		yield return new WaitForSeconds (packRespawnTime);
-		packMesh.enabled = true;
-		packCollider.enabled = true;
+
+        packMesh.enabled = true;
+        packCollider.enabled = true;
 	}
 
-	public override void OnInteractWithPlayer(Health playerHealth, GameObject playerBoat, StatusEffectsManager manager, Collision collision)
+	public override void OnInteractWithPlayerTrigger(Health playerHealth, GameObject playerBoat, StatusEffectsManager manager, Collider collider)
 	{
 		//notifies the player events system that the player who interacted with this object picked up a health pack (this object)
 		//also sets isHealthPack to true, since this is a health pack
@@ -48,10 +40,12 @@ public class HealthPack : InteractiveObject
             playerBoat.transform.Find("ShipSounds").Find("HealthPickupVO").GetComponent<AudioSource>().Play();
         }
 
+        Instantiate(playerHealth.powerupParticle, playerBoat.transform).transform.localPosition = Vector3.zero;
+
         playerBoat.transform.Find("ShipSounds").Find("HealthPickup").GetComponent<AudioSource>().Play();
 
         packMesh.enabled = false;
-		packCollider.enabled = false;
+        packCollider.enabled = false;
 		StartCoroutine(MyCoroutine());
 	}
 

@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using UnityEngine.Networking;
 
 // Developer:   Kyle Aycock
 // Date:        11/10/2016
@@ -36,8 +37,8 @@ public class TitleScreenInput : MonoBehaviour
     void Start()
     {
         MultiplayerManager mm = MultiplayerManager.GetInstance();
-        SaveLoad.Load();
-        if (Game.current != null)
+        
+        if (SaveLoad.Load())
         {
             mm.localPlayerName = Game.current.name;
             mm.networkAddress = Game.current.IPaddress;
@@ -119,13 +120,15 @@ public class TitleScreenInput : MonoBehaviour
     //This is hooked to the Host Server button
     public void StartHost()
     {
-        MultiplayerManager.GetInstance().StartHost();
+        if(!NetworkServer.active)
+            MultiplayerManager.GetInstance().StartHost();
     }
 
     //This is hooked to the Join Server button
     public void StartClient()
     {
-        MultiplayerManager.GetInstance().StartClient();
+        if(!NetworkClient.active)
+            MultiplayerManager.GetInstance().StartClient();
     }
 
     //This is called when changes to the Server IP field are submitted

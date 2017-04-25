@@ -3,6 +3,8 @@ using System.Collections;
 using UnityEngine.Networking;
 using System.Collections.Generic;
 using System;
+using System.Net;
+using System.Net.Sockets;
 
 // Developer: Kyle Aycock
 // Date: 11/3/2016
@@ -116,15 +118,17 @@ public class MultiplayerManager : NetworkManager
 
     void Update()
     {
-        if (networkSceneName.Equals(inGameScene) && NetworkServer.active)
-        {
-            if (gameRestartTimer <= 0)
+        if (networkSceneName.Equals(inGameScene)) {
+            currentGamemode.Update();
+            if (NetworkServer.active)
             {
-                currentGamemode.Update();
-                CheckEndGame();
+                if (gameRestartTimer <= 0)
+                {
+                    CheckEndGame();
+                }
+                else
+                    CheckRestartGame();
             }
-            else
-                CheckRestartGame();
         }
     }
 
@@ -189,7 +193,10 @@ public class MultiplayerManager : NetworkManager
     /// <returns>The local Player object.</returns>
     public static Player GetLocalPlayer()
     {
-        return FindPlayer(GetLocalClient().connection.connectionId);
+        NetworkClient client = GetLocalClient();
+        if(client != null)
+            return FindPlayer(client.connection.connectionId);
+        return null;
     }
 
     /// <summary>
@@ -249,6 +256,22 @@ public class MultiplayerManager : NetworkManager
         return GetInstance().playerList.Find(p => p.objectId == shipId);
     }
 
+    public static string GetLocalIPAddress()
+    {
+        IPHostEntry host;
+        string localIP = "";
+        host = Dns.GetHostEntry(Dns.GetHostName());
+        foreach (IPAddress ip in host.AddressList)
+        {
+            if (ip.AddressFamily == AddressFamily.InterNetwork)
+            {
+                localIP = ip.ToString();
+                break;
+            }
+        }
+        return localIP;
+    }
+
     /// <summary>
     /// Returns the current gamemode object.
     /// </summary>
@@ -305,7 +328,10 @@ public class MultiplayerManager : NetworkManager
         Team[] teams = new Team[2];
         teams[0] = new Team("Red", Color.red, 0);
         teams[1] = new Team("Blue", Color.blue, 1);
-        currentGamemode = new TeamDeathmatch(teams, 30, 300);
+        currentGamemode = new TeamDeathmatch(teams, 30, 360);
+        startPositionIndices = new int[currentGamemode.NumTeams()];
+        for (int i = 0; i < currentGamemode.NumTeams(); i++)
+            startPositionIndices[i] = 0;
     }
 
     //Timer to restart game
@@ -464,7 +490,7 @@ public class MultiplayerManager : NetworkManager
         //and get from that list the next unused start position, incrementing afterwards
         if (!teamStartPositions.ContainsKey(team)) return null;
         if (startPositionIndices[team] >= teamStartPositions[team].Count) return null;
-        return teamStartPositions[team][startPositionIndices[team]++];
+        return teamStartPositions[team][(startPositionIndices[team]++)%4];
     }
 
     public override void OnServerConnect(NetworkConnection conn)
@@ -505,12 +531,16 @@ public class MultiplayerManager : NetworkManager
         base.OnStopHost();
     }
 
+    public override void OnStartHost()
+    {
+        SetupGamemode();
+        base.OnStartHost();
+    }
+
     public override void OnServerSceneChanged(string sceneName)
     {
-        if (sceneName == inGameScene)
+        if (sceneName.Contains(inGameScene))
             GameStart();
-        else if (sceneName == offlineScene)
-            SetupGamemode();
         base.OnServerSceneChanged(sceneName);
     }
 
@@ -524,7 +554,7 @@ public class MultiplayerManager : NetworkManager
     //Convenience method for sending the current game state to all clients
     public void SendGameState()
     {
-        NetworkServer.SendToAll(ExtMsgType.State, new GameStateMessage(playerList, teamScores));
+        NetworkServer.SendToAll(ExtMsgType.State, new GameStateMessage(playerList, teamScores, ((TeamDeathmatch)GetCurrentGamemode()).timeRemaining));
     }
     #endregion
 
@@ -642,15 +672,17 @@ public class MultiplayerManager : NetworkManager
     {
         public List<Player> playerList;
         public int[] teamScores;
+        public float gamemodeTimeLeft;
 
         public GameStateMessage()
         {
         }
 
-        public GameStateMessage(List<Player> plyList, int[] scores)
+        public GameStateMessage(List<Player> plyList, int[] scores, float currentTime)
         {
             playerList = plyList;
             teamScores = scores;
+            gamemodeTimeLeft = currentTime;
         }
 
         public override void Serialize(NetworkWriter writer)
@@ -664,6 +696,7 @@ public class MultiplayerManager : NetworkManager
             {
                 player.Serialize(writer);
             }
+            writer.Write(gamemodeTimeLeft);
         }
 
         public override void Deserialize(NetworkReader reader)
@@ -681,6 +714,7 @@ public class MultiplayerManager : NetworkManager
                 player.Deserialize(reader);
                 playerList.Add(player);
             }
+            gamemodeTimeLeft = reader.ReadSingle();
         }
     }
 

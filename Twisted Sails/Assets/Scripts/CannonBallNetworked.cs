@@ -28,11 +28,11 @@ public class CannonBallNetworked : InteractiveObject {
 
 	public int damageDealt;
 	public float despawnDepth = -3f;
-	public float scaleFactor = 0.1f;
+	public float scaleFactor = 0.7f;
     public GameObject splashPrefab;
 	private static Vector3 initScale = Vector3.zero;
     private bool splashed;
-
+    public GameObject smoke;
 	public GameObject explosion;
 
 	//Set size of cannonball
@@ -43,6 +43,11 @@ public class CannonBallNetworked : InteractiveObject {
         AudioSource fireSound = GetComponent<AudioSource>();
         fireSound.pitch = Random.Range(0.6f, 1.4f);
         fireSound.Play();
+        GetComponent<Rigidbody>().AddForce(0, 3f, 0, ForceMode.VelocityChange);
+        if(isClient)
+        {
+            Instantiate(smoke, transform.position, smoke.transform.rotation, ClientScene.FindLocalObject(owner).transform).transform.LookAt(transform.position+GetComponent<Rigidbody>().velocity);
+        }
 	}
 
     //Set default scale of all cannonballs
