@@ -23,22 +23,16 @@ public class AmmoPack : InteractiveObject
         //also sets isHealthPack to true, since this is a health pack
         Player.ActivateEventPlayerPickup(MultiplayerManager.FindPlayer(playerBoat.GetComponent<NetworkIdentity>().netId), true);
         
-        //play sounds
+        //play sounds and send command for ammo
         if (MultiplayerManager.GetLocalPlayer() != null && MultiplayerManager.GetLocalPlayer().objectId == playerBoat.GetComponent<NetworkIdentity>().netId)
         {
             playerBoat.transform.Find("ShipSounds").Find("AmmoPickupVO").GetComponent<AudioSource>().Play();
+            playerBoat.GetComponent<HeavyWeapon>().CmdAddAmmo(ammoAmmount);
         }
 
         Instantiate(playerHealth.powerupParticle, playerBoat.transform).transform.localPosition = Vector3.zero;
 
         playerBoat.transform.Find("ShipSounds").Find("AmmoPickup").GetComponent<AudioSource>().Play();
-
-        //send out the command to change the players health
-        //setting the source of the healthpack to nothing, since no player is responsible
-        if (isLocalPlayer)
-        {
-            playerBoat.GetComponent<HeavyWeapon>().CmdAddAmmo(ammoAmmount);
-        }
 
         Destroy(gameObject);
     }
