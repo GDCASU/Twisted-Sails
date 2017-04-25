@@ -48,12 +48,12 @@ public static class SaveLoad
 
         BinaryFormatter bFormat = new BinaryFormatter();
         FileStream file = File.Create(Application.persistentDataPath + "/PlayerData.gd");
-
+        
         bFormat.Serialize(file, Game.current);
         file.Close();
     }
 
-    public static void Load()
+    public static bool Load()
     {
         if (File.Exists(Application.persistentDataPath + "/PlayerData.gd"))
         {
@@ -63,6 +63,12 @@ public static class SaveLoad
             Game data = (Game)bFormat.Deserialize(file);
             Game.current = data;
             file.Close();
+            return true;
+        }
+        else
+        {
+            Game.current = new Game();
+            return false;
         }
     }
 }

@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.Networking;
 using UnityEngine.UI;
+using System.Net;
+using System.Net.Sockets;
 
 // Developer:   Kyle Aycock
 // Date:        11/10/2016
@@ -43,6 +45,7 @@ public class LobbyManager : NetworkBehaviour
     public GameObject shipSelectContainer;
     public GameObject[] ShipSelectNameContainers;
     public GameObject lockButton;
+    public Toggle humanToggle;
     public Text shipTimer;
     public Text infoText;
 
@@ -212,6 +215,7 @@ public class LobbyManager : NetworkBehaviour
                 ClientScene.FindLocalObject(p.objectId).SetActive(false);
             }
         }
+        humanToggle.isOn = true;
     }
 
     /// <summary>

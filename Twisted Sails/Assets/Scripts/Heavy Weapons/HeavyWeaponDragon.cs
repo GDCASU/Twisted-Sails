@@ -18,7 +18,7 @@ using System.Collections;
 public class HeavyWeaponDragon: HeavyWeapon {
 
     // Use this for initialization
-    private int projectileSpeed = 50;
+    private int projectileSpeed = 80;
     private int projectileOffset = 5;
 
 	new void Start () {
@@ -105,9 +105,8 @@ public class HeavyWeaponDragon: HeavyWeapon {
     override protected void ActivateWeapon()
 	{
         weaponStartingPosition = transform.position + (transform.forward * projectileOffset) + transform.up;
-        weaponVelocity = transform.forward * projectileSpeed;
-        weaponPrefab.GetComponent<Rigidbody>().AddForce(weaponVelocity);
-        weaponPrefab.transform.localRotation = transform.localRotation;
+        weaponVelocity = transform.forward * projectileSpeed + GetComponent<Rigidbody>().velocity;
+        weaponRotation = transform.localRotation;
 
         base.ActivateWeapon();
 	}

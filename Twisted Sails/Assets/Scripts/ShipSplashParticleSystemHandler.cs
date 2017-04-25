@@ -88,7 +88,7 @@ public class ShipSplashParticleSystemHandler : MonoBehaviour
             splashPos.y = splashOffset + -2 * speedScale; //this is to keep the splash transform stationary relative to the boat since it's childed to the trail
             splash.transform.localPosition = splashPos;
 
-            if (trails.isPaused)
+            if (trails.isStopped)
                 trails.Play();
         }
         else

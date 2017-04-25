@@ -16,6 +16,6 @@ public class TurnWheel : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        transform.Rotate(Vector3.up * Time.deltaTime * (turnSpeed * movement.speed) * turnDirection, Space.Self);
+        transform.Rotate(Vector3.up * Time.deltaTime * (turnSpeed * movement.speed * (InputWrapper.GetKey(movement.backwardsKey) ? -1 : 1)) * turnDirection, Space.Self);
 	}
 }

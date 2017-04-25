@@ -71,6 +71,7 @@ public class BoatMovementNetworked : NetworkBehaviour
 	public float boatPropulsionPointOffset = -1f;
     public float speedStat = 1.0f; // Crew Management - Speed Crew
     public float speed;
+    public float cannonBallSpeedScale;
 
     //Boat Input
     public KeyCode forwardKey	    = KeyCode.W;
@@ -154,14 +155,14 @@ public class BoatMovementNetworked : NetworkBehaviour
                 }
             }
 
-            if (KeysDown.fireCannon)
+            if (KeysDown.fireCannon || Input.GetMouseButtonDown(0))
 			{
 				foreach (BroadsideCannonFireNetworked cScript in cannonScripts)
 				{
 					if (cScript.CanFire())
 					{
 						//Pass information to server and spawn cannonball on all cients
-						CmdFire(cScript.GetCannonBallPosition(), cScript.GetCannonBallVelocity());
+						CmdFire(cScript.GetCannonBallPosition(), cScript.GetCannonBallVelocity()*cannonBallSpeedScale);
 						cScript.ResetFireTimer();
 					}
 				}
@@ -205,10 +206,10 @@ public class BoatMovementNetworked : NetworkBehaviour
             if (speedBoost)
 				acceleration *= speedBoostValue;
 
-			Vector3 forceDirection = -transform.forward;
+            Vector3 forceOffset = -transform.right * (horizontalAxis * rotationalControl) + transform.forward * boatPropulsionPointOffset;
 
-			boat.AddForceAtPosition(forceDirection * acceleration, transform.position + transform.forward * boatPropulsionPointOffset, ForceMode.Acceleration);
-		}
+            boat.AddForceAtPosition(-transform.forward * acceleration, transform.position + forceOffset, ForceMode.Acceleration);
+        }
 
         //Asks the boat's attached swivel guns (if they exist) to update their rotations based on the rotation of the boat's camera
         if(swivelGunScripts.Count != 0 && isLocalPlayer)

@@ -18,6 +18,8 @@ using System.Collections;
 
 public class HeavyWeaponBramble : HeavyWeapon {
 
+    public int numProjectiles;
+
 	// Use this for initialization
 	new void Start () {
         base.Start();
@@ -106,13 +108,18 @@ public class HeavyWeaponBramble : HeavyWeapon {
     /// </summary>
     override protected void ActivateWeapon()
 	{
-		weaponStartingPosition = transform.position + transform.forward * 5;
-		//weaponVelocity = Vector3.back * 1;
+		weaponStartingPosition = transform.position;
+        //weaponVelocity = Vector3.back * 1;
 
         // ADD YOUR CODE HERE
         //  modify spawn position with weaponStartingPosition
         //  modify velocity with weaponVelocity
-        base.ActivateWeapon();
+
+        for (int i = 0; i < numProjectiles; i++)
+        {
+            weaponRotation = Quaternion.Euler(0,i*(360/numProjectiles),0);
+            base.ActivateWeapon();
+        }
 	}
 
     /// <summary>

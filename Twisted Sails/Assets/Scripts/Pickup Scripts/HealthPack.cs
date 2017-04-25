@@ -13,20 +13,12 @@ public class HealthPack : InteractiveObject
 	public MeshRenderer packMesh;
 	public Collider packCollider;
 
-	private void Start()
-	{
-		if (packMesh == null)
-		{
-			packMesh = GetComponent<MeshRenderer>();
-			packCollider = GetComponent<Collider>();
-        }
-	}
-
 	IEnumerator MyCoroutine()
 	{
 		yield return new WaitForSeconds (packRespawnTime);
-		packMesh.enabled = true;
-		packCollider.enabled = true;
+
+        packMesh.enabled = true;
+        packCollider.enabled = true;
 	}
 
 	public override void OnInteractWithPlayerTrigger(Health playerHealth, GameObject playerBoat, StatusEffectsManager manager, Collider collider)
@@ -53,7 +45,7 @@ public class HealthPack : InteractiveObject
         playerBoat.transform.Find("ShipSounds").Find("HealthPickup").GetComponent<AudioSource>().Play();
 
         packMesh.enabled = false;
-		packCollider.enabled = false;
+        packCollider.enabled = false;
 		StartCoroutine(MyCoroutine());
 	}
 

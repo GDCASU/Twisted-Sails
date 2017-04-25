@@ -86,17 +86,20 @@ public class Health : NetworkBehaviour
     [Header("Misc")]
     public KeyCode hurtSelfButton;
     public GameObject activeCamera;
-    
+    [SyncVar]
+    public float invincibleTime;
     public Vector3 spawnPoint; // NK 10/20 added original spawnpoint
     public float defenseStat; // Crew Management - Defense Crew
     public GameObject deathParticle;
     public ParticleSystem smokeParticle;
     public GameObject powerupParticle;
+    public GameObject invincibilityParticle;
 
 
     private float respawnTimer;
     private bool tilting;
     private bool gameOver;
+    private float currentInvincibleTimer;
 
     //Hooks are called automatically, usually there's no reason to manually call these hooks
     #region Hooks
@@ -116,6 +119,7 @@ public class Health : NetworkBehaviour
         activeCamera = Camera.main.gameObject;
         spawnPoint = transform.position;
         smokeParticle = transform.Find("Smoke").GetComponent<ParticleSystem>();
+        currentInvincibleTimer = 0;
 
         //Setting up health bars & nametags
         if (isLocalPlayer) //This is the local player's ship -- use the HUD healthbar
@@ -149,6 +153,8 @@ public class Health : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (currentInvincibleTimer > 0 && isServer)
+            currentInvincibleTimer -= Time.deltaTime;
         //Death effects/respawn timer
         if (dead)
         {
@@ -205,7 +211,8 @@ public class Health : NetworkBehaviour
 			{
 				//tell the interactive object about the interaction
 				//giving them this health, the boat this health is attached to, this boats status effect manager, and the collision that caused the interaction
-				interaction.OnInteractWithPlayer(this, gameObject, ourEffectsManager, collision);
+                if(isServer)
+				    interaction.OnInteractWithPlayer(this, gameObject, ourEffectsManager, collision);
 
 				//if we are the server, destroy the interactive object after the interaction
 				//if it says it is destroy after interactions
@@ -241,7 +248,8 @@ public class Health : NetworkBehaviour
 			{
 				//tell the interactive object about the interaction
 				//giving them this health, the boat this health is attached to, this boats status effect manager, and the collision that caused the interaction
-				interaction.OnInteractWithPlayerTrigger(this, gameObject, ourEffectsManager, collider);
+                if(isServer)
+				    interaction.OnInteractWithPlayerTrigger(this, gameObject, ourEffectsManager, collider);
 
 				//if we are the server, destroy the interactive object after the interaction
 				//if it says it is destroy after interactions
@@ -256,7 +264,7 @@ public class Health : NetworkBehaviour
 	//This method should not be called to change health, use CmdChangeHealth for that.
 	//This method is automatically called on each client when the health changes on the server (through CmdChangeHealth)
 	private void OnChangeHealth(float newHealth)
-    {
+    { 
         //play sound if this health change was negative
         if (newHealth < health)
         {
@@ -374,7 +382,7 @@ public class Health : NetworkBehaviour
     /// <param name="source">ID of the damage/heal source. Can be NetworkInstanceId.Invalid</param>
     public void ChangeHealth(float amount, NetworkInstanceId source)
     {
-        if (health == 0 && amount < 0) return; //don't register damage taken after death
+        if ((health == 0 || currentInvincibleTimer > 0) && amount < 0) return; //don't register damage taken after death or while invincible
 
         //Todo: add back in this functionality in the Stat System using an event hook for PlayerDamaged
         //amount *= defenseStat; // Multiplier effect for defense stat
@@ -410,6 +418,7 @@ public class Health : NetworkBehaviour
         GetComponent<Buoyancy>().enabled = false;
         GetComponent<Rigidbody>().useGravity = false;
         GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
+        GetComponent<Rigidbody>().velocity = Vector3.zero;
     }
 
     /// <summary>
@@ -420,12 +429,13 @@ public class Health : NetworkBehaviour
     {
         //The following code effectively "re-initializes" the boat to its original state
         //Re-enable normal boat scripts, disable death-related scripts, re-initialize positions, rotations, forces
+        currentInvincibleTimer = invincibleTime;
         if (isLocalPlayer)
         {
             activeCamera.GetComponent<BoatCameraNetworked>().enabled = true;
             activeCamera.GetComponent<OrbitalCamera>().enabled = false;
+            CmdHurtSelf(100); //the irony
         }
-        ChangeHealth(100, NetworkInstanceId.Invalid);
         GetComponent<BoatMovementNetworked>().enabled = true;
         GetComponent<Buoyancy>().enabled = true;
         GetComponent<Rigidbody>().useGravity = true;
@@ -434,7 +444,14 @@ public class Health : NetworkBehaviour
         GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
         transform.position = spawnPoint;
         transform.rotation = Quaternion.identity;
+        Instantiate(invincibilityParticle, transform.position, invincibilityParticle.transform.rotation, transform).GetComponent<ParticleSystem>();
         dead = false;
+    }
+
+    [Command]
+    public void CmdMarkInvincible()
+    {
+        currentInvincibleTimer = invincibleTime;
     }
     #endregion
 }

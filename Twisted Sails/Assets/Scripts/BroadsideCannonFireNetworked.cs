@@ -25,7 +25,7 @@ public class BroadsideCannonFireNetworked : MonoBehaviour
 {
 	
 	private float reloadTime = 0f;
-	public float fireDelay = 1f;
+	public float fireDelay = 1.5f;
 	public float projectileSpeed = 20f;
     public float attackStat = 1.0f; // Crew Management - Attack Crew
 

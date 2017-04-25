@@ -140,7 +140,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 6c57d55c345557f4182fb7405cbbfc7f, type: 3}
+  m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
@@ -222,8 +222,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ef834008acd04b47a26dd06d6673fba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  travelTime: 2
+  travelTime: 1.5
+  distFromBoat: 5
+  orbitSpeed: 0.25
   speed: 1
+  lifeTime: 8
   damageDealt: 25
 --- !u!114 &114263969213969390
 MonoBehaviour:
@@ -237,7 +240,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_TransformSyncMode: 3
-  m_SendInterval: 0.1
+  m_SendInterval: 0.05882353
   m_SyncRotationAxis: 7
   m_RotationSyncCompression: 0
   m_SyncSpin: 0
@@ -520,7 +523,7 @@ ParticleSystem:
       maxColor: {r: 1, g: 1, b: 1, a: 1}
       minMaxState: 0
     startSize:
-      scalar: 10
+      scalar: 7
       maxCurve:
         serializedVersion: 2
         m_Curve:

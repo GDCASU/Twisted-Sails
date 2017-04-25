@@ -1136,7 +1136,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1562678586662916}
   m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0.1, z: 0}
+  m_LocalPosition: {x: 0, y: 0.05, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4111574683499286}
@@ -1873,7 +1873,7 @@ BoxCollider:
   m_GameObject: {fileID: 1437031061467112}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
@@ -1888,7 +1888,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 13ceef56aa3332949a7b0fa9b882fdd2, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.5
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -2048,7 +2048,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: baa23efd165ff9940a6aa1de89e684af, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.5
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -2128,7 +2128,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 2cbd9254f5e3afa4e80f15b4f0c41e2a, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.5
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -2368,7 +2368,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: c605d8c5f23b8b544abede74f47ae814, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.5
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -2448,7 +2448,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: eb31730dea4ab2f489470be0d73c338f, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.5
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -2688,7 +2688,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 834d4fb14aa294142ad81dc7ad7c1aef, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.5
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -2933,14 +2933,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d96c63565d5fa664fb9ee29cfb3dceb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  forwardsAcceleration: 500
-  backwardsAcceleration: 50
+  forwardsAcceleration: 425
+  backwardsAcceleration: 250
   rotationalControl: 1
   speedBoostValue: 2
   speedBoost: 0
   boatPropulsionPointOffset: -1
   speedStat: 1
   speed: 0
+  cannonBallSpeedScale: 1
   forwardKey: 119
   backwardsKey: 115
   leftKey: 97
@@ -2994,15 +2995,17 @@ MonoBehaviour:
     type: 2}
   weaponStartingPosition: {x: 0, y: 0, z: 0}
   weaponVelocity: {x: 0, y: 0, z: 0}
+  weaponRotation: {x: 0, y: 0, z: 0, w: 0}
   weaponUseKey: 102
   coolDownTotalSeconds: 3
   startingAmmoAmount: 0
-  ammoCapacity: 3
+  ammoCapacity: 1
   ammoPerPack: 1
   ammoUsePerActivation: 1
   ammoPackTag: AmmoPack
   collectPacksWhileAtMaxAmmo: 1
-  addAmmoKey: 117
+  addAmmoKey: 0
+  numProjectiles: 5
 --- !u!114 &114292624532040872
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3144,6 +3147,7 @@ MonoBehaviour:
   attackStage: 0
   defenseStage: 0
   speedStage: 0
+  startCrew: 3
   attackButton: Attack Crew
   defenseButton: Defense Crew
   speedButton: Speed Crew
@@ -3319,7 +3323,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c488264ba8bdeb4daa77f82cc068bd3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speedCap: 13
+  speedCap: 11
 --- !u!114 &114590363237142764
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3360,7 +3364,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3b04c99c65830146aa3d4dd82a1cf09, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shipMaxSpeed: 14
+  shipMaxSpeed: 11
 --- !u!114 &114643573805107538
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3393,14 +3397,17 @@ MonoBehaviour:
   team: 0
   connectionId: 0
   dead: 0
-  hurtSelfButton: 107
+  hurtSelfButton: 0
   activeCamera: {fileID: 0}
+  invincibleTime: 5
   spawnPoint: {x: 0, y: 0, z: 0}
   defenseStat: 0
   deathParticle: {fileID: 1935981119970370, guid: 5244cd98b9f01cf459b72540264b4bef,
     type: 2}
   smokeParticle: {fileID: 0}
   powerupParticle: {fileID: 1148913017478370, guid: 45db977fa6b27d34396489ba94554c34,
+    type: 2}
+  invincibilityParticle: {fileID: 1709325362536704, guid: 4d841018637c07647b5132bc893b2d3b,
     type: 2}
 --- !u!114 &114757940285351072
 MonoBehaviour:
@@ -3666,7 +3673,7 @@ ParticleSystem:
   m_GameObject: {fileID: 1562678586662916}
   serializedVersion: 5
   lengthInSec: 1
-  speed: 1
+  simulationSpeed: 1
   looping: 1
   prewarm: 0
   playOnAwake: 1
@@ -3713,7 +3720,7 @@ ParticleSystem:
   moveWithTransform: 1
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 1
-  randomSeed: -255210960
+  randomSeed: -1464242886
   InitialModule:
     serializedVersion: 3
     enabled: 1
@@ -6303,7 +6310,7 @@ ParticleSystem:
   m_GameObject: {fileID: 1839074257633464}
   serializedVersion: 5
   lengthInSec: 5
-  speed: 1
+  simulationSpeed: 1
   looping: 1
   prewarm: 0
   playOnAwake: 0
@@ -8904,7 +8911,7 @@ ParticleSystem:
   m_GameObject: {fileID: 1128221953116164}
   serializedVersion: 5
   lengthInSec: 5
-  speed: 1
+  simulationSpeed: 1
   looping: 1
   prewarm: 0
   playOnAwake: 1
@@ -8951,7 +8958,7 @@ ParticleSystem:
   moveWithTransform: 1
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 1
-  randomSeed: 799156907
+  randomSeed: 1519862234
   InitialModule:
     serializedVersion: 3
     enabled: 1

@@ -228,6 +228,7 @@ MonoBehaviour:
   scaleFactor: 1
   splashPrefab: {fileID: 1000011780809054, guid: 67fb2972fe278384c8dacd728cd04bc6,
     type: 2}
+  smoke: {fileID: 1000011780809054, guid: dbdc81636d87a03429a98c507eea7218, type: 2}
   explosion: {fileID: 1000011769946516, guid: 8af0c4ff01de10c4a9980db85d6bf910, type: 2}
 --- !u!114 &114000013921448674
 MonoBehaviour:

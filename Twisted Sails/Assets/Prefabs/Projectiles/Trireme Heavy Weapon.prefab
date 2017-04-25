@@ -276,8 +276,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxDistance: 40
-  explodingScale: 1.5
-  damageDealt: 30
+  explodingScale: 0.5
+  damageDealt: 50
+  explodeSound: {fileID: 8300000, guid: b949bcc46ca47d14485f37ddf4e27d8b, type: 3}
 --- !u!122 &122485650544907036
 Halo:
   m_ObjectHideFlags: 1
@@ -296,10 +297,10 @@ SphereCollider:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1121449243814620}
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 1
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!198 &198943368935105328
 ParticleSystem:
