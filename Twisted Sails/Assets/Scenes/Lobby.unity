@@ -7796,7 +7796,7 @@ MonoBehaviour:
   - {fileID: 430115897}
   - {fileID: 1583695333}
   lockButton: {fileID: 1828466638}
-  humanToggle: {fileID: 0}
+  humanToggle: {fileID: 1420894032}
   shipTimer: {fileID: 430705569}
   infoText: {fileID: 985237027}
   preparingContainer: {fileID: 970344046}
