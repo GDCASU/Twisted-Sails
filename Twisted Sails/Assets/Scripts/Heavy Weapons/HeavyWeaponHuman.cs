@@ -105,7 +105,7 @@ public class HeavyWeaponHuman : HeavyWeapon
     /// </summary>
     override protected void ActivateWeapon()
 	{
-        projectileOffsetVector = transform.forward * 3 + transform.up;
+        projectileOffsetVector = transform.forward * 3;
 
         weaponStartingPosition = transform.position + projectileOffsetVector + transform.up;
         weaponVelocity = transform.forward * projectileSpeed + GetComponent<Rigidbody>().velocity;

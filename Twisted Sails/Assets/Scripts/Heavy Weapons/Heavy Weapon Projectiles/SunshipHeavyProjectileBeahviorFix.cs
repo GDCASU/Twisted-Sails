@@ -39,7 +39,7 @@ public class SunshipHeavyProjectileBeahviorFix : InteractiveObject
             if (explodingTimer > 0)
                 explodingTimer -= Time.deltaTime;
             if (explodingTimer <= 0)
-                Destroy(gameObject);
+                DestroyPreserveParticles();
         }
 
     }
@@ -49,6 +49,7 @@ public class SunshipHeavyProjectileBeahviorFix : InteractiveObject
         if (!isExploding)
             ExplodeObject();
     }
+
 
     public override void OnInteractWithPlayer(Health playerHealth, GameObject playerBoat, StatusEffectsManager manager, Collision collision)
     {
@@ -79,5 +80,16 @@ public class SunshipHeavyProjectileBeahviorFix : InteractiveObject
         GetComponent<Rigidbody>().isKinematic = true;
         GetComponent<Rigidbody>().velocity = Vector3.zero;
         GetComponent<Collider>().isTrigger = true;
+    }
+
+    private void DestroyPreserveParticles()
+    {
+        foreach (Renderer r in GetComponentsInChildren<Renderer>())
+            if (r.GetType() != typeof(ParticleSystemRenderer))
+                r.enabled = false;
+        GetComponent<Collider>().enabled = false;
+        GetComponent<Rigidbody>().velocity = Vector3.zero;
+        gameObject.AddComponent<ParticleSystemAutoDestroy>();
+        GetComponent<ParticleSystem>().Stop();
     }
 }

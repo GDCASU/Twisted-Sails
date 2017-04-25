@@ -8,6 +8,8 @@ public class BrambleProjectileBehavior : InteractiveObject
 
     //Variables to edit
     public float travelTime = 8f; //Amount of time it takes for projectile to hit the farthest point
+    public float distFromBoat = 5f;
+    public float orbitSpeed = 0.25f;
     public float speed = 1f;
     public int damageDealt;
 
@@ -26,11 +28,10 @@ public class BrambleProjectileBehavior : InteractiveObject
     private void Start () {
 		//Debug.Log ("Print Test");
 		totalTime = travelTime * 2;
-		Invoke ("ReturnToShipPos", travelTime);
-		Invoke ("KillMyself", totalTime);
+		//Invoke ("ReturnToShipPos", travelTime);
+		//Invoke ("KillMyself", totalTime);
 		brambleStart = GameObject.Find("BrambleShipPlayer(Clone)").transform.position;
 		brambleTarget = GameObject.Find("BrambleShipPlayer(Clone)/HWtarget").transform.position;
-		speed = distanceToTarget / travelTime;
 
         if (MultiplayerManager.IsServer())
             ownerObject = NetworkServer.FindLocalObject(owner);
@@ -42,19 +43,23 @@ public class BrambleProjectileBehavior : InteractiveObject
 
     // Update is called once per frame
     private void Update () {
+        newTime += Time.deltaTime*speed;
+        if (newTime > travelTime)
+            goingOut = false;
         if (goingOut)
-            newTime += Time.deltaTime;
+            transform.position = ownerObject.transform.position + transform.forward * (1 + distFromBoat * (newTime / travelTime));
         else
-            newTime -= Time.deltaTime;
-        transform.position = ownerObject.transform.position + transform.forward * (1 + 14 * (newTime / travelTime));
+            transform.position = ownerObject.transform.position + transform.forward * (1 + distFromBoat);
+        transform.Rotate(Vector3.up, orbitSpeed * 360 * Time.deltaTime);
+        
     }
     //Destroys the projectile
     private void ReturnToShipPos(){
 		goingOut = false;
 	}
     private void KillMyself(){
-		Destroy (gameObject);
-	}
+        DestroyPreserveParticles();
+    }
 
     //Detects collison with a player
     //Causes the projectile to go back to position if collide with non-player gameobject
@@ -63,8 +68,8 @@ public class BrambleProjectileBehavior : InteractiveObject
         //Debug Code - Debug.Log(other.gameObject.layer);
 
         if (other.gameObject.tag != "Player" && other.GetComponent<BrambleProjectileBehavior>() == null)
-            Destroy(gameObject);
-	}
+            DestroyPreserveParticles();
+    }
 
     public override void OnInteractWithPlayerTrigger(Health playerHealth, GameObject playerBoat, StatusEffectsManager manager, Collider collider)
     {
@@ -75,7 +80,24 @@ public class BrambleProjectileBehavior : InteractiveObject
         //send out the command to change the players health
         //setting the source of the health change to be the owner of this cannonball
         playerHealth.ChangeHealth(healthChange, owner);
-        Destroy(gameObject);
+        DestroyPreserveParticles();
     }
+
+    public override bool DoesDestroyInInteract()
+    {
+        return false;
+    }
+
+    private void DestroyPreserveParticles()
+    {
+        foreach (Renderer r in GetComponentsInChildren<Renderer>())
+            if (r.GetType() != typeof(ParticleSystemRenderer))
+                r.enabled = false;
+        GetComponent<Collider>().enabled = false;
+        GetComponent<Rigidbody>().velocity = Vector3.zero;
+        gameObject.AddComponent<ParticleSystemAutoDestroy>();
+        GetComponent<ParticleSystem>().Stop();
+    }
+
 
 }

@@ -85,6 +85,6 @@ public class HeavyWeaponUI : NetworkBehaviour
     //function to set cool down timer count to cool down timer value from playreHeavyWeapon
     void SetCoolDownTimerText()
     {
-        coolDownTimerText.text = playerHeavyWeapon.CoolDownTimer.ToString("0.#");
+        coolDownTimerText.text = (playerHeavyWeapon.CoolDownTimer > 0 ? playerHeavyWeapon.CoolDownTimer.ToString("0.#") : "0.0");
     }
 }

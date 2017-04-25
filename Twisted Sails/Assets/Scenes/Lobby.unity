@@ -4403,6 +4403,7 @@ MonoBehaviour:
   - {fileID: 1212009804}
   - {fileID: 1043840426}
   lockButton: {fileID: 2083651700}
+  humanToggle: {fileID: 465965843}
   shipTimer: {fileID: 1068384452}
   infoText: {fileID: 1714205356}
   preparingContainer: {fileID: 242185058}

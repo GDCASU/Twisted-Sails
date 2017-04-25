@@ -118,15 +118,17 @@ public class MultiplayerManager : NetworkManager
 
     void Update()
     {
-        currentGamemode.Update();
-        if (networkSceneName.Equals(inGameScene) && NetworkServer.active)
-        {
-            if (gameRestartTimer <= 0)
+        if (networkSceneName.Equals(inGameScene)) {
+            currentGamemode.Update();
+            if (NetworkServer.active)
             {
-                CheckEndGame();
+                if (gameRestartTimer <= 0)
+                {
+                    CheckEndGame();
+                }
+                else
+                    CheckRestartGame();
             }
-            else
-                CheckRestartGame();
         }
     }
 
@@ -529,12 +531,16 @@ public class MultiplayerManager : NetworkManager
         base.OnStopHost();
     }
 
+    public override void OnStartHost()
+    {
+        SetupGamemode();
+        base.OnStartHost();
+    }
+
     public override void OnServerSceneChanged(string sceneName)
     {
         if (sceneName.Contains(inGameScene))
             GameStart();
-        else if (sceneName.Equals(offlineScene))
-            SetupGamemode();
         base.OnServerSceneChanged(sceneName);
     }
 
@@ -548,7 +554,7 @@ public class MultiplayerManager : NetworkManager
     //Convenience method for sending the current game state to all clients
     public void SendGameState()
     {
-        NetworkServer.SendToAll(ExtMsgType.State, new GameStateMessage(playerList, teamScores));
+        NetworkServer.SendToAll(ExtMsgType.State, new GameStateMessage(playerList, teamScores, ((TeamDeathmatch)GetCurrentGamemode()).timeRemaining));
     }
     #endregion
 
@@ -666,15 +672,17 @@ public class MultiplayerManager : NetworkManager
     {
         public List<Player> playerList;
         public int[] teamScores;
+        public float gamemodeTimeLeft;
 
         public GameStateMessage()
         {
         }
 
-        public GameStateMessage(List<Player> plyList, int[] scores)
+        public GameStateMessage(List<Player> plyList, int[] scores, float currentTime)
         {
             playerList = plyList;
             teamScores = scores;
+            gamemodeTimeLeft = currentTime;
         }
 
         public override void Serialize(NetworkWriter writer)
@@ -688,6 +696,7 @@ public class MultiplayerManager : NetworkManager
             {
                 player.Serialize(writer);
             }
+            writer.Write(gamemodeTimeLeft);
         }
 
         public override void Deserialize(NetworkReader reader)
@@ -705,6 +714,7 @@ public class MultiplayerManager : NetworkManager
                 player.Deserialize(reader);
                 playerList.Add(player);
             }
+            gamemodeTimeLeft = reader.ReadSingle();
         }
     }
 

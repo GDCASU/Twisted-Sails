@@ -86,6 +86,7 @@ public class Health : NetworkBehaviour
     [Header("Misc")]
     public KeyCode hurtSelfButton;
     public GameObject activeCamera;
+    [SyncVar]
     public float invincibleTime;
     public Vector3 spawnPoint; // NK 10/20 added original spawnpoint
     public float defenseStat; // Crew Management - Defense Crew
@@ -151,7 +152,7 @@ public class Health : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (currentInvincibleTimer > 0)
+        if (currentInvincibleTimer > 0 && isServer)
             currentInvincibleTimer -= Time.deltaTime;
         //Death effects/respawn timer
         if (dead)
@@ -260,8 +261,7 @@ public class Health : NetworkBehaviour
 	//This method should not be called to change health, use CmdChangeHealth for that.
 	//This method is automatically called on each client when the health changes on the server (through CmdChangeHealth)
 	private void OnChangeHealth(float newHealth)
-    {
-        if (currentInvincibleTimer > 0) return;
+    { 
         //play sound if this health change was negative
         if (newHealth < health)
         {
@@ -379,7 +379,7 @@ public class Health : NetworkBehaviour
     /// <param name="source">ID of the damage/heal source. Can be NetworkInstanceId.Invalid</param>
     public void ChangeHealth(float amount, NetworkInstanceId source)
     {
-        if (health == 0 && amount < 0) return; //don't register damage taken after death
+        if ((health == 0 || currentInvincibleTimer > 0) && amount < 0) return; //don't register damage taken after death or while invincible
 
         //Todo: add back in this functionality in the Stat System using an event hook for PlayerDamaged
         //amount *= defenseStat; // Multiplier effect for defense stat
@@ -415,6 +415,7 @@ public class Health : NetworkBehaviour
         GetComponent<Buoyancy>().enabled = false;
         GetComponent<Rigidbody>().useGravity = false;
         GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
+        GetComponent<Rigidbody>().velocity = Vector3.zero;
     }
 
     /// <summary>
@@ -431,7 +432,7 @@ public class Health : NetworkBehaviour
             activeCamera.GetComponent<BoatCameraNetworked>().enabled = true;
             activeCamera.GetComponent<OrbitalCamera>().enabled = false;
         }
-        ChangeHealth(100, NetworkInstanceId.Invalid);
+        CmdHurtSelf(100); //the irony
         GetComponent<BoatMovementNetworked>().enabled = true;
         GetComponent<Buoyancy>().enabled = true;
         GetComponent<Rigidbody>().useGravity = true;
@@ -441,6 +442,12 @@ public class Health : NetworkBehaviour
         transform.position = spawnPoint;
         transform.rotation = Quaternion.identity;
         dead = false;
+    }
+
+    [Command]
+    public void CmdMarkInvincible()
+    {
+        currentInvincibleTimer = invincibleTime;
     }
     #endregion
 }

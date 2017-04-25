@@ -207,7 +207,7 @@ public class CrewManagementThreeStage : NetworkBehaviour
         defenseStage = CREW_MIN;
         speedStage = CREW_MIN;
         
-        crewCount = CREW_MAX - 1;
+        crewCount = startCrew;
         crewText.text = "Available Crew: " + crewCount;
         cooldownTimer = 0;
     }
