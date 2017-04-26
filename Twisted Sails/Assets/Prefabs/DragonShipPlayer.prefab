@@ -4312,8 +4312,8 @@ MonoBehaviour:
   weaponRotation: {x: 0, y: 0, z: 0, w: 0}
   weaponUseKey: 102
   coolDownTotalSeconds: 3
-  startingAmmoAmount: 3
-  ammoCapacity: 3
+  startingAmmoAmount: 0
+  ammoCapacity: 1
   ammoPerPack: 1
   ammoUsePerActivation: 1
   ammoPackTag: AmmoPack

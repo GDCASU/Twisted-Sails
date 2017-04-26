@@ -15,7 +15,7 @@ public class HealthSpawnerFix : NetworkBehaviour
 
     public override void OnStartServer()
     {
-        //InvokeRepeating("SpawnHealthPack", respawnTime, respawnTime);
+        InvokeRepeating("SpawnHealthPack", respawnTime, respawnTime);
     }
 
     private void SpawnHealthPack()
