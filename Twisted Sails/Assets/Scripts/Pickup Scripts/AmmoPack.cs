@@ -27,8 +27,11 @@ public class AmmoPack : InteractiveObject
         if (MultiplayerManager.GetLocalPlayer() != null && MultiplayerManager.GetLocalPlayer().objectId == playerBoat.GetComponent<NetworkIdentity>().netId)
         {
             playerBoat.transform.Find("ShipSounds").Find("AmmoPickupVO").GetComponent<AudioSource>().Play();
-            playerBoat.GetComponent<HeavyWeapon>().CmdAddAmmo(ammoAmmount);
+            //Debug.Log(MultiplayerManager.GetLocalPlayer().name);
+            
         }
+
+        playerBoat.GetComponent<HeavyWeapon>().AddAmmo(ammoAmmount);
 
         Instantiate(playerHealth.powerupParticle, playerBoat.transform).transform.localPosition = Vector3.zero;
 
