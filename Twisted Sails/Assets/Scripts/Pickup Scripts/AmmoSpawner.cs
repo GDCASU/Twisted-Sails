@@ -14,7 +14,7 @@ public class AmmoSpawner : NetworkBehaviour
 
     public override void OnStartServer()
     {
-        InvokeRepeating("SpawnAmmoPack", respawnTime, respawnTime);
+        //InvokeRepeating("SpawnAmmoPack", respawnTime, respawnTime);
     }
 
     private void SpawnAmmoPack()
