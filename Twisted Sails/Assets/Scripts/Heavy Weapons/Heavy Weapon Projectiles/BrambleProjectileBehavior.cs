@@ -7,20 +7,15 @@ public class BrambleProjectileBehavior : InteractiveObject
 {
 
     //Variables to edit
-    public float travelTime = 8f; //Amount of time it takes for projectile to hit the farthest point
+    public float travelTime = 8f;
     public float distFromBoat = 5f;
     public float orbitSpeed = 0.25f;
     public float speed = 1f;
     public float lifeTime = 10f;
     public int damageDealt;
 
-    private Vector3 brambleTarget; //Farthest point
-    private Vector3 brambleStart; //Point projectile was shot from
     private bool goingOut = true; //Is projectile going towards target location
-    private float totalTime; //Amount of time it takes for projectile to complete journey
-    private float distanceToTarget;
     private float newTime;
-    private float currentSize = 1f;
     private bool isDestroying = false;
 
     private GameObject ownerObject;
@@ -29,18 +24,11 @@ public class BrambleProjectileBehavior : InteractiveObject
 
     // Use this for initialization
     private void Start () {
-		//Debug.Log ("Print Test");
-		totalTime = travelTime * 2;
-		//Invoke ("ReturnToShipPos", travelTime);
-		//Invoke ("KillMyself", totalTime);
-		brambleStart = GameObject.Find("BrambleShipPlayer(Clone)").transform.position;
-		brambleTarget = GameObject.Find("BrambleShipPlayer(Clone)/HWtarget").transform.position;
-
         if (MultiplayerManager.IsServer())
             ownerObject = NetworkServer.FindLocalObject(owner);
         else
             ownerObject = ClientScene.FindLocalObject(owner);
-        //Debug.Log(distanceToTarget);
+
         Invoke("KillMyself", lifeTime);
 	}
 
@@ -74,8 +62,6 @@ public class BrambleProjectileBehavior : InteractiveObject
     //Detects collison with a player
     //Causes the projectile to go back to position if collide with non-player gameobject
     private void OnTriggerEnter (Collider other) {
-        //Debug.Log ("Bramble Projectile: Collide");
-        //Debug Code - Debug.Log(other.gameObject.layer);
 
         if (other.gameObject.tag != "Player" && !other.isTrigger)
         {
@@ -91,9 +77,7 @@ public class BrambleProjectileBehavior : InteractiveObject
         base.OnInteractWithPlayerTrigger(playerHealth, playerBoat, manager, collider);
 
         int healthChange = -damageDealt;
-        //if this object is on the side of the player who owns this object
-        //send out the command to change the players health
-        //setting the source of the health change to be the owner of this cannonball
+
         playerHealth.ChangeHealth(healthChange, owner);
         KillMyself();
     }
