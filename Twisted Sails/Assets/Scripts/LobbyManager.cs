@@ -267,12 +267,12 @@ public class LobbyManager : NetworkBehaviour
             if (player.team == 0)
             {
                 redIcons[redIndex].transform.FindChild("Image").GetComponent<Image>().sprite = shipIcons[(short)player.ship];
-                redIcons[redIndex].transform.FindChild("Text").GetComponent<Text>().text = player.name;
+                redIcons[redIndex].GetComponentInChildren<Text>().text = player.name;
                 redIndex++;
             } else
             {
                 blueIcons[blueIndex].transform.FindChild("Image").GetComponent<Image>().sprite = shipIcons[(short)player.ship];
-                blueIcons[blueIndex].transform.FindChild("Text").GetComponent<Text>().text = player.name;
+                blueIcons[blueIndex].GetComponentInChildren<Text>().text = player.name;
                 blueIndex++;
             }
         }

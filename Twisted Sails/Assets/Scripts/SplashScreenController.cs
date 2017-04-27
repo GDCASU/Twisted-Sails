@@ -11,10 +11,19 @@ public class SplashScreenController : MonoBehaviour {
         ((MovieTexture)GetComponent<Image>().material.mainTexture).Play();
         StartCoroutine(ChangeSceneAfterTime(((MovieTexture)GetComponent<Image>().material.mainTexture).duration));
 	}
+
+    void Update()
+    {
+        if(InputWrapper.GetKeyDown(KeyCode.Escape))
+        {
+            StopCoroutine("ChangeSceneAfterTime");
+            SceneManager.LoadScene(1);
+        }
+    }
 	
 	IEnumerator ChangeSceneAfterTime(float time)
     {
         yield return new WaitForSeconds(time);
-        SceneManager.LoadScene("Title Screen");
+        SceneManager.LoadScene(1);
     }
 }

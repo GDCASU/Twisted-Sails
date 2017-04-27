@@ -84,7 +84,8 @@ public class CannonBallNetworked : InteractiveObject {
 		//if this object is on the side of the player who owns this object
 		//send out the command to change the players health
 		//setting the source of the health change to be the owner of this cannonball
-        playerHealth.ChangeHealth(healthChange, owner);
+        if(isServer)
+            playerHealth.ChangeHealth(healthChange, owner);
 
         //locally instantiates an explosion prefab at the site of the interaction for graphics
         GameObject explode = (GameObject)Instantiate(explosion, collision.contacts[0].point, Quaternion.identity);

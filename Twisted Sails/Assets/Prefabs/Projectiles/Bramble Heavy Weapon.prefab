@@ -222,12 +222,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ef834008acd04b47a26dd06d6673fba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  travelTime: 1.5
+  travelTime: 0.5
   distFromBoat: 5
   orbitSpeed: 0.25
-  speed: 1
+  speed: 2
   lifeTime: 8
-  damageDealt: 25
+  damageDealt: 15
 --- !u!114 &114263969213969390
 MonoBehaviour:
   m_ObjectHideFlags: 1

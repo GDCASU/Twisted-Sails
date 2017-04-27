@@ -58,9 +58,6 @@ public class TitleScreenInput : MonoBehaviour
     // Allows quitting by pressing ESC.
     void Update()
     {
-        if (InputWrapper.GetKeyDown(KeyCode.Escape))
-            QuitGame();
-
         //The following code was taken from http://answers.unity3d.com/questions/784526/46-ugui-select-next-inputfield-with-entertab.html
         //and exists solely to allow tabbing between input fields on the title screen. Whew!
         if (InputWrapper.GetKeyDown(KeyCode.Tab))

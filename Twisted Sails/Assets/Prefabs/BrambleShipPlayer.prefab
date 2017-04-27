@@ -2965,7 +2965,7 @@ MonoBehaviour:
   ammoPackTag: AmmoPack
   collectPacksWhileAtMaxAmmo: 1
   addAmmoKey: 0
-  numProjectiles: 5
+  numProjectiles: 8
 --- !u!114 &114292624532040872
 MonoBehaviour:
   m_ObjectHideFlags: 1

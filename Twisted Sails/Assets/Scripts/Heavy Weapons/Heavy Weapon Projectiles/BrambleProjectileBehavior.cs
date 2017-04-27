@@ -35,18 +35,19 @@ public class BrambleProjectileBehavior : InteractiveObject
     // Update is called once per frame
     private void Update () {
         newTime += Time.deltaTime*speed;
+        Vector3 origin = ownerObject.transform.position + transform.up;
         if (newTime > travelTime)
             goingOut = false;
         if (goingOut)
-            transform.position = ownerObject.transform.position + transform.forward * (1 + distFromBoat * (newTime / travelTime));
+            transform.position = origin + transform.forward * (1 + distFromBoat * (newTime / travelTime));
         else if (isDestroying)
         {
-            transform.position = ownerObject.transform.position + transform.forward * (1 + distFromBoat * (1 - newTime / travelTime));
+            transform.position = origin + transform.forward * (1 + distFromBoat * (1 - newTime / travelTime));
             if (newTime > travelTime)
                 DestroyPreserveParticles();
 
         } else
-            transform.position = ownerObject.transform.position + transform.forward * (1 + distFromBoat);
+            transform.position = origin + transform.forward * (1 + distFromBoat);
         transform.Rotate(Vector3.up, orbitSpeed * 360 * Time.deltaTime);
         
     }
@@ -65,11 +66,17 @@ public class BrambleProjectileBehavior : InteractiveObject
 
         if (other.gameObject.tag != "Player" && !other.isTrigger)
         {
-            Debug.Log(other.gameObject.name);
-            DestroyPreserveParticles();
+            if (other.gameObject.tag == "Cannonball")
+            {
+                if (other.GetComponent<InteractiveObject>().owner != owner)
+                    Destroy(other.gameObject);
+            }
+            else
+            {
+                Debug.Log(other.gameObject.name);
+                DestroyPreserveParticles();
+            }
         }
-        if (other.gameObject.tag == "Cannonball")
-            Destroy(other.gameObject);
     }
 
     public override void OnInteractWithPlayerTrigger(Health playerHealth, GameObject playerBoat, StatusEffectsManager manager, Collider collider)
@@ -79,7 +86,7 @@ public class BrambleProjectileBehavior : InteractiveObject
         int healthChange = -damageDealt;
 
         playerHealth.ChangeHealth(healthChange, owner);
-        KillMyself();
+        DestroyPreserveParticles();
     }
 
     public override bool DoesDestroyInInteract()

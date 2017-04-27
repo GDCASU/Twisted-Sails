@@ -76,6 +76,11 @@ public class PlayerIconController : NetworkBehaviour
         DoChangeShip((Ship)playerShip);
         DoChangeTeam(playerTeam);
         OnNameChange(playerName);
+
+        if (playerTeam == 0)
+            lobby.redTeam.parent.GetComponent<Button>().Select();
+        else
+            lobby.blueTeam.parent.GetComponent<Button>().Select();
     }
 
     /// <summary>
