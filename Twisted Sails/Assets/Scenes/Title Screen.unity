@@ -444,9 +444,9 @@ RectTransform:
   m_Father: {fileID: 1810104127}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.29786035, y: 0.5352275}
-  m_AnchorMax: {x: 0.5, y: 0.582}
-  m_AnchoredPosition: {x: 0, y: -51.8}
+  m_AnchorMin: {x: 0.5172738, y: 0.36943826}
+  m_AnchorMax: {x: 0.7374529, y: 0.42123473}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &162053443
@@ -473,8 +473,8 @@ MonoBehaviour:
     m_FontSize: 28
     m_FontStyle: 0
     m_BestFit: 1
-    m_MinSize: 2
-    m_MaxSize: 30
+    m_MinSize: 0
+    m_MaxSize: 60
     m_Alignment: 0
     m_AlignByGeometry: 0
     m_RichText: 1
@@ -1090,8 +1090,8 @@ RectTransform:
   m_Father: {fileID: 1810104127}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5172794, y: 0.89631045}
-  m_AnchorMax: {x: 0.67800003, y: 0.943}
+  m_AnchorMin: {x: 0.5172794, y: 0.89129746}
+  m_AnchorMax: {x: 0.67800003, y: 0.937987}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -1119,9 +1119,9 @@ MonoBehaviour:
     m_FontSize: 28
     m_FontStyle: 0
     m_BestFit: 1
-    m_MinSize: 2
-    m_MaxSize: 30
-    m_Alignment: 0
+    m_MinSize: 0
+    m_MaxSize: 60
+    m_Alignment: 3
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
@@ -1460,8 +1460,8 @@ RectTransform:
   m_Father: {fileID: 146095398}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.015000001, y: 0.025515744}
-  m_AnchorMax: {x: 0.9861361, y: 0.1}
+  m_AnchorMin: {x: 0.040581904, y: 0.07294244}
+  m_AnchorMax: {x: 0.94728655, y: 0.1316178}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -1735,8 +1735,8 @@ RectTransform:
   m_Father: {fileID: 690530550}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: -10.750127}
-  m_AnchorMax: {x: 1, y: -0.7391267}
+  m_AnchorMin: {x: 0, y: -9.119089}
+  m_AnchorMax: {x: 1, y: -0.43330714}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -1764,15 +1764,15 @@ MonoBehaviour:
     m_FontSize: 18
     m_FontStyle: 0
     m_BestFit: 1
-    m_MinSize: 10
-    m_MaxSize: 40
+    m_MinSize: 0
+    m_MaxSize: 60
     m_Alignment: 0
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1.2
-  m_Text: 'Kyle Acock
+  m_Text: 'Kyle Aycock
 
     Ryan Black
 
@@ -2165,8 +2165,8 @@ RectTransform:
   m_Father: {fileID: 162053442}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: -5.9653893}
-  m_AnchorMax: {x: 1, y: -0.74281573}
+  m_AnchorMin: {x: 0, y: -4.5589843}
+  m_AnchorMax: {x: 1, y: -0.20935176}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -2194,8 +2194,8 @@ MonoBehaviour:
     m_FontSize: 18
     m_FontStyle: 0
     m_BestFit: 1
-    m_MinSize: 1
-    m_MaxSize: 40
+    m_MinSize: 0
+    m_MaxSize: 60
     m_Alignment: 0
     m_AlignByGeometry: 0
     m_RichText: 1
@@ -2248,8 +2248,8 @@ RectTransform:
   m_Father: {fileID: 1810104127}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.29786035, y: 0.89631045}
-  m_AnchorMax: {x: 0.5, y: 0.943}
+  m_AnchorMin: {x: 0.25356334, y: 0.8899821}
+  m_AnchorMax: {x: 0.4739843, y: 0.9393024}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -2277,9 +2277,9 @@ MonoBehaviour:
     m_FontSize: 28
     m_FontStyle: 0
     m_BestFit: 1
-    m_MinSize: 2
-    m_MaxSize: 40
-    m_Alignment: 0
+    m_MinSize: 0
+    m_MaxSize: 60
+    m_Alignment: 3
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
@@ -2776,8 +2776,8 @@ RectTransform:
   m_Father: {fileID: 1661277917}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.0918596, y: -18.330343}
-  m_AnchorMax: {x: 0.8001924, y: -0.5913014}
+  m_AnchorMin: {x: 0.0000018898286, y: -13.039955}
+  m_AnchorMax: {x: 1, y: -0.32002905}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -2806,16 +2806,40 @@ MonoBehaviour:
     m_FontStyle: 0
     m_BestFit: 1
     m_MinSize: 0
-    m_MaxSize: 30
+    m_MaxSize: 60
     m_Alignment: 0
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1.2
-  m_Text: "Joseph Cash\t\t\tGame Director\nTori Jackson\t\t\tProducer\nSean McGonegle\t\tDesign
-    Lead\nExcel Ortega\t\t\tArt Lead\nLeigh Moratin\t\t\tArt Lead\nNizar Kury\t\t\t\tProgramming
-    Lead\nKyle Chapman\t\t\tProgramming Lead"
+  m_Text: 'Game Director
+
+    Joseph Cash
+
+
+    Producer
+
+    Tori Jackson
+
+
+    Design Lead
+
+    Sean McGonegle
+
+
+    Art Leads
+
+    Excel Ortega
+
+    Leigh Moratin
+
+
+    Programming Leads
+
+    Nizar Kury
+
+    Kyle Chapman'
 --- !u!222 &807061059
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2881,8 +2905,8 @@ MonoBehaviour:
     m_FontSize: 26
     m_FontStyle: 0
     m_BestFit: 1
-    m_MinSize: 2
-    m_MaxSize: 40
+    m_MinSize: 0
+    m_MaxSize: 60
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
@@ -3052,8 +3076,8 @@ RectTransform:
   m_Father: {fileID: 1810104127}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.7141397, y: 0.89631045}
-  m_AnchorMax: {x: 0.857581, y: 0.943}
+  m_AnchorMin: {x: 0.74050516, y: 0.8913682}
+  m_AnchorMax: {x: 0.8839465, y: 0.9410507}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -3081,9 +3105,9 @@ MonoBehaviour:
     m_FontSize: 28
     m_FontStyle: 0
     m_BestFit: 1
-    m_MinSize: 2
-    m_MaxSize: 30
-    m_Alignment: 0
+    m_MinSize: 0
+    m_MaxSize: 60
+    m_Alignment: 3
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
@@ -3699,8 +3723,8 @@ RectTransform:
   m_Father: {fileID: 2094476397}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: -0.00051898276, y: -5.2533965}
-  m_AnchorMax: {x: 1.054493, y: -0.7465047}
+  m_AnchorMin: {x: -0.00051874976, y: -3.2892792}
+  m_AnchorMax: {x: 1.0544932, y: -0.28578585}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -3728,8 +3752,8 @@ MonoBehaviour:
     m_FontSize: 18
     m_FontStyle: 0
     m_BestFit: 1
-    m_MinSize: 1
-    m_MaxSize: 40
+    m_MinSize: 0
+    m_MaxSize: 60
     m_Alignment: 0
     m_AlignByGeometry: 0
     m_RichText: 1
@@ -4802,8 +4826,8 @@ MonoBehaviour:
     m_FontSize: 18
     m_FontStyle: 0
     m_BestFit: 1
-    m_MinSize: 10
-    m_MaxSize: 30
+    m_MinSize: 0
+    m_MaxSize: 60
     m_Alignment: 0
     m_AlignByGeometry: 0
     m_RichText: 1
@@ -5284,8 +5308,8 @@ RectTransform:
   m_Father: {fileID: 1810104127}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0.89631045}
-  m_AnchorMax: {x: 0.2841397, y: 0.943}
+  m_AnchorMin: {x: 0.023876533, y: 0.8834331}
+  m_AnchorMax: {x: 0.22387652, y: 0.9459929}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -5313,15 +5337,15 @@ MonoBehaviour:
     m_FontSize: 28
     m_FontStyle: 0
     m_BestFit: 1
-    m_MinSize: 2
-    m_MaxSize: 40
-    m_Alignment: 0
+    m_MinSize: 0
+    m_MaxSize: 60
+    m_Alignment: 3
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: '   Leads'
+  m_Text: Leads
 --- !u!222 &1661277919
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -5863,10 +5887,10 @@ RectTransform:
   m_Father: {fileID: 146095398}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.048, y: 0.053000003}
-  m_AnchorMax: {x: 0.9472865, y: 0.9187264}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: -2.5, y: -7.5}
+  m_SizeDelta: {x: -85, y: -95}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1810104128
 MonoBehaviour:
@@ -6368,7 +6392,7 @@ RectTransform:
   m_Father: {fileID: 914374056}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: -12.565154}
+  m_AnchorMin: {x: 0, y: -8.924821}
   m_AnchorMax: {x: 1, y: -0.7391267}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
@@ -6397,8 +6421,8 @@ MonoBehaviour:
     m_FontSize: 18
     m_FontStyle: 0
     m_BestFit: 1
-    m_MinSize: 1
-    m_MaxSize: 40
+    m_MinSize: 0
+    m_MaxSize: 60
     m_Alignment: 0
     m_AlignByGeometry: 0
     m_RichText: 1
@@ -6417,13 +6441,7 @@ MonoBehaviour:
 
     Brin Terry
 
-    Bryce Young
-
-
-
-
-
-'
+    Bryce Young'
 --- !u!222 &2047792405
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -6622,9 +6640,9 @@ RectTransform:
   m_Father: {fileID: 1810104127}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.51044136, y: 0.5352275}
-  m_AnchorMax: {x: 0.67800003, y: 0.582}
-  m_AnchoredPosition: {x: 1.6296, y: -13.554}
+  m_AnchorMin: {x: 0.7405051, y: 0.3694382}
+  m_AnchorMax: {x: 0.90806377, y: 0.42123467}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2094476398
@@ -6651,8 +6669,8 @@ MonoBehaviour:
     m_FontSize: 28
     m_FontStyle: 0
     m_BestFit: 1
-    m_MinSize: 2
-    m_MaxSize: 30
+    m_MinSize: 0
+    m_MaxSize: 60
     m_Alignment: 0
     m_AlignByGeometry: 0
     m_RichText: 1

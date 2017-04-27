@@ -89,6 +89,7 @@ public class Health : NetworkBehaviour
     [SyncVar]
     public float invincibleTime;
     public Vector3 spawnPoint; // NK 10/20 added original spawnpoint
+    public Quaternion spawnRotation;
     public float defenseStat; // Crew Management - Defense Crew
     public GameObject deathParticle;
     public ParticleSystem smokeParticle;
@@ -118,6 +119,7 @@ public class Health : NetworkBehaviour
         //Variable initialization
         activeCamera = Camera.main.gameObject;
         spawnPoint = transform.position;
+        spawnRotation = transform.rotation;
         smokeParticle = transform.Find("Smoke").GetComponent<ParticleSystem>();
         currentInvincibleTimer = 0;
 
@@ -442,7 +444,7 @@ public class Health : NetworkBehaviour
         GetComponent<Rigidbody>().velocity = Vector3.zero;
         GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
         transform.position = spawnPoint;
-        transform.rotation = Quaternion.identity;
+        transform.rotation = spawnRotation;
         Instantiate(invincibilityParticle, transform.position, invincibilityParticle.transform.rotation, transform).GetComponent<ParticleSystem>();
         dead = false;
     }

@@ -74,11 +74,16 @@ public class BrambleProjectileBehavior : InteractiveObject
     //Detects collison with a player
     //Causes the projectile to go back to position if collide with non-player gameobject
     private void OnTriggerEnter (Collider other) {
-		//Debug.Log ("Bramble Projectile: Collide");
+        //Debug.Log ("Bramble Projectile: Collide");
         //Debug Code - Debug.Log(other.gameObject.layer);
 
-        if (other.gameObject.tag != "Player" && other.GetComponent<BrambleProjectileBehavior>() == null)
-            KillMyself();
+        if (other.gameObject.tag != "Player" && !other.isTrigger)
+        {
+            Debug.Log(other.gameObject.name);
+            DestroyPreserveParticles();
+        }
+        if (other.gameObject.tag == "Cannonball")
+            Destroy(other.gameObject);
     }
 
     public override void OnInteractWithPlayerTrigger(Health playerHealth, GameObject playerBoat, StatusEffectsManager manager, Collider collider)
@@ -100,6 +105,7 @@ public class BrambleProjectileBehavior : InteractiveObject
 
     private void DestroyPreserveParticles()
     {
+        Debug.Log("Destroying bramble hw");
         foreach (Renderer r in GetComponentsInChildren<Renderer>())
             if (r.GetType() != typeof(ParticleSystemRenderer))
                 r.enabled = false;

@@ -19,7 +19,7 @@ public class AmmoSpawner : NetworkBehaviour
 
     private void SpawnAmmoPack()
     {
-        Debug.Log(spawnedPack);
+        //Debug.Log(spawnedPack);
         if (spawnedPack == null)
         {
             spawnedPack = Instantiate(ammoPackPrefab, transform.position, Quaternion.Euler(-90, 0, 0));
