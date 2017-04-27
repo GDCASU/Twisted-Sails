@@ -37,6 +37,8 @@ public class TitleScreenInput : MonoBehaviour
     void Start()
     {
         MultiplayerManager mm = MultiplayerManager.GetInstance();
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
         
         if (SaveLoad.Load())
         {
