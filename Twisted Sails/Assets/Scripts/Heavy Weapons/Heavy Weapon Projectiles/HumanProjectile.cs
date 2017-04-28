@@ -30,7 +30,7 @@ public class HumanProjectile : InteractiveObject {
 
     private void OnCollisionEnter(Collision other)
     {
-        if (other.gameObject.tag != "Player" && other.gameObject.GetComponent<HumanProjectile>() == null)
+        if (other.gameObject.GetComponent<HumanProjectile>() == null)
             DestroyPreserveParticles();
     }
 
