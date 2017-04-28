@@ -5532,6 +5532,21 @@ Prefab:
       propertyPath: packRespawnTime
       value: 45
       objectReference: {fileID: 0}
+    - target: {fileID: 65820838051037576, guid: c57f00819798082449fe1212958d01cd,
+        type: 2}
+      propertyPath: m_Size.z
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 65820838051037576, guid: c57f00819798082449fe1212958d01cd,
+        type: 2}
+      propertyPath: m_Size.x
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 65820838051037576, guid: c57f00819798082449fe1212958d01cd,
+        type: 2}
+      propertyPath: m_Size.y
+      value: 3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: c57f00819798082449fe1212958d01cd, type: 2}
   m_IsPrefabParent: 0
@@ -5978,6 +5993,21 @@ Prefab:
         type: 2}
       propertyPath: packRespawnTime
       value: 45
+      objectReference: {fileID: 0}
+    - target: {fileID: 65820838051037576, guid: c57f00819798082449fe1212958d01cd,
+        type: 2}
+      propertyPath: m_Size.z
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 65820838051037576, guid: c57f00819798082449fe1212958d01cd,
+        type: 2}
+      propertyPath: m_Size.y
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 65820838051037576, guid: c57f00819798082449fe1212958d01cd,
+        type: 2}
+      propertyPath: m_Size.x
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: c57f00819798082449fe1212958d01cd, type: 2}
@@ -29213,6 +29243,21 @@ Prefab:
         type: 2}
       propertyPath: packRespawnTime
       value: 45
+      objectReference: {fileID: 0}
+    - target: {fileID: 65820838051037576, guid: c57f00819798082449fe1212958d01cd,
+        type: 2}
+      propertyPath: m_Size.z
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 65820838051037576, guid: c57f00819798082449fe1212958d01cd,
+        type: 2}
+      propertyPath: m_Size.x
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 65820838051037576, guid: c57f00819798082449fe1212958d01cd,
+        type: 2}
+      propertyPath: m_Size.y
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: c57f00819798082449fe1212958d01cd, type: 2}
