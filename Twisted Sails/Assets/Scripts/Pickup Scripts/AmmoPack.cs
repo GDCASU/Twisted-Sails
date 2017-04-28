@@ -39,8 +39,8 @@ public class AmmoPack : InteractiveObject
             //Debug.Log(MultiplayerManager.GetLocalPlayer().name);
             
         }
-
-        playerBoat.GetComponent<HeavyWeapon>().AddAmmo(ammoAmmount);
+        if(isServer)
+            playerBoat.GetComponent<HeavyWeapon>().AddAmmo(ammoAmmount);
 
         Instantiate(playerHealth.powerupParticle, playerBoat.transform).transform.localPosition = Vector3.zero;
 

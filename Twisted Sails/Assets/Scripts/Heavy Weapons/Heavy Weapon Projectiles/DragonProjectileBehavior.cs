@@ -38,8 +38,7 @@ public class DragonProjectileBehavior : InteractiveObject {
 
     private void OnCollisionEnter(Collision other)
     {
-        if (other.gameObject.tag != "Player")
-            DestroyPreserveParticles();
+        DestroyPreserveParticles();
     }
 
     public override bool DoesDestroyInInteract()

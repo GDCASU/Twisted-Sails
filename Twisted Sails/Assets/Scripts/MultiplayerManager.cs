@@ -337,6 +337,10 @@ public class MultiplayerManager : NetworkManager
         startPositionIndices = new int[currentGamemode.NumTeams()];
         for (int i = 0; i < currentGamemode.NumTeams(); i++)
             startPositionIndices[i] = 0;
+        for (int i = 0; i < currentGamemode.NumTeams(); i++)
+        {
+            teamScores[i] = 0;
+        }
     }
 
     //Timer to restart game

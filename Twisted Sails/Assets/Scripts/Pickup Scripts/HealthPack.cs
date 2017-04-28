@@ -38,6 +38,8 @@ public class HealthPack : InteractiveObject
 
 	public override void OnInteractWithPlayerTrigger(Health playerHealth, GameObject playerBoat, StatusEffectsManager manager, Collider collider)
 	{
+        if (playerHealth.health >= 100) return;
+
 		//notifies the player events system that the player who interacted with this object picked up a health pack (this object)
 		//also sets isHealthPack to true, since this is a health pack
 		Player.ActivateEventPlayerPickup(MultiplayerManager.FindPlayer(playerBoat.GetComponent<NetworkIdentity>().netId), true);
