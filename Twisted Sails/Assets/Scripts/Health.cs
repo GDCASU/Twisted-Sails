@@ -86,7 +86,6 @@ public class Health : NetworkBehaviour
     [Header("Misc")]
     public KeyCode hurtSelfButton;
     public GameObject activeCamera;
-    [SyncVar]
     public float invincibleTime;
     public Vector3 spawnPoint; // NK 10/20 added original spawnpoint
     public Quaternion spawnRotation;
@@ -447,12 +446,6 @@ public class Health : NetworkBehaviour
         transform.rotation = spawnRotation;
         Instantiate(invincibilityParticle, transform.position, invincibilityParticle.transform.rotation, transform).GetComponent<ParticleSystem>();
         dead = false;
-    }
-
-    [Command]
-    public void CmdMarkInvincible()
-    {
-        currentInvincibleTimer = invincibleTime;
     }
     #endregion
 }
