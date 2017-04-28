@@ -395,7 +395,8 @@ public class Health : NetworkBehaviour
         if ((health == 0 || currentInvincibleTimer > 0) && amount < 0) return; //don't register damage taken after death or while invincible
 
         //Todo: add back in this functionality in the Stat System using an event hook for PlayerDamaged
-        amount *= defenseStat; // Multiplier effect for defense stat
+        if(amount < 0) //only for damage
+            amount *= defenseStat; // Multiplier effect for defense stat
 
         Player.ActivateEventPlayerDamaged(MultiplayerManager.FindPlayer(GetComponent<NetworkIdentity>().netId), MultiplayerManager.FindPlayer(source), ref amount);
         
