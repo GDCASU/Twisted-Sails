@@ -72,6 +72,10 @@ public class PlayerIconController : NetworkBehaviour
         if (isLocalPlayer)
         {
             CmdPlayerInit(connectionId);
+            if (playerTeam == 0)
+                lobby.redTeam.parent.GetComponent<Button>().Select();
+            else
+                lobby.blueTeam.parent.GetComponent<Button>().Select();
         }
         DoChangeShip((Ship)playerShip);
         DoChangeTeam(playerTeam);

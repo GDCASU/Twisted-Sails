@@ -57,14 +57,14 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1878608399054052}
-  m_LocalRotation: {x: 1, y: -0, z: -0, w: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4751397755233918}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 180, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4751397755233918
 Transform:
   m_ObjectHideFlags: 1
@@ -222,12 +222,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ef834008acd04b47a26dd06d6673fba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  travelTime: 1.5
+  travelTime: 0.75
   distFromBoat: 5
   orbitSpeed: 0.25
-  speed: 1
+  speed: 2
   lifeTime: 8
-  damageDealt: 25
+  damageDealt: 15
 --- !u!114 &114263969213969390
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -290,7 +290,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 1.5
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!198 &198442688968412096
 ParticleSystem:
@@ -347,7 +347,7 @@ ParticleSystem:
   moveWithTransform: 1
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 1
-  randomSeed: -1545428872
+  randomSeed: -1311402933
   InitialModule:
     serializedVersion: 3
     enabled: 1
@@ -523,7 +523,7 @@ ParticleSystem:
       maxColor: {r: 1, g: 1, b: 1, a: 1}
       minMaxState: 0
     startSize:
-      scalar: 7
+      scalar: 5
       maxCurve:
         serializedVersion: 2
         m_Curve:

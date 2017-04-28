@@ -108,7 +108,7 @@ public class HeavyWeaponBramble : HeavyWeapon {
     /// </summary>
     override protected void ActivateWeapon()
 	{
-		weaponStartingPosition = transform.position;
+		weaponStartingPosition = transform.position + Vector3.up;
         //weaponVelocity = Vector3.back * 1;
 
         // ADD YOUR CODE HERE

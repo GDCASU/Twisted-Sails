@@ -2,17 +2,28 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class SplashScreenController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        StartCoroutine(ChangeSceneAfterTime());
+        ((MovieTexture)GetComponent<Image>().material.mainTexture).Play();
+        StartCoroutine(ChangeSceneAfterTime(((MovieTexture)GetComponent<Image>().material.mainTexture).duration));
 	}
-	
-	IEnumerator ChangeSceneAfterTime()
+
+    void Update()
     {
-        yield return new WaitForSeconds(7);
-        SceneManager.LoadScene("Title Screen");
+        if(InputWrapper.GetKeyDown(KeyCode.Escape))
+        {
+            StopCoroutine("ChangeSceneAfterTime");
+            SceneManager.LoadScene(1);
+        }
+    }
+	
+	IEnumerator ChangeSceneAfterTime(float time)
+    {
+        yield return new WaitForSeconds(time);
+        SceneManager.LoadScene(1);
     }
 }

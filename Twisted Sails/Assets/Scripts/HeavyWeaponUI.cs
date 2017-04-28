@@ -40,8 +40,8 @@ public class HeavyWeaponUI : NetworkBehaviour
             UI = GameObject.FindGameObjectWithTag("CurrentAmmoUI");
             ammoCountValueText = UI.GetComponentInChildren<Text>();
             //locate text for max ammo in scene
-            UI = GameObject.FindGameObjectWithTag("MaxAmmoUI");
-            ammoMaxValueText = UI.GetComponentInChildren<Text>();
+            //UI = GameObject.FindGameObjectWithTag("MaxAmmoUI");
+            //ammoMaxValueText = UI.GetComponentInChildren<Text>();
             //locate text for cool down in scene
             UI = GameObject.FindGameObjectWithTag("CooldownUI");
             coolDownTimerText = UI.GetComponentInChildren<Text>();
@@ -51,7 +51,7 @@ public class HeavyWeaponUI : NetworkBehaviour
 
             //initialize text UI elements with infor from playerHeavyWeapon
             SetAmmoCountValueText();
-            SetAmmoMaxValueText();
+            //SetAmmoMaxValueText();
             SetCoolDownTimerText();
         }
     }
@@ -65,7 +65,7 @@ public class HeavyWeaponUI : NetworkBehaviour
         //Update ammo count text item with ammo count value in playerHeavyWeapon 
         SetAmmoCountValueText();
         //Update ammo max value text item with max ammo count value in playerHeavyWeapon 
-        SetAmmoMaxValueText();
+        //SetAmmoMaxValueText();
         //Update cool down timer text item with cooldown timer value in playerHeavyWeapon 
         SetCoolDownTimerText();
     }
