@@ -279,8 +279,7 @@ public class Player
     /// <returns>Points of bounty</returns>
     public short GetBounty()
     {
-        if (_killstreak == 0) return 0;
-        return (short)Mathf.Clamp(_killstreak, 2, 5);
+        return (short)Mathf.Clamp(Mathf.Floor(_killstreak/2),0,5);
     }
 
     /// <summary>
