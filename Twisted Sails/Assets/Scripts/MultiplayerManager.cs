@@ -265,7 +265,12 @@ public class MultiplayerManager : NetworkManager
         {
             if (ip.AddressFamily == AddressFamily.InterNetwork)
             {
-                localIP = ip.ToString();
+                using (Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, 0))
+                {
+                    socket.Connect(ip.ToString(), 65530);
+                    IPEndPoint endPoint = socket.LocalEndPoint as IPEndPoint;
+                    localIP = endPoint.Address.ToString();
+                }
                 break;
             }
         }
@@ -384,7 +389,7 @@ public class MultiplayerManager : NetworkManager
         if (res >= 0)
         {
             GameEnd(res);
-            gameRestartTimer = 10;
+            //gameRestartTimer = 10;
             foreach (Player player in playerList)
                 NetworkServer.FindLocalObject(player.objectId).GetComponent<Health>().RpcEndGame(res, teamScores);
         }
@@ -582,6 +587,7 @@ public class MultiplayerManager : NetworkManager
         GameStateMessage msg = netMsg.ReadMessage<GameStateMessage>();
         playerList = msg.playerList;
         teamScores = msg.teamScores;
+        ((TeamDeathmatch)currentGamemode).timeRemaining = msg.gamemodeTimeLeft;
         SaveLoad.SaveGame();
     }
 

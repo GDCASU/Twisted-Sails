@@ -53,6 +53,7 @@ public class TitleScreenInput : MonoBehaviour
         }
         //just in case input is locked
         InputWrapper.ReleaseKeyboard();
+        InputWrapper.ReleaseMouse();
     }
 
     // Allows quitting by pressing ESC.

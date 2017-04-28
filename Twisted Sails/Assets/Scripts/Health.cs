@@ -89,6 +89,7 @@ public class Health : NetworkBehaviour
     public float invincibleTime;
     public Vector3 spawnPoint; // NK 10/20 added original spawnpoint
     public Quaternion spawnRotation;
+    [SyncVar]
     public float defenseStat; // Crew Management - Defense Crew
     public GameObject deathParticle;
     public ParticleSystem smokeParticle;
@@ -301,13 +302,21 @@ public class Health : NetworkBehaviour
     {
         MultiplayerManager.FindPlayer(connectionId).objectId = GetComponent<NetworkIdentity>().netId;
     }
-    #endregion
 
     [Command]
     public void CmdHurtSelf(float dmg)
     {
         ChangeHealth(dmg, NetworkInstanceId.Invalid);
     }
+
+    [Command]
+    public void CmdSetDefense(float newDefense)
+    {
+        defenseStat = newDefense;
+    }
+    #endregion
+
+
     //ClientRpc methods are called on the server to send information to the client
     #region ClientRpcs
     /// <summary>
@@ -354,6 +363,7 @@ public class Health : NetworkBehaviour
         }
         GameObject.Find("InGame").GetComponent<AudioSource>().volume = 0.1f;
         InputWrapper.CaptureKeyboard();
+        InputWrapper.CaptureMouse();
     }
 
     /// <summary>
@@ -385,7 +395,7 @@ public class Health : NetworkBehaviour
         if ((health == 0 || currentInvincibleTimer > 0) && amount < 0) return; //don't register damage taken after death or while invincible
 
         //Todo: add back in this functionality in the Stat System using an event hook for PlayerDamaged
-        //amount *= defenseStat; // Multiplier effect for defense stat
+        amount *= defenseStat; // Multiplier effect for defense stat
 
         Player.ActivateEventPlayerDamaged(MultiplayerManager.FindPlayer(GetComponent<NetworkIdentity>().netId), MultiplayerManager.FindPlayer(source), ref amount);
         

@@ -219,5 +219,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ammoAmmount: 1
-  packMesh: {fileID: 0}
-  packCollider: {fileID: 0}
+  packRespawnTime: 90
+  packMesh: {fileID: 23346018437660838}
+  packCollider: {fileID: 65820838051037576}
+  onMat: {fileID: 2100000, guid: c1003f3780808fe44a21a6ed53e9f8f4, type: 2}
+  offMat: {fileID: 2100000, guid: f7e2b80c12a4c2a4ba73d91c8075ec3e, type: 2}
