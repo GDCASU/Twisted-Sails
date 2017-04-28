@@ -105,9 +105,9 @@ public class HeavyWeaponHuman : HeavyWeapon
     /// </summary>
     override protected void ActivateWeapon()
 	{
-        projectileOffsetVector = transform.forward * 3;
+        projectileOffsetVector = transform.forward * 3 + transform.up * 0.5f;
 
-        weaponStartingPosition = transform.position + projectileOffsetVector + transform.up;
+        weaponStartingPosition = transform.position + projectileOffsetVector + transform.up * 0.25f;
         weaponVelocity = transform.forward * projectileSpeed + GetComponent<Rigidbody>().velocity;
         weaponPrefab.GetComponent<Rigidbody>().AddForce(weaponVelocity);
         base.ActivateWeapon();

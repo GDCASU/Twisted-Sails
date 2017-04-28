@@ -15,7 +15,7 @@ public class Scoreboard : MonoBehaviour {
     private void Start()
     {
         manager = MultiplayerManager.GetInstance();
-        manager.client.RegisterHandler(MultiplayerManager.ExtMsgType.State, UpdateScoreboard);
+        //manager.client.RegisterHandler(MultiplayerManager.ExtMsgType.State, UpdateScoreboard);
     }
 
 	// Update is called once per frame

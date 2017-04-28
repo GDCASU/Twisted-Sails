@@ -57,8 +57,8 @@ public class BroadsideCannonFireNetworked : MonoBehaviour
 	public Vector3 GetCannonBallVelocity()
 	{
 		//Sets the initial velocity of the cannonBall to projectileSpeed units/second in the direction of the cannon barrel
-		Vector3 inheritedVelocity = this.transform.root.GetComponent<Rigidbody>().velocity; 
-		return inheritedVelocity + this.transform.up * this.projectileSpeed; 
+		Vector3 inheritedVelocity = this.transform.parent.GetComponent<Rigidbody>().velocity;
+		return inheritedVelocity + this.transform.up * this.projectileSpeed * Random.Range(0.95f,1.05f) + Vector3.up * Random.Range(0,0.05f);
 	}
 
 	public Vector3 GetCannonBallPosition()

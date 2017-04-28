@@ -57,7 +57,7 @@ public class SunshipHeavyProjectileBeahviorFix : InteractiveObject
         base.OnInteractWithPlayer(playerHealth, playerBoat, manager, collision);
         int healthChange = -damageDealt;
 
-        playerHealth.ChangeHealth(healthChange, owner);
+        playerHealth.ChangeHealth(healthChange/2, owner);
 
     }
 

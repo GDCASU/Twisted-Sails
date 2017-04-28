@@ -162,7 +162,7 @@ public class StatSystem : NetworkBehaviour
         defenseMod = Mathf.Clamp(defenseMod + newMod, MOD_MIN, MOD_MAX);
         currentDefense = 1 / (BASE_DEFENSE + defenseMod);
 
-        healthScript.defenseStat = currentDefense;
+        healthScript.CmdSetDefense(currentDefense);
         defenseBar.value = 1 / currentDefense;
         defenseText.text = "Defense: " + (1 / currentDefense);
 

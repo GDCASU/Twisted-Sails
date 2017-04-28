@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Networking;
 using System.Linq;
+using System.Collections;
 using System.Collections.Generic;
 
 /************************** BOAT MOVEMENT SCRIPT *******************************
@@ -155,18 +156,18 @@ public class BoatMovementNetworked : NetworkBehaviour
                 }
             }
 
-            if (KeysDown.fireCannon || Input.GetMouseButtonDown(0))
+            if (KeysDown.fireCannon || InputWrapper.GetMouseButtonDown(0))
 			{
-				foreach (BroadsideCannonFireNetworked cScript in cannonScripts)
-				{
-					if (cScript.CanFire())
-					{
-						//Pass information to server and spawn cannonball on all cients
-						CmdFire(cScript.GetCannonBallPosition(), cScript.GetCannonBallVelocity()*cannonBallSpeedScale);
-						cScript.ResetFireTimer();
-					}
-				}
-			}
+                foreach (BroadsideCannonFireNetworked cScript in cannonScripts)
+                {
+                    if (cScript.CanFire())
+                    {
+                        //Pass information to server and spawn cannonball on all cients
+                        CmdFire(cScript.GetCannonBallPosition(), cScript.GetCannonBallVelocity() * cannonBallSpeedScale);
+                        cScript.ResetFireTimer();
+                    }
+                }
+            }
 			
 			boatCam.gameIsPaused = gameIsPaused; //assign game is paused value to boat cam
 		}

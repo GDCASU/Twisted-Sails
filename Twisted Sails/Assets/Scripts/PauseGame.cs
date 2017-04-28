@@ -70,7 +70,6 @@ public class PauseGame : MonoBehaviour
 		//If current scene is in MainLevel_PabloCamacho or MainLevel
 		if(SceneManager.GetActiveScene().name.Contains("MainLevel") && MultiplayerManager.IsClient())
 		{
-			
 			//get reference to player component BoatMovementNetworked
 			Player thisPlayer = MultiplayerManager.GetLocalPlayer();
 			GameObject thisPlayerGameObject = thisPlayer.GetPlayerObject();
@@ -104,7 +103,10 @@ public class PauseGame : MonoBehaviour
 		pauseMenuCanvas.gameObject.SetActive(true);
 		pauseMenuScriptRef.pauseMenuCurrentState = PauseMenuScript.IN_PAUSE_MENU_START;
 		gamePaused = true;
-		
+
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+
 		//assign game pause bool to game is paused bool of player boat movement component
 		playerBoatMovementComponent.gameIsPaused = true;
 		
@@ -115,9 +117,12 @@ public class PauseGame : MonoBehaviour
 		pauseMenuCanvas.gameObject.SetActive(false);
 		pauseMenuScriptRef.pauseMenuCurrentState = PauseMenuScript.PAUSE_MENU_HIDDEN;
 		gamePaused = false;
-		
-		//assign game pause bool to game is paused bool of player boat movement component
-		playerBoatMovementComponent.gameIsPaused = false;
+
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+
+        //assign game pause bool to game is paused bool of player boat movement component
+        playerBoatMovementComponent.gameIsPaused = false;
 		
 	}
 	

@@ -55,6 +55,8 @@ public class PlayerIconController : NetworkBehaviour
     public bool host;
     [SyncVar]
     public int connectionId;
+    [SyncVar(hook = "OnColorChange")]
+    public Color textColor;
 
     private Text nameText;
     private RectTransform rectTransform;
@@ -86,6 +88,12 @@ public class PlayerIconController : NetworkBehaviour
     {
         playerName = newName;
         GetComponent<Text>().text = newName;
+    }
+
+    public void OnColorChange(Color newColor)
+    {
+        textColor = newColor;
+        GetComponent<Text>().color = newColor;
     }
 
     /// <summary>
@@ -129,10 +137,23 @@ public class PlayerIconController : NetworkBehaviour
             if(MultiplayerManager.GetInstance().localPlayerTeam != team)
                 GameObject.Find("SwitchTeam").GetComponent<AudioSource>().Play(); //only play if actually changing teams
             MultiplayerManager.GetInstance().localPlayerTeam = team;
+            if (team == 0)
+            {
+                lobby.redTeam.parent.GetComponent<Button>().interactable = false;
+                lobby.blueTeam.parent.GetComponent<Button>().interactable = true;
+                lobby.blueTeam.parent.GetComponent<Button>().OnPointerExit(null);
+            }
+            else
+            {
+                lobby.blueTeam.parent.GetComponent<Button>().interactable = false;
+                lobby.redTeam.parent.GetComponent<Button>().interactable = true;
+                lobby.redTeam.parent.GetComponent<Button>().OnPointerExit(null);
+            }
         }
 
         if (team == 0)
             transform.SetParent(lobby.redTeam, false);
+            
         else
             transform.SetParent(lobby.blueTeam, false);
     }
@@ -174,6 +195,7 @@ public class PlayerIconController : NetworkBehaviour
     {
         MultiplayerManager.FindPlayer(GetComponent<NetworkIdentity>().netId).ready = true;
         List<Player> playerList = MultiplayerManager.GetInstance().playerList;
+        textColor = new Color(0.4f, 0.8f, 0.4f);
         if (playerList.FindAll(p => p.ready).Count == playerList.Count)
         {
             lobby.LockShips();

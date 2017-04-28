@@ -84,7 +84,7 @@ public class HeavyWeapon : NetworkBehaviour
 
             //the player has pressed the button identified by the weaponUseKey field
             //and the weapon is not on cooldown
-            if (InputWrapper.GetKeyDown(weaponUseKey) || Input.GetMouseButtonDown(1))
+            if (InputWrapper.GetKeyDown(weaponUseKey) || InputWrapper.GetMouseButtonDown(1))
             {
                 //if enough ammo to use weapon, check for cooldown
                 if (ammoCount >= ammoUsePerActivation)

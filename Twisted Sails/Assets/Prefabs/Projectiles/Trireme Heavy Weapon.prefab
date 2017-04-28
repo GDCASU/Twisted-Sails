@@ -276,7 +276,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxDistance: 40
-  explodingScale: 0.5
+  explodingScale: 0.4
   damageDealt: 50
   explodeSound: {fileID: 8300000, guid: b949bcc46ca47d14485f37ddf4e27d8b, type: 3}
 --- !u!122 &122485650544907036

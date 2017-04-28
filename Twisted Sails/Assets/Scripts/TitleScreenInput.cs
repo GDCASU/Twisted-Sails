@@ -37,6 +37,8 @@ public class TitleScreenInput : MonoBehaviour
     void Start()
     {
         MultiplayerManager mm = MultiplayerManager.GetInstance();
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
         
         if (SaveLoad.Load())
         {
@@ -51,14 +53,12 @@ public class TitleScreenInput : MonoBehaviour
         }
         //just in case input is locked
         InputWrapper.ReleaseKeyboard();
+        InputWrapper.ReleaseMouse();
     }
 
     // Allows quitting by pressing ESC.
     void Update()
     {
-        if (InputWrapper.GetKeyDown(KeyCode.Escape))
-            QuitGame();
-
         //The following code was taken from http://answers.unity3d.com/questions/784526/46-ugui-select-next-inputfield-with-entertab.html
         //and exists solely to allow tabbing between input fields on the title screen. Whew!
         if (InputWrapper.GetKeyDown(KeyCode.Tab))
