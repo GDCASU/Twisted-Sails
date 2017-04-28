@@ -104,7 +104,7 @@ public class HeavyWeaponDragon: HeavyWeapon {
     /// </summary>
     override protected void ActivateWeapon()
 	{
-        weaponStartingPosition = transform.position + (transform.forward * projectileOffset) + transform.up;
+        weaponStartingPosition = transform.position + (transform.forward * projectileOffset) + transform.up * 0.5f;
         weaponVelocity = transform.forward * projectileSpeed + GetComponent<Rigidbody>().velocity;
         weaponRotation = transform.localRotation;
 

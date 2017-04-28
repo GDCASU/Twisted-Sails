@@ -213,8 +213,8 @@ public class Health : NetworkBehaviour
 			{
 				//tell the interactive object about the interaction
 				//giving them this health, the boat this health is attached to, this boats status effect manager, and the collision that caused the interaction
-                if(isServer)
-				    interaction.OnInteractWithPlayer(this, gameObject, ourEffectsManager, collision);
+                //if(isServer)
+				interaction.OnInteractWithPlayer(this, gameObject, ourEffectsManager, collision);
 
 				//if we are the server, destroy the interactive object after the interaction
 				//if it says it is destroy after interactions

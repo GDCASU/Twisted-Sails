@@ -436,8 +436,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.3, y: 2.4, z: 0.3}
-  m_Center: {x: 0, y: 0.3, z: 0}
+  m_Size: {x: 0.3, y: 0.3, z: 2.4}
+  m_Center: {x: 0, y: 0, z: 1}
 --- !u!82 &82716707895437062
 AudioSource:
   m_ObjectHideFlags: 1
@@ -530,6 +530,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damageDealt: 70
+  explodeSoundTime: 1.3
+  explodeParticle: {fileID: 1033593714182800, guid: 9a8a33ad0a80dd04f8923abb6ade1f0c,
+    type: 2}
 --- !u!114 &114586681469858036
 MonoBehaviour:
   m_ObjectHideFlags: 1

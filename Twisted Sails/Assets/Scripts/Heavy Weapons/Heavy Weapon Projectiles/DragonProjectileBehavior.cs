@@ -13,6 +13,13 @@ public class DragonProjectileBehavior : InteractiveObject {
     
     StatusEffectsManager manager;
     public int damageDealt;
+    public float explodeSoundTime;
+    public GameObject explodeParticle;
+
+    private void Start()
+    {
+        Invoke("StopSound", explodeSoundTime);
+    }
 
     public override void OnInteractWithPlayer(Health playerHealth, GameObject playerBoat, StatusEffectsManager manager, Collision collision)
     {
@@ -23,7 +30,8 @@ public class DragonProjectileBehavior : InteractiveObject {
         //if this object is on the side of the player who owns this object
         //send out the command to change the players health
         //setting the source of the health change to be the owner of this cannonball
-        playerHealth.ChangeHealth(healthChange, owner);
+        if(isServer)
+            playerHealth.ChangeHealth(healthChange, owner);
 
         DestroyPreserveParticles();
     }
@@ -39,6 +47,11 @@ public class DragonProjectileBehavior : InteractiveObject {
         return false;
     }
 
+    private void StopSound()
+    {
+        GetComponent<AudioSource>().Stop();
+    }
+
     private void DestroyPreserveParticles()
     {
         foreach (Renderer r in GetComponentsInChildren<Renderer>())
@@ -46,7 +59,17 @@ public class DragonProjectileBehavior : InteractiveObject {
                 r.enabled = false;
         GetComponent<Collider>().enabled = false;
         GetComponent<Rigidbody>().velocity = Vector3.zero;
-        gameObject.AddComponent<ParticleSystemAutoDestroy>();
+        Invoke("DestroySelf", 1.5f);
+        //gameObject.AddComponent<ParticleSystemAutoDestroy>();
         GetComponentInChildren<ParticleSystem>().Stop();
+        StopSound();
+        Instantiate(explodeParticle, transform.position, transform.rotation);
+        GetComponent<AudioSource>().time = explodeSoundTime;
+        GetComponent<AudioSource>().Play();
+    }
+
+    private void DestroySelf()
+    {
+        Destroy(gameObject);
     }
 }

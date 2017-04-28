@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Networking;
 using System.Linq;
+using System.Collections;
 using System.Collections.Generic;
 
 /************************** BOAT MOVEMENT SCRIPT *******************************
@@ -161,9 +162,9 @@ public class BoatMovementNetworked : NetworkBehaviour
 				{
 					if (cScript.CanFire())
 					{
-						//Pass information to server and spawn cannonball on all cients
-						CmdFire(cScript.GetCannonBallPosition(), cScript.GetCannonBallVelocity()*cannonBallSpeedScale);
-						cScript.ResetFireTimer();
+                        //Pass information to server and spawn cannonball on all cients
+                        CmdFire(cScript.GetCannonBallPosition(), cScript.GetCannonBallVelocity() * cannonBallSpeedScale);
+                        cScript.ResetFireTimer();
 					}
 				}
 			}
