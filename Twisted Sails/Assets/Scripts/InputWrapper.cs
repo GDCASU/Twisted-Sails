@@ -10,6 +10,7 @@ using UnityEngine;
 public class InputWrapper {
 
     private static bool KeyboardCaptured = false;
+    private static bool MouseCaptured = false;
 
     public static void CaptureKeyboard()
     {
@@ -21,7 +22,17 @@ public class InputWrapper {
         KeyboardCaptured = false;
     }
 
-	public static bool GetKey(KeyCode key)
+    public static void CaptureMouse()
+    {
+        MouseCaptured = true;
+    }
+
+    public static void ReleaseMouse()
+    {
+        MouseCaptured = false;
+    }
+
+    public static bool GetKey(KeyCode key)
     {
         return !KeyboardCaptured && Input.GetKey(key);
     }
@@ -49,5 +60,20 @@ public class InputWrapper {
     public static bool GetButton(string button)
     {
         return !KeyboardCaptured && Input.GetButtonDown(button);
+    }
+
+    public static bool GetMouseButton(int button)
+    {
+        return !MouseCaptured && Input.GetMouseButton(button);
+    }
+
+    public static bool GetMouseButtonDown(int button)
+    {
+        return !MouseCaptured && Input.GetMouseButtonDown(button);
+    }
+
+    public static bool GetMouseButtonUp(int button)
+    {
+        return !MouseCaptured && Input.GetMouseButtonUp(button);
     }
 }

@@ -38,8 +38,13 @@ public class LobbyManager : NetworkBehaviour
     public GameObject teamSelectContainer;
     public GameObject startButton;
     public Text lobbyText;
+    public Text ipText;
+    public Text lanIPText;
     public Transform redTeam;
     public Transform blueTeam;
+    public GameObject gameOptions;
+    public Text pointsToWin;
+    public Text matchTime;
 
     [Header("Ship Select")]
     public GameObject shipSelectContainer;
@@ -57,6 +62,10 @@ public class LobbyManager : NetworkBehaviour
 
     [SyncVar(hook = "OnHostNameChange")]
     public string hostName;
+    [SyncVar(hook = "OnHostPubIPChange")]
+    public string hostPublicIP;
+    [SyncVar(hook = "OnHostLANIPChange")]
+    public string hostLANIP;
     public Sprite[] shipIcons;
 
     public static LobbyManager instance;
@@ -84,12 +93,17 @@ public class LobbyManager : NetworkBehaviour
         if (!MultiplayerManager.IsHost())
         {
             startButton.SetActive(false);
+            gameOptions.SetActive(false);
         } else
         {
             CmdSetHostName(MultiplayerManager.GetLocalPlayer().name);
+            CmdSetHostIP(MultiplayerManager.GetLocalIPAddress(), "Fetching...");
+            StartCoroutine(GetAssignPublicIPAddress());
         }
 
         OnHostNameChange(hostName);
+        OnHostPubIPChange(hostPublicIP);
+        OnHostLANIPChange(hostLANIP);
     }
 
     void Update()
@@ -132,6 +146,20 @@ public class LobbyManager : NetworkBehaviour
         GetLocalPlayer().GetComponent<PlayerIconController>().CmdChangeTeam((short)team);
     }
 
+    public void PointsValueChanged(float newVal)
+    {
+        int points = (int)newVal;
+        pointsToWin.text = points.ToString();
+        ((TeamDeathmatch)manager.currentGamemode).pointsToWin = points; //no need for networking this, it already happens on host = server
+    }
+
+    public void TimeValueChanged(float newVal)
+    {
+        int time = (int)newVal;
+        matchTime.text = time.ToString();
+        ((TeamDeathmatch)manager.currentGamemode).timeRemaining = time*60; //no need for networking this, it already happens on host = server
+    }
+
     // NK
     /// <summary>
     /// Called when a player clicks a ship button to switch to that ship
@@ -160,6 +188,17 @@ public class LobbyManager : NetworkBehaviour
         return manager.client.connection.playerControllers[0].gameObject;
     }
 
+    private IEnumerator GetAssignPublicIPAddress()
+    {
+        WWW myExtIPWWW = new WWW("http://checkip.dyndns.org");
+        if (myExtIPWWW == null) yield break;
+        yield return myExtIPWWW;
+        string myExtIP = myExtIPWWW.text;
+        myExtIP = myExtIP.Substring(myExtIP.IndexOf(":") + 1);
+        myExtIP = myExtIP.Substring(0, myExtIP.IndexOf("<"));
+        CmdSetHostIP(MultiplayerManager.GetLocalIPAddress(), myExtIP);
+    }
+
     /// <summary>
     /// Exists only to bounce messages to the client
     /// Sets the host's name for display in the lobby
@@ -175,7 +214,28 @@ public class LobbyManager : NetworkBehaviour
     public void OnHostNameChange(string newName)
     {
         hostName = newName;
-        lobbyText.text = newName + "'s Twisted Sails Lobby";
+        lobbyText.text = newName + "'s Lobby";
+    }
+
+    //Hooked onto SyncVar hostName
+    public void OnHostPubIPChange(string newIP)
+    {
+        hostPublicIP = newIP;
+        ipText.text = newIP;
+    }
+
+    //Hooked onto SyncVar hostName
+    public void OnHostLANIPChange(string newIP)
+    {
+        hostLANIP = newIP;
+        lanIPText.text = newIP;
+    }
+
+    [Command]
+    public void CmdSetHostIP(string lan, string pub)
+    {
+        hostPublicIP = pub;
+        hostLANIP = lan;
     }
 
     /// <summary>
@@ -285,5 +345,10 @@ public class LobbyManager : NetworkBehaviour
     public void CmdEnterGame()
     {
         MultiplayerManager.GetInstance().EnterGame();
+    }
+
+    public void QuitToMenu()
+    {
+        MultiplayerManager.GetInstance().StopHost();
     }
 }

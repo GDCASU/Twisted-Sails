@@ -3246,7 +3246,7 @@ MonoBehaviour:
   boatPropulsionPointOffset: -1
   speedStat: 1
   speed: 0
-  cannonBallSpeedScale: 0.75
+  cannonBallSpeedScale: 0.95
   forwardKey: 119
   backwardsKey: 115
   leftKey: 97

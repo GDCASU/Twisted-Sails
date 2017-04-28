@@ -12,12 +12,27 @@ public class HealthPack : InteractiveObject
 	public float packRespawnTime = 10f;
 	public MeshRenderer packMesh;
 	public Collider packCollider;
+    public Material onMatRed;
+    public Material offMatRed;
+    public Material onMatWhite;
+    public Material offMatWhite;
 
-	IEnumerator MyCoroutine()
+    private void Start()
+    {
+        Material[] materials = packMesh.materials;
+        materials[0] = offMatWhite;
+        materials[1] = offMatRed;
+        packMesh.materials = materials;
+        packCollider.enabled = false;
+        InvokeRepeating("Respawn", packRespawnTime, packRespawnTime);
+    }
+
+    void Respawn()
 	{
-		yield return new WaitForSeconds (packRespawnTime);
-
-        packMesh.enabled = true;
+        Material[] materials = packMesh.materials;
+        materials[0] = onMatWhite;
+        materials[1] = onMatRed;
+        packMesh.materials = materials;
         packCollider.enabled = true;
 	}
 
@@ -44,9 +59,11 @@ public class HealthPack : InteractiveObject
 
         playerBoat.transform.Find("ShipSounds").Find("HealthPickup").GetComponent<AudioSource>().Play();
 
-        packMesh.enabled = false;
+        Material[] materials = packMesh.materials;
+        materials[0] = offMatWhite;
+        materials[1] = offMatRed;
+        packMesh.materials = materials;
         packCollider.enabled = false;
-		StartCoroutine(MyCoroutine());
 	}
 
 	public override bool DoesDestroyInInteract()

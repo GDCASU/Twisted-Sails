@@ -73,12 +73,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8557f1abf19edd74abae10918cf787d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ready: 0
   playerName: 
   playerTeam: 0
+  playerShip: 0
   host: 0
-  defaultColor: {r: 0, g: 0, b: 0, a: 0}
-  readyColor: {r: 0, g: 0, b: 0, a: 0}
+  connectionId: 0
+  textColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!114 &114598106032935760
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -108,7 +108,7 @@ MonoBehaviour:
     m_Alignment: 1
     m_AlignByGeometry: 0
     m_RichText: 1
-    m_HorizontalOverflow: 0
+    m_HorizontalOverflow: 1
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: ???

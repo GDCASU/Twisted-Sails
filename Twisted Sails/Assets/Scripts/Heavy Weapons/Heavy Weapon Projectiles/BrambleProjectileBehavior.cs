@@ -43,7 +43,7 @@ public class BrambleProjectileBehavior : InteractiveObject
         else if (isDestroying)
         {
             transform.position = origin + transform.forward * (1 + distFromBoat * (1 - newTime / travelTime));
-            if (newTime > travelTime)
+            if (newTime > travelTime && GetComponent<Collider>().enabled)
                 DestroyPreserveParticles();
 
         } else
@@ -73,7 +73,7 @@ public class BrambleProjectileBehavior : InteractiveObject
             }
             else
             {
-                Debug.Log(other.gameObject.name);
+                //Debug.Log(other.gameObject.name);
                 DestroyPreserveParticles();
             }
         }
@@ -96,7 +96,7 @@ public class BrambleProjectileBehavior : InteractiveObject
 
     private void DestroyPreserveParticles()
     {
-        Debug.Log("Destroying bramble hw");
+        //Debug.Log("Destroying bramble hw");
         foreach (Renderer r in GetComponentsInChildren<Renderer>())
             if (r.GetType() != typeof(ParticleSystemRenderer))
                 r.enabled = false;
