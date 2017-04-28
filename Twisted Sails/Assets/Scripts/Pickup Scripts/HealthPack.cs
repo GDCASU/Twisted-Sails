@@ -24,17 +24,24 @@ public class HealthPack : InteractiveObject
         materials[1] = offMatRed;
         packMesh.materials = materials;
         packCollider.enabled = false;
-        InvokeRepeating("Respawn", packRespawnTime, packRespawnTime);
+        if(isServer)
+            InvokeRepeating("Respawn", packRespawnTime, packRespawnTime);
     }
 
     void Respawn()
 	{
+        RpcRespawn();
+	}
+
+    [ClientRpc]
+    void RpcRespawn()
+    {
         Material[] materials = packMesh.materials;
         materials[0] = onMatWhite;
         materials[1] = onMatRed;
         packMesh.materials = materials;
         packCollider.enabled = true;
-	}
+    }
 
 	public override void OnInteractWithPlayerTrigger(Health playerHealth, GameObject playerBoat, StatusEffectsManager manager, Collider collider)
 	{

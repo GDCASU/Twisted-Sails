@@ -15,10 +15,17 @@ public class AmmoPack : InteractiveObject
     {
         packMesh.material = offMat;
         packCollider.enabled = false;
-        InvokeRepeating("Respawn", packRespawnTime, packRespawnTime);
+        if(isServer)
+            InvokeRepeating("Respawn", packRespawnTime, packRespawnTime);
     }
 
     void Respawn()
+    {
+        RpcRespawn();
+    }
+
+    [ClientRpc]
+    void RpcRespawn()
     {
         packMesh.material = onMat;
         packCollider.enabled = true;
