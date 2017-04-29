@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
 public class DragonProjectileBehavior : InteractiveObject {
 
@@ -30,7 +31,7 @@ public class DragonProjectileBehavior : InteractiveObject {
         //if this object is on the side of the player who owns this object
         //send out the command to change the players health
         //setting the source of the health change to be the owner of this cannonball
-        if(isServer)
+        if (isServer && playerHealth.team != NetworkServer.FindLocalObject(owner).GetComponent<Health>().team)
             playerHealth.ChangeHealth(healthChange, owner);
 
         DestroyPreserveParticles();
@@ -38,12 +39,18 @@ public class DragonProjectileBehavior : InteractiveObject {
 
     private void OnCollisionEnter(Collision other)
     {
-        DestroyPreserveParticles();
+        if (other.gameObject.tag != "Player")
+            DestroyPreserveParticles();
     }
 
     public override bool DoesDestroyInInteract()
     {
         return false;
+    }
+
+    public override bool DoesEffectTeammates()
+    {
+        return true;
     }
 
     private void StopSound()
