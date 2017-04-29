@@ -15,10 +15,17 @@ public class AmmoPack : InteractiveObject
     {
         packMesh.material = offMat;
         packCollider.enabled = false;
-        InvokeRepeating("Respawn", packRespawnTime, packRespawnTime);
+        if(isServer)
+            InvokeRepeating("Respawn", packRespawnTime, packRespawnTime);
     }
 
     void Respawn()
+    {
+        RpcRespawn();
+    }
+
+    [ClientRpc]
+    void RpcRespawn()
     {
         packMesh.material = onMat;
         packCollider.enabled = true;
@@ -28,20 +35,27 @@ public class AmmoPack : InteractiveObject
     {
         //notifies the player events system that the player who interacted with this object picked up a health pack (this object)
         //also sets isHealthPack to true, since this is a health pack
-        if (playerBoat.GetComponent<HeavyWeapon>().AmmoCount >= playerBoat.GetComponent<HeavyWeapon>().ammoCapacity) return;
 
-        Player.ActivateEventPlayerPickup(MultiplayerManager.FindPlayer(playerBoat.GetComponent<NetworkIdentity>().netId), true);
-        
+        if (isServer)
+        {
+            if (playerBoat.GetComponent<HeavyWeapon>().AmmoCount >= playerBoat.GetComponent<HeavyWeapon>().ammoCapacity) return;
+            playerBoat.GetComponent<HeavyWeapon>().AddAmmo(ammoAmmount);
+            Player.ActivateEventPlayerPickup(MultiplayerManager.FindPlayer(playerBoat.GetComponent<NetworkIdentity>().netId), true);
+            RpcConsumePack(playerBoat.GetComponent<NetworkIdentity>().netId);
+        }
+    }
+
+    [ClientRpc]
+    public void RpcConsumePack(NetworkInstanceId player)
+    {
+        GameObject playerBoat = ClientScene.FindLocalObject(player);
+        Health playerHealth = playerBoat.GetComponent<Health>();
         //play sounds and send command for ammo
         if (MultiplayerManager.GetLocalPlayer() != null && MultiplayerManager.GetLocalPlayer().objectId == playerBoat.GetComponent<NetworkIdentity>().netId)
         {
             playerBoat.transform.Find("ShipSounds").Find("AmmoPickupVO").GetComponent<AudioSource>().Play();
             //Debug.Log(MultiplayerManager.GetLocalPlayer().name);
-            
         }
-        if(isServer)
-            playerBoat.GetComponent<HeavyWeapon>().AddAmmo(ammoAmmount);
-
         Instantiate(playerHealth.powerupParticle, playerBoat.transform).transform.localPosition = Vector3.zero;
 
         playerBoat.transform.Find("ShipSounds").Find("AmmoPickup").GetComponent<AudioSource>().Play();

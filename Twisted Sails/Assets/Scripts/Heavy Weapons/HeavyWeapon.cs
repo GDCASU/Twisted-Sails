@@ -234,6 +234,8 @@ public class HeavyWeapon : NetworkBehaviour
     [Command]
     private void CmdFire(Vector3 spawnPosition, Vector3 spawnVelocity, Quaternion spawnRotation, NetworkInstanceId shooterID)
     {
+        ammoCount = 0;
+
         //Spawn object on server
         GameObject instantiatedProjectile = GameObject.Instantiate(weaponPrefab);
 

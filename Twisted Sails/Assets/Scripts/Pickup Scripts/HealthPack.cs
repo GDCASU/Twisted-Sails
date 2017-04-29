@@ -24,39 +24,52 @@ public class HealthPack : InteractiveObject
         materials[1] = offMatRed;
         packMesh.materials = materials;
         packCollider.enabled = false;
-        InvokeRepeating("Respawn", packRespawnTime, packRespawnTime);
+        if(isServer)
+            InvokeRepeating("Respawn", packRespawnTime, packRespawnTime);
     }
 
     void Respawn()
 	{
+        RpcRespawn();
+	}
+
+    [ClientRpc]
+    void RpcRespawn()
+    {
         Material[] materials = packMesh.materials;
         materials[0] = onMatWhite;
         materials[1] = onMatRed;
         packMesh.materials = materials;
         packCollider.enabled = true;
-	}
+    }
 
 	public override void OnInteractWithPlayerTrigger(Health playerHealth, GameObject playerBoat, StatusEffectsManager manager, Collider collider)
 	{
-        if (playerHealth.health >= 100) return;
-
-		//notifies the player events system that the player who interacted with this object picked up a health pack (this object)
-		//also sets isHealthPack to true, since this is a health pack
-		Player.ActivateEventPlayerPickup(MultiplayerManager.FindPlayer(playerBoat.GetComponent<NetworkIdentity>().netId), true);
-
 		//send out the command to change the players health
 		//setting the source of the healthpack to nothing, since no player is responsible
 		if (isServer)
 		{
-			playerHealth.ChangeHealth(healAmount, NetworkInstanceId.Invalid);
-		}
+            if (playerHealth.health >= 100) return;
 
-        //play sounds
-        if(MultiplayerManager.GetLocalPlayer() != null && MultiplayerManager.GetLocalPlayer().objectId == playerBoat.GetComponent<NetworkIdentity>().netId)
+            //notifies the player events system that the player who interacted with this object picked up a health pack (this object)
+            //also sets isHealthPack to true, since this is a health pack
+            Player.ActivateEventPlayerPickup(MultiplayerManager.FindPlayer(playerBoat.GetComponent<NetworkIdentity>().netId), true);
+            playerHealth.ChangeHealth(healAmount, NetworkInstanceId.Invalid);
+            RpcConsumePack(playerBoat.GetComponent<NetworkIdentity>().netId);
+		}
+	}
+
+    [ClientRpc]
+    public void RpcConsumePack(NetworkInstanceId player)
+    {
+        GameObject playerBoat = ClientScene.FindLocalObject(player);
+        Health playerHealth = playerBoat.GetComponent<Health>();
+        //play sounds and send command for ammo
+        if (MultiplayerManager.GetLocalPlayer() != null && MultiplayerManager.GetLocalPlayer().objectId == playerBoat.GetComponent<NetworkIdentity>().netId)
         {
             playerBoat.transform.Find("ShipSounds").Find("HealthPickupVO").GetComponent<AudioSource>().Play();
+            //Debug.Log(MultiplayerManager.GetLocalPlayer().name);
         }
-
         Instantiate(playerHealth.powerupParticle, playerBoat.transform).transform.localPosition = Vector3.zero;
 
         playerBoat.transform.Find("ShipSounds").Find("HealthPickup").GetComponent<AudioSource>().Play();
@@ -66,9 +79,9 @@ public class HealthPack : InteractiveObject
         materials[1] = offMatRed;
         packMesh.materials = materials;
         packCollider.enabled = false;
-	}
+    }
 
-	public override bool DoesDestroyInInteract()
+    public override bool DoesDestroyInInteract()
 	{
 		return false;
 	}
