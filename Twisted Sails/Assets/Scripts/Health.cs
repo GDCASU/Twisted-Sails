@@ -135,16 +135,16 @@ public class Health : NetworkBehaviour
         }
         else //This is a ship belonging to another player -- use the ship's healthbar & nametag
         {
-            GameObject UI = transform.FindChild("Canvas").FindChild("HealthUI").gameObject;
+            GameObject UI = transform.Find("Canvas").Find("HealthUI").gameObject;
             healthSlider = UI.GetComponent<Slider>();
             if (isClient)
             {
                 //Indicate if this ship is on the local player's team
                 if (ClientScene.localPlayers[0].gameObject.GetComponent<Health>().team == team)
-                    healthSlider.transform.FindChild("Fill Area").GetChild(0).GetComponent<Image>().color = Color.green;
+                    healthSlider.transform.Find("Fill Area").GetChild(0).GetComponent<Image>().color = Color.green;
             }
-            healthText = UI.transform.FindChild("Text").GetComponent<Text>();
-            UI.transform.FindChild("Nametag").GetComponent<Text>().text = playerName;
+            healthText = UI.transform.Find("Text").GetComponent<Text>();
+            UI.transform.Find("Nametag").GetComponent<Text>().text = playerName;
             UI.SetActive(true);
         }
         healthSlider.minValue = 0f;
@@ -336,17 +336,17 @@ public class Health : NetworkBehaviour
         gameOver = true;
 
         //Set up game-over screen with relevant information
-        GameObject endScreen = GameObject.Find("Canvas(Health)").transform.FindChild("EndScreen").gameObject;
+        GameObject endScreen = GameObject.Find("Canvas(Health)").transform.Find("EndScreen").gameObject;
         endScreen.SetActive(true);
-        Text teamWin = endScreen.transform.FindChild("TeamWinText").GetComponent<Text>();
+        Text teamWin = endScreen.transform.Find("TeamWinText").GetComponent<Text>();
         teamWin.gameObject.SetActive(true);
         teamWin.text = "Team " + MultiplayerManager.GetTeam(winner).teamName + " wins!";
         teamWin.color = MultiplayerManager.GetTeam(winner).teamColor;
         if (winner == team)
-            endScreen.transform.FindChild("YouWin").gameObject.SetActive(true);
+            endScreen.transform.Find("YouWin").gameObject.SetActive(true);
         else
-            endScreen.transform.FindChild("YouLose").gameObject.SetActive(true);
-        Text scoreText = endScreen.transform.FindChild("FinalScore").GetComponent<Text>();
+            endScreen.transform.Find("YouLose").gameObject.SetActive(true);
+        Text scoreText = endScreen.transform.Find("FinalScore").GetComponent<Text>();
         scoreText.text = "Scores: \n";
         for (short i = 0; i < MultiplayerManager.GetCurrentGamemode().NumTeams(); i++)
         {
@@ -374,11 +374,11 @@ public class Health : NetworkBehaviour
     {
         gameOver = false;
         Respawn();
-        GameObject endScreen = GameObject.Find("Canvas(Health)").transform.FindChild("EndScreen").gameObject;
+        GameObject endScreen = GameObject.Find("Canvas(Health)").transform.Find("EndScreen").gameObject;
         endScreen.SetActive(false);
-        endScreen.transform.FindChild("TeamWinText").gameObject.SetActive(false);
-        endScreen.transform.FindChild("YouWin").gameObject.SetActive(false);
-        endScreen.transform.FindChild("YouLose").gameObject.SetActive(false);
+        endScreen.transform.Find("TeamWinText").gameObject.SetActive(false);
+        endScreen.transform.Find("YouWin").gameObject.SetActive(false);
+        endScreen.transform.Find("YouLose").gameObject.SetActive(false);
     }
     #endregion
 

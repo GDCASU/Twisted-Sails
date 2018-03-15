@@ -3,27 +3,36 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.Video;
 
 public class SplashScreenController : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
-        ((MovieTexture)GetComponent<Image>().material.mainTexture).Play();
-        StartCoroutine(ChangeSceneAfterTime(((MovieTexture)GetComponent<Image>().material.mainTexture).duration));
-	}
+    public VideoPlayer splashVideo;
+    public GameObject blackScreen;
+    bool startedPlaying;
+
+    void Start()
+    {
+        splashVideo.Play();
+    }
 
     void Update()
     {
-        if(InputWrapper.GetKeyDown(KeyCode.Escape))
+        blackScreen.SetActive(!splashVideo.isPlaying);
+
+        if (InputWrapper.GetKeyDown(KeyCode.Escape))
         {
             StopCoroutine("ChangeSceneAfterTime");
             SceneManager.LoadScene(1);
         }
-    }
-	
-	IEnumerator ChangeSceneAfterTime(float time)
-    {
-        yield return new WaitForSeconds(time);
-        SceneManager.LoadScene(1);
+
+        if (splashVideo.isPlaying)
+        {
+            startedPlaying = true;
+            return;
+        }
+
+        if (startedPlaying)
+            SceneManager.LoadScene(1);
     }
 }

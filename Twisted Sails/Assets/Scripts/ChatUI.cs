@@ -84,7 +84,7 @@ public class ChatUI : MonoBehaviour
         //this assumes the window won't be resized
         //calculate font size
         currentFontSize = (int)(chatEnterField.GetComponent<RectTransform>().rect.height * 0.5f - 1);
-        chatEnterField.transform.FindChild("Text").GetComponent<Text>().fontSize = currentFontSize;
+        chatEnterField.transform.Find("Text").GetComponent<Text>().fontSize = currentFontSize;
         //fetch displaybounds
         RectTransform rt = chatRecord.GetComponent<RectTransform>();
         //rt.position is actual position of rt.rect, rt.rect.position is offset... unity why

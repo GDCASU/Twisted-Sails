@@ -85,9 +85,9 @@ public class StatSystem : NetworkBehaviour
 
             // Initialize UI components
             Transform crewUI = GameObject.FindGameObjectWithTag("CrewManagementUI").transform;
-            Transform attackUI = crewUI.FindChild("AttackCrewUI");
-            Transform defenseUI = crewUI.FindChild("DefenseCrewUI");
-            Transform speedUI = crewUI.FindChild("SpeedCrewUI");
+            Transform attackUI = crewUI.Find("AttackCrewUI");
+            Transform defenseUI = crewUI.Find("DefenseCrewUI");
+            Transform speedUI = crewUI.Find("SpeedCrewUI");
 
             attackBar = attackUI.GetComponentInChildren<Slider>();
             defenseBar = defenseUI.GetComponentInChildren<Slider>();
